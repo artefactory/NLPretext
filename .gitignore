@@ -87,3 +87,8 @@ target/
 
 # Mypy cache
 .mypy_cache/
+
+# Fasttext Word_vector
+*.bin
+*.vec
+*.gz
