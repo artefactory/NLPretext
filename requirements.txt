@@ -11,3 +11,4 @@ python-dotenv>=0.5.1
 
 #library requirements
 spacy==2.0.18
+scikit-learn

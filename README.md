@@ -1,14 +1,31 @@
 Nautilus_NLP
 ==============================
 
-All the goto functions you need to handle NLP use-cases
+The Nautilus NLP library aimed to be a meta-library to be used to help you get started on handling your NLP use-case.
+
+This library can help you with:
+
+    1. Cleaning text data
+    2. Normalizing your dataset
+    3. Training automatically multiclass, multilabel classifier
+    4. Help you discover topics and cluster your data
 
 
 
+# Installation
+
+To install this library you should first clone the repository:
+
+`git clone https://github.com/artefactory/nautilus_nlp/ && cd nautilus_nlp`
+
+then you can install it via pip:
+
+`pip install -e .`
 
 
+# Notebooks
 
-
+The [notebook](notebooks/) folder contains various notebook on how to use this library.
 
 
 Project Organization

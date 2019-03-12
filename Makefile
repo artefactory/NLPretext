@@ -36,7 +36,7 @@ clean:
 
 ## Lint using flake8
 lint:
-	flake8 src
+	black nautilus_nlp
 
 ## Upload Data to S3
 sync_data_to_s3:
