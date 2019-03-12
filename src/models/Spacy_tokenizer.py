@@ -29,9 +29,9 @@ class spacy_model:
 
     @staticmethod
     def get_entities_from_document(spacydoc):
-        return [(ent,ent.label_) for ent in spacydoc.ents]
-    
+        return [(ent, ent.label_) for ent in spacydoc.ents]
+
     @staticmethod
-    def get_entities_from_str(self,text:str):
+    def get_entities_from_str(self, text: str):
         doc = self.model(text)
-        return [(ent,ent.label_) for ent in doc.ents]
+        return [(ent, ent.label_) for ent in doc.ents]

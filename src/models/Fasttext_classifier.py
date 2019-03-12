@@ -1,14 +1,14 @@
 from sklearn.base import BaseEstimator, ClassifierMixin
 import fastText
 
-class Fasttext_clf(BaseEstimator, ClassifierMixin):
 
-    def __init__(self,path=None):
+class Fasttext_clf(BaseEstimator, ClassifierMixin):
+    def __init__(self, path=None):
         try:
-            self.model=fastText.load_model(path)
+            self.model = fastText.load_model(path)
         except Exception as e:
             print(e)
-            self.model=None
+            self.model = None
 
     def fit(self, X, y):
         return self
@@ -24,7 +24,6 @@ class Fasttext_clf(BaseEstimator, ClassifierMixin):
             if probas:
                 return probas[0]
         return False
-
 
     def score(self, X, y=None):
         return sum(self.predict(X))

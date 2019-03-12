@@ -92,3 +92,4 @@ target/
 *.bin
 *.vec
 *.gz
+*.ftz
