@@ -26,4 +26,3 @@ class TextProcessor:
 
     def lower(self, text: str):
         return text.lower()
-        
