@@ -1,4 +1,5 @@
 import fastText
+import multiprocessing
 
 
 class FasttextEmbedding(object):
