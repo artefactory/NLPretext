@@ -16,9 +16,9 @@ from . import constants
 
 
 
-def remove_stopwords(text=lang,stopwords)-> str:
+def remove_stopwords(text,stopwords=None)-> str:
 
-
+    return text
 
 def fix_bad_unicode(text, normalization="NFC")-> str:
     """
