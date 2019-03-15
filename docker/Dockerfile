@@ -6,3 +6,4 @@ RUN git clone https://github.com/facebookresearch/fastText.git && cd fastText &&
 RUN pip install --upgrade pip && pip install schedule nltk pendulum bounter spacy==2.0.18 jupyterlab confluent-kafka xxhash scikit-learn
 RUN python -m spacy download fr &&  python -m spacy download en && python -m spacy download de && python -m spacy download it && python -m spacy download xx
 RUN python -m nltk.downloader stopwords 
+RUN git clone https://github.com/artefactory/nautilus_nlp/ && cd nautilus_nlp && pip install -e . 
