@@ -15,12 +15,12 @@ from ftfy import fix_text
 from . import constants
 
 
-
-def remove_stopwords(text,stopwords=None)-> str:
+def remove_stopwords(text, stopwords=None) -> str:
 
     return text
 
-def fix_bad_unicode(text, normalization="NFC")-> str:
+
+def fix_bad_unicode(text, normalization="NFC") -> str:
     """
     Fix unicode text that's "broken" using `ftfy <http://ftfy.readthedocs.org/>`_;
     this includes mojibake, HTML entities and other code cruft,
@@ -42,7 +42,7 @@ def fix_bad_unicode(text, normalization="NFC")-> str:
     return fix_text(text, normalization=normalization)
 
 
-def normalize_whitespace(text)->str:
+def normalize_whitespace(text) -> str:
     """
     Given ``text`` str, replace one or more spacings with a single space, and one
     or more linebreaks with a single newline. Also strip leading/trailing whitespace.
@@ -52,12 +52,12 @@ def normalize_whitespace(text)->str:
     ).strip()
 
 
-def unpack_french_contractions(text)->str:
+def unpack_french_contractions(text) -> str:
 
     return text
 
 
-def unpack_english_contractions(text)->str:
+def unpack_english_contractions(text) -> str:
     """
     Replace *English* contractions in ``text`` str with their unshortened forms.
     N.B. The "'d" and "'s" forms are ambiguous (had/would, is/has/possessive),
@@ -90,36 +90,36 @@ def unpack_english_contractions(text)->str:
     return text
 
 
-def unpack_contractions_from_lang(text, lang: str = "fr")->str:
+def unpack_contractions_from_lang(text, lang: str = "fr") -> str:
     if lang == "fr":
         return unpack_english_contractions(text)
     else:
         return unpack_english_contractions(text)
 
 
-def replace_urls(text, replace_with="*URL*")->str:
+def replace_urls(text, replace_with="*URL*") -> str:
     """Replace all URLs in ``text`` str with ``replace_with`` str."""
     return constants.URL_REGEX.sub(
         replace_with, constants.SHORT_URL_REGEX.sub(replace_with, text)
     )
 
 
-def replace_emails(text, replace_with="*EMAIL*")->str:
+def replace_emails(text, replace_with="*EMAIL*") -> str:
     """Replace all emails in ``text`` str with ``replace_with`` str."""
     return constants.EMAIL_REGEX.sub(replace_with, text)
 
 
-def replace_phone_numbers(text, replace_with="*PHONE*")->str:
+def replace_phone_numbers(text, replace_with="*PHONE*") -> str:
     """Replace all phone numbers in ``text`` str with ``replace_with`` str."""
     return constants.PHONE_REGEX.sub(replace_with, text)
 
 
-def replace_numbers(text, replace_with="*NUMBER*")->str:
+def replace_numbers(text, replace_with="*NUMBER*") -> str:
     """Replace all numbers in ``text`` str with ``replace_with`` str."""
     return constants.NUMBERS_REGEX.sub(replace_with, text)
 
 
-def replace_currency_symbols(text, replace_with=None)->str:
+def replace_currency_symbols(text, replace_with=None) -> str:
     """
     Replace all currency symbols in ``text`` str with string specified by ``replace_with`` str.
 
@@ -141,7 +141,7 @@ def replace_currency_symbols(text, replace_with=None)->str:
         return constants.CURRENCY_REGEX.sub(replace_with, text)
 
 
-def remove_punct(text, marks=None)->str:
+def remove_punct(text, marks=None) -> str:
     """
     Remove punctuation from ``text`` by replacing all instances of ``marks``
     with whitespace.
@@ -166,7 +166,7 @@ def remove_punct(text, marks=None)->str:
         return text.translate(constants.PUNCT_TRANSLATE_UNICODE)
 
 
-def remove_accents(text, method="unicode")->str:
+def remove_accents(text, method="unicode") -> str:
     """
     Remove accents from any accented unicode characters in ``text`` str, either by
     transforming them into ascii equivalents or removing them entirely.
@@ -214,7 +214,7 @@ def preprocess_text(
     no_punct=False,
     no_contractions=False,
     no_accents=False,
-)->str:
+) -> str:
     """
     Normalize various aspects of a raw text doc before parsing it with Spacy.
     A convenience function for applying all other preprocessing functions in one go.
