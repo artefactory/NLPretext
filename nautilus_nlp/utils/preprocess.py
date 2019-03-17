@@ -15,6 +15,22 @@ from ftfy import fix_text
 from . import constants
 
 
+def remove_tokens_with_nonletters(tokens):
+    '''
+    Inputs a list of tokens, outputs a list of tokens without tokens that
+    includes numbers of special caracters
+    '''
+    return [word for word in tokens if re.search('[a-zA-Z]', word)]
+
+
+def remove_special_caracters(tokens):
+    """ Checks for letters in the token - using a regex search.
+    Strings that are just punctuation will
+    be removed! No more custom '--'. But ''s' and '9' will remain.
+    """
+    return [word for word in tokens if re.search('[a-zA-Z0-9]', word)]
+
+
 def remove_stopwords(text, stopwords=None) -> str:
 
     return text
