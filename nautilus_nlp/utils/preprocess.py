@@ -31,9 +31,16 @@ def remove_special_caracters(tokens):
     return [word for word in tokens if re.search('[a-zA-Z0-9]', word)]
 
 
-def remove_stopwords(text, stopwords=None) -> str:
-
-    return text
+def remove_stopwords(text_or_tokens, stopwords):
+    ''' 
+    Remove stopwords from tokens.
+    '''
+    if type(text_or_tokens) is str:
+        return [word for word in text_or_tokens.split() if word not in stopwords]
+    elif type(text_or_tokens) is list:
+        return [word for word in text_or_tokens if word not in stopwords]                                                    
+    else:
+        raise ValueError('must input string or list of tokens')    
 
 
 def fix_bad_unicode(text, normalization="NFC") -> str:
