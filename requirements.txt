@@ -18,3 +18,5 @@ wordcloud>=1.5.0
 matplotlib>=3.0.3
 chardet
 shutil
+nltk
+mosestokenizer
