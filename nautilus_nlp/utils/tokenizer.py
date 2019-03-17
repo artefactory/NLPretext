@@ -29,14 +29,14 @@ def tokenize(text: str, lang_module: str = 'en_spacy'):
         return nltk.word_tokenize(text)
     elif lang_module is 'en_spacy':
         spacydoc = english_spacy(text)
-        return [tokens for tokens in spacydoc]
+        return [tokens.text for tokens in spacydoc]
     elif lang_module is 'fr_spacy':
         spacydoc = french_spacy(text)
-        return [tokens for tokens in spacydoc]
+        return [tokens.text for tokens in spacydoc]
     elif lang_module is 'fr_moses':
         t = MosesTokenizer(lang='fr')
         return t.tokenize(text, escape=False)
-    
+
 
 def untokenize(tokens, lang='fr'):
     '''
