@@ -15,9 +15,32 @@ from ftfy import fix_text
 from . import constants
 
 
-def remove_stopwords(text, stopwords=None) -> str:
+def remove_tokens_with_nonletters(tokens):
+    '''
+    Inputs a list of tokens, outputs a list of tokens without tokens that
+    includes numbers of special caracters
+    '''
+    return [word for word in tokens if re.search('[a-zA-Z]', word)]
 
-    return text
+
+def remove_special_caracters(tokens):
+    """ Checks for letters in the token - using a regex search.
+    Strings that are just punctuation will
+    be removed! No more custom '--'. But ''s' and '9' will remain.
+    """
+    return [word for word in tokens if re.search('[a-zA-Z0-9]', word)]
+
+
+def remove_stopwords(text_or_tokens, stopwords):
+    ''' 
+    Remove stopwords from tokens.
+    '''
+    if type(text_or_tokens) is str:
+        return [word for word in text_or_tokens.split() if word not in stopwords]
+    elif type(text_or_tokens) is list:
+        return [word for word in text_or_tokens if word not in stopwords]                                                    
+    else:
+        raise ValueError('must input string or list of tokens')    
 
 
 def fix_bad_unicode(text, normalization="NFC") -> str:

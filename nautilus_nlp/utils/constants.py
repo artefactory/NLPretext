@@ -4,22 +4,29 @@ Collection of regular expressions and other (small, generally useful) constants.
 """
 from __future__ import unicode_literals
 
+import os
 import re
 import sys
 import unicodedata
 
 from . import compat
+from . import file_loader as util
+from stop_words import get_stop_words
+
+
+def get_stopwords(lang:str = 'en'): 
+    return get_stop_words(lang)
 
 
 NUMERIC_NE_TYPES = {
-    "ORDINAL",
-    "CARDINAL",
-    "MONEY",
-    "QUANTITY",
-    "PERCENT",
-    "TIME",
-    "DATE",
-}
+                    "ORDINAL",
+                    "CARDINAL",
+                    "MONEY",
+                    "QUANTITY",
+                    "PERCENT",
+                    "TIME",
+                    "DATE",
+                    }
 SUBJ_DEPS = {"agent", "csubj", "csubjpass", "expl", "nsubj", "nsubjpass"}
 OBJ_DEPS = {"attr", "dobj", "dative", "oprd"}
 AUX_DEPS = {"aux", "auxpass", "neg"}
