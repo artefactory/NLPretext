@@ -22,8 +22,16 @@ except OSError:
 
 def tokenize(text: str, lang_module: str = 'en_spacy'):
     """
-    Inputs string output a list of tokens
-    French = "J' ai" >>> ["J'", 'ai']
+    Convert text to a list of tokens. 
+
+    Args:
+        lang_module ({'en_spacy', 'en_nltk', 'fr_spacy', 'fr_moses'}): choose
+        the tokenization module according to the langage and the implementation.
+        Recommanded: Spacy (faster, better results). To process other langages
+        import models.Spacy_models
+
+    Returns:
+        list
     """
     if lang_module is 'en_nltk':
         return nltk.word_tokenize(text)
