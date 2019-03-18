@@ -46,3 +46,25 @@ def untokenize(tokens, lang='fr'):
     d = MosesDetokenizer(lang=lang)
     text = d.detokenize(tokens, unescape=False)
     return text    
+
+
+def _tokensToString(tokens_or_str):
+    if type(tokens_or_str) is str:
+        return tokens_or_str
+    elif type(tokens_or_str) is list:
+        return untokenize(tokens_or_str)
+    elif type(tokens_or_str) is None:
+        return ''
+    else:
+        raise ValueError('Please input string or tokens')
+
+
+def _stringToTokens(tokens_or_str, lang_module='en_spacy'):
+    if type(tokens_or_str) is str:
+        return tokenize(tokens_or_str, lang_module=lang_module)
+    elif type(tokens_or_str) is list:
+        return tokens_or_str
+    elif type(tokens_or_str) is None:
+        return []
+    else:
+        raise ValueError('Please input string or tokens')
