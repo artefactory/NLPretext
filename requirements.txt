@@ -22,3 +22,6 @@ nltk
 mosestokenizer
 -e git://github.com/ClaudeCoulombe/FrenchLefffLemmatizer.git#egg=french_lefff_lemmatizer
 stopwords
+textblob
+textblob_fr
+vaderSentiment
