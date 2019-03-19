@@ -92,3 +92,4 @@ target/
 *.vec
 *.gz
 *.ftz
+!/nautilus_nlp/data/lang_identification.ftz
