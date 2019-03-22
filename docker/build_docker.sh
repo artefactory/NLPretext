@@ -1,3 +1,3 @@
 #!/bin/bash
-
-docker build -t nautilus_nlp .
+cp docker/Dockerfile .
+docker build -t nautilus_nlp:latest .
