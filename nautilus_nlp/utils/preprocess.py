@@ -15,6 +15,24 @@ from ftfy import fix_text
 from . import constants
 
 
+
+
+def remove_multiple_spaces_and_strip_text(text):
+    """Remove multiple spaces, strip text, and remove '-', '*' characters.
+    Parameters
+    ----------
+    text : str,
+        Header content.
+    Returns
+    -------
+    str
+    """
+    regex_remove_multiple_spaces_list= ["\\t", "[\\s\\-\\*]{2,}"]
+    for regex_remove_multiple_spaces in regex_remove_multiple_spaces_list:
+        text = re.sub(regex_remove_multiple_spaces, ' ', text)
+        text = text.strip()
+    return text
+
 def remove_tokens_with_nonletters(tokens):
     '''
     Inputs a list of tokens, outputs a list of tokens without tokens that
@@ -224,6 +242,11 @@ def remove_accents(text, method="unicode") -> str:
         msg = '`method` must be either "unicode" and "ascii", not {}'.format(method)
         raise ValueError(msg)
 
+def remove_emoji(word):
+
+    RE_EMOJI = re.compile('[\U00010000-\U0010ffff]', flags=re.UNICODE)
+    word = RE_EMOJI.sub(r'', word)
+    return word
 
 def preprocess_text(
     text,
