@@ -25,4 +25,4 @@ stopwords
 textblob
 textblob_fr
 vaderSentiment
-
+stop_words
