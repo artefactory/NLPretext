@@ -1,7 +1,7 @@
 import spacy
 
-
 class spacy_model:
+
     def __init__(self, lang: str):
         try:
             self.model = spacy.load(lang)
@@ -55,3 +55,7 @@ class spacy_model:
     def get_lemma_from_str(self, text: str):
         spacydoc = self.model(text)
         return [token.lemma_ for token in spacydoc]
+
+    def get_pos_from_str(self, text: str):
+        spacydoc = self.model(text)
+        return [token.pos_ for token in spacydoc]
