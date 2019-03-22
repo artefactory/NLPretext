@@ -18,6 +18,10 @@ To install this library you should first clone the repository:
 
 `git clone https://github.com/artefactory/nautilus_nlp/ && cd nautilus_nlp`
 
+**If you don't use the docker container, we strongly advise you to do these steps in a virtual environnement**
+
+First you need to install the required files:
+`pip install -r requirements.txt`
 then you can install it via pip:
 
 `pip install -e .`
