@@ -11,6 +11,13 @@ This library can help you with:
     4. Help you discover topics and cluster your data
 
 
+# Feature Request
+
+As an Artefact user, you might be working on a NLP use case, and wish to use Nautilus.
+
+ However, if you think Nautilus is lacking features that can be useful not only to your use case but also others, feel free to to fill up an issue with the label "Feature-request".
+
+ We will try to put it in the roadmap and implement it as soon as possible.
 
 # Installation
 
@@ -21,7 +28,9 @@ To install this library you should first clone the repository:
 **If you don't use the docker container, we strongly advise you to do these steps in a virtual environnement**
 
 First you need to install the required files:
+
 `pip install -r requirements.txt`
+
 then you can install it via pip:
 
 `pip install -e .`
