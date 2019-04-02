@@ -5,14 +5,14 @@ import spacy
 nltk.download('punkt')
 
 try:
-    french_spacy = spacy.load('fr')
+    french_spacy = spacy.lang.fr.French()
 except OSError:
     raise OSError("""You must install French langage to use SpaCy. 
                     python -m spacy download fr
                     See https://spacy.io/usage/ for details
                 """)
 try:
-    english_spacy = spacy.load('en')
+    english_spacy = spacy.lang.en.English()
 except OSError:
     raise OSError("""You must install english langage to use SpaCy. 
                     python -m spacy download en
