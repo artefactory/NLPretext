@@ -21,6 +21,8 @@ As an Artefact user, you might be working on a NLP use case, and wish to use Nau
 
 # Installation
 
+Beware, this package has been tested on Python **3.6** & **3.7**, and will probably not be working under python **2.7** as **Python2.7** EOL is scheduled for December 2019. 
+
 To install this library you should first clone the repository:
 
 `git clone https://github.com/artefactory/nautilus_nlp/ && cd nautilus_nlp`
