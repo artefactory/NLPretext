@@ -1,25 +1,87 @@
-import os
+import io
+import chardet
+import glob
+import re
+from os.path import isfile, isdir
 
-#################
-## Text loaders
+import logging
 
-def load_text_file(file_path):
+logging.basicConfig(level=logging.INFO)
+
+
+def open_textfile(filepath, encoding='utf-8'):
+    with io.open(filepath, 'r', encoding=encoding) as f:
+        string = f.read()
+    return string
+
+
+def detect_encoding(file_path_or_string, n_lines=100):
     '''
-    load a file as string
-    Inputs a file path, returns a string'''
-    with open(file_path, errors="ignore") as handle:
-        text = handle.read()
-    return text
+    Predict a file's encoding using chardet
+    '''
+    if isfile(file_path_or_string):
+        with open(file_path_or_string, 'rb') as f:                      # Open the file as binary data
+            rawdata = b''.join([f.readline() for _ in range(n_lines)])  # Join binary lines for specified number of lines
+    elif type(file_path_or_string) is bytes:
+        rawdata = file_path_or_string
+    return chardet.detect(rawdata)
 
 
-def load_texts_as_string(filenames):
-    """ Input is a list of path, output is a dict """
-    from collections import defaultdict
-    loaded_text = defaultdict(str)  # each value is a string, the text
-    for filename in filenames:
-        with open(filename, errors="ignore") as handle:
-            loaded_text[filename] = handle.read()
-    return loaded_text
+def text_loader(filepath, encoding=None, detectencoding=True):
+    '''
+    Args:
+        detect_encoding[bool]= If file is not encoded into UTF-8, try to detect encoding using the chardet library.
+    '''
+    if encoding is not None:
+        return open_textfile(filepath, encoding=encoding)
+    else:
+        try:
+            return open_textfile(filepath, encoding='utf-8')
+        except UnicodeDecodeError:
+            logging.warning('Encoding is not UTF-8.')
+            if detectencoding is True:
+                logging.warning('Trying to detect encoding for {}'.format(filepath))
+                detected_encoding = detect_encoding(filepath)
+                logging.info('detected encoding is {encod}, with a confidence rate of {conf_rate}'.format(encod=detected_encoding['encoding'],
+                                                                                                        conf_rate=detected_encoding['confidence']))
+                return open_textfile(filepath, encoding=detected_encoding['encoding'])
+
+
+def list_files(filepath:str):
+    '''
+    inputs a filepath. 
+    Outputs a list of filepath. 
+    Supports regex
+    '''
+    if isdir(filepath) and len(re.findall(r"[\w.]$",filepath)):
+        filepath=filepath+'/*'
+    if filepath.endswith('/'):
+        filepath=filepath+'*'
+    return[file for file in glob.glob(filepath) if isfile(file)]            
+
+
+def documents_loader(filepath, encoding=None):
+    '''
+    Input a filepath, a filepath with wildcard (eg. *.txt), 
+    or a list of filepaths.
+    Output a string, or a dict of strings.
+    '''
+    
+    if type(filepath) is str:
+        documents = list_files(filepath)
+        nb_of_documents = len(documents)
+    elif type(filepath) is list:
+        nb_of_documents = len(filepath)
+        documents = filepath
+    else:
+        raise IOError('Please enter a valid filepath or a valid list of filepath')
+    
+    if nb_of_documents == 1:
+        return text_loader(documents[0],encoding=encoding)
+    elif nb_of_documents > 1:
+        return { document : text_loader(documents[0], encoding=encoding) for document in documents}
+    else:
+        raise IOError('No files detected in {}'.format(filepath))        
 
 
 #################
@@ -38,54 +100,11 @@ def decode_columns(df, columns_to_encode):
     apply json.loads on columns
     '''
     for col in columns_to_encode:
-        df[col] = df[col].apply(json.loads)                
-
-
-#################
-## Functions to list a folder and get filepaths
-
-def get_filenames(folder):
-    from os import listdir
-    from os.path import isfile, join
-
-    if not folder.endswith("/"):
-        folder = folder + "/"
-    # this will return only the filenames, not folders inside the path
-    return [folder + f for f in listdir(folder)
-        if isfile(join(folder, f)) and f != ".DS_Store"]    
-
-
-def get_filepath(folder):
-    """
-    Return the path of all the files of a directory
-    """
-    import os
-    if not folder.endswith("/"):
-        folder = folder + "/"
-    res = []
-    for root, dirs, files in os.walk(folder, topdown=False):
-        for name in files:
-            res.append(os.path.join(root, name))
-    return res        
+        df[col] = df[col].apply(json.loads)
+  
 
 #################
 ## Encoding functions
-
-def predict_encoding(file_path_or_string, file=True, n_lines=20):
-    '''
-    Predict a file's encoding using chardet
-    '''
-    import chardet
-
-    if file is True:
-        # Open the file as binary data
-        with open(file_path_or_string, 'rb') as f:
-            # Join binary lines for specified number of lines
-            rawdata = b''.join([f.readline() for _ in range(n_lines)])
-    else:
-        rawdata = file_path_or_string
-
-    return chardet.detect(rawdata)['encoding']
 
 
 def convert_encoding(file_path, input_encoding, output_encoding):
