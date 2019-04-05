@@ -62,8 +62,8 @@ class Doc:
 
         if not self._language:
             if self._language_detector:
-                self._is_reliable_language, self._language = self._language_detector.detect_language(
-                    self.raw
+                self._language,self._is_reliable_language = self._language_detector.detect_language(
+                    self.clean
                 )
             else:
                 raise NautilusMissingModelException(
@@ -111,9 +111,12 @@ class Doc:
         Loads the spacy default language module for the Doc's language
         """
         try:
-            return spacy.load(
-                "{}_core_{}_sm".format(lang, "web" if lang == "en" else "news")
-            )
+            if lang!='un':
+                return spacy.load(
+                    "{}_core_{}_sm".format(lang, "web" if lang == "en" else "news")
+                )
+            else:
+                return spacy.load('xx_ent_wiki_sm')
         except IOError:
             raise NautilusMissingModelException(
                 f'Default model for language "{lang}" is not available. You should try to run python -m spacy download {lang}_core_news_sm'
@@ -142,7 +145,7 @@ class Doc:
         True
         """
         text = self.raw
-
+        text.replace('\n',' ')
         if clean_dots:
             text = re.sub(r"…", "...", text)
         if clean_quotes:
@@ -152,6 +155,16 @@ class Doc:
             text = re.sub(r"\s+", " ", text).strip()
 
         return text
+
+    @property
+    def lemma(self):
+
+        return self.get_lemma()
+    
+    @functools.lru_cache()
+    def get_lemma(self,model_name=None):
+        
+        return [token.lemma_ for token in  self._load_spacy_doc(self.language, model_name)]
 
     @property
     def entities(self):
