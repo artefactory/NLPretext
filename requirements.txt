@@ -27,3 +27,4 @@ textblob_fr
 vaderSentiment
 stop_words
 cld2_cffi~=0.1
+flashtext
