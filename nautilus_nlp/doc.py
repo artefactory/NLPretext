@@ -318,3 +318,8 @@ class Doc:
         [('awesome', 0.32456160227748454), ('capital', 0.32456160227748454), ('Amsterdam', 0.17543839772251532)]
         """
         return self.extract_keyterms()
+   
+    @functools.lru_cache()
+    def extract_keywords(self,keyword_list:list):
+        from flashtext import KeywordProcessor
+        return KeywordProcessor().add_keywords_from_list(keyword_list).extract_keywords(self.raw)
