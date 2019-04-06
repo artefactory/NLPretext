@@ -51,6 +51,7 @@ class Doc:
     def language(self):
         """
         Provided or detected language of a text
+        
         >>> from nautilus_nlp.doc import Doc
         >>> Doc('Test sentence for testing text').language
         'en'
@@ -181,6 +182,7 @@ class Doc:
     def find_entities(self, model_name=None):
         """
         Extract a list of the named entities in text, with the possibility of using a custom model.
+
         >>> doc = Doc('Sentence for testing Google text')
         >>> doc.find_entities()
         [('Google', 'ORG')]
