@@ -10,6 +10,7 @@ from nautilus_nlp.utils.preprocess import (remove_multiple_spaces_and_strip_text
     ("hello-world", "hello-world"),
     ("hello - world", "hello world")
 ])
+
 def test_remove_multiple_spaces_and_strip_text(input_str, expected_str):
     result = remove_multiple_spaces_and_strip_text(input_str)
     np.testing.assert_string_equal(result, expected_str)
