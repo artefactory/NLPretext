@@ -3,7 +3,7 @@ import chardet
 import glob
 import re
 from os.path import isfile, isdir
-
+import json
 import logging
 
 logging.basicConfig(level=logging.INFO)
@@ -50,11 +50,12 @@ def text_loader(filepath, encoding=None, detectencoding=True):
 
 
 def list_files(filepath:str):
-    '''
+    """  
     inputs a filepath. 
     Outputs a list of filepath. 
     Supports regex
-    '''
+    """
+
     if isdir(filepath) and len(re.findall(r"[\w.]$",filepath)):
         filepath=filepath+'/*'
     if filepath.endswith('/'):
