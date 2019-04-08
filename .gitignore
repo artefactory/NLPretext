@@ -93,3 +93,6 @@ target/
 *.gz
 *.ftz
 !/nautilus_nlp/data/lang_identification.ftz
+
+# PyTest cache
+.pytest_cache/

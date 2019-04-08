@@ -6,6 +6,97 @@ from gensim.matutils import sparse2full
 import numpy as np
 import math
 
+from sklearn.feature_extraction.text import TfidfVectorizer, TfidfTransformer
+
+
+class Tfidf(object):
+    """
+    Inputs a list of string
+    Outputs a tuple with the wordcount vector matrix, and the list of feature name
+    Params:
+        input=’content’, encoding=’utf-8’, decode_error=’strict’, strip_accents=None,
+        lowercase=True, preprocessor=None, tokenizer=None, analyzer=’word’,
+        stop_words=None, token_pattern=’(?u)\b\w\w+\b’, ngram_range=(1, 1),
+        max_df=1.0, min_df=1, max_features=None, vocabulary=None, binary=False,
+        dtype=<class ‘numpy.float64’>, norm=’l2’, use_idf=True, smooth_idf=True, sublinear_tf=False
+    Wrapper of https://scikit-learn.org/stable/modules/generated/sklearn.feature_extraction.text.TfidfVectorizer.html
+    """
+    
+    def __init__(self, **kwargs):
+        self.tfidf_vectorizer = TfidfVectorizer(**kwargs)
+    
+    def _compute_wordcount_vector(self, documents):
+        '''
+        Input a list of documents (string)
+        Output the wordcount vector matrix 
+        '''
+        self.word_count_vector = self.tfidf_vectorizer.fit_transform(documents)
+        return self.word_count_vector
+    
+
+    def _get_features_name(self):
+        self.feature_names = self.tfidf_vectorizer.get_feature_names()
+        return self.feature_names
+
+    
+    def _compute_idf(self):
+        self.tfidf_transformer=TfidfTransformer(smooth_idf=True, use_idf=True)
+        self.tfidf_transformer.fit(self.word_count_vector)
+        return self.word_count_vector
+
+    
+    def compute_tfidf(self, documents):
+        self._compute_wordcount_vector(documents)
+        self._get_features_name()
+        self._compute_idf()
+        return self.word_count_vector
+
+    def _apply_tfidf_to_doc(self, text):
+        '''generate tf-idf for the given document'''
+        return self.tfidf_transformer.transform(self.tfidf_vectorizer.transform([text]))
+    
+    
+    def _sort_coo(self, coo_matrix):
+        '''sort the tf-idf vectors by descending order of scores'''
+        tuples = zip(coo_matrix.col, coo_matrix.data)
+        return sorted(tuples, key=lambda x: (x[1], x[0]), reverse=True)
+    
+    
+    def _extract_topn_from_vector(self, feature_names, sorted_items, topn=10):
+        """get the feature names and tf-idf score of top n items"""
+
+        #use only topn items from vector
+        sorted_items = sorted_items[:topn]
+
+        score_vals = []
+        feature_vals = []
+
+        # word index and corresponding tf-idf score
+        for idx, score in sorted_items:
+
+            #keep track of feature name and its corresponding score
+            score_vals.append(round(score, 3))
+            feature_vals.append(feature_names[idx])
+
+        #create a tuples of feature,score
+        #results = zip(feature_vals,score_vals)
+        results= {}
+        for idx in range(len(feature_vals)):
+            results[feature_vals[idx]]=score_vals[idx]
+
+        return results
+
+    
+    def get_top_tfidf_per_doc(self, text, n=10):
+        '''compute TF-IDF for a given doc, and returns a list of the top N weighted words'''
+        tf_idf_vector= self._apply_tfidf_to_doc(text)
+        sorted_items=self._sort_coo(tf_idf_vector.tocoo())
+        return list(self._extract_topn_from_vector(self.feature_names, sorted_items, n).keys())
+    
+    def get_top_tfidf(self, n=10):
+        '''returns a dict of the top N weighted words, with their weight'''
+        return self._extract_topn_from_vector(self.feature_names, self._sort_coo(self.word_count_vector.tocoo()), topn=n)
+
 
 class Text_Vectorizer:
     def __init__(self, doc_list):
