@@ -7,14 +7,14 @@ from nltk.stem import WordNetLemmatizer
 from nltk.corpus import wordnet
 
 try:
-    french_spacy = spacy.load('fr')
+    french_spacy = spacy.load('fr_core_news_sm')
 except OSError:
     raise OSError("""You must install French langage to use SpaCy. 
                     python -m spacy download fr
                     See https://spacy.io/usage/ for details
                 """)
 try:
-    english_spacy = spacy.load('en')
+    english_spacy = spacy.load('en_core_web_sm')
 except OSError:
     raise OSError("""You must install english langage to use SpaCy. 
                     python -m spacy download en

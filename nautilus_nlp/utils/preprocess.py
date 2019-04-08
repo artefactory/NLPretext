@@ -243,13 +243,23 @@ def remove_accents(text, method="unicode") -> str:
         raise ValueError(msg)
 
 def remove_emoji(word):
+    """
+    Remove emoji from any  str by stripping any unicode in the range of Emoji unicode,
 
+    Args:
+        word (str): raw word
+
+    Returns:
+        str
+
+    """
     RE_EMOJI = re.compile('[\U00010000-\U0010ffff]', flags=re.UNICODE)
     word = RE_EMOJI.sub(r'', word)
     return word
 
 def preprocess_text(
     text,
+    no_emoji=False,
     fix_unicode=False,
     lowercase=False,
     no_urls=False,
@@ -305,7 +315,7 @@ def preprocess_text(
     if no_currency_symbols is True:
         text = replace_currency_symbols(text)
     if no_contractions is True:
-        text = unpack_contractions(text)
+        text = unpack_contractions_from_lang(text)
     if no_accents is True:
         text = remove_accents(text, method="unicode")
     if no_punct is True:

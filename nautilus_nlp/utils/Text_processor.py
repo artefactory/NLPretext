@@ -42,7 +42,7 @@ class TokensProcessor:
     def lemmatize(self, text: str):
         return text
 
-    def stem(self, tokens_list: list, lang: str = lang:
+    def stem(self, tokens_list: list, lang: str = lang):
         return stem_tokens(tokens_list, lang='english')
 
     def remove_stopwords(self, text: str):
