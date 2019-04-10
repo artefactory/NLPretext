@@ -4,6 +4,8 @@ import os
 import pyLDAvis
 import pyLDAvis.gensim 
 pyLDAvis.enable_notebook()
+from gensim.models import CoherenceModel
+import matplotlib.pyplot as plt
 
 from IPython.display import HTML
 
@@ -12,8 +14,7 @@ logging.getLogger("gensim").setLevel(logging.WARNING)
 
 def create_dictionary(data):
     
-    """ Create a dictionary(id2word) containing the number of times a word appears 
-    in the dataset set: one of the two main inputs to the LDA topic model with the corpus
+    """ Create a Dictionary encapsulates the mapping between normalized words and their integer ids.
     
     Parameters
     ----------
@@ -45,7 +46,7 @@ def filter_extremes(dictionary, no_below=15, no_above=0.3 , **kwargs) :
 def create_bow_corpus(data, dictionary):
     
     """ Create the corpus: one of the two main inputs to the LDA topic model with the dictionary (id2word)
-        The produced corpus is a mapping of (word_id, word_frequency).
+        The produced corpus is a mapping of (token_id, token_count).
     Parameters
     ----------
     data : list of list of tokens
@@ -58,6 +59,71 @@ def create_bow_corpus(data, dictionary):
     corpus = [dictionary.doc2bow(text) for text in texts]
     return corpus
 
+### Find Number of topics
+
+def compute_coherence_values(dictionary, bow_corpus, texts, limit=25, start=2, step=4):
+    """
+    Compute c_v coherence for various number of topics
+
+    Parameters:
+    ----------
+    dictionary : Gensim dictionary
+    bow_corpus : Gensim bow corpus
+    texts : List of input texts
+    limit : Max num of topics
+
+    Returns:
+    -------
+    model_list : List of LDA topic models
+    coherence_values : Coherence values corresponding to the LDA model with respective number of topics
+    """
+    coherence_values = []
+    model_list = []
+    for num_topics in range(start, limit, step):
+        model = gensim.models.ldamodel.LdaModel(corpus=bow_corpus,
+                                           id2word=dictionary,
+                                          num_topics=num_topics, 
+                                          random_state=0,
+                                          update_every=5,
+                                          chunksize=1000,
+                                          passes=10)
+        model_list.append(model)
+        coherencemodel = CoherenceModel(model=model, texts=texts, dictionary=dictionary, coherence='c_v')
+        coherence_values.append(coherencemodel.get_coherence())
+
+    return model_list, coherence_values
+
+def plot_optimal_topic_number(coherence_values, start=2, limit=25, step=4):
+    """
+    Plot the coherence scores per number of topics
+
+    Parameters:
+    ----------
+    coherence_values : list of coherence scores for various number of topics
+    start : int. Min num of topics
+    limit : int. Max num of topics
+    step: int
+
+    Output:
+    -------
+    Lineplot
+    """
+    x = range(start, limit, step)
+    plt.plot(x, coherence_values)
+    plt.xlabel("Num Topics")
+    plt.ylabel("Coherence score")
+    plt.legend(("coherence_values"), loc='best')
+    return plt.show()
+
+def print_coherence_scores(coherence_values, start=2, limit=25, step=4):
+    """
+    Print the coherences scores for the ldamodels that had been tested with different number of topics
+    """
+    x = range(start, limit, step)
+    for m, cv in zip(x, coherence_values):
+        print("Num Topics =", m, " has Coherence Value of", round(cv, 4))
+
+
 ### Gensim LdaModel
 
 def train_lda_model(bow_corpus, dictionary, num_topics, **kwargs):
@@ -65,8 +131,8 @@ def train_lda_model(bow_corpus, dictionary, num_topics, **kwargs):
       
     Parameters
     ----------
-    bow_corpus : iterable of list of tokens. Stream of document vectors or sparse matrix of shape (num_terms, num_documents).$
-    dictionary: corpora.Dictionary. Mapping from word IDs to words
+    bow_corpus : iterable of list of tokens. 
+    dictionary: corpora.Dictionary. Dictionary encapsulates the mapping between normalized words and their integer ids.
     num_topics: int
     
     Returns
