@@ -1,4 +1,6 @@
 # local package
+-e .
+os
 
 # external requirements
 click
@@ -11,6 +13,18 @@ pillow
 pytest
 
 #library requirements
+pyLDAvis==2.1.2
+gensim==3.7.1
+sacremoses==0.0.13
+stop-words==2018.7.23
+spacy==2.1.3
+scikit-learn>=0.17.0
+ftfy==5.5.1
+ftfy>=4.2.0,<5.0.0
+wordcloud>=1.5.0
+matplotlib>=3.0.3
+chardet
+nltk
 mosestokenizer
 numpy>1.15.4
 stop_words==2018.7.23
