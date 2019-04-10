@@ -3,6 +3,7 @@ import logging
 import os
 import pyLDAvis
 import pyLDAvis.gensim 
+pyLDAvis.enable_notebook()
 
 from IPython.display import HTML
 
@@ -64,7 +65,7 @@ def train_lda_model(bow_corpus, dictionary, num_topics, **kwargs):
       
     Parameters
     ----------
-    corpus : iterable of list of tokens. Stream of document vectors or sparse matrix of shape (num_terms, num_documents).$
+    bow_corpus : iterable of list of tokens. Stream of document vectors or sparse matrix of shape (num_terms, num_documents).$
     dictionary: corpora.Dictionary. Mapping from word IDs to words
     num_topics: int
     
@@ -72,11 +73,11 @@ def train_lda_model(bow_corpus, dictionary, num_topics, **kwargs):
     -------
     gensim.ldamodel
     """
-    model = gensim.models.ldamodel.LdaModel(corpus=bow_corpus, id2word=dictionary, num_topics=num_topics, passes=10, minimum_probability=0.001, random_state=0)
+    model = gensim.models.ldamodel.LdaModel(corpus=bow_corpus, id2word=dictionary, num_topics=num_topics, passes=10, minimum_probability=0.001, random_state=0, **kwargs)
     return model
 
 
-def save_model(model, MODELNAME):
+def save_model(model, model_path, model_name):
     """ Save the model that has been trained
         
         Parameters
@@ -84,7 +85,7 @@ def save_model(model, MODELNAME):
         model: ldamodel
         MODELNAME: str
     """
-    return model.save(MODELNAME)
+    return model.save(os.path.join(model_path,model_name))
 
 
 def load_model(model_path,model_name):
@@ -138,16 +139,40 @@ def visualize_topics(model, bow_corpus, dictionary):
     """
     return pyLDAvis.gensim.prepare(model, bow_corpus, dictionary)
 
-
 def save_pyldavis(pyldavis, vis_path, vis_name):
     """ Save the pyldavis interactive chart
     pyldavis: pyLDAvis._prepare.PreparedData
     vis_path: str
     vis_path: str
     """ 
-    return pyLDAvis.save_html(pyldavis, os.path.join(vis_path, vis_name, '.html'))
+    return pyLDAvis.save_html(pyldavis, os.path.join(vis_path, vis_name + '{}'.format('.html')))
 
 
 def show_pyldavis(vis_path, vis_name):
-    return HTML(filename=os.path.join(vis_path, vis_name, '.html'))
+    """ Display the HTML of the saved pyldavis interactive chart
+    vis_path: str
+    vis_path: str
+    """
+    return HTML(filename=os.path.join(vis_path, vis_name + '{}'.format('.html')))
 
+def show_dominant_topic(model, bow_corpus, topic_number=1, topn=5):
+    """ Print the dominant topics in the document, its score and the topics' top keywords.
+    
+    Parameters
+    ----------
+
+    gensim.ldamodel
+    model: ldamodel
+    bow_corpus: iterable of list of tokens.
+    topic_number: int. Pick the number of topics displayed
+    topn: int. Number of topics' top keyword displayed
+
+    """
+    i = 0
+    for index, score in sorted(model[bow_corpus], key=lambda tup: -1*tup[1]): 
+        weight = model.show_topic(index, topn=topn)
+        keywords = [i[0] for i in weight]
+        print("Score: {}\t Topic: {}".format(score, keywords))
+        i +=1
+        if i == topic_number:
+            break
