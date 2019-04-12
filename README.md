@@ -10,6 +10,7 @@ This library can help you with:
     3. Training automatically multiclass, multilabel classifier
     4. Help you discover topics and cluster your data
 
+You can find a list of the available features [in this article.](https://artefactory.atlassian.net/wiki/spaces/CK/pages/822837299/Nautilus+NLP+-+key+features)
 
 # Feature Request
 
