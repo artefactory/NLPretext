@@ -80,7 +80,7 @@ def get_stopwords(lang:str = 'en'):
         custom_stopwords = _load_stopwords_from_json(STOPWORDS_JSON_FILEPATH)
         stopwords = []
         
-        supported_lang_lib = list(LANGUAGE_MAPPING.keys())
+        supported_lang_lib = list(_LANGUAGE_MAPPING.keys())
         supported_lang_custom = list(custom_stopwords.keys())
         supported_lang = supported_lang_lib+supported_lang_custom
         if lang in supported_lang:
