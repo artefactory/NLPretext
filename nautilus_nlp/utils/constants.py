@@ -11,11 +11,10 @@ import unicodedata
 
 from . import compat
 from . import file_loader as util
-from stop_words import get_stop_words
 
 
-def get_stopwords(lang:str = 'en'): 
-    return get_stop_words(lang)
+
+
 
 
 NUMERIC_NE_TYPES = {
