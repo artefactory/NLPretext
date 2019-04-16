@@ -35,4 +35,5 @@ textacy==0.6.3
 gensim==3.7.1
 scikit_learn==0.20.3
 vaderSentiment==3.2.1
+flashtext
 
