@@ -7,14 +7,20 @@ may affect the interpretation of the text -- and spacy's processing of it.
 """
 from __future__ import absolute_import, division, print_function, unicode_literals
 
+import os
+import json
 import re
 import unicodedata
 
 from ftfy import fix_text
+from stop_words import get_stop_words as _get_stop_words
+from stop_words import LANGUAGE_MAPPING as _LANGUAGE_MAPPING
 
 from . import constants
+from nautilus_nlp.config.config import ROOT_FOLDER
+from nautilus_nlp.utils.file_loader import documents_loader
 
-
+STOPWORDS_JSON_FILEPATH = os.path.join(ROOT_FOLDER,'data','stopwords.json')
 
 
 def remove_multiple_spaces_and_strip_text(text):
@@ -47,6 +53,46 @@ def remove_special_caracters(tokens):
     be removed! No more custom '--'. But ''s' and '9' will remain.
     """
     return [word for word in tokens if re.search('[a-zA-Z0-9]', word)]
+
+
+def _load_stopwords_from_json(filepath=STOPWORDS_JSON_FILEPATH):
+    stopwords = documents_loader(filepath)
+    stopwords = json.loads(stopwords)
+    return stopwords
+
+
+def get_stopwords(lang:str = 'en'): 
+    '''
+    Inputs a language code, returns a list of stopwords for the specified language
+
+    Args:
+        lang: Supported languages: ['ar', 'bg', 'ca', 'cz', 'da', 'nl', 'en',
+         'fi', 'fr', 'de', 'hi', 'hu', 'id', 'it', 'nb', 'pl', 'pt', 'ro', 'ru', 
+         'sk', 'es', 'sv', 'tr', 'uk', 'vi', 'af', 'ha', 'so', 'st', 'sw', 'yo', 
+         'zu', 'da', 'de', 'es', 'et', 'fi', 'fr', 'hr', 'hu', 'it', 'ko', 'nl',
+          'no', 'pl', 'pt', 'ru', 'sv', 'tr', 'zh', 'eo', 'he', 'la', 'sk', 'sl', 
+          'br', 'ca', 'cs', 'el', 'eu', 'ga', 'gl', 'hy', 'id', 'ja', 'lv', 'th',
+           'ar', 'bg', 'bn', 'fa', 'hi', 'mr', 'ro', 'en']
+    '''
+    if type(lang) == str and len(lang) == 2:
+        lang = lang.lower()
+        
+        custom_stopwords = _load_stopwords_from_json(STOPWORDS_JSON_FILEPATH)
+        stopwords = []
+        
+        supported_lang_lib = list(_LANGUAGE_MAPPING.keys())
+        supported_lang_custom = list(custom_stopwords.keys())
+        supported_lang = supported_lang_lib+supported_lang_custom
+        if lang in supported_lang:
+            if lang in supported_lang_lib:
+                stopwords += _get_stop_words(lang)
+            if lang in supported_lang_custom:
+                stopwords += custom_stopwords[lang]
+        else:
+            raise ValueError('Language not available yet or incorrect country code. Supported languages: {}'.format(supported_lang))
+    else:
+        raise ValueError('Please input a valid country code, in 2 letters. Eg. "us" for USA. ')
+    return list(set(stopwords))
 
 
 def remove_stopwords(text_or_tokens, stopwords):
