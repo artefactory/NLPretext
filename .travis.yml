@@ -1,6 +1,4 @@
 language: python
-python: 
-    - "3.7" 
 
 services:
   - docker
@@ -8,7 +6,7 @@ services:
 script:
   - docker pull datadoume/nautilus:latest
   - docker run datadoume/nautilus:latest
-  
+
 install:
   - pip install -r requirements.txt
   - pip install -e .
