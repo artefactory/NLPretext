@@ -1,7 +1,5 @@
 import spacy
 import nltk
-from french_lefff_lemmatizer.french_lefff_lemmatizer \
-                                    import FrenchLefffLemmatizer
 nltk.download('wordnet')
 from nltk.stem import WordNetLemmatizer 
 from nltk.corpus import wordnet
@@ -32,11 +30,10 @@ def lemmatize_french_tokens(tokens, module='spacy', load_only_pos='all'):
 
     Args:
         tokens (list): list of tokens
-        module ({'french_leff_v', 'spacy'}): modules availables.
+        module ({'spacy'}): modules availables.
         load_only_pos ({'a', v', 'r', 'n', 'all'}): If not "all", applies 
         lemmatization only to a certain POS tags, for french_leff_v module.
         a = adjectives, v = verbs, n = noun, r = adverb. 
-        See https://github.com/ClaudeCoulombe/FrenchLefffLemmatizer.
 
     Returns:
         list of lemmatized tokens
@@ -45,25 +42,7 @@ def lemmatize_french_tokens(tokens, module='spacy', load_only_pos='all'):
 
     tokens = _make_sure_input_is_list_of_tokens(tokens)
 
-    if module == 'french_leff_v':
-        # Doc : https://github.com/ClaudeCoulombe/FrenchLefffLemmatizer
-        lemmatizer = FrenchLefffLemmatizer()
-        
-        if load_only_pos == 'all':
-            lemmatized_tokens = []
-            for word in tokens:
-
-                word = lemmatizer.lemmatize(word,'n')
-                word = lemmatizer.lemmatize((word),'a') 
-                word = lemmatizer.lemmatize((word),'r') 
-                word = lemmatizer.lemmatize((word),'v') 
-                lemmatized_tokens.append(word)
-
-            return lemmatized_tokens
-        else:
-            return [lemmatizer.lemmatize(t, load_only_pos) for t in tokens]
-
-    elif module == 'spacy':
+    if module == 'spacy':
         # Doc : https://spacy.io/api/token#attributes
         text = ' '.join(tokens)
         doc = french_spacy(text)
