@@ -36,6 +36,6 @@ gensim==3.7.1
 scikit_learn==0.20.3
 vaderSentiment==3.2.1
 
-#google-compute-engine==2.8.13
+google-compute-engine==2.8.13
 flashtext==2.7
 
