@@ -27,7 +27,7 @@ nltk==3.4
 textblob==0.15.3
 textblob_fr==0.2.0
 cld2_cffi==0.1.4
-pandas==0.23.4
+pandas>=0.23.4
 chardet==3.0.4
 setuptools==40.8.0
 textacy==0.6.3
@@ -36,3 +36,4 @@ gensim==3.7.1
 scikit_learn==0.20.3
 vaderSentiment==3.2.1
 google-compute-engine==2.8.13
+flashtext==2.7
