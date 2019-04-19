@@ -5,7 +5,7 @@ services:
 
 before_script:
   wget https://github.com/facebookresearch/fastText/archive/v0.2.0.zip  && unzip v0.2.0.zip && cd fastText-0.2.0 && make && cd ~ &&
-  git clone https://github.com/facebookresearch/fastText.git && cd  fastText && pip install . && cd ~/nautilus-nlp
+  git clone https://github.com/facebookresearch/fastText.git && cd  fastText && pip install . && cd ..
   
   
 install:
