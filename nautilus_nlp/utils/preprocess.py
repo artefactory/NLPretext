@@ -348,6 +348,9 @@ def preprocess_text(
         These changes may negatively affect subsequent NLP analysis performed
         on the text, so choose carefully, and preprocess at your own risk!
     """
+
+    assert isinstance(['text'],str) , 'The text to preprocess must be a string'
+    
     if fix_unicode is True:
         text = fix_bad_unicode(text, normalization="NFC")
     if no_urls is True:
