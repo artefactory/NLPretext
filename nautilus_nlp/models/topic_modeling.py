@@ -5,6 +5,7 @@ import pyLDAvis
 import pyLDAvis.gensim 
 pyLDAvis.enable_notebook()
 from gensim.models import CoherenceModel
+from gensim.models.wrappers import LdaMallet
 import matplotlib.pyplot as plt
 
 from IPython.display import HTML
