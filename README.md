@@ -10,6 +10,7 @@ This library can help you with:
     3. Training automatically multiclass, multilabel classifier
     4. Help you discover topics and cluster your data
 
+You can find a list of the available features [in this article.](https://artefactory.atlassian.net/wiki/spaces/CK/pages/822837299/Nautilus+NLP+-+key+features)
 
 # Feature Request
 
@@ -35,8 +36,46 @@ First you need to install the required files:
 
 then you can install it via pip:
 
-`pip install -e .`
+`pip install -e . 
 
+## Handling installation errors
+
+### Conda conficts
+You might get the following error message while installing the library:
+`Cannot uninstall 'PACKAGE_NAME'. It is a distutils installed project and thus we cannot accurately determine which files belong to it which would lead to only a partial uninstall.`
+
+To fix this, just type `pip install -e . --ignore-installed PACKAGE_NAME` instead. 
+
+### Installing nautilus-nlp on a linux-based VM
+
+If you are installing nautilus on a linux-powered Virtual Machine (VM), you might want to install essentials first. If you don't, you might experience some issues to install Cython-based libraries, such as spaCy, becode the C compiler will be missing. 
+
+On a Ubuntu VM (tested on 16.04), you can run the following command before following the classic installation process above:
+`sudo apt-get update && sudo apt-get install -y build-essential unzip`
+
+## Installation of additional required libraries
+
+If you want to leverage all the features of nautilus-nlp, you need to **install others required libraries** (such as FastText).
+
+### Install spaCy language models
+
+Installing additional spaCy models will give you the possibility to handle a lot of new language for text processing feature (such as lemmatization or tokenization). 
+
+To do so, run: *(on your virtual environment if you are using one)*
+
+`bash nautilus_nlp/scripts/download_spacy_models.sh`
+
+### Install FastText 
+
+run: 
+
+`bash nautilus_nlp/scripts/install_fasttext.sh`
+
+### Install Lang Detect
+
+run: 
+
+`bash nautilus_nlp/scripts/download_ft_langdetect.sh`
 
 # Notebooks
 
