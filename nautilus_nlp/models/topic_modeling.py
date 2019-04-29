@@ -12,7 +12,6 @@ from IPython.display import HTML
 logging.getLogger("gensim").setLevel(logging.WARNING)
 
 
-
 def create_dictionary(data):
     
     """ Create a Dictionary encapsulates the mapping between normalized words and their integer ids.
