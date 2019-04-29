@@ -3,7 +3,6 @@ import logging
 import os
 import pyLDAvis
 import pyLDAvis.gensim 
-pyLDAvis.enable_notebook()
 from gensim.models import CoherenceModel
 from gensim.models.wrappers import LdaMallet
 import matplotlib.pyplot as plt
@@ -11,6 +10,7 @@ import matplotlib.pyplot as plt
 from IPython.display import HTML
 
 logging.getLogger("gensim").setLevel(logging.WARNING)
+
 
 
 def create_dictionary(data):
@@ -65,6 +65,8 @@ def create_bow_corpus(data, dictionary):
 def compute_coherence_values(dictionary, bow_corpus, texts, limit=25, start=2, step=4):
     """
     Compute c_v coherence for various number of topics
+
+    /!\ It takes a really long time.
 
     Parameters:
     ----------
@@ -202,11 +204,31 @@ def fit_data(model, bow):
 # Visualization (only for gensim implementation for now)
 
 
-def visualize_topics(model, bow_corpus, dictionary):
+def visualize_topics(model, bow_corpus, dictionary, model_type=None):
     """ Visualize the topics-keywords with the pyLDAvis interactive chart.
         (Work well in notebook)
+        
+    Parameters
+    ----------
+    model: LDA model: gensim or mallet
+    bow_corpus : iterable of list of tokens. 
+    dictionary: corpora.Dictionary. Dictionary encapsulates the mapping between normalized words and their integer ids.
+    model : str. Precise the topic modeling model used, must be "gensim" or "mallet"
+    
+    Returns:
+    ----------
+    3D interactive chart
+    
     """
-    return pyLDAvis.gensim.prepare(model, bow_corpus, dictionary)
+    if model_type == 'mallet':
+        model_vis = gensim.models.wrappers.ldamallet.malletmodel2ldamodel(model)
+    elif model_type == 'gensim':
+        model_vis = model
+    elif model_type is None:
+        raise ValueError('You forgot to precise your model type, it must be: gensim or mallet')
+    else:
+        raise ValueError('Please enter a valid model name: gensim or mallet') 
+    return pyLDAvis.gensim.prepare(model_vis, bow_corpus, dictionary)
 
 def save_pyldavis(pyldavis, vis_path, vis_name):
     """ Save the pyldavis interactive chart
@@ -227,6 +249,8 @@ def show_pyldavis(vis_path, vis_name):
 def show_dominant_topic(model, bow_corpus, topic_number=1, topn=5):
     """ Print the dominant topics in the document, its score and the topics' top keywords.
     
+    Quick way to interpret the topics
+
     Parameters
     ----------
 
