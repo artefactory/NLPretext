@@ -17,12 +17,12 @@ def _create_ngrams(token, n):
     return [" ".join(ngram) for ngram in ngrams]
 
 
-def frequent_words(list_words, ngrams_number=1, number_top_words=10 ):
+def frequent_words(list_words, ngrams_number=1, number_top_words=10):
     """
     Compute n-grams frequencies and return number_top_words top n-grams.
     :param list_words: list of strings
     :param ngrams_number: output dataframe length
-    :param output_ngrams_number: output dataframe length
+    :param number_top_words: output dataframe length
     :return: dataframe with the entities and their frequencies.
     """
 
