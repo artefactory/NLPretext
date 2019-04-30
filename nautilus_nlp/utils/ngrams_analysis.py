@@ -2,7 +2,7 @@
 """
 Functions to calculate words or ngrams frequencies.
 """
-import pandas as pd
+from pandas import DataFrame
 from collections import Counter
 
 
@@ -36,8 +36,4 @@ def frequent_words(list_words, ngrams_number=1, number_top_words=10):
 
     x = Counter(list_words)
     frequent = x.most_common(number_top_words)
-    return pd.DataFrame(frequent, columns=['Entity', 'Counts'])
-
-
-
-
+    return DataFrame(frequent, columns=['Entity', 'Counts'])
