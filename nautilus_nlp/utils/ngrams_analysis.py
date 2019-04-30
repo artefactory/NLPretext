@@ -1,14 +1,14 @@
 # -*- coding: utf-8 -*-
 """
-Functions to analyse words frequencies. Generates counts and bars plots with words and n-grams frequencies in text.
+Functions to calculate words or ngrams frequencies.
 """
 import pandas as pd
 from collections import Counter
-from matplotlib import pyplot as plt
 
 
 def _create_ngrams(token, n):
     """
+    Create n-grams for list of tokens
     :param token: list of strings
     :param n: number of elements in the n-gram
     :return: list of n-grams
@@ -19,10 +19,11 @@ def _create_ngrams(token, n):
 
 def frequent_words(list_words, ngrams_number=1, number_top_words=10 ):
     """
+    Compute n-grams frequencies and return number_top_words top n-grams.
     :param list_words: list of strings
     :param ngrams_number: output dataframe length
     :param output_ngrams_number: output dataframe length
-    :return: dataframe with the entities and their frequencies in text
+    :return: dataframe with the entities and their frequencies.
     """
 
     frequent = []
