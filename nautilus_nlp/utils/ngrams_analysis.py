@@ -6,7 +6,7 @@ from pandas import DataFrame
 from collections import Counter
 
 
-def _create_ngrams(token, n):
+def create_ngrams(token, n):
     """
     Create n-grams for list of tokens
     :param token: list of strings
@@ -25,15 +25,13 @@ def frequent_words(list_words, ngrams_number=1, number_top_words=10):
     :param number_top_words: output dataframe length
     :return: dataframe with the entities and their frequencies.
     """
-
     frequent = []
     if ngrams_number == 1:
         pass
     elif ngrams_number >= 2:
-        list_words = _create_ngrams(list_words, ngrams_number)
+        list_words = create_ngrams(list_words, ngrams_number)
     else:
         raise ValueError("number of n-grams should be >= 1")
-
     x = Counter(list_words)
     frequent = x.most_common(number_top_words)
-    return DataFrame(frequent, columns=['Entity', 'Counts'])
+    return frequent
