@@ -10,8 +10,8 @@ def test_frequent_words():
     res_2 = frequent_words(list_words, ngrams_number=2, number_top_words=3)
     res_3 = frequent_words(list_words, ngrams_number=3, number_top_words=5)
 
-    exp_res_1 = [('an', 3), ('example', 3), ('world', 2), ('this', 2), ('is', 2), ('Hello', 1), ('of', 1), ('ngrams', 1),
-                 ('count', 1), ('to', 1)]
+    exp_res_1 = [('an', 3), ('example', 3), ('world', 2), ('this', 2), ('is', 2),
+                 ('Hello', 1), ('of', 1), ('ngrams', 1), ('count', 1), ('to', 1)]
     exp_res_2 = [('an example', 3), ('this is', 2), ('is an', 2)]
     exp_res_3 = [('this is an', 2), ('is an example', 2), ('Hello world this', 1),
                  ('world this is', 1), ('an example of', 1)]
