@@ -41,7 +41,7 @@ almost there \n\\n\nthe end\n"""
 
 ents_model = spacy.blank("nl")
 custom_spacy_nlps = {"nl": {"ents": ents_model}}
-detector = LangDetector(typemodel="fasttext")
+detector = LangDetector()
 
 DOC_1 = Doc(TEXT_1, language="en")
 DOC_2 = Doc(TEXT_2, language="fr")
