@@ -2,7 +2,6 @@
 """
 Functions to calculate words or ngrams frequencies.
 """
-from pandas import DataFrame
 from collections import Counter
 
 
