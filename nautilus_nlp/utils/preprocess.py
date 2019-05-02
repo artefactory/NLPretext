@@ -20,7 +20,7 @@ from . import constants
 from nautilus_nlp.config.config import ROOT_FOLDER
 from nautilus_nlp.utils.file_loader import documents_loader
 
-STOPWORDS_JSON_FILEPATH = os.path.join(ROOT_FOLDER,'data','stopwords.json')
+STOPWORDS_JSON_FILEPATH = os.path.join(ROOT_FOLDER, "data", "stopwords.json")
 
 
 def remove_multiple_spaces_and_strip_text(text):
@@ -28,23 +28,35 @@ def remove_multiple_spaces_and_strip_text(text):
     Parameters
     ----------
     text : str,
-        Header content.
     Returns
     -------
     str
     """
-    regex_remove_multiple_spaces_list= ["\\t", "[\\s\\-\\*]{2,}"]
+    regex_remove_multiple_spaces_list = ["\\t", "[\\s\\-\\*]{2,}"]
     for regex_remove_multiple_spaces in regex_remove_multiple_spaces_list:
-        text = re.sub(regex_remove_multiple_spaces, ' ', text)
+        text = re.sub(regex_remove_multiple_spaces, " ", text)
         text = text.strip()
     return text
 
+
+def remove_EOL_characters(text):
+    """Remove end of line (\n) char.
+    Parameters
+    ----------
+    text : str,
+    Returns
+    -------
+    str
+    """
+    return text.replace("\n", "")
+
+
 def remove_tokens_with_nonletters(tokens):
-    '''
+    """
     Inputs a list of tokens, outputs a list of tokens without tokens that
     includes numbers of special caracters
-    '''
-    return [word for word in tokens if re.search('[a-zA-Z]', word)]
+    """
+    return [word for word in tokens if re.search("[a-zA-Z]", word)]
 
 
 def remove_special_caracters(tokens):
@@ -52,7 +64,7 @@ def remove_special_caracters(tokens):
     Strings that are just punctuation will
     be removed! No more custom '--'. But ''s' and '9' will remain.
     """
-    return [word for word in tokens if re.search('[a-zA-Z0-9]', word)]
+    return [word for word in tokens if re.search("[a-zA-Z0-9]", word)]
 
 
 def _load_stopwords_from_json(filepath=STOPWORDS_JSON_FILEPATH):
@@ -61,8 +73,8 @@ def _load_stopwords_from_json(filepath=STOPWORDS_JSON_FILEPATH):
     return stopwords
 
 
-def get_stopwords(lang:str = 'en'): 
-    '''
+def get_stopwords(lang: str = "en"):
+    """
     Inputs a language code, returns a list of stopwords for the specified language
 
     Args:
@@ -73,38 +85,44 @@ def get_stopwords(lang:str = 'en'):
           'no', 'pl', 'pt', 'ru', 'sv', 'tr', 'zh', 'eo', 'he', 'la', 'sk', 'sl', 
           'br', 'ca', 'cs', 'el', 'eu', 'ga', 'gl', 'hy', 'id', 'ja', 'lv', 'th',
            'ar', 'bg', 'bn', 'fa', 'hi', 'mr', 'ro', 'en']
-    '''
+    """
     if type(lang) == str and len(lang) == 2:
         lang = lang.lower()
-        
+
         custom_stopwords = _load_stopwords_from_json(STOPWORDS_JSON_FILEPATH)
         stopwords = []
-        
+
         supported_lang_lib = list(_LANGUAGE_MAPPING.keys())
         supported_lang_custom = list(custom_stopwords.keys())
-        supported_lang = supported_lang_lib+supported_lang_custom
+        supported_lang = supported_lang_lib + supported_lang_custom
         if lang in supported_lang:
             if lang in supported_lang_lib:
                 stopwords += _get_stop_words(lang)
             if lang in supported_lang_custom:
                 stopwords += custom_stopwords[lang]
         else:
-            raise ValueError('Language not available yet or incorrect country code. Supported languages: {}'.format(supported_lang))
+            raise ValueError(
+                "Language not available yet or incorrect country code. Supported languages: {}".format(
+                    supported_lang
+                )
+            )
     else:
-        raise ValueError('Please input a valid country code, in 2 letters. Eg. "us" for USA. ')
+        raise ValueError(
+            'Please input a valid country code, in 2 letters. Eg. "us" for USA. '
+        )
     return list(set(stopwords))
 
 
 def remove_stopwords(text_or_tokens, stopwords):
-    ''' 
+    """ 
     Remove stopwords from tokens.
-    '''
+    """
     if type(text_or_tokens) is str:
         return [word for word in text_or_tokens.split() if word not in stopwords]
     elif type(text_or_tokens) is list:
-        return [word for word in text_or_tokens if word not in stopwords]                                                    
+        return [word for word in text_or_tokens if word not in stopwords]
     else:
-        raise ValueError('must input string or list of tokens')    
+        raise ValueError("must input string or list of tokens")
 
 
 def fix_bad_unicode(text, normalization="NFC") -> str:
@@ -288,6 +306,7 @@ def remove_accents(text, method="unicode") -> str:
         msg = '`method` must be either "unicode" and "ascii", not {}'.format(method)
         raise ValueError(msg)
 
+
 def remove_emoji(word):
     """
     Remove emoji from any  str by stripping any unicode in the range of Emoji unicode,
@@ -299,9 +318,10 @@ def remove_emoji(word):
         str
 
     """
-    RE_EMOJI = re.compile('[\U00010000-\U0010ffff]', flags=re.UNICODE)
-    word = RE_EMOJI.sub(r'', word)
+    RE_EMOJI = re.compile("[\U00010000-\U0010ffff]", flags=re.UNICODE)
+    word = RE_EMOJI.sub(r"", word)
     return word
+
 
 def preprocess_text(
     text,
@@ -349,8 +369,8 @@ def preprocess_text(
         on the text, so choose carefully, and preprocess at your own risk!
     """
 
-    assert isinstance(text,str) , 'The text to preprocess must be a string'
-    
+    assert isinstance(text, str), "The text to preprocess must be a string"
+
     if fix_unicode is True:
         text = fix_bad_unicode(text, normalization="NFC")
     if no_urls is True:
