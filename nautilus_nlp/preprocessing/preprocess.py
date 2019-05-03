@@ -16,7 +16,7 @@ from ftfy import fix_text
 from stop_words import get_stop_words as _get_stop_words
 from stop_words import LANGUAGE_MAPPING as _LANGUAGE_MAPPING
 
-from . import constants
+from nautilus_nlp.utils import constants
 from nautilus_nlp.config.config import ROOT_FOLDER
 from nautilus_nlp.utils.file_loader import documents_loader
 
