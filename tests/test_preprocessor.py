@@ -55,3 +55,4 @@ def test_remove_accents():
 def test_fix_bad_unicode(input_str, expected_str):
     result = fix_bad_unicode(input_str)
     np.testing.assert_string_equal(result, expected_str)
+
