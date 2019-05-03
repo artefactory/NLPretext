@@ -32,15 +32,28 @@ To install this library you should first clone the repository:
 
 First you need to install the required files:
 
-`pip install -r requirements.txt`
+```pip install -r requirements.txt```
 
 then you can install it via pip:
 
-`pip install -e . 
+```pip install -e .```
 
 ## Handling installation errors
 
-### Conda conficts
+### command 'gcc' failed with exit status 1
+
+While runing `pip install -r requirements.txt` you might get the following error message:
+```
+command 'gcc' failed with exit status 1 
+```
+
+To solve it, run the following command before installing requirements.txt:
+```
+conda install pyemd
+```
+
+### Cannot uninstall 'package_name'
+
 You might get the following error message while installing the library:
 `Cannot uninstall 'PACKAGE_NAME'. It is a distutils installed project and thus we cannot accurately determine which files belong to it which would lead to only a partial uninstall.`
 
@@ -51,7 +64,14 @@ To fix this, just type `pip install -e . --ignore-installed PACKAGE_NAME` instea
 If you are installing nautilus on a linux-powered Virtual Machine (VM), you might want to install essentials first. If you don't, you might experience some issues to install Cython-based libraries, such as spaCy, becode the C compiler will be missing. 
 
 On a Ubuntu VM (tested on 16.04), you can run the following command before following the classic installation process above:
-`sudo apt-get update && sudo apt-get install -y build-essential unzip`
+
+```
+# install compilators and required softwares
+sudo apt-get update && sudo apt-get install -y build-essential unzip git wget
+# install conda
+wget https://repo.anaconda.com/archive/Anaconda3-2019.03-Linux-x86_64.sh
+bash Anaconda3-2019.03-Linux-x86_64.sh
+```
 
 ## Installation of additional required libraries
 
@@ -77,10 +97,15 @@ run:
 
 `bash nautilus_nlp/scripts/download_ft_langdetect.sh`
 
-# Notebooks
+# Quick start 
 
 The [notebook](notebooks/) folder contains various notebook on how to use this library.
 
+Here is a quick example:
+
+```
+
+```
 
 Project Organization
 ------------
