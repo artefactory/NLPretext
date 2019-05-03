@@ -1,10 +1,5 @@
 # -*- coding: utf-8 -*-
-"""
-Functions that modify raw text *in-place*, replacing contractions, URLs, emails,
-phone numbers, and currency symbols with standardized forms. These should be
-applied before processing by `Spacy <http://spacy.io>`_, but be warned: preprocessing
-may affect the interpretation of the text -- and spacy's processing of it.
-"""
+
 from __future__ import absolute_import, division, print_function, unicode_literals
 
 import os
@@ -24,13 +19,19 @@ STOPWORDS_JSON_FILEPATH = os.path.join(ROOT_FOLDER, "data", "stopwords.json")
 
 
 def remove_multiple_spaces_and_strip_text(text):
-    """Remove multiple spaces, strip text, and remove '-', '*' characters.
+    """
+    Remove multiple spaces, strip text, and remove '-', '*' characters.
+
     Parameters
     ----------
-    text : str,
+    text : str
+        the text to be processed
+
     Returns
     -------
-    str
+    string
+        the text with removed multiple spaces and strip text
+
     """
     regex_remove_multiple_spaces_list = ["\\t", "[\\s\\-\\*]{2,}"]
     for regex_remove_multiple_spaces in regex_remove_multiple_spaces_list:
@@ -40,15 +41,18 @@ def remove_multiple_spaces_and_strip_text(text):
 
 
 def remove_EOL_characters(text):
-    """Remove end of line (\n) char.
+    """
+    Remove end of line (\n) char.
+
     Parameters
     ----------
     text : str,
+
     Returns
     -------
     str
     """
-    return text.replace("\n", "")
+    return text.replace("\n", " ")
 
 
 def remove_tokens_with_nonletters(tokens):
