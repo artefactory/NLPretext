@@ -18,7 +18,7 @@ from nautilus_nlp.utils.file_loader import documents_loader
 STOPWORDS_JSON_FILEPATH = os.path.join(ROOT_FOLDER, "data", "stopwords.json")
 
 
-def remove_multiple_spaces_and_strip_text(text):
+def remove_multiple_spaces_and_strip_text(text: str) -> str:
     """
     Remove multiple spaces, strip text, and remove '-', '*' characters.
 
@@ -40,13 +40,13 @@ def remove_multiple_spaces_and_strip_text(text):
     return text
 
 
-def remove_EOL_characters(text):
+def remove_EOL_characters(text: str) -> str:
     """
     Remove end of line (\n) char.
 
     Parameters
     ----------
-    text : str,
+    text : str
 
     Returns
     -------
@@ -55,18 +55,40 @@ def remove_EOL_characters(text):
     return text.replace("\n", " ")
 
 
-def remove_tokens_with_nonletters(tokens):
+def remove_tokens_with_nonletters(tokens: list) -> list:
     """
     Inputs a list of tokens, outputs a list of tokens without tokens that
-    includes numbers of special caracters
+    includes numbers of special caracters.
+    ['foo','bar','124','34euros'] -> ['foo','bar']
+
+    Parameters
+    ----------
+    tokens : list
+        list of tokens to be cleaned
+
+    Returns
+    -------
+    list
+        list of tokens without tokens with numbers
     """
     return [word for word in tokens if re.search("[a-zA-Z]", word)]
 
 
-def remove_special_caracters(tokens):
-    """ Checks for letters in the token - using a regex search.
-    Strings that are just punctuation will
-    be removed! No more custom '--'. But ''s' and '9' will remain.
+def remove_special_caracters_from_tokenslist(tokens: list) -> list:
+    """ 
+    Remove tokens that doesn't contains any number or letter. 
+    eg. ['foo','bar','---',"'s",'#'] -> ['foo','bar',"'s"]
+
+    Parameters
+    ----------
+    tokens : list
+        list of tokens to be cleaned
+
+    Returns
+    -------
+    list
+        list of tokens without tokens that contains only special caracters
+    
     """
     return [word for word in tokens if re.search("[a-zA-Z0-9]", word)]
 
@@ -77,18 +99,30 @@ def _load_stopwords_from_json(filepath=STOPWORDS_JSON_FILEPATH):
     return stopwords
 
 
-def get_stopwords(lang: str = "en"):
+def get_stopwords(lang: str = "en") -> list:
     """
     Inputs a language code, returns a list of stopwords for the specified language
 
-    Args:
-        lang: Supported languages: ['ar', 'bg', 'ca', 'cz', 'da', 'nl', 'en',
+    Parameters
+    ----------
+    lang : str
+        Supported languages: ['ar', 'bg', 'ca', 'cz', 'da', 'nl', 'en',
          'fi', 'fr', 'de', 'hi', 'hu', 'id', 'it', 'nb', 'pl', 'pt', 'ro', 'ru', 
          'sk', 'es', 'sv', 'tr', 'uk', 'vi', 'af', 'ha', 'so', 'st', 'sw', 'yo', 
          'zu', 'da', 'de', 'es', 'et', 'fi', 'fr', 'hr', 'hu', 'it', 'ko', 'nl',
           'no', 'pl', 'pt', 'ru', 'sv', 'tr', 'zh', 'eo', 'he', 'la', 'sk', 'sl', 
           'br', 'ca', 'cs', 'el', 'eu', 'ga', 'gl', 'hy', 'id', 'ja', 'lv', 'th',
            'ar', 'bg', 'bn', 'fa', 'hi', 'mr', 'ro', 'en']
+
+    Returns
+    -------
+    list
+        list of stopwords for a given language
+
+    Raises
+    ------
+    ValueError
+        When language is not available yet or incorrect country code
     """
     if type(lang) == str and len(lang) == 2:
         lang = lang.lower()
@@ -117,9 +151,25 @@ def get_stopwords(lang: str = "en"):
     return list(set(stopwords))
 
 
-def remove_stopwords(text_or_tokens, stopwords):
+def remove_stopwords(text_or_tokens, stopwords: list) -> list:
     """ 
-    Remove stopwords from tokens.
+    Remove stopwords from a list of tokens or a text.
+    eg. ['']
+
+    Parameters
+    ----------
+    text_or_tokens : list or string
+        list of tokens to be cleaned
+
+    Returns
+    -------
+    list
+        list of tokens without stopwords
+
+    Raises
+    ------
+    ValueError
+        When inputs is not a string or a list
     """
     if type(text_or_tokens) is str:
         return [word for word in text_or_tokens.split() if word not in stopwords]
