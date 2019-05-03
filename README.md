@@ -1,4 +1,4 @@
-Nautilus_NLP
+Nautilus_NLP [![Build Status](https://travis-ci.com/artefactory/nautilus-nlp.svg?token=Ssg4shz5pz9qGnYCybSj&branch=master)](https://travis-ci.com/artefactory/nautilus-nlp)
 ==============================
 
 The Nautilus NLP library aimed to be a meta-library to be used to help you get started on handling your NLP use-case.
