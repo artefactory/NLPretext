@@ -3,8 +3,8 @@ import logging
 import os
 import pyLDAvis
 import pyLDAvis.gensim 
-pyLDAvis.enable_notebook()
 from gensim.models import CoherenceModel
+from gensim.models.wrappers import LdaMallet
 import matplotlib.pyplot as plt
 
 from IPython.display import HTML
@@ -65,6 +65,8 @@ def compute_coherence_values(dictionary, bow_corpus, texts, limit=25, start=2, s
     """
     Compute c_v coherence for various number of topics
 
+    /!\ It takes a really long time.
+
     Parameters:
     ----------
     dictionary : Gensim dictionary
@@ -124,86 +126,108 @@ def print_coherence_scores(coherence_values, start=2, limit=25, step=4):
         print("Num Topics =", m, " has Coherence Value of", round(cv, 4))
 
 
-### Gensim LdaModel
+### LdaModel: Gensim & Mallet
 
-def train_lda_model(bow_corpus, dictionary, num_topics, **kwargs):
-    """ Train the model on the corpus
+def train_lda_model(bow_corpus, dictionary, num_topics, model='gensim', mallet_path=None, **kwargs):
+    """ Train the lda model on the corpus
       
     Parameters
     ----------
-    bow_corpus : iterable of list of tokens. 
-    dictionary: corpora.Dictionary. Dictionary encapsulates the mapping between normalized words and their integer ids.
+    bow_corpus : iterable of list of tokens. Stream of document vectors or sparse matrix of shape (num_terms, num_documents).
+    dictionary: corpora.Dictionary. Mapping from word IDs to words
     num_topics: int
+    model : str. Precise the topic modeling model wanted, must be "gensim" or "mallet"
+    mallet_path: str, optionnal if model='gensim', required if model='mallet'. Path to the mallet-2.0.8 file 
     
     Returns
     -------
     gensim.ldamodel
     """
+    if model == 'gensim':
+        model = train_lda_gensim(bow_corpus, dictionary, num_topics, **kwargs)
+    elif model == 'mallet':
+        if mallet_path is None:
+            raise ValueError('You must precise the path to the mallet-2.0.8 file that has been downloaded before')
+        else:
+            model = train_lda_mallet(bow_corpus, dictionary, num_topics, mallet_path, **kwargs)
+    else:
+        raise ValueError('Please enter a valid model name: gensim or mallet')
+    return model
+
+def train_lda_gensim(bow_corpus, dictionary, num_topics, **kwargs):
+
     model = gensim.models.ldamodel.LdaModel(corpus=bow_corpus, id2word=dictionary, num_topics=num_topics, passes=10, minimum_probability=0.001, random_state=0, **kwargs)
     return model
 
+def train_lda_mallet(bow_corpus, dictionary, num_topics, mallet_path, **kwargs):
+    
+    os.environ['MALLET_PATH'] = mallet_path
+    mallet = '$MALLET_PATH/mallet-2.0.8/bin/mallet'
+    model = gensim.models.wrappers.LdaMallet(mallet, corpus=bow_corpus, id2word=dictionary, num_topics=num_topics, prefix='composant', random_seed=0, **kwargs)
+    return model
 
-def save_model(model, model_path, model_name):
-    """ Save the model that has been trained
+
+def save_model(model, model_name):
+    """ Save the model that has been trained. The model will be saved on your current emplacement.
         
         Parameters
         ----------
         model: ldamodel
-        MODELNAME: str
+        model_name: str. Name the model that will be saved
     """
-    return model.save(os.path.join(model_path,model_name))
+    return model.save(os.path.join(model_name))
 
 
-def load_model(model_path,model_name):
+def load_model(model_path,model_name, model='gensim', model_prefix='composant'):
     '''
-    model_path: path where the model has been saved
-    model_name: name of the saved model
+    model : str. Precise the topic modeling model wanted, must be "gensim" or "mallet"
+    model_path: str. path where the model has been saved
+    model_name: str. name of the saved model
+    model_prefix: str. By default, 'composant' default prefix used while saving the mallet model with train_lda_model function. 
     '''
-    ldamodel = gensim.models.LdaModel.load(os.path.join(model_path,model_name))
+    if model =='gensim':
+        ldamodel = gensim.models.LdaModel.load(os.path.join(model_path,model_name))
+    elif model =='mallet':
+        ldamodel = LdaMallet.load(os.path.join(model_path,model_name))
+        if model_prefix is not None:
+            ldamodel.prefix = model_path+'/'+ model_prefix
+    else:
+        raise ValueError('Please enter a valid model name: gensim or mallet')
     return ldamodel
 
 def fit_data(model, bow):
     """Test the model on new, unseen documents"""
     return model[bow]
 
-### Gensim LdaMallet
 
-def load_mallet_model(model_path, model_name, model_prefix=None):
-    '''
-    model_prefix: prefix used while saving the model
-    model_name: name of the saved model
-    '''
-    ldamodel = LdaMallet.load(os.path.join(model_path,model_name))
-    if model_prefix is not None:
-        ldamodel.prefix = model_path+'/'+ model_prefix
-    return ldamodel
-
-def train_mallet_model(mallet_path, bow_corpus, dictionary, num_topics, **kwargs):
-    """ Train the model on the corpus
-      
-    Parameters
-    ----------
-    mallet_path: path to mallet files
-    bow_corpus : iterable of list of tokens. Stream of document vectors or sparse matrix of shape (num_terms, num_documents).$
-    dictionary: corpora.Dictionary. Mapping from word IDs to words
-    num_topics: int
-    
-    Returns
-    -------
-    gensim.ldamodel
-    """
-    model = gensim.models.wrappers.LdaMallet(mallet_path, corpus=bow_corpus, id2word=dictionary, num_topics=num_topics, prefix='nautil')
-    return model
+# Visualization (only for gensim implementation for now)
 
 
-# Visualization
-
-
-def visualize_topics(model, bow_corpus, dictionary):
+def visualize_topics(model, bow_corpus, dictionary, model_type=None):
     """ Visualize the topics-keywords with the pyLDAvis interactive chart.
         (Work well in notebook)
+        
+    Parameters
+    ----------
+    model: LDA model: gensim or mallet
+    bow_corpus : iterable of list of tokens. 
+    dictionary: corpora.Dictionary. Dictionary encapsulates the mapping between normalized words and their integer ids.
+    model : str. Precise the topic modeling model used, must be "gensim" or "mallet"
+    
+    Returns:
+    ----------
+    3D interactive chart
+    
     """
-    return pyLDAvis.gensim.prepare(model, bow_corpus, dictionary)
+    if model_type == 'mallet':
+        model_vis = gensim.models.wrappers.ldamallet.malletmodel2ldamodel(model)
+    elif model_type == 'gensim':
+        model_vis = model
+    elif model_type is None:
+        raise ValueError('You forgot to precise your model type, it must be: gensim or mallet')
+    else:
+        raise ValueError('Please enter a valid model name: gensim or mallet') 
+    return pyLDAvis.gensim.prepare(model_vis, bow_corpus, dictionary)
 
 def save_pyldavis(pyldavis, vis_path, vis_name):
     """ Save the pyldavis interactive chart
@@ -224,6 +248,8 @@ def show_pyldavis(vis_path, vis_name):
 def show_dominant_topic(model, bow_corpus, topic_number=1, topn=5):
     """ Print the dominant topics in the document, its score and the topics' top keywords.
     
+    Quick way to interpret the topics
+
     Parameters
     ----------
 
