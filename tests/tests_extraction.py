@@ -1,4 +1,4 @@
-from nautilus_nlp.utils.keyword_extractor import extract_keywords
+from nautilus_nlp.preprocessing.keyword_extractor import extract_keywords
 
 str_="""Les moteurs de recherche tels Google, Exalead ou Yahoo! sont
  des applications très connues de fouille de textes sur de grandes masses de données. 
