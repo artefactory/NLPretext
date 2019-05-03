@@ -4,7 +4,10 @@ from nautilus_nlp.utils.preprocess import (
     remove_multiple_spaces_and_strip_text,
     remove_accents,
     fix_bad_unicode,
-    remove_EOL_characters
+    remove_EOL_characters,
+    remove_tokens_with_nonletters,
+    remove_special_caracters_from_tokenslist,
+    get_stopwords
 )
 
 
@@ -33,6 +36,28 @@ def test_remove_multiple_spaces_and_strip_text(input_str, expected_str):
 def test_remove_EOL_characters(input_str, expected_str):
     result = remove_EOL_characters(input_str)
     np.testing.assert_string_equal(result, expected_str)    
+
+
+def test_remove_tokens_with_nonletters():
+    input_tokens = ['foo','bar','124','34euros']
+    expected_output = ['foo','bar']
+    result = remove_tokens_with_nonletters(input_tokens)
+    np.testing.assert_array_equal(result,expected_output)
+
+
+def test_remove_special_caracters_from_tokenslist():
+    input_tokens = ['foo','bar','---',"'s",'#']
+    expected_output = ['foo','bar',"'s"]
+    result = remove_tokens_with_nonletters(input_tokens)
+    np.testing.assert_array_equal(result,expected_output)
+
+
+def test_get_stopwords():
+    languages_to_test = ['fr','en','ga','zh']
+    for lang in languages_to_test:
+        result = get_stopwords(lang)
+        assert len(result) > 0 and type(result) == list
+    
 
 def test_remove_accents():
     input_str = "éèëêàù"
