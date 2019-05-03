@@ -4,7 +4,7 @@ Testing for textpipe doc.py
 import pytest
 import random
 import spacy
-from nautilus_nlp.models.Language_detector import LangDetector
+from nautilus_nlp.models.language_detector import LangDetector
 from nautilus_nlp.doc import Doc, NautilusMissingModelException
 
 TEXT_1 = """

@@ -9,7 +9,7 @@ import re
 import sys
 import unicodedata
 
-from . import compat
+from . import  compat
 from . import file_loader as util
 
 

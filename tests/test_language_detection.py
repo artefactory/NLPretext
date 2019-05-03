@@ -1,8 +1,8 @@
-from nautilus_nlp.models import Language_detector
+from nautilus_nlp.models import language_detector
 import pytest
 import numpy as np
 
-model = Language_detector.LangDetector()
+model = language_detector.LangDetector()
 
 TEXT_1 = """Кипрская война (итал. Guerra di Cipro; тур. Kıbrıs Savaşı) — одна из нескольких войн между Османской империей и Венецианской республикой за господство в Восточном Средиземноморье. Сначала Венеция воевала с османами одна. Затем, когда сформировалась Священная лига (в которую помимо Венеции входили Испания с Неаполем и Сицилией, Республика Генуя, Герцогство Савойское, госпитальеры, Великое герцогство Тосканское и другие итальянские государства), Османская империя воевала уже против Лиги."""
 TEXT_2 = """

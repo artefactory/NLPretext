@@ -1,6 +1,6 @@
 import pytest
 import numpy as np
-from nautilus_nlp.utils.preprocess import (
+from nautilus_nlp.preprocessing.preprocess import (
     remove_multiple_spaces_and_strip_text,
     remove_accents,
     fix_bad_unicode,
