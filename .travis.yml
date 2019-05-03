@@ -2,8 +2,6 @@ language: python
 
 os:
   - linux
-  - osx
-  
 services:
   - docker
 
