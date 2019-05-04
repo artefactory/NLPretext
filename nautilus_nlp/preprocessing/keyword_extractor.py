@@ -1,13 +1,22 @@
 from flashtext import KeywordProcessor
 
-def extract_keywords(text,keyword,case_sensitive=True):
+def extract_keywords(text:str, keyword, case_sensitive=True) -> list:
     """
     Extract Keywords from a document.
-    args :
-    text: Text to extract keywords from
-    keyword : Single keyword (str) or list of keywords (list)
 
-    return list of extracted keyworkds
+    Parameters
+    ----------
+    text : str
+        Text to extract keywords from
+    keyword : str or list 
+        Single keyword (str) or list of keywords (list)
+    case_sensitive : bool
+        If True, will be case-sensitive.
+
+    Returns
+    -------
+    string
+        return list of extracted keyworkds
     """
     processor=KeywordProcessor(case_sensitive=case_sensitive)
     if isinstance(keyword,list):
