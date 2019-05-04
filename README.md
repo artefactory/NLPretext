@@ -97,7 +97,23 @@ run:
 
 `bash nautilus_nlp/scripts/download_ft_langdetect.sh`
 
+<<<<<<< HEAD
 # Quick start 
+=======
+### Install Mallet
+
+1) Install Mallet file
+run:
+
+`bash nautilus_nlp/scripts/install_mallet.sh`
+
+2) Install Java JDK (required to implement mallet)
+run:
+
+`bash nautilus_nlp/scripts/install_java.sh`
+
+# Notebooks
+>>>>>>> master
 
 The [notebook](notebooks/) folder contains various notebook on how to use this library.
 
