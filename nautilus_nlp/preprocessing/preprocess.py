@@ -552,8 +552,8 @@ def preprocess_text(
         text = text.lower()
     if no_stopwords is not None:
         stopwords = get_stopwords(no_stopwords)
-        text = remove_stopwords(text, stopwords)
+        text = ' '.join(remove_stopwords(text, stopwords))
     # always normalize whitespace; treat linebreaks separately from spacing
     text = normalize_whitespace(text)
-
+    
     return text
