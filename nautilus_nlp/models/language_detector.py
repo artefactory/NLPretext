@@ -1,5 +1,5 @@
-from nautilus_nlp.models.Fasttext_classifier import Fasttext_clf as langdetect
-from nautilus_nlp.utils.preprocess import remove_EOL_characters
+from nautilus_nlp.models.fasttext_classifier import Fasttext_clf as langdetect
+from nautilus_nlp.preprocessing.preprocess import remove_EOL_characters
 import pkg_resources
 
 lang_path = pkg_resources.resource_filename(
