@@ -468,7 +468,7 @@ def preprocess_text(
     no_accents=False,
     no_emoji=False,
     replace_with=None, 
-    remove_stopwords=None
+    no_stopwords=None
 ) -> str:
     """
     Normalize various aspects of a raw text doc. A convenience function for
@@ -507,7 +507,7 @@ def preprocess_text(
         if True, remove all emojis from text
     replace_with : string
         The string you want the entities to be replaced with.
-    remove_stopwords : 2-letter country code
+    no_stopwords : 2-letter country code
         If specified, will remove the stopwords of the given language. 
         Supported languages: ['ar', 'bg', 'ca', 'cz', 'da', 'nl', 'en',
          'fi', 'fr', 'de', 'hi', 'hu', 'id', 'it', 'nb', 'pl', 'pt', 'ro', 'ru', 
@@ -550,8 +550,8 @@ def preprocess_text(
         text = remove_punct(text)
     if lowercase is True:
         text = text.lower()
-    if remove_stopwords is not None:
-        stopwords = get_stopwords(remove_stopwords)
+    if no_stopwords is not None:
+        stopwords = get_stopwords(no_stopwords)
         text = remove_stopwords(text, stopwords)
     # always normalize whitespace; treat linebreaks separately from spacing
     text = normalize_whitespace(text)
