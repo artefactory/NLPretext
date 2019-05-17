@@ -136,7 +136,7 @@ def test_normalize_whitespace(input_str, expected_str):
         ("Let's go!",'Let us go!'),
         ("You've been missing",'You have been missing'),
         ("I'm sure you're leaving",'I am sure you are leaving'),
-        ("We'll survive.","We will survive")
+        ("We'll survive.","We will survive.")
     ]
     )
 def test_unpack_english_contractions(input_str, expected_str):
