@@ -19,7 +19,7 @@ from nautilus_nlp.preprocessing.preprocess import (
     remove_punct,
     remove_emoji
 )
-
+import nautilus_nlp.utils.phone_number as phone
 
 @pytest.mark.parametrize(
     "input_str, expected_str",
@@ -187,12 +187,14 @@ def test_replace_emails(input_str, expected_str):
         ('(541) 754-3010 is a US. Phone','*NUMBER* is a US. Phone'),
         ('+1-541-754-3010 is an international Phone','*NUMBER* is an international Phone'),
         ('+1-541-754-3010 Dialed in the US','*NUMBER* Dialed in the US'),
-        ('+1-541-754-3010 Dialed from Germany','*NUMBER* Dialed from Germany'),
-        ('191 541 754 3010 Dialed from France','*NUMBER* Dialed from France')
+        ('+1-541-754-3010 Dialed from Germany','*NUMBER* Dialed from Germany')
     ]
     )
 def test_replace_phone_numbers(input_str, expected_str):
-    result = replace_phone_numbers(input_str)
+    result = replace_phone_numbers(input_str,   replace_with="*NUMBER*", 
+                                                method="detection",
+                                                country_format_to_detect=phone.SUPPORTED_COUNTRY
+                                                )
     np.testing.assert_equal(result, expected_str)
 
 

@@ -11,6 +11,7 @@ from ftfy import fix_text as _fix_text
 from stop_words import get_stop_words as _get_stop_words
 from stop_words import LANGUAGE_MAPPING as _LANGUAGE_MAPPING
 
+from nautilus_nlp.utils.phone_number import extract_phone_numbers as _extract_phone_numbers
 from nautilus_nlp.utils import constants
 from nautilus_nlp.config.config import ROOT_FOLDER
 from nautilus_nlp.utils.file_loader import documents_loader
@@ -301,7 +302,10 @@ def replace_emails(text, replace_with="*EMAIL*") -> str:
     return constants.EMAIL_REGEX.sub(replace_with, text)
 
 
-def replace_phone_numbers(text, replace_with="*PHONE*") -> str:
+
+def replace_phone_numbers(text, replace_with:str="*PHONE*",
+                                method:str="regex",
+                                country_format_to_detect:list=[None,'FR','US','GB']) -> str:
     """
     Replace all phone numbers in ``text`` str with ``replace_with`` str
 
@@ -310,12 +314,30 @@ def replace_phone_numbers(text, replace_with="*PHONE*") -> str:
     text : string
     replace_with : string
         the string you want the phone number to be replaced with.
-
+    method : ['regex','detection']
+        regex is faster but will omit a lot of numbers, while detection will 
+        catch every numbers, but takes a while.
+    country_format_to_detect : list 
+        If a list of country code is specified, will catch every number formatted.
+        Only when method = 'detection'.
     Returns
     -------
     string
-    """    
-    return constants.PHONE_REGEX.sub(replace_with, text)
+    """
+    if method == 'regex':
+        return constants.PHONE_REGEX.sub(replace_with, text)
+        
+    elif method == 'detection':
+        found_nums = _extract_phone_numbers(text, countrylist=country_format_to_detect)
+
+        # order by lenght to avoid truncated numbers to be removed first.
+        found_nums.sort(key=len,reverse=True) 
+        for phone_number in found_nums:
+            text = text.replace(phone_number, replace_with)
+        
+        return text
+    else:
+        raise ValueError('Please input a valid method between "regex" or "detection"')
 
 
 def replace_numbers(text, replace_with="*NUMBER*") -> str:
@@ -467,7 +489,9 @@ def preprocess_text(
     no_accents=False,
     no_emoji=False,
     replace_with=None, 
-    no_stopwords=None
+    no_stopwords=None,
+    phone_countries_format=[None,'US','FR'],
+    phone_method='regex'
 ) -> str:
     """
     Normalize various aspects of a raw text doc. A convenience function for
@@ -514,7 +538,13 @@ def preprocess_text(
          'zu', 'da', 'de', 'es', 'et', 'fi', 'fr', 'hr', 'hu', 'it', 'ko', 'nl',
           'no', 'pl', 'pt', 'ru', 'sv', 'tr', 'zh', 'eo', 'he', 'la', 'sk', 'sl', 
           'br', 'ca', 'cs', 'el', 'eu', 'ga', 'gl', 'hy', 'id', 'ja', 'lv', 'th',
-           'ar', 'bg', 'bn', 'fa', 'hi', 'mr', 'ro', 'en']        
+           'ar', 'bg', 'bn', 'fa', 'hi', 'mr', 'ro', 'en']    
+    phone_countries_format : list
+        formats of the phone numbers to be removed. Full list is available at
+    utils.SUPPORTED_COUNTRY
+    phone_method : ['regex','detection']
+        regex is faster but will omit a lot of numbers, while detection will 
+        catch every numbers, but takes a while.
     Returns
     -------
     string
@@ -534,7 +564,9 @@ def preprocess_text(
     if no_emails is True:
         text = replace_emails(text, replace_with=replace_with)
     if no_phone_numbers is True:
-        text = replace_phone_numbers(text, replace_with=replace_with)
+        text = replace_phone_numbers(text,  replace_with=replace_with,
+                                            method=phone_method,
+                                            country_format_to_detect=phone_countries_format)
     if no_numbers is True:
         text = replace_numbers(text, replace_with=replace_with)
     if no_currency_symbols is True:
