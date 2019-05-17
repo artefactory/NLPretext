@@ -166,7 +166,7 @@ def test_replace_urls(input_str, expected_str):
         ("my email:hugo.vasselin@artefact.com","my email:*EMAIL*"),
         ("v543143@nwytg.net is a temporary email", "*EMAIL* is a temporary email"),
         ("our emails used to be name.surname@artefact.is","our emails used to be *EMAIL*"),
-        ("chaudasse_du_13@hotmail.frC ton email bb?",'*EMAIL*C ton email bb?')
+        ("chaudasse_du_13@hotmail.fr,C ton email bb?",'*EMAIL*,C ton email bb?')
     ]
     )
 def test_replace_emails(input_str, expected_str):
