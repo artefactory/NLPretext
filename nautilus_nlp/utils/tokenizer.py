@@ -58,7 +58,7 @@ def untokenize(tokens, lang='fr'):
     return text    
 
 
-def _tokensToString(tokens_or_str):
+def _convert_tokens_to_string(tokens_or_str):
     if type(tokens_or_str) is str:
         return tokens_or_str
     elif type(tokens_or_str) is list:
@@ -69,7 +69,7 @@ def _tokensToString(tokens_or_str):
         raise ValueError('Please input string or tokens')
 
 
-def _stringToTokens(tokens_or_str, lang_module='en_spacy'):
+def _convert_string_to_tokens(tokens_or_str, lang_module='en_spacy'):
     if type(tokens_or_str) is str:
         return tokenize(tokens_or_str, lang_module=lang_module)
     elif type(tokens_or_str) is list:
