@@ -1,4 +1,4 @@
-from nautilus_nlp.utils.tokenizer import _tokensToString, _stringToTokens
+from nautilus_nlp.utils.tokenizer import _convert_tokens_to_string, _convert_string_to_tokens
 
 import textblob
 from textblob import Blobber
@@ -11,7 +11,7 @@ def compute_sentiment_score(tokens_or_txt, lang_module='en_textblob'):
     '''
 
     '''
-    text = _tokensToString(tokens_or_txt)
+    text = _convert_tokens_to_string(tokens_or_txt)
     output = ''
     if lang_module is 'fr_textblob':
         tb = Blobber(pos_tagger=PatternTagger(), analyzer=PatternAnalyzer())

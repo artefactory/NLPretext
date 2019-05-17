@@ -11,16 +11,22 @@ from sklearn.feature_extraction.text import TfidfVectorizer, TfidfTransformer
 
 class Tfidf(object):
     """
-    Inputs a list of string
-    Outputs a tuple with the wordcount vector matrix, and the list of feature name
-    Params:
-        input=’content’, encoding=’utf-8’, decode_error=’strict’, strip_accents=None,
-        lowercase=True, preprocessor=None, tokenizer=None, analyzer=’word’,
-        stop_words=None, token_pattern=’(?u)\b\w\w+\b’, ngram_range=(1, 1),
-        max_df=1.0, min_df=1, max_features=None, vocabulary=None, binary=False,
-        dtype=<class ‘numpy.float64’>, norm=’l2’, use_idf=True, smooth_idf=True, sublinear_tf=False
-        
+    Inputs a list of string. 
+    and the list of feature name.
     Wrapper of https://scikit-learn.org/stable/modules/generated/sklearn.feature_extraction.text.TfidfVectorizer.html
+
+    Parameters
+    ----------
+    input=’content’, encoding=’utf-8’, decode_error=’strict’, strip_accents=None,
+    lowercase=True, preprocessor=None, tokenizer=None, analyzer=’word’,
+    stop_words=None, token_pattern=’(?u)\b\w\w+\b’, ngram_range=(1, 1),
+    max_df=1.0, min_df=1, max_features=None, vocabulary=None, binary=False,
+    dtype=<class ‘numpy.float64’>, norm=’l2’, use_idf=True, smooth_idf=True, sublinear_tf=False
+
+    Returns
+    -------
+    list
+        Outputs a tuple with the wordcount vector matrix
     """
     
     def __init__(self, **kwargs):
