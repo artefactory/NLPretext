@@ -143,10 +143,10 @@ CURRENCY_REGEX = re.compile(
 LINEBREAK_REGEX = re.compile(r"((\r\n)|[\n\v])+")
 NONBREAKING_SPACE_REGEX = re.compile(r"(?!\n)\s+")
 URL_REGEX = re.compile(
-    r"(?:^|(?<![\w/.]))"
+    r"(?:|(?<![\w/.]))"
     # protocol identifier
     # r"(?:(?:https?|ftp)://)"  <-- alt?
-    r"(?:(?:https?://|ftp://|www\d{0,3}\.))"
+    r"(?:(?:https?://|mailto:|ftp://|www\d{0,3}\.))"
     # user:pass authentication
     r"(?:\S+(?::\S*)?@)?" r"(?:"
     # IP address exclusion
