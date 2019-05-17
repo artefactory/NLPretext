@@ -31,7 +31,6 @@ def remove_multiple_spaces_and_strip_text(text: str) -> str:
     -------
     string
         the text with removed multiple spaces and strip text
-
     """
     regex_remove_multiple_spaces_list = ["\\t", "[\\s\\-\\*]{2,}"]
     for regex_remove_multiple_spaces in regex_remove_multiple_spaces_list:
@@ -71,7 +70,7 @@ def remove_tokens_with_nonletters(tokens: list) -> list:
     list
         list of tokens without tokens with numbers
     """
-    return [word for word in tokens if re.search("[a-zA-Z]", word)]
+    return [word for word in tokens if re.search("[^a-zA-Z]", word) is None]
 
 
 def remove_special_caracters_from_tokenslist(tokens: list) -> list:
