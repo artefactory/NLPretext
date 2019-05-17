@@ -58,7 +58,7 @@ def test_remove_tokens_with_nonletters():
 def test_remove_special_caracters_from_tokenslist():
     input_tokens = ['foo','bar','---',"'s",'#']
     expected_output = ['foo','bar',"'s"]
-    result = remove_tokens_with_nonletters(input_tokens)
+    result = remove_special_caracters_from_tokenslist(input_tokens)
     np.testing.assert_array_equal(result, expected_output)
 
 
