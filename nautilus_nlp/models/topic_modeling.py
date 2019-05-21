@@ -221,13 +221,15 @@ def visualize_topics(model, bow_corpus, dictionary, model_type=None):
     """
     if model_type == 'mallet':
         model_vis = gensim.models.wrappers.ldamallet.malletmodel2ldamodel(model)
+        vis_data = pyLDAvis.gensim.prepare(model_vis, bow_corpus, dictionary)
     elif model_type == 'gensim':
         model_vis = model
+        vis_data = pyLDAvis.gensim.prepare(model_vis, bow_corpus, dictionary)
     elif model_type is None:
         raise ValueError('You forgot to precise your model type, it must be: gensim or mallet')
     else:
         raise ValueError('Please enter a valid model name: gensim or mallet') 
-    return pyLDAvis.gensim.prepare(model_vis, bow_corpus, dictionary)
+    return pyLDAvis.display(vis_data)
 
 def save_pyldavis(pyldavis, vis_path, vis_name):
     """ Save the pyldavis interactive chart
@@ -236,6 +238,7 @@ def save_pyldavis(pyldavis, vis_path, vis_name):
     vis_path: str
     """ 
     return pyLDAvis.save_html(pyldavis, os.path.join(vis_path, vis_name + '{}'.format('.html')))
+
 
 
 def show_pyldavis(vis_path, vis_name):
