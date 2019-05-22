@@ -202,9 +202,9 @@ def test_replace_phone_numbers(input_str, expected_str):
     "input_str, expected_str",
     [
         ("123, 3 petits chats","*NUMBER*, *NUMBER* petits chats"),
-        ("l0ve 2 twa <3","l*NUMBER*ve *NUMBER* twa <*NUMBER*"),
+        ("l0ve 2 twa <3","l0ve *NUMBER* twa <*NUMBER*"),
         ("Give me 45bucks!","Give me *NUMBER*bucks!"),
-        ("call me at +33625093267","call me at +*NUMBER*")
+        ("call me at +33625093267","call me at *NUMBER*")
     ]
     )
 def test_replace_numbers(input_str, expected_str):
@@ -229,7 +229,7 @@ def test_replace_currency_symbols(input_str, param, expected_str):
 @pytest.mark.parametrize(
     "input_str, param, expected_str",
     [
-        ("Seriously...",None,"Seriously "),
+        ("Seriously...",None,"Seriously   "),
         ("Seriously?",None,"Seriously "),
         ("Seriously ?",None,"Seriously  "),
         ("Seriously???",None,"Seriously   "),
@@ -238,13 +238,13 @@ def test_replace_currency_symbols(input_str, param, expected_str):
         ('Seriously:',None,"Seriously "),
         ('Seriously;',None,"Seriously "),
         ("'Seriously'",None," Seriously "),
-        ("'Seriously'",'.,;','Seriously'),
-        ("Seriously...",'.,;','Seriously   '),
-        ("Seriously.,.",'.,;','Seriously   '),
-        ("Seriously.!.",'.,;','Seriously ! '),
-        ("hugo.vasselin@artefact.com",'.,;','hugo vasselin@artefact com'),
-        ("hugo.vasselin@artefact.com",None,'hugo vasselin@artefact com'),
-        ("hugo-vasselin@artefact.com",None,'hugo vasselin@artefact com')
+        ("'Seriously'",'.,;',"'Seriously'"),
+        ("Seriously.,.",'.,;',"Seriously "),
+        ("Seriously...",'.,;',"Seriously "),
+        ("Seriously.!.",'.,;',"Seriously ! "),
+        ("hugo.vasselin@artefact.com",'.,;',"hugo vasselin@artefact com"),
+        ("hugo.vasselin@artefact.com",None,"hugo vasselin@artefact com"),
+        ("hugo-vasselin@artefact.com",None,"hugo vasselin@artefact com")
     ]
     )
 def test_remove_punct(input_str, param, expected_str):
