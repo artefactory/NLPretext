@@ -7,6 +7,7 @@ import json
 import re
 import unicodedata
 
+import emoji as _emoji
 from ftfy import fix_text as _fix_text
 from stop_words import get_stop_words as _get_stop_words
 from stop_words import LANGUAGE_MAPPING as _LANGUAGE_MAPPING
@@ -459,19 +460,20 @@ def remove_accents(text:str, method:str="unicode") -> str:
 
 def remove_emoji(text:str) -> str:
     """
-    Remove emoji from any  str by stripping any unicode in the range of Emoji unicode,
+    Remove emoji from any str by stripping any unicode in the range of Emoji unicode
+    http://www.unicode.org/emoji/charts/full-emoji-list.html
 
     Parameters
     ----------
-    text : str
-        raw text
+    word : str
+        raw word
 
     Returns
     -------
-    string
+    str
     """
-    RE_EMOJI = re.compile("[\U00010000-\U0010ffff]", flags=re.UNICODE)
-    word = RE_EMOJI.sub(r"", text)
+    emoji_pattern = _emoji.get_emoji_regexp()
+    word = emoji_pattern.sub("", text)
     return word
 
 
