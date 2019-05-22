@@ -243,8 +243,8 @@ def test_replace_currency_symbols(input_str, param, expected_str):
         ("Seriously...",'.,;',"Seriously "),
         ("Seriously.!.",'.,;',"Seriously ! "),
         ("hugo.vasselin@artefact.com",'.,;',"hugo vasselin@artefact com"),
-        ("hugo.vasselin@artefact.com",None,"hugo vasselin@artefact com"),
-        ("hugo-vasselin@artefact.com",None,"hugo vasselin@artefact com")
+        ("hugo.vasselin@artefact.com",None,"hugo vasselin artefact com"),
+        ("hugo-vasselin@artefact.com",None,"hugo vasselin artefact com")
     ]
     )
 def test_remove_punct(input_str, param, expected_str):
