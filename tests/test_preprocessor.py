@@ -17,7 +17,8 @@ from nautilus_nlp.preprocessing.preprocess import (
     replace_numbers,
     replace_currency_symbols,
     remove_punct,
-    remove_emoji
+    remove_emoji,
+    convert_emoji_to_text
 )
 import nautilus_nlp.utils.phone_number as phone
 
@@ -183,15 +184,15 @@ def test_replace_emails(input_str, expected_str):
         ("call me at +33 6 25 09 32 67","call me at *PHONE*"),
         ("call me at +33 625 093 267","call me at *PHONE*"),
         ("if this unit test doesn't work, call 3615 and says 'ROBIN'",
-         "if this unit test doesn't work, call *NUMBER* and says 'ROBIN'"),
-        ('(541) 754-3010 is a US. Phone','*NUMBER* is a US. Phone'),
-        ('+1-541-754-3010 is an international Phone','*NUMBER* is an international Phone'),
-        ('+1-541-754-3010 Dialed in the US','*NUMBER* Dialed in the US'),
-        ('+1-541-754-3010 Dialed from Germany','*NUMBER* Dialed from Germany')
+         "if this unit test doesn't work, call *PHONE* and says 'ROBIN'"),
+        ('(541) 754-3010 is a US. Phone','*PHONE* is a US. Phone'),
+        ('+1-541-754-3010 is an international Phone','*PHONE* is an international Phone'),
+        ('+1-541-754-3010 Dialed in the US','*PHONE* Dialed in the US'),
+        ('+1-541-754-3010 Dialed from Germany','*PHONE* Dialed from Germany')
     ]
     )
 def test_replace_phone_numbers(input_str, expected_str):
-    result = replace_phone_numbers(input_str,   replace_with="*NUMBER*", 
+    result = replace_phone_numbers(input_str,   replace_with="*PHONE*", 
                                                 method="detection",
                                                 country_format_to_detect=phone.SUPPORTED_COUNTRY
                                                 )
@@ -268,3 +269,17 @@ def test_remove_punct(input_str, param, expected_str):
 def test_remove_emoji(input_str, expected_str):
     result = remove_emoji(input_str)
     np.testing.assert_equal(result, expected_str)
+
+
+@pytest.mark.parametrize(
+    "input_str, expected_str",
+    [
+        ("👉👌",":backhand_index_pointing_right::OK_hand:"),
+        ("🎅🏿⌚",":Santa_Claus_dark_skin_tone::watch:"),
+        ("🥖✊💦",":baguette_bread::raised_fist::sweat_droplets:"),
+        ("✊",":raised_fist:")
+    ]
+    )
+def test_convert_emoji_to_text(input_str, expected_str):
+    result = convert_emoji_to_text(input_str)
+    np.testing.assert_equal(result, expected_str)    
