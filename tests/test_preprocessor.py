@@ -136,7 +136,7 @@ def test_normalize_whitespace(input_str, expected_str):
         ("Let's go!",'Let us go!'),
         ("You've been missing",'You have been missing'),
         ("I'm sure you're leaving",'I am sure you are leaving'),
-        ("We'll survive.","We will survive")
+        ("We'll survive.","We will survive.")
     ]
     )
 def test_unpack_english_contractions(input_str, expected_str):
@@ -177,18 +177,18 @@ def test_replace_emails(input_str, expected_str):
 @pytest.mark.parametrize(
     "input_str, expected_str",
     [
-        ("mon 06 bb: 0625093267","mon 06 bb: *NUMBER*"),
-        ("mon 06 bb: 06.25.09.32.67","mon 06 bb: *NUMBER*"),
-        ("call me at +33625093267","call me at *NUMBER*"),
-        ("call me at +33 6 25 09 32 67","call me at *NUMBER*"),
-        ("call me at +33 625 093 267","call me at *NUMBER*"),
+        ("mon 06 bb: 0625093267","mon 06 bb: *PHONE*"),
+        ("mon 06 bb: 06.25.09.32.67","mon 06 bb: *PHONE*"),
+        ("call me at +33625093267","call me at *PHONE*"),
+        ("call me at +33 6 25 09 32 67","call me at *PHONE*"),
+        ("call me at +33 625 093 267","call me at *PHONE*"),
         ("if this unit test doesn't work, call 3615 and says 'ROBIN'",
-         "if this unit test doesn't work, call *NUMBER* and says 'ROBIN'"),
-        ('(541) 754-3010 is a US. Phone','*NUMBER* is a US. Phone'),
-        ('+1-541-754-3010 is an international Phone','*NUMBER* is an international Phone'),
-        ('+1-541-754-3010 Dialed in the US','*NUMBER* Dialed in the US'),
-        ('+1-541-754-3010 Dialed from Germany','*NUMBER* Dialed from Germany'),
-        ('191 541 754 3010 Dialed from France','*NUMBER* Dialed from France')
+         "if this unit test doesn't work, call *PHONE* and says 'ROBIN'"),
+        ('(541) 754-3010 is a US. Phone','*PHONE* is a US. Phone'),
+        ('+1-541-754-3010 is an international Phone','*PHONE* is an international Phone'),
+        ('+1-541-754-3010 Dialed in the US','*PHONE* Dialed in the US'),
+        ('+1-541-754-3010 Dialed from Germany','*PHONE* Dialed from Germany'),
+        ('191 541 754 3010 Dialed from France','*PHONE* Dialed from France')
     ]
     )
 def test_replace_phone_numbers(input_str, expected_str):
