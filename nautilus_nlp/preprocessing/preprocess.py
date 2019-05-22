@@ -461,12 +461,12 @@ def remove_accents(text:str, method:str="unicode") -> str:
 def remove_emoji(text:str) -> str:
     """
     Remove emoji from any str by stripping any unicode in the range of Emoji unicode
+    as defined in the unicode convention: 
     http://www.unicode.org/emoji/charts/full-emoji-list.html
 
     Parameters
     ----------
-    word : str
-        raw word
+    text : str
 
     Returns
     -------
@@ -475,6 +475,26 @@ def remove_emoji(text:str) -> str:
     emoji_pattern = _emoji.get_emoji_regexp()
     word = emoji_pattern.sub("", text)
     return word
+
+
+def convert_emoji_to_text(text:str, code_delimiters=(':', ':')) -> str:
+    """
+    Convert emoji to their CLDR Short Name, according to the unicode convention
+    http://www.unicode.org/emoji/charts/full-emoji-list.html
+    eg. 😀 --> :grinning_face:
+
+    Parameters
+    ----------
+    text : str
+        code_delimiters : tuple of symbols around the emoji code. 
+        eg: (':',':') --> :grinning_face:
+
+    Returns
+    -------
+    str
+        string 
+    """
+    return _emoji.demojize(text, delimiters=code_delimiters)
 
 
 def preprocess_text(
