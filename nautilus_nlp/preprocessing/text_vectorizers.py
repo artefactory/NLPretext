@@ -58,6 +58,17 @@ class Tfidf(object):
         self._compute_idf()
         return self.word_count_vector
 
+
+    def transform_doc(self, document):
+        '''
+        Transform documents to document-term matrix.
+
+        Returns
+        -------
+        Tf-idf-weighted document-term matrix.
+        '''
+        return self.tfidf_transformer.transform(document)
+
     def _apply_tfidf_to_doc(self, text):
         '''generate tf-idf for the given document'''
         return self.tfidf_transformer.transform(self.tfidf_vectorizer.transform([text]))
@@ -105,7 +116,10 @@ class Tfidf(object):
         return self._extract_topn_from_vector(self.feature_names, self._sort_coo(self.word_count_vector.tocoo()), topn=n)
 
 
-class Text_Vectorizer:
+class Text_Vectorizer(object):
+    '''
+    TODO: DOCSTRING
+    '''
     def __init__(self, doc_list):
         # Initialize
         self.doc_list = doc_list
