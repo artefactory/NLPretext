@@ -8,56 +8,66 @@ from nautilus_nlp.utils.file_loader import documents_loader, list_files, detect_
 testdoc_latin1 = "J'aime les frites bien grasse étalon châpeau!"
 testdoc_utf8 = "Un deuxième exemple de texte en utf-8 cette fois!"
 
+def create_files():
+    encoded_s = testdoc_latin1.encode('latin-1')
+    with open('testdoc_latin1.txt', 'wb') as f:
+        f.write(encoded_s)
 
-encoded_s = testdoc_latin1.encode('latin-1')
-with open('testdoc_latin1.txt', 'wb') as f:
-    f.write(encoded_s)
 
-
-encoded_s = testdoc_utf8.encode('utf-8')
-with open('testdoc_utf8.txt', 'wb') as f:
-    f.write(encoded_s)
+    encoded_s = testdoc_utf8.encode('utf-8')
+    with open('testdoc_utf8.txt', 'wb') as f:
+        f.write(encoded_s)
+    return True
 
 
 def test_openfile_with_encoding():
+    create_files()
     input_str = "testdoc_latin1.txt"
     expected_str = testdoc_latin1
     result = documents_loader(input_str, encoding='latin-1')
     np.testing.assert_string_equal(result, expected_str)
+    remove_files()
 
 
 def test_openfile_utf8():
+    create_files()
     input_str = "testdoc_utf8.txt"
     expected_str = testdoc_utf8
     result = documents_loader(input_str)
     np.testing.assert_string_equal(result, expected_str)
-
+    remove_files()
 
 def test_encoding_detection():
+    create_files()
     input_str = "testdoc_latin1.txt"
     expected_str = testdoc_latin1
     result = documents_loader(input_str)
     np.testing.assert_string_equal(result, expected_str)    
-  
+    remove_files()
 
 def test_load_several_docs_wildcard():
+    create_files()
     expected = {'testdoc_latin1.txt': "J'aime les frites bien grasse étalon châpeau!",
                 'testdoc_utf8.txt': 'Un deuxième exemple de texte en utf-8 cette fois!'}
-    result = documents_loader('*.txt', output_as='dict')
+    result = documents_loader('test*.txt', output_as='dict')
     np.testing.assert_equal(result, expected)   
-
+    remove_files()
 
 def test_load_several_docs_list():
+    create_files()
     expected = {'testdoc_latin1.txt': "J'aime les frites bien grasse étalon châpeau!",
                 'testdoc_utf8.txt': 'Un deuxième exemple de texte en utf-8 cette fois!'}
     result = documents_loader(['testdoc_latin1.txt','testdoc_utf8.txt'], output_as='dict')
     np.testing.assert_equal(result, expected)
+    remove_files()
 
 
 def test_load_several_docs_output_list():
+    create_files()
     expected = ["J'aime les frites bien grasse étalon châpeau!",
                 'Un deuxième exemple de texte en utf-8 cette fois!']
     result = documents_loader(['testdoc_latin1.txt','testdoc_utf8.txt'], output_as='list')
+    remove_files()
     return len(expected) == len(result) and sorted(expected) == sorted(result)
 
 
@@ -69,9 +79,12 @@ def test_load_several_docs_output_list():
 
 
 def test_detect_encoding():
+    create_files()
     expected = {'encoding': 'ISO-8859-1', 'confidence': 0.73, 'language': ''}
     result = detect_encoding('testdoc_latin1.txt')
     np.testing.assert_equal(result, expected)
+    remove_files()
 
-os.remove('testdoc_latin1.txt')
-os.remove('testdoc_utf8.txt')
+def remove_files():
+    os.remove('testdoc_latin1.txt')
+    os.remove('testdoc_utf8.txt')
