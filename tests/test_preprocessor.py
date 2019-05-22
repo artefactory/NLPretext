@@ -177,11 +177,11 @@ def test_replace_emails(input_str, expected_str):
 @pytest.mark.parametrize(
     "input_str, expected_str",
     [
-        ("mon 06 bb: 0625093267","mon 06 bb: *NUMBER*"),
-        ("mon 06 bb: 06.25.09.32.67","mon 06 bb: *NUMBER*"),
-        ("call me at +33625093267","call me at *NUMBER*"),
-        ("call me at +33 6 25 09 32 67","call me at *NUMBER*"),
-        ("call me at +33 625 093 267","call me at *NUMBER*"),
+        ("mon 06 bb: 0625093267","mon 06 bb: *PHONE*"),
+        ("mon 06 bb: 06.25.09.32.67","mon 06 bb: *PHONE*"),
+        ("call me at +33625093267","call me at *PHONE*"),
+        ("call me at +33 6 25 09 32 67","call me at *PHONE*"),
+        ("call me at +33 625 093 267","call me at *PHONE*"),
         ("if this unit test doesn't work, call 3615 and says 'ROBIN'",
          "if this unit test doesn't work, call *NUMBER* and says 'ROBIN'"),
         ('(541) 754-3010 is a US. Phone','*NUMBER* is a US. Phone'),

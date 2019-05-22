@@ -122,6 +122,7 @@ PUNCT_TRANSLATE_UNICODE = dict.fromkeys(
     ),
     " ",
 )
+PUNCT_TRANSLATE_UNICODE.pop(64) # To keep @ 
 
 ACRONYM_REGEX = re.compile(
     r"(?:^|(?<=\W))(?:(?:(?:(?:[A-Z]\.?)+[a-z0-9&/-]?)+(?:[A-Z][s.]?|[0-9]s?))|(?:[0-9](?:\-?[A-Z])+))(?:$|(?=\W))",
