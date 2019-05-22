@@ -6,39 +6,38 @@ from nltk.corpus import wordnet
 
 try:
     french_spacy = spacy.load('fr_core_news_sm')
-except OSError:
+except:
     raise OSError("""You must install French langage to use SpaCy. 
                     python -m spacy download fr
                     See https://spacy.io/usage/ for details
                 """)
 try:
     english_spacy = spacy.load('en_core_web_sm')
-except OSError:
+except:
     raise OSError("""You must install english langage to use SpaCy. 
                     python -m spacy download en
                     See https://spacy.io/usage/ for details
                 """)             
 
 
+def lemmatize_french_tokens(tokens:list, module:str='spacy')->list:
+    """
+    Wrappers of SpaCy french lemmatizers (based on FrenchLeffLemmatizer but 
+    faster and more accurate.) 
 
+    Parameters
+    ----------
+    tokens : list
+        List of tokens
+    module : ({'spacy'})
+        Only spaCy is available. We removed FrenchLeffLemmatizer for performance
+        considerations.
 
-def lemmatize_french_tokens(tokens, module='spacy', load_only_pos='all'):
-    '''
-    Wrappers of french lemmatizers. SpaCy is much faster but sometimes 
-    FrenchLefffLemmatizer returns more accurate results. Give a try to the 
-    2 modules and choose the one that better fit your needs. 
-
-    Args:
-        tokens (list): list of tokens
-        module ({'spacy'}): modules availables.
-        load_only_pos ({'a', v', 'r', 'n', 'all'}): If not "all", applies 
-        lemmatization only to a certain POS tags, for french_leff_v module.
-        a = adjectives, v = verbs, n = noun, r = adverb. 
-
-    Returns:
+    Returns
+    -------
+    list
         list of lemmatized tokens
-    
-    '''
+    """
 
     tokens = _make_sure_input_is_list_of_tokens(tokens)
 
@@ -52,18 +51,22 @@ def lemmatize_french_tokens(tokens, module='spacy', load_only_pos='all'):
         raise ValueError("must pass a valid module name!")
 
 
-def lemmatize_english_tokens(tokens, module='spacy', pos_tag_prio='v'):
-    '''
-    Args:
-        tokens (list): list of tokens
-        module ({'french_leff_v', 'spacy'}): modules availables.
-        pos_tag_prio ({'v', 'n', 'all'}): grammatical priority, applies
-        for french_leff_v module. 
+def lemmatize_english_tokens(tokens:list, module:str='spacy')->list:
+    """
+    Wrapper of SpaCy english lemmatizer and NLTK WordNet.
 
-    Returns:
+    Parameters
+    ----------
+    tokens : list
+        List of tokens
+    module : ({'spacy'},{'nltk'})
+        Tokenizer module. Default: 'spacy'
+
+    Returns
+    -------
+    list
         list of lemmatized tokens
-    
-    '''
+    """
     tokens = _make_sure_input_is_list_of_tokens(tokens)
 
     if module == 'nltk':
@@ -82,7 +85,9 @@ def lemmatize_english_tokens(tokens, module='spacy', pos_tag_prio='v'):
 
 
 def _get_wordnet_pos(word):
-    """Map POS tag to first character lemmatize() accepts"""
+    """
+    Map POS tag to first character lemmatize() accepts
+    """
     tag = nltk.pos_tag([word])[0][1][0].upper()
     tag_dict = {"J": wordnet.ADJ,
                 "N": wordnet.NOUN,
@@ -93,6 +98,10 @@ def _get_wordnet_pos(word):
 
 
 def _make_sure_input_is_list_of_tokens(tokens):
+    """
+    Raises an error if input is not a list, and convert "None" to blank list
+    to handle dataset with no text.
+    """    
     if type(tokens) is list:
         return tokens
     elif tokens is None:

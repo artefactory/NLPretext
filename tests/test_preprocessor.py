@@ -19,7 +19,7 @@ from nautilus_nlp.preprocessing.preprocess import (
     remove_punct,
     remove_emoji
 )
-
+import nautilus_nlp.utils.phone_number as phone
 
 @pytest.mark.parametrize(
     "input_str, expected_str",
@@ -58,7 +58,7 @@ def test_remove_tokens_with_nonletters():
 def test_remove_special_caracters_from_tokenslist():
     input_tokens = ['foo','bar','---',"'s",'#']
     expected_output = ['foo','bar',"'s"]
-    result = remove_tokens_with_nonletters(input_tokens)
+    result = remove_special_caracters_from_tokenslist(input_tokens)
     np.testing.assert_array_equal(result, expected_output)
 
 
@@ -166,7 +166,7 @@ def test_replace_urls(input_str, expected_str):
         ("my email:hugo.vasselin@artefact.com","my email:*EMAIL*"),
         ("v543143@nwytg.net is a temporary email", "*EMAIL* is a temporary email"),
         ("our emails used to be name.surname@artefact.is","our emails used to be *EMAIL*"),
-        ("chaudasse_du_13@hotmail.frC ton email bb?",'*EMAIL*C ton email bb?')
+        ("chaudasse_du_13@hotmail.fr,C ton email bb?",'*EMAIL*,C ton email bb?')
     ]
     )
 def test_replace_emails(input_str, expected_str):
@@ -183,16 +183,18 @@ def test_replace_emails(input_str, expected_str):
         ("call me at +33 6 25 09 32 67","call me at *PHONE*"),
         ("call me at +33 625 093 267","call me at *PHONE*"),
         ("if this unit test doesn't work, call 3615 and says 'ROBIN'",
-         "if this unit test doesn't work, call *PHONE* and says 'ROBIN'"),
-        ('(541) 754-3010 is a US. Phone','*PHONE* is a US. Phone'),
-        ('+1-541-754-3010 is an international Phone','*PHONE* is an international Phone'),
-        ('+1-541-754-3010 Dialed in the US','*PHONE* Dialed in the US'),
-        ('+1-541-754-3010 Dialed from Germany','*PHONE* Dialed from Germany'),
-        ('191 541 754 3010 Dialed from France','*PHONE* Dialed from France')
+         "if this unit test doesn't work, call *NUMBER* and says 'ROBIN'"),
+        ('(541) 754-3010 is a US. Phone','*NUMBER* is a US. Phone'),
+        ('+1-541-754-3010 is an international Phone','*NUMBER* is an international Phone'),
+        ('+1-541-754-3010 Dialed in the US','*NUMBER* Dialed in the US'),
+        ('+1-541-754-3010 Dialed from Germany','*NUMBER* Dialed from Germany')
     ]
     )
 def test_replace_phone_numbers(input_str, expected_str):
-    result = replace_phone_numbers(input_str)
+    result = replace_phone_numbers(input_str,   replace_with="*NUMBER*", 
+                                                method="detection",
+                                                country_format_to_detect=phone.SUPPORTED_COUNTRY
+                                                )
     np.testing.assert_equal(result, expected_str)
 
 
@@ -200,9 +202,9 @@ def test_replace_phone_numbers(input_str, expected_str):
     "input_str, expected_str",
     [
         ("123, 3 petits chats","*NUMBER*, *NUMBER* petits chats"),
-        ("l0ve 2 twa <3","l*NUMBER*ve *NUMBER* twa <*NUMBER*"),
+        ("l0ve 2 twa <3","l0ve *NUMBER* twa <*NUMBER*"),
         ("Give me 45bucks!","Give me *NUMBER*bucks!"),
-        ("call me at +33625093267","call me at +*NUMBER*")
+        ("call me at +33625093267","call me at *NUMBER*")
     ]
     )
 def test_replace_numbers(input_str, expected_str):
@@ -217,7 +219,7 @@ def test_replace_numbers(input_str, expected_str):
         ("Give me 23£",None,"Give me 23GBP"),
         ("Give me 23 £",None,"Give me 23 GBP"),
         ("Give me 23 €",None,"Give me 23 EUR"),
-        ('¥ is both japanese yen and Chinese Renminbi',"*CUR*","*CUR* is both japanese yen and Chinese Renminbi")
+        ("¥ is both japanese yen and Chinese Renminbi","*CUR*","*CUR* is both japanese yen and Chinese Renminbi")
     ]
     )
 def test_replace_currency_symbols(input_str, param, expected_str):
@@ -227,7 +229,7 @@ def test_replace_currency_symbols(input_str, param, expected_str):
 @pytest.mark.parametrize(
     "input_str, param, expected_str",
     [
-        ("Seriously...",None,"Seriously "),
+        ("Seriously...",None,"Seriously   "),
         ("Seriously?",None,"Seriously "),
         ("Seriously ?",None,"Seriously  "),
         ("Seriously???",None,"Seriously   "),
@@ -236,13 +238,13 @@ def test_replace_currency_symbols(input_str, param, expected_str):
         ('Seriously:',None,"Seriously "),
         ('Seriously;',None,"Seriously "),
         ("'Seriously'",None," Seriously "),
-        ("'Seriously'",'.,;','Seriously'),
-        ("Seriously...",'.,;','Seriously   '),
-        ("Seriously.,.",'.,;','Seriously   '),
-        ("Seriously.!.",'.,;','Seriously ! '),
-        ("hugo.vasselin@artefact.com",'.,;','hugo vasselin@artefact com'),
-        ("hugo.vasselin@artefact.com",None,'hugo vasselin@artefact com'),
-        ("hugo-vasselin@artefact.com",None,'hugo vasselin@artefact com')
+        ("'Seriously'",'.,;',"'Seriously'"),
+        ("Seriously.,.",'.,;',"Seriously "),
+        ("Seriously...",'.,;',"Seriously "),
+        ("Seriously.!.",'.,;',"Seriously ! "),
+        ("hugo.vasselin@artefact.com",'.,;',"hugo vasselin@artefact com"),
+        ("hugo.vasselin@artefact.com",None,"hugo vasselin@artefact com"),
+        ("hugo-vasselin@artefact.com",None,"hugo vasselin@artefact com")
     ]
     )
 def test_remove_punct(input_str, param, expected_str):
@@ -254,12 +256,15 @@ def test_remove_punct(input_str, param, expected_str):
     "input_str, expected_str",
     [
         ("👉👌",""),
-        ("🎅🏿",""),
+        ("🎅🏿⌚",""),
         ("🥖✊💦",""),
+        ("✊",""),
         ("J'espère que les 🚓 vont pas lire ce test",
-        "J'espère que les  vont pas lire ce test")
+        "J'espère que les  vont pas lire ce test"),
+        ("J'espère que les vont pas lire ce test🚓",
+        "J'espère que les vont pas lire ce test")
     ]
     )
 def test_remove_emoji(input_str, expected_str):
     result = remove_emoji(input_str)
-    np.testing.assert_equal(result, expected_str)    
+    np.testing.assert_equal(result, expected_str)
