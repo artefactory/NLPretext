@@ -1,20 +1,25 @@
 from nltk.stem.snowball import *
 
 
-def stem_tokens(tokens: list, lang: str ='english'):
-    '''
+def stem_tokens(tokens: list, lang: str ='english')-> list:
+    """
     Wrapper of NLTK's Snowball stemmers : http://www.nltk.org/howto/stem.html
 
-    Args:
-        tokens (list): list of tokens
-        lang ({'arabic', 'danish', 'dutch', 'english', 'finnish', 'french',
+    Parameters
+    ----------
+    tokens : list
+        List of tokens
+    lang : string
+        Supported languages: ({'arabic', 'danish', 'dutch', 'english', 'finnish', 'french',
         'german', 'hungarian', 'italian', 'norwegian', 'porter', 'portuguese', 
-        'romanian', 'russian', 'spanish', 'swedish'}): supported langages
+        'romanian', 'russian', 'spanish', 'swedish'}): 
 
-    Returns:
+    Returns
+    -------
+    list
         list of stemmed tokens
-    
-    '''
+    """
+
     supported_lang = [lang for lang in SnowballStemmer.languages]
     
     if lang in supported_lang:
