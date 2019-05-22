@@ -219,7 +219,7 @@ def test_replace_numbers(input_str, expected_str):
         ("Give me 23£",None,"Give me 23GBP"),
         ("Give me 23 £",None,"Give me 23 GBP"),
         ("Give me 23 €",None,"Give me 23 EUR"),
-        ('¥ is both japanese yen and Chinese Renminbi',"*CUR*","*CUR* is both japanese yen and Chinese Renminbi")
+        ("¥ is both japanese yen and Chinese Renminbi","*CUR*","*CUR* is both japanese yen and Chinese Renminbi")
     ]
     )
 def test_replace_currency_symbols(input_str, param, expected_str):
@@ -256,12 +256,15 @@ def test_remove_punct(input_str, param, expected_str):
     "input_str, expected_str",
     [
         ("👉👌",""),
-        ("🎅🏿",""),
+        ("🎅🏿⌚",""),
         ("🥖✊💦",""),
+        ("✊",""),
         ("J'espère que les 🚓 vont pas lire ce test",
-        "J'espère que les  vont pas lire ce test")
+        "J'espère que les  vont pas lire ce test"),
+        ("J'espère que les vont pas lire ce test🚓",
+        "J'espère que les vont pas lire ce test")
     ]
     )
 def test_remove_emoji(input_str, expected_str):
     result = remove_emoji(input_str)
-    np.testing.assert_equal(result, expected_str)    
+    np.testing.assert_equal(result, expected_str)

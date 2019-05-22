@@ -12,6 +12,7 @@ import json
 import re
 import unicodedata
 
+import emoji as _emoji
 from ftfy import fix_text
 from stop_words import get_stop_words as _get_stop_words
 from stop_words import LANGUAGE_MAPPING as _LANGUAGE_MAPPING
@@ -40,7 +41,8 @@ def remove_multiple_spaces_and_strip_text(text):
 
 
 def remove_EOL_characters(text):
-    """Remove end of line (\n) char.
+    """
+    Remove end of line char.
     Parameters
     ----------
     text : str,
@@ -155,11 +157,6 @@ def normalize_whitespace(text) -> str:
     return constants.NONBREAKING_SPACE_REGEX.sub(
         " ", constants.LINEBREAK_REGEX.sub(r"\n", text)
     ).strip()
-
-
-def unpack_french_contractions(text) -> str:
-
-    return text
 
 
 def unpack_english_contractions(text) -> str:
@@ -309,7 +306,7 @@ def remove_accents(text, method="unicode") -> str:
 
 def remove_emoji(word):
     """
-    Remove emoji from any  str by stripping any unicode in the range of Emoji unicode,
+    Remove emoji from any str by stripping any unicode in the range of Emoji unicode,
 
     Args:
         word (str): raw word
@@ -318,8 +315,8 @@ def remove_emoji(word):
         str
 
     """
-    RE_EMOJI = re.compile("[\U00010000-\U0010ffff]", flags=re.UNICODE)
-    word = RE_EMOJI.sub(r"", word)
+    emoji_pattern = _emoji.get_emoji_regexp()
+    word = emoji_pattern.sub(r"", word)
     return word
 
 
