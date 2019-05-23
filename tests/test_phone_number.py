@@ -5,7 +5,7 @@ def test_extract_phone_number():
     input_str = '(541) 754-3010 is a US. Phone'
     expected = ['(541) 754-3010', '754-3010']
     res = phone.extract_phone_numbers(input_str, countrylist=phone.SUPPORTED_COUNTRY)
-    assert res == expected
+    assert sorted(res) == sorted(expected)
 
 def test_extract_phone_number_us():
     input_str = '(541) 754-3010 is a US. Phone'

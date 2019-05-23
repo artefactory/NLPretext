@@ -9,14 +9,14 @@ def test_lemmatize_french_tokens_spacy():
 
 
 def test_lemmatize_english_tokens_spacy():
-    input_tokens = ['The', 'striped', 'bats', 'are', 'hanging', 'on', 'their', 'feet', 'for', 'best']
+    input_tokens = ['The', 'strip', 'bats', 'are', 'hanging', 'on', 'their', 'feet', 'for', 'best']
     expected = ['the', 'strip', 'bat', 'be', 'hang', 'on', '-PRON-', 'foot', 'for', 'good']
-    res = lemmatize_french_tokens(input_tokens, module='spacy')
+    res = lemmatize_english_tokens(input_tokens, module='spacy')
     assert res == expected
 
 
 def test_lemmatize_english_tokens_nltk():
     input_tokens = ['The', 'striped', 'bats', 'are', 'hanging', 'on', 'their', 'feet', 'for', 'best']
     expected = ['The', 'strip', 'bat', 'be', 'hang', 'on', 'their', 'foot', 'for', 'best']
-    res = lemmatize_french_tokens(input_tokens, module='nltk')
+    res = lemmatize_english_tokens(input_tokens, module='nltk')
     assert res == expected    
