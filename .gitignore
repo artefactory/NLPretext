@@ -96,3 +96,5 @@ target/
 
 # PyTest cache
 .pytest_cache/
+
+data/
