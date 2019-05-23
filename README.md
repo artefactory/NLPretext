@@ -144,6 +144,16 @@ Here is a quick example:
 ['tropical', 'storm', 'nicole', 'short', 'live', 'unusually', 'asymmetric', 'tropical', 'cyclone', 'cause', 'extensive', 'flooding', 'jamaica', 'atlantic', 'hurricane', 'season', 'source']
 ```
 
+
+# Make HTML documentation
+
+In order to make the html Sphinx documentation, you need to run at the nautilus_nlp root path:
+`sphinx-apidoc -f nautilus_nlp -o docs/`
+This will generate the .rst files.
+You can generate the doc with
+`cd docs && make html`
+
+You can now open the file index.html located in the build folder.
 # Project Organization
 ------------
 
