@@ -200,7 +200,7 @@ def fit_data(model, bow):
     return model[bow]
 
 
-# Visualization (only for gensim implementation for now)
+# Visualization
 
 
 def visualize_topics(model, bow_corpus, dictionary, model_type=None):
@@ -236,6 +236,7 @@ def save_pyldavis(pyldavis, vis_path, vis_name):
     vis_path: str
     """ 
     return pyLDAvis.save_html(pyldavis, os.path.join(vis_path, vis_name + '{}'.format('.html')))
+
 
 
 def show_pyldavis(vis_path, vis_name):
