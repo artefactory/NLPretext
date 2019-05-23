@@ -40,7 +40,7 @@ def test_untokenize_en():
     assert res == expected
 
 def test_untokenize_fr():
-    input_str = ['Les', 'moteurs', 'de', 'recherche', 'tels', 'Google', ',', 'Exalead', 'ou', 'Yahoo', '!', 'sont', 'des', 'applications', 'très', 'connues', 'de', 'fouille', 'de', 'textes', 'sur', 'de', 'grandes', 'masses', 'de', 'données', '.', 'Cependant', ',', 'les', 'moteurs', 'de', 'recherche', 'ne', 'se', 'basent', 'pas', 'uniquement', 'sur', 'le', 'texte', 'pour', "l'", 'indexer', ',', 'mais', 'également', 'sur', 'la', 'façon', 'dont', 'les', 'pages', 'sont', 'mises', 'en', 'valeur', 'les', 'unes', 'par', 'rapport', 'aux', 'autres', '.', "L'", 'algorithme', 'utilisé', 'par', 'Google', 'est', 'PageRank', ',', 'et', 'il', 'est', 'courant', 'de', 'voir', 'HITS', 'dans', 'le', 'milieu', 'académique']
-    expected = "Les moteurs de recherche tels Google, Exalead ou Yahoo ! sont des applications très connues de fouille de textes sur de grandes masses de données. Cependant, les moteurs de recherche ne se basent pas uniquement sur le texte pour l' indexer, mais également sur la façon dont les pages sont mises en valeur les unes par rapport aux autres. L' algorithme utilisé par Google est PageRank, et il est courant de voir HITS dans le milieu académique"
-    res = untokenize(input_str,lang='en')
+    input_str = ['Les', 'moteurs', 'de', 'recherche', 'tels', 'Google', ',', 'Exalead', 'ou', 'Yahoo', '!']
+    expected = "Les moteurs de recherche tels Google, Exalead ou Yahoo !"
+    res = untokenize(input_str,lang='fr')
     assert res == expected
