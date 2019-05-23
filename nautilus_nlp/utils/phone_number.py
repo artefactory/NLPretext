@@ -66,7 +66,7 @@ def extract_phone_numbers(string:str, countrylist:list=[None,'FR','US','GB'])->l
     return list(set(res))
 
 
-class PhoneParser(object):
+class phoneParser(object):
     """
     Python port of Google's libphonenumber.
     https://github.com/daviddrysdale/python-phonenumbers 
@@ -106,6 +106,6 @@ class PhoneParser(object):
         '''
         ['E164','INTERNATIONAL','NATIONAL','RFC3966']
         '''
-        standard_format = exec('phonenumbers.PhoneNumberFormat.'+num_format)
+        standard_format = exec('_phonenumbers.PhoneNumberFormat.'+num_format)
         
         return _phonenumbers.format_number(self.parsed_num, standard_format)
