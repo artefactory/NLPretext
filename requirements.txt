@@ -36,6 +36,9 @@ scikit_learn==0.20.3
 vaderSentiment==3.2.1
 google-compute-engine==2.8.13
 flashtext==2.7
+summa==1.2.0
+
+
 
 
 
