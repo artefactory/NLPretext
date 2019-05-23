@@ -526,6 +526,8 @@ def preprocess_text(
         raw text to preprocess
     fix_unicode : bool
         if True, fix "broken" unicode such as mojibake and garbled HTML entities
+    remove_eol_char : bool 
+        if True, will remove the end-of-line characters \\n
     lowercase : bool
         if True, all text is lower-cased
     no_urls : bool
