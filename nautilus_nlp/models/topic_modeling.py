@@ -200,7 +200,7 @@ def fit_data(model, bow):
     return model[bow]
 
 
-# Visualization (only for gensim implementation for now)
+# Visualization
 
 
 def visualize_topics(model, bow_corpus, dictionary, model_type=None):
