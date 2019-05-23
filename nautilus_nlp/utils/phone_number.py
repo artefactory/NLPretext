@@ -106,6 +106,6 @@ class PhoneParser(object):
         '''
         ['E164','INTERNATIONAL','NATIONAL','RFC3966']
         '''
-        standard_format = exec('phonenumbers.PhoneNumberFormat.'+num_format)
+        standard_format = exec('_phonenumbers.PhoneNumberFormat.'+num_format)
         
         return _phonenumbers.format_number(self.parsed_num, standard_format)
