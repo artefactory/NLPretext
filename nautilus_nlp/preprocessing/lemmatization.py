@@ -1,6 +1,7 @@
 import spacy
 import nltk
 nltk.download('wordnet')
+nltk.download('averaged_perceptron_tagger')
 from nltk.stem import WordNetLemmatizer 
 from nltk.corpus import wordnet
 
