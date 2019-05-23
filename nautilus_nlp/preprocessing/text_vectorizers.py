@@ -6,11 +6,13 @@ from gensim.matutils import sparse2full
 import numpy as np
 import math
 
-from sklearn.feature_extraction.text import TfidfVectorizer, TfidfTransformer
+from sklearn.feature_extraction.text import TfidfVectorizer as _TfidfVectorizer
 
 
-class Tfidf(object):
+class TfidfTextVectorizer(object):
     """
+    Convert a collection of raw documents to a matrix of TF-IDF features.
+
     Inputs a list of string. 
     and the list of feature name.
     Wrapper of https://scikit-learn.org/stable/modules/generated/sklearn.feature_extraction.text.TfidfVectorizer.html
@@ -22,56 +24,64 @@ class Tfidf(object):
     stop_words=None, token_pattern=’(?u)\b\w\w+\b’, ngram_range=(1, 1),
     max_df=1.0, min_df=1, max_features=None, vocabulary=None, binary=False,
     dtype=<class ‘numpy.float64’>, norm=’l2’, use_idf=True, smooth_idf=True, sublinear_tf=False
-
-    Returns
-    -------
-    list
-        Outputs a tuple with the wordcount vector matrix
     """
     
     def __init__(self, **kwargs):
-        self.tfidf_vectorizer = TfidfVectorizer(**kwargs)
-    
-    def _compute_wordcount_vector(self, documents):
-        '''
-        Input a list of documents (string)
-        Output the wordcount vector matrix 
-        '''
-        self.word_count_vector = self.tfidf_vectorizer.fit_transform(documents)
-        return self.word_count_vector
-    
+        self.tfidf_vectorizer = _TfidfVectorizer(**kwargs)
+
 
     def _get_features_name(self):
+        '''
+        Array mapping from feature integer indices to feature name
+        '''
         self.feature_names = self.tfidf_vectorizer.get_feature_names()
         return self.feature_names
 
-    
-    def _compute_idf(self):
-        self.tfidf_transformer=TfidfTransformer(smooth_idf=True, use_idf=True)
-        self.tfidf_transformer.fit(self.word_count_vector)
-        return self.word_count_vector
 
-    
-    def compute_tfidf(self, documents):
-        self._compute_wordcount_vector(documents)
-        self._get_features_name()
-        self._compute_idf()
-        return self.word_count_vector
-
-
-    def transform_doc(self, document):
+    def compute_tfidf(self, raw_documents):
         '''
-        Transform documents to document-term matrix.
+        Learn vocabulary and idf, return term-document matrix.
+
+        Input a list of documents (string)
+        Output the wordcount vector matrix.
+
+        params
+        ------
+        raw_documents : iterable
+            an iterable which yields either str, unicode or file objects
+
+        returns
+        -------
+        X : sparse matrix, [n_samples, n_features]
+            Tf-idf-weighted document-term matrix.
+        '''
+        self.word_count_vector = self.tfidf_vectorizer.fit_transform(raw_documents)
+        self._get_features_name()
+        return self.word_count_vector    
+
+
+    def apply_tfidf_to_documents(self, raw_document):
+        '''
+        Apply the tf-idf weights to a document or a list of documents.
+        Equivalent to .transform() method in sci-kit learn.
+        
+        Uses the vocabulary and document frequencies (df) learned by fit 
+        (or fit_transform), and convert documents to document-term matrix.
+
+        parameters
+        ---------
+        raw_documents : iterable or document
+            an iterable which yields either str, unicode or file objects, or 
+        a string.
 
         Returns
         -------
-        Tf-idf-weighted document-term matrix.
+        X : sparse matrix, [n_samples, n_features]
+            Tf-idf-weighted document-term matrix.
         '''
-        return self.tfidf_transformer.transform(document)
-
-    def _apply_tfidf_to_doc(self, text):
-        '''generate tf-idf for the given document'''
-        return self.tfidf_transformer.transform(self.tfidf_vectorizer.transform([text]))
+        if type(raw_document) == str:
+            raw_document = [raw_document]
+        return self.tfidf_vectorizer.transform(raw_document)
     
     
     def _sort_coo(self, coo_matrix):
@@ -104,21 +114,55 @@ class Tfidf(object):
 
         return results
 
-    
-    def get_top_tfidf_per_doc(self, text, n=10):
-        '''compute TF-IDF for a given doc, and returns a list of the top N weighted words'''
-        tf_idf_vector= self._apply_tfidf_to_doc(text)
+
+    def get_top_tfidf_per_doc(self, text:str, n:int=10)->list:
+        '''
+        compute TF-IDF for a given doc, and returns a list of the top N weighted words
+
+        parameters
+        ---------
+        text : sparse matrix, [n_samples, n_features]
+            If specified, will return the top weighted words for the given matrix,
+            otherwise will give the result of the tf-idf matrix
+        a string.
+
+        n : number of terms to display
+
+        Returns
+        -------
+        top-n weighted terms : dict
+            List of top terms for the given document
+        '''
+        tf_idf_vector= self.apply_tfidf_to_documents([text])
         sorted_items=self._sort_coo(tf_idf_vector.tocoo())
         return list(self._extract_topn_from_vector(self.feature_names, sorted_items, n).keys())
     
-    def get_top_tfidf(self, n=10):
-        '''returns a dict of the top N weighted words, with their weight'''
-        return self._extract_topn_from_vector(self.feature_names, self._sort_coo(self.word_count_vector.tocoo()), topn=n)
+
+    def get_top_tfidf(self, tfidf_matrix=None, n:int=10)->list:
+        '''
+        Input a tf-idf matrix, and returns a dict of the top N weighted words,
+        with their weight.
+
+        parameters
+        ---------
+        tfidf_matrix : sparse matrix, [n_samples, n_features]
+            If specified, will return the top weighted words for the given matrix,
+            otherwise will give the result of the tf-idf matrix
+        a string.
+
+        Returns
+        -------
+        top-n weighted terms : dict
+            Dict of top terms and their associated weighted.
+        '''
+        if tfidf_matrix is None:
+            tfidf_matrix = self.word_count_vector
+        return self._extract_topn_from_vector(self.feature_names, self._sort_coo(tfidf_matrix.tocoo()), topn=n)
 
 
-class Text_Vectorizer(object):
+class GensimTextVectorizer(object):
     '''
-    TODO: DOCSTRING
+    Gensim's implementation of TF-IDF, BOW models etc. 
     '''
     def __init__(self, doc_list):
         # Initialize
@@ -150,64 +194,83 @@ class Text_Vectorizer(object):
         docs_dict = self._get_docs_dict(docs)
         return nlp, docs, docs_dict
 
-    # Gensim can again be used to create a bag-of-words representation of each document,
-    # build the TF-IDF model,
-    # and compute the TF-IDF vector for each document.
+
     def _get_tfidf(self, docs, docs_dict):
+        '''
+        Gensim can again be used to create a bag-of-words representation of each document,
+        Build the TF-IDF model, and compute the TF-IDF vector for each document.
+        '''
         docs_corpus = [docs_dict.doc2bow(doc) for doc in docs]
         model_tfidf = TfidfModel(docs_corpus, id2word=docs_dict)
         docs_tfidf = model_tfidf[docs_corpus]
         docs_vecs = np.vstack([sparse2full(c, len(docs_dict)) for c in docs_tfidf])
         return docs_vecs
 
-    # Get avg w2v for one document
     def _document_vector(self, doc, docs_dict, nlp):
-        # remove out-of-vocabulary words
+        """
+        Get avg w2v for one document. Remove out-of-vocabulary words.
+        """
+        
         doc_vector = [nlp(word).vector for word in doc if word in docs_dict.token2id]
         return np.mean(doc_vector, axis=0)
 
 
-    # Get average vector for document list
     def avg_wv(self):
+        '''
+        Get average vector for document list
+        '''
         docs_vecs = np.vstack(
             [self._document_vector(doc, self.docs_dict, self.nlp) for doc in self.docs]
         )
         return docs_vecs
 
-    # Get TF-IDF vector for document list
+
     def get_tfidf(self):
+        '''
+        Get TF-IDF vector for document list
+        '''
         docs_corpus = [self.docs_dict.doc2bow(doc) for doc in self.docs]
         model_tfidf = TfidfModel(docs_corpus, id2word=self.docs_dict)
         docs_tfidf = model_tfidf[docs_corpus]
         docs_vecs = np.vstack([sparse2full(c, len(self.docs_dict)) for c in docs_tfidf])
         return docs_vecs
 
-    # Get Latent Semantic Indexing(LSI) vector for document list
+    
     def get_lsi(self, num_topics=300):
+        '''
+        Get Latent Semantic Indexing(LSI) vector for document list
+        '''
         docs_corpus = [self.docs_dict.doc2bow(doc) for doc in self.docs]
         model_lsi = models.LsiModel(docs_corpus, num_topics, id2word=self.docs_dict)
         docs_lsi = model_lsi[docs_corpus]
         docs_vecs = np.vstack([sparse2full(c, len(self.docs_dict)) for c in docs_lsi])
         return docs_vecs
 
-    # Get Random Projections(RP) vector for document list
+    
     def get_rp(self):
+        '''
+        Get Random Projections(RP) vector for document list
+        '''
         docs_corpus = [self.docs_dict.doc2bow(doc) for doc in self.docs]
         model_rp = models.RpModel(docs_corpus, id2word=self.docs_dict)
         docs_rp = model_rp[docs_corpus]
         docs_vecs = np.vstack([sparse2full(c, len(self.docs_dict)) for c in docs_rp])
         return docs_vecs
 
-    # Get Latent Dirichlet Allocation(LDA) vector for document list
     def get_lda(self, num_topics=100):
+        '''
+        Get Latent Dirichlet Allocation(LDA) vector for document list
+        '''
         docs_corpus = [self.docs_dict.doc2bow(doc) for doc in self.docs]
         model_lda = models.LdaModel(docs_corpus, num_topics, id2word=self.docs_dict)
         docs_lda = model_lda[docs_corpus]
         docs_vecs = np.vstack([sparse2full(c, len(self.docs_dict)) for c in docs_lda])
         return docs_vecs
 
-    # Get Hierarchical Dirichlet Process(HDP) vector for document list
     def get_hdp(self):
+        '''
+        Get Hierarchical Dirichlet Process(HDP) vector for document list
+        '''
         docs_corpus = [self.docs_dict.doc2bow(doc) for doc in self.docs]
         model_hdp = models.HdpModel(docs_corpus, id2word=self.docs_dict)
         docs_hdp = model_hdp[docs_corpus]
