@@ -499,6 +499,7 @@ def convert_emoji_to_text(text:str, code_delimiters=(':', ':')) -> str:
 
 def preprocess_text(
     text,
+    remove_eol_char=True,
     fix_unicode=False,
     lowercase=False,
     no_urls=False,
@@ -510,7 +511,7 @@ def preprocess_text(
     no_contractions=False,
     no_accents=False,
     no_emoji=False,
-    replace_with=None, 
+    replace_with=' ', 
     no_stopwords=None,
     phone_countries_format=[None,'US','FR'],
     phone_method='regex'
@@ -581,6 +582,8 @@ def preprocess_text(
 
     if fix_unicode is True:
         text = fix_bad_unicode(text, normalization="NFC")
+    if remove_eol_char is True:
+        text = remove_EOL_characters(text)
     if no_urls is True:
         text = replace_urls(text, replace_with=replace_with)
     if no_emails is True:
