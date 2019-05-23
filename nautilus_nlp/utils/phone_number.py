@@ -66,7 +66,7 @@ def extract_phone_numbers(string:str, countrylist:list=[None,'FR','US','GB'])->l
     return list(set(res))
 
 
-class PhoneParser(object):
+class phoneParser(object):
     """
     Python port of Google's libphonenumber.
     https://github.com/daviddrysdale/python-phonenumbers 
