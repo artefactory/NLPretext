@@ -19,4 +19,4 @@ def test_lemmatize_english_tokens_nltk():
     input_tokens = ['The', 'striped', 'bats', 'are', 'hanging', 'on', 'their', 'feet', 'for', 'best']
     expected = ['The', 'strip', 'bat', 'be', 'hang', 'on', 'their', 'foot', 'for', 'best']
     res = lemmatize_english_tokens(input_tokens, module='nltk')
-    assert res == expected    
+    assert res == expected
