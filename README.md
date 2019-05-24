@@ -46,6 +46,19 @@ pip install -e .
 
 ## Handling installation errors
 
+
+### Problem when building FastText on MACOS:
+
+If you see this errorwhen building Fasttext:
+
+    clang: warning: libstdc++ is deprecated; move to libc++ with a minimum deployment target of OS X 10.9 [-Wdeprecated]
+    ld: library not found for -lstdc++
+    clang: error: linker command failed with exit code 1 (use -v to see invocation)
+    error: command 'g++' failed with exit status 1
+Then you should type this command in your terminal:
+
+    export MACOSX_DEPLOYMENT_TARGET=10.9
+
 ### command 'gcc' failed with exit status 1
 
 While runing `pip install -r requirements.txt` you might get the following error message:
