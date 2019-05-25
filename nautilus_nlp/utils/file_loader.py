@@ -2,9 +2,12 @@ import io
 import chardet
 import glob
 import re
-from os.path import isfile, isdir
+import os 
+from os import listdir
+from os.path import isfile, isdir, join
 import json
 import logging
+
 
 logging.basicConfig(level=logging.INFO)
 
@@ -47,6 +50,23 @@ def text_loader(filepath, encoding=None, detectencoding=True):
                 return open_textfile(filepath, encoding=detected_encoding['encoding'])
             else:
                 raise UnicodeDecodeError('Cannot load document using utf-8. Try to detect encoding using detectencoding=True')
+
+
+def get_subfolders_path(folder):
+    if not folder.endswith("/"):
+        folder = folder + "/"
+    return [folder + f+'/' for f in listdir(folder)if isdir(join(folder, f)) and f != ".DS_Store"]
+
+
+def list_files_in_subdir(filepath):
+    '''
+    Get a list of all the filepath of files in directory and subdirectory.
+    '''
+    res = []
+    for path, subdirs, files in os.walk(filepath):
+        for name in files:
+            res.append(os.path.join(path, name))
+    return res
 
 
 def list_files(filepath:str):

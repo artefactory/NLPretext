@@ -1,12 +1,20 @@
-"""
-This dataset is based on:
+import csv
+
+def rebuilt_emoji_dictionaries(filename):
+    """
+   This function recreate the dictionnaries with emoji2unicode_name, emoji2sentiment  that are hardcoded below.
+
+    :input: csv filename
+    :return: dict,dict
+    
+    This dataset is based on and can be found:
     Kralj Novak, Petra; Smailović, Jasmina; Sluban, Borut and Mozetič, Igor, 2015,
     Emoji Sentiment Ranking 1.0, Slovenian language resource repository CLARIN.SI,
     http://hdl.handle.net/11356/1048.
-"""
 
-def rebuilt_emoji_dictionaries(filename):
-    emoji2unicode_name, emoji2sentiment = {}, {}
+    """
+
+    emoji2unicode_name, emoji2sentiment = dict(),dict()
     with open(filename) as csvin:
         for emoji in csv.DictReader(csvin):
             for key, value in emoji.items():
