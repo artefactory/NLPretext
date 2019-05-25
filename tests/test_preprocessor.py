@@ -1,11 +1,26 @@
 import pytest
 import numpy as np
-from nautilus_nlp.utils.preprocess import (
+from nautilus_nlp.preprocessing.preprocess import (
     remove_multiple_spaces_and_strip_text,
     remove_accents,
     fix_bad_unicode,
+    remove_EOL_characters,
+    remove_tokens_with_nonletters,
+    remove_special_caracters_from_tokenslist,
+    get_stopwords,
+    remove_stopwords,
+    normalize_whitespace,
+    unpack_english_contractions,
+    replace_urls,
+    replace_emails,
+    replace_phone_numbers,
+    replace_numbers,
+    replace_currency_symbols,
+    remove_punct,
+    remove_emoji,
+    convert_emoji_to_text
 )
-
+import nautilus_nlp.utils.phone_number as phone
 
 @pytest.mark.parametrize(
     "input_str, expected_str",
@@ -20,6 +35,52 @@ from nautilus_nlp.utils.preprocess import (
 def test_remove_multiple_spaces_and_strip_text(input_str, expected_str):
     result = remove_multiple_spaces_and_strip_text(input_str)
     np.testing.assert_string_equal(result, expected_str)
+
+@pytest.mark.parametrize(
+    "input_str, expected_str",
+    [
+        ("\nhello world", " hello world"),
+        ("hello\nworld", "hello world"),
+        ("hello world\n", "hello world ")
+    ],
+)
+def test_remove_EOL_characters(input_str, expected_str):
+    result = remove_EOL_characters(input_str)
+    np.testing.assert_string_equal(result, expected_str)    
+
+
+def test_remove_tokens_with_nonletters():
+    input_tokens = ['foo','bar','124','34euros']
+    expected_output = ['foo','bar']
+    result = remove_tokens_with_nonletters(input_tokens)
+    np.testing.assert_array_equal(result,expected_output)
+
+
+def test_remove_special_caracters_from_tokenslist():
+    input_tokens = ['foo','bar','---',"'s",'#']
+    expected_output = ['foo','bar',"'s"]
+    result = remove_special_caracters_from_tokenslist(input_tokens)
+    np.testing.assert_array_equal(result, expected_output)
+
+
+def test_get_stopwords():
+    languages_to_test = ['fr','en','ga','zh']
+    for lang in languages_to_test:
+        result = get_stopwords(lang)
+        assert len(result) > 0 and type(result) == list
+
+
+@pytest.mark.parametrize(
+    "input_tokens, expected_output",
+    [
+        (['I','like','when','you','move','your','body','!'], ['I', 'move', 'body', '!']),
+        ('I like when you move your body !', ['I', 'move', 'body', '!']),
+    ],
+)    
+def test_remove_stopwords(input_tokens, expected_output):
+    stopwords = get_stopwords('en')
+    result = remove_stopwords(input_tokens, stopwords)
+    np.testing.assert_array_equal(result, expected_output)
 
 
 def test_remove_accents():
@@ -56,3 +117,169 @@ def test_fix_bad_unicode(input_str, expected_str):
     result = fix_bad_unicode(input_str)
     np.testing.assert_string_equal(result, expected_str)
 
+
+@pytest.mark.parametrize(
+    "input_str, expected_str",
+    [
+        ('  foo  ', 'foo'),
+        ('  foo   bar  ', 'foo bar')
+    ],
+)
+def test_normalize_whitespace(input_str, expected_str):
+    result = normalize_whitespace(input_str)
+    np.testing.assert_equal(result, expected_str)
+
+@pytest.mark.parametrize(
+    "input_str, expected_str",
+    [
+        ("I can't tell how we've done.", 'I can not tell how we have done.'),
+        ("You're fired. She's nice.", "You are fired. She's nice."),
+        ("Let's go!",'Let us go!'),
+        ("You've been missing",'You have been missing'),
+        ("I'm sure you're leaving",'I am sure you are leaving'),
+        ("We'll survive.","We will survive.")
+    ]
+    )
+def test_unpack_english_contractions(input_str, expected_str):
+    result = unpack_english_contractions(input_str)
+    np.testing.assert_equal(result, expected_str)
+
+@pytest.mark.parametrize(
+    "input_str, expected_str",
+    [
+        ("Wan't to contribute to Nautilus? read https://github.com/artefactory/nautilus-nlp/blob/docs/CONTRIBUTING.md first",
+         "Wan't to contribute to Nautilus? read *URL* first"),
+        ("The ip address of my VM is http://34.76.182.5:8888", "The ip address of my VM is *URL*"),
+        ("If you go to http://internet.org, you will find a website hosted by FB.",
+         "If you go to *URL*, you will find a website hosted by FB."),
+        ("Ishttps://waaaou.com/ available?",'Is*URL* available?'),
+        ("mailto:hugo.vasselin@artefact.com",'*URL*')
+    ]
+    )
+def test_replace_urls(input_str, expected_str):
+    result = replace_urls(input_str)
+    np.testing.assert_equal(result, expected_str)
+
+
+@pytest.mark.parametrize(
+    "input_str, expected_str",
+    [
+        ("my email:hugo.vasselin@artefact.com","my email:*EMAIL*"),
+        ("v543143@nwytg.net is a temporary email", "*EMAIL* is a temporary email"),
+        ("our emails used to be name.surname@artefact.is","our emails used to be *EMAIL*"),
+        ("chaudasse_du_13@hotmail.fr,C ton email bb?",'*EMAIL*,C ton email bb?')
+    ]
+    )
+def test_replace_emails(input_str, expected_str):
+    result = replace_emails(input_str)
+    np.testing.assert_equal(result, expected_str)
+
+
+@pytest.mark.parametrize(
+    "input_str, expected_str",
+    [
+        ("mon 06 bb: 0625093267","mon 06 bb: *PHONE*"),
+        ("mon 06 bb: 06.25.09.32.67","mon 06 bb: *PHONE*"),
+        ("call me at +33625093267","call me at *PHONE*"),
+        ("call me at +33 6 25 09 32 67","call me at *PHONE*"),
+        ("call me at +33 625 093 267","call me at *PHONE*"),
+        ("if this unit test doesn't work, call 3615 and says 'ROBIN'",
+         "if this unit test doesn't work, call *PHONE* and says 'ROBIN'"),
+        ('(541) 754-3010 is a US. Phone','*PHONE* is a US. Phone'),
+        ('+1-541-754-3010 is an international Phone','*PHONE* is an international Phone'),
+        ('+1-541-754-3010 Dialed in the US','*PHONE* Dialed in the US'),
+        ('+1-541-754-3010 Dialed from Germany','*PHONE* Dialed from Germany')
+    ]
+    )
+def test_replace_phone_numbers(input_str, expected_str):
+    result = replace_phone_numbers(input_str,   replace_with="*PHONE*", 
+                                                method="detection",
+                                                country_format_to_detect=phone.SUPPORTED_COUNTRY
+                                                )
+    np.testing.assert_equal(result, expected_str)
+
+
+@pytest.mark.parametrize(
+    "input_str, expected_str",
+    [
+        ("123, 3 petits chats","*NUMBER*, *NUMBER* petits chats"),
+        ("l0ve 2 twa <3","l0ve *NUMBER* twa <*NUMBER*"),
+        ("Give me 45bucks!","Give me *NUMBER*bucks!"),
+        ("call me at +33625093267","call me at *NUMBER*")
+    ]
+    )
+def test_replace_numbers(input_str, expected_str):
+    result = replace_numbers(input_str)
+    np.testing.assert_equal(result, expected_str)
+
+
+@pytest.mark.parametrize(
+    "input_str, param, expected_str",
+    [
+        ("Give me 23$",None,"Give me 23USD"),
+        ("Give me 23£",None,"Give me 23GBP"),
+        ("Give me 23 £",None,"Give me 23 GBP"),
+        ("Give me 23 €",None,"Give me 23 EUR"),
+        ("¥ is both japanese yen and Chinese Renminbi","*CUR*","*CUR* is both japanese yen and Chinese Renminbi")
+    ]
+    )
+def test_replace_currency_symbols(input_str, param, expected_str):
+    result = replace_currency_symbols(input_str, replace_with=param)
+    np.testing.assert_equal(result, expected_str)
+
+@pytest.mark.parametrize(
+    "input_str, param, expected_str",
+    [
+        ("Seriously...",None,"Seriously   "),
+        ("Seriously?",None,"Seriously "),
+        ("Seriously ?",None,"Seriously  "),
+        ("Seriously???",None,"Seriously   "),
+        ("Seriously?!",None,"Seriously  "),
+        ('"Seriously"',None," Seriously "),
+        ('Seriously:',None,"Seriously "),
+        ('Seriously;',None,"Seriously "),
+        ("'Seriously'",None," Seriously "),
+        ("'Seriously'",'.,;',"'Seriously'"),
+        ("Seriously.,.",'.,;',"Seriously "),
+        ("Seriously...",'.,;',"Seriously "),
+        ("Seriously.!.",'.,;',"Seriously ! "),
+        ("hugo.vasselin@artefact.com",'.,;',"hugo vasselin@artefact com"),
+        ("hugo.vasselin@artefact.com",None,"hugo vasselin artefact com"),
+        ("hugo-vasselin@artefact.com",None,"hugo vasselin artefact com")
+    ]
+    )
+def test_remove_punct(input_str, param, expected_str):
+    result = remove_punct(input_str, marks=param)
+    np.testing.assert_equal(result, expected_str)
+
+
+@pytest.mark.parametrize(
+    "input_str, expected_str",
+    [
+        ("👉👌",""),
+        ("🎅🏿⌚",""),
+        ("🥖✊💦",""),
+        ("✊",""),
+        ("J'espère que les 🚓 vont pas lire ce test",
+        "J'espère que les  vont pas lire ce test"),
+        ("J'espère que les vont pas lire ce test🚓",
+        "J'espère que les vont pas lire ce test")
+    ]
+    )
+def test_remove_emoji(input_str, expected_str):
+    result = remove_emoji(input_str)
+    np.testing.assert_equal(result, expected_str)
+
+
+@pytest.mark.parametrize(
+    "input_str, expected_str",
+    [
+        ("👉👌",":backhand_index_pointing_right::OK_hand:"),
+        ("🎅🏿⌚",":Santa_Claus_dark_skin_tone::watch:"),
+        ("🥖✊💦",":baguette_bread::raised_fist::sweat_droplets:"),
+        ("✊",":raised_fist:")
+    ]
+    )
+def test_convert_emoji_to_text(input_str, expected_str):
+    result = convert_emoji_to_text(input_str)
+    np.testing.assert_equal(result, expected_str)    
