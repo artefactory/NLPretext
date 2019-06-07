@@ -37,6 +37,7 @@ flashtext==2.7
 phonenumbers==8.10.12
 emoji>=0.5.2
 summa==1.2.0
+biterm==0.1.5
 
 
 
