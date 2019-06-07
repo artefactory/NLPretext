@@ -6,23 +6,6 @@ from sklearn.feature_extraction.text import CountVectorizer
 
 class BitermModel:
 
-    @staticmethod
-    def is_int_positive(number):
-        if type(number) != int:
-            raise ValueError("Parameter {} has to be an integer".format(number))
-        if number < 1:
-            raise ValueError("Parameter {} has to be positive".format(number))
-
-    @staticmethod
-    def is_list_of_string(data):
-        if type(data) != list:
-            raise ValueError("{} has to be a list".format(data))
-        if len(data) == 0:
-            raise ValueError("{} is empty".format(data))
-        for document in data:
-            if type(document) != str:
-                raise ValueError("All elements of {} have to be a string, problem with {}".format(data, document))
-
     def __init__(self, data, nb_topics, nb_iteration, lang='english'):
         """
         Model for topic modelling
@@ -42,6 +25,23 @@ class BitermModel:
         self.nb_iteration = nb_iteration
         self.lang = lang
         self.topics = None
+
+    @staticmethod
+    def is_int_positive(number):
+        if type(number) != int:
+            raise ValueError("Parameter {} has to be an integer".format(number))
+        if number < 1:
+            raise ValueError("Parameter {} has to be positive".format(number))
+
+    @staticmethod
+    def is_list_of_string(data):
+        if type(data) != list:
+            raise ValueError("{} has to be a list".format(data))
+        if len(data) == 0:
+            raise ValueError("{} is empty".format(data))
+        for document in data:
+            if type(document) != str:
+                raise ValueError("All elements of {} have to be a string, problem with {}".format(data, document))
 
     def get_clusters(self, nb_word_per_cluster):
         vec = CountVectorizer(stop_words=self.lang)
