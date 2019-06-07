@@ -2,6 +2,7 @@ import numpy as np
 from biterm.btm import oBTM
 from biterm.utility import vec_to_biterms, topic_summuary
 from sklearn.feature_extraction.text import CountVectorizer
+import pyLDAvis
 
 
 class BitermModel:
@@ -25,6 +26,9 @@ class BitermModel:
         self.nb_iteration = nb_iteration
         self.lang = lang
         self.topics = None
+        self.btm = None
+        self.X = None
+        self.vocab = None
 
     @staticmethod
     def is_int_positive(number):
@@ -45,14 +49,14 @@ class BitermModel:
 
     def get_clusters(self, nb_word_per_cluster):
         vec = CountVectorizer(stop_words=self.lang)
-        X = vec.fit_transform(self.data).toarray()
-        vocab = np.array(vec.get_feature_names())
+        self.X = vec.fit_transform(self.data).toarray()
+        self.vocab = np.array(vec.get_feature_names())
 
-        biterms = vec_to_biterms(X)
-        btm = oBTM(num_topics=self.nb_topics, V=vocab)
-        self.topics = btm.fit_transform(biterms, iterations=self.nb_iteration)
+        biterms = vec_to_biterms(self.X)
+        self.btm = oBTM(num_topics=self.nb_topics, V=self.vocab)
+        self.topics = self.btm.fit_transform(biterms, iterations=self.nb_iteration)
 
-        results = topic_summuary(btm.phi_wz.T, X, vocab, nb_word_per_cluster, verbose=False)
+        results = topic_summuary(self.btm.phi_wz.T, self.X, self.vocab, nb_word_per_cluster, verbose=False)
 
         return results
 
@@ -61,3 +65,11 @@ class BitermModel:
             raise ValueError("Model needs to be trained first")
 
         return self.topics[index].argmax()
+
+    def save_pyLDAvis_plot(self, path_to_output='./plot.html'):
+        if self.topics is None or self.btm is None or self.X is None or self.vocab is None:
+            raise ValueError("Model needs to be trained first")
+
+        vis = pyLDAvis.prepare(self.btm.phi_wz.T, self.topics, np.count_nonzero(self.X, axis=1), self.vocab,
+                               np.sum(self.X, axis=0))
+        pyLDAvis.save_html(vis, path_to_output)
