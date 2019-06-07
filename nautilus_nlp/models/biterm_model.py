@@ -7,14 +7,14 @@ import pyLDAvis
 
 class BitermModel:
 
-    def __init__(self, data, nb_topics, nb_iteration, lang='english'):
+    def __init__(self, data, nb_topics, nb_iteration, lang):
         """
         Model for topic modelling
         Particularly useful for short texts
         :param data: a list of string, each string can be a document
         :param nb_topics: positive int
         :param nb_iteration: positive int
-        :param lang: str, language to remove the stop words
+        :param lang: str, language to remove the stop words, can be setup to None
         """
 
         self.is_int_positive(nb_topics)
