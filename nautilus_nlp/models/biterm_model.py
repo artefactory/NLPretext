@@ -58,6 +58,11 @@ class BitermModel:
                 raise ValueError("All elements of {} have to be a string, problem with {}".format(data, document))
 
     def compute_topics(self, nb_word_per_cluster):
+        """
+        Main function computing the topic modeling, topics
+        :param nb_word_per_cluster: positive integer
+        :return: a dictionary containing the the different topics with the top words and coherence associated
+        """
         vec = CountVectorizer(stop_words=self.lang)
         self._vectorize_text = vec.fit_transform(self.data).toarray()
         self._vocabulary = np.array(vec.get_feature_names())
@@ -71,12 +76,22 @@ class BitermModel:
         return results
 
     def get_document_topic(self, index):
+        """
+        Get the cluster associated to the specified document
+        :param index: the document index, positive integer
+        :return: the cluster index
+        """
         if self._topics is None:
             raise ValueError("Model needs to be trained first")
 
         return self._topics[index].argmax()
 
-    def save_pyLDAvis_plot(self, path_to_output='./biterm_pyLDAavis_plot.html'):
+    def save_pyLDAvis_plot_as_html(self, path_to_output='./biterm_pyLDAavis_plot.html'):
+        """
+        Function saving the pyLDAvis plot associated with the compute_topics function
+        :param path_to_output: path to save the plut, must be a html file
+        :return:
+        """
         if self._topics is None or self._btm is None or self._vectorize_text is None or self._vocabulary is None:
             raise ValueError("Model needs to be trained first")
 
