@@ -27,8 +27,8 @@ class BitermModel:
         self.lang = lang
         self._topics = None
         self._btm = None
-        self._X = None
-        self._vocab = None
+        self._vectorize_text = None
+        self._vocabulary = None
 
     @staticmethod
     def is_int_positive(number):
@@ -59,14 +59,14 @@ class BitermModel:
 
     def compute_topics(self, nb_word_per_cluster):
         vec = CountVectorizer(stop_words=self.lang)
-        self._X = vec.fit_transform(self.data).toarray()
-        self._vocab = np.array(vec.get_feature_names())
+        self._vectorize_text = vec.fit_transform(self.data).toarray()
+        self._vocabulary = np.array(vec.get_feature_names())
 
-        biterms = vec_to_biterms(self._X)
-        self._btm = oBTM(num_topics=self.nb_topics, V=self._vocab)
+        biterms = vec_to_biterms(self._vectorize_text)
+        self._btm = oBTM(num_topics=self.nb_topics, V=self._vocabulary)
         self._topics = self._btm.fit_transform(biterms, iterations=self.nb_iteration)
 
-        results = topic_summuary(self._btm.phi_wz.T, self._X, self._vocab, nb_word_per_cluster, verbose=False)
+        results = topic_summuary(self._btm.phi_wz.T, self._vectorize_text, self._vocabulary, nb_word_per_cluster, verbose=False)
 
         return results
 
@@ -77,9 +77,9 @@ class BitermModel:
         return self._topics[index].argmax()
 
     def save_pyLDAvis_plot(self, path_to_output='./biterm_pyLDAavis_plot.html'):
-        if self._topics is None or self._btm is None or self._X is None or self._vocab is None:
+        if self._topics is None or self._btm is None or self._vectorize_text is None or self._vocabulary is None:
             raise ValueError("Model needs to be trained first")
 
-        vis = pyLDAvis.prepare(self._btm.phi_wz.T, self._topics, np.count_nonzero(self._X, axis=1), self._vocab,
-                               np.sum(self._X, axis=0))
+        vis = pyLDAvis.prepare(self._btm.phi_wz.T, self._topics, np.count_nonzero(self._vectorize_text, axis=1), self._vocabulary,
+                               np.sum(self._vectorize_text, axis=0))
         pyLDAvis.save_html(vis, path_to_output)
