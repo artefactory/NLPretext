@@ -43,7 +43,7 @@ class UnitTestBiterm:
                                    , nb_topics=self.nb_topics
                                    , nb_iteration=self.nb_iteration
                                    , lang=self.language)
-        clusters = biterm_model.get_clusters(nb_word_per_cluster=self.nb_word_per_cluster)
+        clusters = biterm_model.compute_topics(nb_word_per_cluster=self.nb_word_per_cluster)
         assert len(pd.DataFrame(clusters)) == 5
 
     def test_number_topic_negative(self, nb_topics):
