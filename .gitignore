@@ -1,3 +1,4 @@
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
@@ -65,6 +66,7 @@ target/
 
 # Pycharm
 .idea
+venv/
 
 # VS Code
 .vscode/
