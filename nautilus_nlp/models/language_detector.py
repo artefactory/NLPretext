@@ -8,8 +8,8 @@ lang_path = pkg_resources.resource_filename(
 
 
 class LangDetector:
-    """ This class is to instantiante a language detector.
-
+    """ 
+    This class is to instantiante a language detector.
     """
 
     def __init__(self, path=None):
@@ -20,12 +20,17 @@ class LangDetector:
         """
         Detected the language of a text
 
-        Args:
-        hint_language: language you expect your text to be
+        Parameters
+        ----------
+        hint_language : string
+            language you expect your text to be
 
-        Returns:
-        is_reliable: is the top language is much better than 2nd best language?
-        language: 2-letter code for the language of the text
+        Returns
+        -------
+        is_reliable : 
+            is the top language is much better than 2nd best language?
+        language: 
+            2-letter code for the language of the text
         """
         best_guesses = self.model.predict(remove_EOL_characters(text_to_detect))
         return best_guesses[0][0].replace("__label__", ""), best_guesses[1][0]

@@ -13,8 +13,8 @@ logging.getLogger("gensim").setLevel(logging.WARNING)
 
 
 def create_dictionary(data):
-    
-    """ Create a Dictionary encapsulates the mapping between normalized words and their integer ids.
+    """ 
+    Create a Dictionary encapsulates the mapping between normalized words and their integer ids.
     
     Parameters
     ----------
@@ -27,7 +27,8 @@ def create_dictionary(data):
     return gensim.corpora.Dictionary(data)
 
 def filter_extremes(dictionary, no_below=15, no_above=0.3 , **kwargs) :
-    """ Remove very rare and very common words
+    """ 
+    Remove very rare and very common words
 
     Parameters
     ----------
@@ -45,8 +46,10 @@ def filter_extremes(dictionary, no_below=15, no_above=0.3 , **kwargs) :
 
 def create_bow_corpus(data, dictionary):
     
-    """ Create the corpus: one of the two main inputs to the LDA topic model with the dictionary (id2word)
-        The produced corpus is a mapping of (token_id, token_count).
+    """ 
+    Create the corpus: one of the two main inputs to the LDA topic model with the dictionary (id2word)
+    The produced corpus is a mapping of (token_id, token_count).
+
     Parameters
     ----------
     data : list of list of tokens
@@ -168,23 +171,40 @@ def train_lda_mallet(bow_corpus, dictionary, num_topics, mallet_path, **kwargs):
 
 
 def save_model(model, model_name):
-    """ Save the model that has been trained. The model will be saved on your current emplacement.
+    """ 
+    Save the model that has been trained. The model will be saved on your current emplacement.
         
-        Parameters
-        ----------
-        model: ldamodel
-        model_name: str. Name the model that will be saved
+    Parameters
+    ----------
+    model: ldamodel
+    model_name: str. 
+        Name the model that will be saved
     """
     return model.save(os.path.join(model_name))
 
 
 def load_model(model_path,model_name, model='gensim', model_prefix='composant'):
-    '''
-    model : str. Precise the topic modeling model wanted, must be "gensim" or "mallet"
-    model_path: str. path where the model has been saved
-    model_name: str. name of the saved model
-    model_prefix: str. By default, 'composant' default prefix used while saving the mallet model with train_lda_model function. 
-    '''
+    """
+    Detected the language of a text
+
+    Parameters
+    ----------
+    model_path: str
+        path where the model has been saved
+    model_name: str
+        name of the saved model
+    model : str
+        Precise the topic modeling model wanted, must be "gensim" or "mallet"
+    model_prefix : str
+        By default, 'composant' default prefix used while saving the mallet model with train_lda_model function.         
+    
+    Returns
+    -------
+    is_reliable : 
+        is the top language is much better than 2nd best language?
+    language: 
+        2-letter code for the language of the text
+    """
     if model =='gensim':
         ldamodel = gensim.models.LdaModel.load(os.path.join(model_path,model_name))
     elif model =='mallet':
@@ -204,7 +224,8 @@ def fit_data(model, bow):
 
 
 def visualize_topics(model, bow_corpus, dictionary, model_type=None):
-    """ Visualize the topics-keywords with the pyLDAvis interactive chart.
+    """ 
+    Visualize the topics-keywords with the pyLDAvis interactive chart.
         (Work well in notebook)
         
     Parameters
@@ -217,7 +238,6 @@ def visualize_topics(model, bow_corpus, dictionary, model_type=None):
     Returns:
     ----------
     3D interactive chart
-    
     """
     if model_type == 'mallet':
         model_vis = gensim.models.wrappers.ldamallet.malletmodel2ldamodel(model)
@@ -230,19 +250,27 @@ def visualize_topics(model, bow_corpus, dictionary, model_type=None):
     return pyLDAvis.gensim.prepare(model_vis, bow_corpus, dictionary)
 
 def save_pyldavis(pyldavis, vis_path, vis_name):
-    """ Save the pyldavis interactive chart
+    """ 
+    Save the pyldavis interactive chart
+    
+    Parameters
+    ----------
     pyldavis: pyLDAvis._prepare.PreparedData
     vis_path: str
-    vis_path: str
+    vis_name: str
     """ 
     return pyLDAvis.save_html(pyldavis, os.path.join(vis_path, vis_name + '{}'.format('.html')))
 
 
 
 def show_pyldavis(vis_path, vis_name):
-    """ Display the HTML of the saved pyldavis interactive chart
+    """ 
+    Display the HTML of the saved pyldavis interactive chart
+
+    Parameters
+    ----------
     vis_path: str
-    vis_path: str
+    vis_name: str
     """
     return HTML(filename=os.path.join(vis_path, vis_name + '{}'.format('.html')))
 
@@ -253,7 +281,6 @@ def show_dominant_topic(model, bow_corpus, topic_number=1, topn=5):
 
     Parameters
     ----------
-
     gensim.ldamodel
     model: ldamodel
     bow_corpus: iterable of list of tokens.

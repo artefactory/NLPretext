@@ -3,20 +3,37 @@ from summa.summarizer import summarize
 
 def is_list_of_strings(lst):
     """
-    :param lst: list
-    :return: boolean indicator
-    """
+    Parameters
+    ----------    
+    lst : list
+
+    Returns
+    -------
+    book
+        boolean indicator
+    """      
+    
     return bool(lst) and isinstance(lst, list) and all(isinstance(elem, str) for elem in lst)
 
 
 def summarize_text(txt, ratio=0.2, words=None, language="english"):
     """
-    :param txt: Sting or list of strings containing text to summarize
-    :param ratio: Percentage giving the output text length in reference to the input length.
-    :param words: number of words of the output text
-    :param language: text language
-    :return: string containing the summarized text
-    """
+    Parameters
+    ----------    
+    txt : str
+        Sting or list of strings containing text to summarize
+    ratio : float
+        Percentage giving the output text length in reference to the input length.
+    words : 
+        number of words of the output text
+    language :
+        text language. eg. "english"
+
+    Returns
+    -------
+    string
+        string containing the summarized text
+    """      
 
     if is_list_of_strings(txt):
         txt = ' '.join(txt)
