@@ -8,22 +8,39 @@ from collections import Counter
 def create_ngrams(token, n):
     """
     Create n-grams for list of tokens
-    :param token: list of strings
-    :param n: number of elements in the n-gram
-    :return: list of n-grams
-    """
+
+    Parameters
+    ----------    
+    token : list
+        list of strings
+    n :
+        number of elements in the n-gram
+
+    Returns
+    -------
+    list
+        list of n-grams
+    """    
     ngrams = zip(*[token[i:] for i in range(n)])
     return [" ".join(ngram) for ngram in ngrams]
 
 
 def frequent_words(list_words, ngrams_number=1, number_top_words=10):
     """
-    Compute n-grams frequencies and return number_top_words top n-grams.
-    :param list_words: list of strings
-    :param ngrams_number: output dataframe length
-    :param number_top_words: output dataframe length
-    :return: dataframe with the entities and their frequencies.
-    """
+    Create n-grams for list of tokens
+
+    Parameters
+    ----------    
+    ngrams_number : int
+    
+    number_top_words : int 
+        output dataframe length
+
+    Returns
+    -------
+    DataFrame
+        Dataframe with the entities and their frequencies.
+    """             
     frequent = []
     if ngrams_number == 1:
         pass

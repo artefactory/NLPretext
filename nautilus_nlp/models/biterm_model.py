@@ -9,14 +9,24 @@ class BitermModel:
 
     def __init__(self, data, nb_topics, nb_iteration, lang):
         """
-        Model for topic modelling
-        Particularly useful for short texts
-        :param data: a list of string, each string can be a document
-        :param nb_topics: positive int
-        :param nb_iteration: positive int
-        :param lang: str, _language to remove the stop words, can be setup to None
-        """
+        Model for topic modelling. Particularly useful for short texts.
 
+        Parameters
+        ----------
+        data : list
+            a list of string, each string can be a document
+        nb_topics : positive int
+
+        nb_iteration : positive int
+
+        lang : str
+            _language to remove the stop words, can be setup to None
+
+        Returns
+        -------
+        string
+            the text with removed multiple spaces and strip text
+        """        
         self.is_int_positive(nb_topics)
         self.is_int_positive(nb_iteration)
         self.is_list_of_string(data)
@@ -33,10 +43,19 @@ class BitermModel:
     @staticmethod
     def is_int_positive(number):
         """
-        Function to check if the input parameter is a integer and positive otherwise raise an error
-        :param number:
-        :return:
-        """
+        Function to check if the input parameter is a integer and positive 
+        otherwise raise an error
+
+        Parameters
+        ----------
+        number : str
+            
+        Returns
+        -------
+        str:
+            the text with removed multiple spaces and strip text
+            
+        """  
         if not isinstance(number, int):
             raise ValueError("Parameter {} has to be an integer".format(number))
         if number < 1:
@@ -46,8 +65,13 @@ class BitermModel:
     def is_list_of_string(data):
         """
         Function to check if the input parameter is a list of strings otherwise raise an error
-        :param data:
-        :return:
+        
+        Parameters
+        ----------
+        data
+        
+        Returns
+        -------
         """
         if not isinstance(data, list):
             raise ValueError("{} has to be a list".format(data))
@@ -60,8 +84,16 @@ class BitermModel:
     def compute_topics(self, nb_word_per_cluster):
         """
         Main function computing the topic modeling, topics
-        :param nb_word_per_cluster: positive integer
-        :return: a dictionary containing the the different topics with the top words and coherence associated
+        
+        Parameters
+        ----------
+        nb_word_per_cluster : positive integer
+        
+        Returns
+        -------
+        dict :    
+            a dictionary containing the the different topics with the top words 
+            and coherence associated
         """
         vec = CountVectorizer(stop_words=self.lang)
         self._vectorize_text = vec.fit_transform(self.data).toarray()
@@ -78,8 +110,15 @@ class BitermModel:
     def get_document_topic(self, index):
         """
         Get the cluster associated to the specified document
-        :param index: the document index, positive integer
-        :return: the cluster index
+                
+        Parameters
+        ----------
+        index : positive integer
+            the document index
+
+        Returns
+        -------
+        the cluster index
         """
         if self._topics is None:
             raise ValueError("Model needs to be trained first")
@@ -89,9 +128,15 @@ class BitermModel:
     def save_pyLDAvis_plot_as_html(self, path_to_output='./biterm_pyLDAavis_plot.html'):
         """
         Function saving the pyLDAvis plot associated with the compute_topics function
-        :param path_to_output: path to save the plut, must be a html file
-        :return:
-        """
+                
+        Parameters
+        ----------
+        path_to_output : str
+            path to save the plut, must be a html file
+
+        Returns
+        -------
+        """        
         if self._topics is None or self._btm is None or self._vectorize_text is None or self._vocabulary is None:
             raise ValueError("Model needs to be trained first")
 

@@ -1,5 +1,6 @@
 Nautilus_NLP [![Build Status](https://travis-ci.com/artefactory/nautilus-nlp.svg?token=Ssg4shz5pz9qGnYCybSj&branch=master)](https://travis-ci.com/artefactory/nautilus-nlp)
 ==============================
+![Nautilus-NLP](/references/nautilus_nlp_logo.png)
 
 The Nautilus NLP library aimed to be a meta-library to be used to help you get started on handling your NLP use-case.
 
@@ -44,8 +45,57 @@ then you can install it via pip:
 pip install -e .
 ```
 
-## Handling installation errors
+Once it's done, please install the additional required libraries: 
 
+## Installation of the additional required libraries
+
+If you want to leverage all the features of nautilus-nlp, you need to **install others required libraries** (such as FastText).
+
+### Install spaCy language models (highly recommanded)
+
+Installing additional spaCy models will give you the possibility to handle a lot of new language for text processing feature (such as lemmatization or tokenization). 
+
+To do so, run: *(on your virtual environment if you are using one)*
+
+```
+bash nautilus_nlp/scripts/download_spacy_models.sh
+```
+
+### Install FastText 
+
+run: 
+
+```
+bash nautilus_nlp/scripts/install_fasttext.sh
+```
+
+### Install Lang Detect
+
+run: 
+
+```
+bash nautilus_nlp/scripts/download_ft_langdetect.sh
+```
+
+### Install Mallet
+
+Mallet is an implementation of the LDA algorithm (used for **topic modeling**). 
+
+1) Install Mallet file
+run:
+
+```
+bash nautilus_nlp/scripts/install_mallet.sh
+```
+
+2) Install Java JDK (required to implement mallet)
+run:
+
+```
+bash nautilus_nlp/scripts/install_java.sh
+```
+
+## Handling installation errors
 
 ### Problem when building FastText on MACOS:
 
@@ -91,42 +141,6 @@ sudo apt-get update && sudo apt-get install -y build-essential unzip git wget
 wget https://repo.anaconda.com/archive/Anaconda3-2019.03-Linux-x86_64.sh
 bash Anaconda3-2019.03-Linux-x86_64.sh
 ```
-
-## Installation of additional required libraries
-
-If you want to leverage all the features of nautilus-nlp, you need to **install others required libraries** (such as FastText).
-
-### Install spaCy language models
-
-Installing additional spaCy models will give you the possibility to handle a lot of new language for text processing feature (such as lemmatization or tokenization). 
-
-To do so, run: *(on your virtual environment if you are using one)*
-
-`bash nautilus_nlp/scripts/download_spacy_models.sh`
-
-### Install FastText 
-
-run: 
-
-`bash nautilus_nlp/scripts/install_fasttext.sh`
-
-### Install Lang Detect
-
-run: 
-
-`bash nautilus_nlp/scripts/download_ft_langdetect.sh`
-
-### Install Mallet
-
-1) Install Mallet file
-run:
-
-`bash nautilus_nlp/scripts/install_mallet.sh`
-
-2) Install Java JDK (required to implement mallet)
-run:
-
-`bash nautilus_nlp/scripts/install_java.sh`
 
 # Quick start
 
