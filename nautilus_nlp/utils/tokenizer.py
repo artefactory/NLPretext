@@ -26,15 +26,18 @@ def tokenize(text: str, lang_module: str = 'en_spacy'):
     """
     Convert text to a list of tokens. 
 
-    Args:
-        lang_module ({'en_spacy', 'en_nltk', 'fr_spacy', 'fr_moses'}): choose
-        the tokenization module according to the langage and the implementation.
+    Parameters
+    ----------    
+    lang_module : ({'en_spacy', 'en_nltk', 'fr_spacy', 'fr_moses'})
+        choose the tokenization module according to the langage and the implementation.
         Recommanded: Spacy (faster, better results). To process other langages
         import models.Spacy_models
 
-    Returns:
-        list
-    """
+    Returns
+    -------
+    list
+        list of string
+    """      
     if lang_module is 'en_nltk':
         return nltk.word_tokenize(text)
     elif lang_module is 'en_spacy':
@@ -52,6 +55,11 @@ def untokenize(tokens, lang='fr'):
     '''
     Inputs a list of tokens output string.
     ["J'", 'ai'] >>> "J' ai"
+
+    Parameters
+    ----------    
+    lang : string
+        language code 
     '''
     d = MosesDetokenizer(lang=lang)
     text = d.detokenize(tokens, unescape=False)

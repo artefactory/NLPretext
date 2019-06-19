@@ -19,9 +19,20 @@ def open_textfile(filepath, encoding='utf-8'):
 
 
 def detect_encoding(file_path_or_string, n_lines=100):
-    '''
+    """ 
     Predict a file's encoding using chardet
-    '''
+    
+    Parameters
+    ----------
+    file_path_or_string : string
+        if filepath, will open the file. Otherwise will predict from the string
+    n_lines : int
+        number of line to predict from 
+       
+    Returns
+    -------
+    the code of the detected encoding
+    """
     if isfile(file_path_or_string):
         with open(file_path_or_string, 'rb') as f:                      # Open the file as binary data
             rawdata = b''.join([f.readline() for _ in range(n_lines)])  # Join binary lines for specified number of lines
@@ -32,8 +43,22 @@ def detect_encoding(file_path_or_string, n_lines=100):
 
 def text_loader(filepath, encoding=None, detectencoding=True):
     '''
-    Args:
-        detect_encoding[bool]= If file is not encoded into UTF-8, try to detect encoding using the chardet library.
+    This util loads a file. If the encoding is specified, will use the specified 
+    encoding to load the text file. 
+    If not specified, this function tries to open the doc as UTF-U, and if 
+    it fails it will try to detect the encoding using **detect_encoding** 
+
+    Parameters
+    ----------
+    filepath : str 
+    encoding : str
+        If the encoding is specified, will use the specified encoding to load the text file.
+    detect_encoding : bool
+    If file is not encoded into UTF-8, try to detect encoding using the chardet library.
+
+    Returns
+    -------
+    string
     '''
     if encoding is not None:
         return open_textfile(filepath, encoding=encoding)
@@ -88,17 +113,24 @@ def documents_loader(filepath:str, encoding=None, detectencoding=True, output_as
     Input a filepath, a filepath with wildcard (eg. *.txt), 
     or a list of filepaths.
     Output a string, or a dict of strings.
-    Args:
-        filepath: filepath, a filepath with wildcard (eg. *.txt), 
-            or a list of filepaths.
-        output_as: list or dict. If dict, key will be the filename.
-        encoding: if not specified, will try to detect encoding except if 
-            detectencoding is false. 
-        detectencoding: if True and if encoding is not specified, will try to 
-            detect encoding using chardet. 
 
-    '''
+    Parameters
+    ----------
+    filepath: filepath
+        A filepath with wildcard (eg. *.txt), or a list of filepaths.
+    output_as: list or dict.
+        If dict, key will be the filename.
+    encoding: 
+        if not specified, will try to detect encoding except if detectencoding is false. 
+    detectencoding : bool 
+        if True and if encoding is not specified, will try to detect encoding using chardet. 
     
+    Returns
+    -------
+    string
+    the document loaded
+    '''
+   
     if type(filepath) is str:
         documents = list_files(filepath)
         nb_of_documents = len(documents)
