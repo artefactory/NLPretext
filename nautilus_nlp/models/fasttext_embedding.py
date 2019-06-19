@@ -11,18 +11,35 @@ class FasttextEmbedding(object):
             self.model = None
 
     def get_word_vector(self, word: str):
-        """Return the wordvector of a word according to pretrained model
-            Input document: string
-            output: array
         """
+        Return the wordvector of a word according to pretrained model
+
+        Parameters
+        ----------
+        word : string
+            the input document
+
+        Returns
+        -------
+        array
+        """
+
         return self.model.get_word_vector(word)
 
     def get_document_vector(self, document: str):
-        """Return the wordvector of a full document according to pretrained model
-            To build the vector,  each word-wordvector is divided by its norm, then the array of vector is averaged
-            The document must be cleaned beforehand (no EOL)
-            Input document: string
-            output: array
+        """
+        Return the wordvector of a full document according to pretrained model
+        To build the vector,  each word-wordvector is divided by its norm, then the array of vector is averaged
+        The document must be cleaned beforehand (no EOL)
+
+        Parameters
+        ----------
+        Input document : string
+            the input document
+
+        Returns
+        -------
+        array
         """
         return self.model.get_sentence_vector(document)
 
