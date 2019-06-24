@@ -17,6 +17,7 @@ RUN wget --quiet https://repo.anaconda.com/miniconda/Miniconda3-4.5.11-Linux-x86
 
 ENV TINI_VERSION v0.16.1
 ADD https://github.com/krallin/tini/releases/download/${TINI_VERSION}/tini /usr/bin/tini
+
 RUN chmod +x /usr/bin/tini
 
 
@@ -32,14 +33,11 @@ RUN  pip3 install pandas schedule nltk pendulum bounter spacy==2.1 jupyterlab co
 RUN python3 -m spacy download fr &&  python3 -m spacy download en && python3 -m spacy download de && python3 -m spacy download it && python3 -m spacy download xx && python3 -m spacy validate
 RUN python3 -m nltk.downloader stopwords 
 
-RUN wget http://mallet.cs.umass.edu/dist/mallet-2.0.8.zip 
-    unzip mallet-2.0.8.zip
+RUN wget http://mallet.cs.umass.edu/dist/mallet-2.0.8.zip  && \
+    unzip mallet-2.0.8.zip &&\
     rm mallet-2.0.8.zip
 
-RUN sudo add-apt-repository ppa:openjdk-r/ppa  # only Ubuntu 17.4 and earlier
-    sudo apt update
-    apt search openjdk
-    sudo apt install openjdk-8-jdk
+RUN  apt update && apt-get install -y software-properties-common && add-apt-repository ppa:openjdk-r/ppa && apt update && apt search openjdk &&  apt install -y openjdk-8-jdk
 
 RUN echo "alias python='python3'" >> .bash_aliases
 RUN echo "alias pip='pip3' ">> ~/.bash_aliases
