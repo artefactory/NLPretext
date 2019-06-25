@@ -37,7 +37,7 @@ class Fasttext_clf(BaseEstimator, ClassifierMixin):
         verbose=2,
         pretrainedVectors="",
     ):
-    """
+        """
     Train a supervised model and return a model object.
     input must be a filepath. The input text does not need to be tokenized
     as per the tokenize function, but it must be preprocessed and encoded
