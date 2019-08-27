@@ -1,12 +1,15 @@
 import re
-from nmf_seanmf_models import *
+from nautilus_nlp.models.nmf_model import *
 import numpy as np
+import pyLDAvis
 
-def data_preparation(text, vocab_min_count=1, vocab_max_size=10000):
+def prepare_data(text, vocab_min_count=1, vocab_max_size=10000):
     """
     This function expects a list of documents (sentences) and returns the needed data to
     make topic modeling for short text using NMF model.
-    :return:
+    :return:  encoded_text_id: list of encoded sentences using vocab IDs
+              vocab_list: list of vocabulary
+              vocab_arr: array with vocab frequency counts
     """
 
     vocab = {}
@@ -36,31 +39,30 @@ def data_preparation(text, vocab_min_count=1, vocab_max_size=10000):
     return encoded_text_id, vocab_list, vocab_arr
 
 
-def train_model(model, encoded_text_id, vocab_list, n_topics= 20, max_iter= 20, max_err=0.1, alpha = 0, beta=0):
+def train_nmf_model(encoded_text_id, vocab_list, n_topics= 20, max_iter= 20, max_err=0.1, alpha = 0, beta=0):
     """
-    :param model:
-    :param docs:
-    :param n_topics:
-    :param max_iter:
-    :param max_err:
-    :param alpha:
-    :param beta:
-    :return:
+    :param encoded_text_id: list of encoded sentences
+    :param vocab_list: list of vocabulary
+    :param n_topics: number of topics
+    :param max_iter: maximum number of iterations while training
+    :param max_err: training error
+    :param alpha: regularization param for the NMF model
+    :param beta: regularization param for the NMF model
+    :return: Trained NMF model
     """
 
     n_docs = len(encoded_text_id)
     n_terms = len(vocab_list)
 
-    if model == 'nmf':
-        dt_mat = np.zeros([n_terms, n_docs])
-        for k in range(n_docs):
-            for j in encoded_text_id[k]:
-                dt_mat[j, k] += 1.0
-        model = NMF(
-            dt_mat,
-            n_topic=n_topics,
-            max_iter=max_iter,
-            max_err=max_err)
+    dt_mat = np.zeros([n_terms, n_docs])
+    for k in range(n_docs):
+        for j in encoded_text_id[k]:
+            dt_mat[j, k] += 1.0
+    model = NMF(
+        dt_mat,
+        n_topic=n_topics,
+        max_iter=max_iter,
+        max_err=max_err)
 
     return model
 
@@ -68,9 +70,9 @@ def train_model(model, encoded_text_id, vocab_list, n_topics= 20, max_iter= 20, 
 def show_dominant_topic(model, encoded_text_id, vocab_list, n_topKeyword =10):
     """
     Computes the PMi score for each topic and the topKeywords describing each of them.
-    :param model:
-    :param encoded_text_id:
-    :param vocab_list:
+    :param model: trained NMF model
+    :param encoded_text_id: list of encoded sentences
+    :param vocab_list: list of vocabulary
     :return: topics = dictionnary with the topic number and its topkeywords
              pmi_score = dictionnary with the topic number and its PMI score
     """
@@ -99,7 +101,7 @@ def show_dominant_topic(model, encoded_text_id, vocab_list, n_topKeyword =10):
 def get_assigned_topics(model):
     """
     Assign the topic number to the sentences used when training the model
-    :param model: trained model
+    :param model: trained model for short text
     :return topics_list: list having the same length as the training text containing topics assigned to each sentence.
     """
     _, H = model.get_decomposition_matrix()
@@ -108,6 +110,49 @@ def get_assigned_topics(model):
     return topics_list
 
 
+def show_pyldavis(model, encoded_text_id, vocab_arr):
+    """
+    :param model: trained model
+    :param encoded_text_id: encoded_text_id: list of encoded sentences
+    :param vocab_arr: array of vocabulary frequency
+    :return: pyldavis topics plot
+    """
+    data = prepare_data_pyldavis(model, encoded_text_id, vocab_arr)
+    vis_data = pyLDAvis.prepare(**data)
+    return pyLDAvis.display(vis_data)
+
+def prepare_data_pyldavis(model, encoded_text_id, vocab_arr):
+    """
+    Transform the model decomposed matrix to create topic term and document topics matrices
+    and prepare data to feed pyldavis.
+    link : http://jeriwieringa.com/2018/07/17/pyLDAviz-and-Mallet/
+    :return dict of data needed by pyldavis
+    """
+    # 1 List of documents lengths
+    doc_length_values=[]
+    for doc in encoded_text_id:
+        doc_length_values.append(len(doc))
+    # 2 List of vocab
+    list_vocab = list(map(lambda x: x[0], vocab_arr))
+    # 3 List of vocab. Frequency
+    freq_vocab = list(map(lambda x: x[1], vocab_arr))
+    W, H = model.get_decomposition_matrix()
+    # Normlize the decomposition to get probabilities
+    W_probs = W / W.sum(axis=1, keepdims=True)
+    # 4 topic term matrix phi
+    phi = W_probs.T
+    # 5 document term matrix theta
+    theta = H / H.sum(axis=1, keepdims=True)
+
+    data = {'topic_term_dists': phi,
+            'doc_topic_dists': theta,
+            'doc_lengths': doc_length_values,
+            'vocab': list_vocab,
+            'term_frequency': freq_vocab
+            }
+
+    return data
+
 def __build_cooccurence_matrix(n_terms, encoded_text_id):
     dt_mat = np.zeros([n_terms, n_terms])
     for itm in encoded_text_id:
@@ -115,6 +160,7 @@ def __build_cooccurence_matrix(n_terms, encoded_text_id):
             for jj in itm:
                 if kk != jj:
                     dt_mat[int(kk), int(jj)] += 1.0
+
     return dt_mat
 
 def __calculate_PMI(AA, topKeywordsIndex):
@@ -139,23 +185,3 @@ def __calculate_PMI(AA, topKeywordsIndex):
 
     return avg_PMI
 
-## TEST
-
-text = ['abs souscription ird abs collaborateur message bloquant finaliser merci selectionner un personne physique comme assurer principal',
-'ref contrat af752001033 date heure creation avener non technique abs abs souscription ird collaborateur souhaiter repasser contrat mensuel selectionner bon rib car rib present sur contrat être errone celer cause impaye sur contrat',
-'demande refair devis faire depuis im non traduire dans ab avec declanchement visa correction un message erreur',
-'abs souscription ird souscription un affaire nouveau abs collab arriver pas finaliser son contrat']
-encoded_text_id, vocab_list, vocab_arr = data_preparation(text)
-
-#print(encoded_text_id)
-#print(vocab_arr)
-
-x = train_model('nmf', encoded_text_id, vocab_list, n_topics= 3)
-topics, pmi_score = show_dominant_topic(x, encoded_text_id, vocab_list, n_topKeyword =10)
-
-print(topics)
-
-print(pmi_score)
-
-list_of_topics= get_assigned_topics(x)
-print(list_of_topics)
