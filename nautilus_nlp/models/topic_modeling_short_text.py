@@ -36,6 +36,7 @@ def prepare_data(text, vocab_min_count=1, vocab_max_size=10000):
         sentence = re.split('\s', sentence)
         sentence = [int(vocab2id[wd]) for wd in sentence if wd in vocab2id]
         encoded_text_id.append(sentence)
+
     return encoded_text_id, vocab_list, vocab_arr
 
 
@@ -104,9 +105,11 @@ def get_assigned_topics(model):
     :param model: trained model for short text
     :return topics_list: list having the same length as the training text containing topics assigned to each sentence.
     """
+
     _, H = model.get_decomposition_matrix()
     H_probs = H / H.sum(axis=1, keepdims=True)
     topics_list = list(np.argmax(H_probs, axis=1) + 1)
+
     return topics_list
 
 
@@ -117,8 +120,10 @@ def show_pyldavis(model, encoded_text_id, vocab_arr):
     :param vocab_arr: array of vocabulary frequency
     :return: pyldavis topics plot
     """
+
     data = prepare_data_pyldavis(model, encoded_text_id, vocab_arr)
     vis_data = pyLDAvis.prepare(**data)
+
     return pyLDAvis.display(vis_data)
 
 def prepare_data_pyldavis(model, encoded_text_id, vocab_arr):
@@ -128,6 +133,7 @@ def prepare_data_pyldavis(model, encoded_text_id, vocab_arr):
     link : http://jeriwieringa.com/2018/07/17/pyLDAviz-and-Mallet/
     :return dict of data needed by pyldavis
     """
+
     # 1 List of documents lengths
     doc_length_values=[]
     for doc in encoded_text_id:
@@ -169,6 +175,7 @@ def __calculate_PMI(AA, topKeywordsIndex):
     Reference:
     Short and Sparse Text Topic Modeling via Self-Aggregation
     '''
+
     D1 = np.sum(AA)
     n_tp = len(topKeywordsIndex)
     PMI = []
@@ -184,4 +191,3 @@ def __calculate_PMI(AA, topKeywordsIndex):
     avg_PMI = 2.0*np.sum(PMI)/float(n_tp)/(float(n_tp)-1.0)
 
     return avg_PMI
-

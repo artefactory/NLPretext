@@ -88,9 +88,6 @@ class NMF(object):
     def get_loss(self):
         return np.array(self.obj)
 
-    def get_lowrank_matrix(self):
-        return self.W, self.H
-
     def get_decomposition_matrix(self):
         return self.W, self.H
 
