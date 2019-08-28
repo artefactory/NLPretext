@@ -108,7 +108,7 @@ def get_assigned_topics(model):
 
     _, H = model.get_decomposition_matrix()
     H_probs = H / H.sum(axis=1, keepdims=True)
-    topics_list = list(np.argmax(H_probs, axis=1) + 1)
+    topics_list = list(np.argmax(H_probs, axis=1))
 
     return topics_list
 
