@@ -1,7 +1,7 @@
-
 import time
 import numpy as np
 from numpy.linalg import norm
+from tqdm import tqdm
 
 '''
 Topic Modeling via NMF
@@ -13,9 +13,19 @@ class NMF(object):
             A, IW=[], IH=[],
             n_topic=10, max_iter=100, max_err=1e-3,
             rand_init=True):
-        '''
-        A = WH^T
-        '''
+        """
+        The objective of the NMF model is to approximate the term-document matrix A by two lower-rank matrices W and H.
+        The process is iterative and we denote IW and IH the the matrix W and H that are updated at each step.
+
+        :param A: The term-document matrix
+        :param IW: topics Matrix, each column vector W(:,k) represents the k-th topic in terms of M keywords
+        and its elements are the weights of the corresponding keywords.
+        :param IH: The row vector H(j,:) is the latent representation for document j in terms of K topics
+        :param n_topic: Number of selected topics
+        :param max_iter: Maximum number of iterations to update W and H
+        :param max_err: maximum error under which we consider that the loop converged
+        :param rand_init: random init boolean
+        """
         self.A = A
         self.n_row = A.shape[0]
         self.n_col = A.shape[1]
@@ -24,42 +34,41 @@ class NMF(object):
         self.max_iter = max_iter
         self.max_err = max_err
 
-        self.obj = []
-        if rand_init:
-            self.nmf_init_rand()
-        else:
-            self.nmf_init(IW, IH)
+        self.loss_hist = []
+        self.nmf_mat_init(rand_init)
         self.nmf_iter()
 
-    def nmf_init_rand(self):
-        self.W = np.random.random((self.n_row, self.n_topic))
-        self.H = np.random.random((self.n_col, self.n_topic))
-
-        for k in range(self.n_topic):
-            self.W[:, k] /= norm(self.W[:, k])
-
-    def nmf_init(self, IW, IH):
-        self.W = IW
-        self.H = IH
-
+    def nmf_mat_init(self, rand_init):
+        """
+        Init Matrices W and H initially either randomly or using existing IW, IH matrices taken when iterating.
+        :param rand_init: Boolean indicating initial random init
+        """
+        if rand_init:
+            self.W = np.random.random((self.n_row, self.n_topic))
+            self.H = np.random.random((self.n_col, self.n_topic))
+        else:
+            self.W = IW
+            self.H = IH
         for k in range(self.n_topic):
             self.W[:, k] /= norm(self.W[:, k])
 
     def nmf_iter(self):
+        """
+        Main iterative loop for matrix decomposition
+        """
         loss_old = 1e20
-        print('loop begin')
         start_time = time.time()
-        for i in range(self.max_iter):
+        for i in tqdm(range(self.max_iter)):
             self.nmf_solver()
             loss = self.nmf_loss()
-            self.obj.append(loss)
+            self.loss_hist.append(loss)
 
             if loss_old - loss < self.max_err:
+                print('Matrix decomposition loop converged!')
                 break
             loss_old = loss
             end_time = time.time()
             print('Step={}, Loss={}, Time={}s'.format(i, loss, end_time - start_time))
-        print('loop end')
 
     def nmf_solver(self):
         '''
@@ -86,11 +95,7 @@ class NMF(object):
         return loss
 
     def get_loss(self):
-        return np.array(self.obj)
+        return np.array(self.loss_hist)
 
     def get_decomposition_matrix(self):
         return self.W, self.H
-
-    def save_format(self, Wfile='W.txt', Hfile='H.txt'):
-        np.savetxt(Wfile, self.W)
-        np.savetxt(Hfile, self.H)

@@ -5,13 +5,13 @@ import pyLDAvis
 
 def prepare_data(text, vocab_min_count=1, vocab_max_size=10000):
     """
-    This function expects a list of documents (sentences) and returns the needed data to
-    make topic modeling for short text using NMF model.
+    :param text: list of str on which the topic modeling will be performed
+    :param vocab_min_count: minimum number of occurrences of a word to be considered in the vocabulary
+    :param vocab_max_size: maximum number of word in the vocabulary
     :return:  encoded_text_id: list of encoded sentences using vocab IDs
               vocab_list: list of vocabulary
               vocab_arr: array with vocab frequency counts
     """
-
     vocab = {}
     for sentence in text:
         sentence = re.split('\s', sentence)
@@ -191,3 +191,4 @@ def __calculate_PMI(AA, topKeywordsIndex):
     avg_PMI = 2.0*np.sum(PMI)/float(n_tp)/(float(n_tp)-1.0)
 
     return avg_PMI
+
