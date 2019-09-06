@@ -1,4 +1,6 @@
 import re
+from collections import Counter
+from itertools import permutations
 from nautilus_nlp.models.nmf_model import *
 import numpy as np
 import pyLDAvis
@@ -13,13 +15,14 @@ def prepare_data(text, vocab_min_count=1, vocab_max_size=10000):
               vocab_arr: array with vocab frequency counts
     """
     vocab = {}
+
+    # Tokens_list is a list of sub-lists where each sub-list contains a sentences' tokens.
+    tokens_list=[]
     for sentence in text:
         sentence = re.split('\s', sentence)
-        for wd in sentence:
-                try:
-                    vocab[wd] += 1
-                except:
-                    vocab[wd] = 1
+        tokens_list.append(sentence)
+    vocab = dict(Counter(x for xs in tokens_list for x in xs))
+
     # Create Vocab array ( list of sorted vocab + counts )
     vocab_arr = [[wd, vocab[wd]] for wd in vocab if vocab[wd] > vocab_min_count]
     vocab_arr = sorted(vocab_arr, key=lambda k: k[1])[::-1]
@@ -99,6 +102,7 @@ def show_dominant_topic(model, encoded_text_id, vocab_list, n_topKeyword =10):
 
     return topics, pmi_score
 
+
 def get_assigned_topics(model):
     """
     Assign the topic number to the sentences used when training the model
@@ -125,6 +129,7 @@ def show_pyldavis(model, encoded_text_id, vocab_arr):
     vis_data = pyLDAvis.prepare(**data)
 
     return pyLDAvis.display(vis_data)
+
 
 def prepare_data_pyldavis(model, encoded_text_id, vocab_arr):
     """
@@ -159,15 +164,26 @@ def prepare_data_pyldavis(model, encoded_text_id, vocab_arr):
 
     return data
 
-def __build_cooccurence_matrix(n_terms, encoded_text_id):
-    dt_mat = np.zeros([n_terms, n_terms])
-    for itm in encoded_text_id:
-        for kk in itm:
-            for jj in itm:
-                if kk != jj:
-                    dt_mat[int(kk), int(jj)] += 1.0
 
-    return dt_mat
+
+def __build_cooccurence_matrix(n_terms, encoded_text_id):
+    """
+    The cooccurence matrix represents the number of times each word
+    appeared in the same context as another word from the vocabulary.
+    The matrix has the size of vocab. columns and rows denote the vocab.
+    Cell values represent the number of times words occured together in the same sentence
+
+    :param :encoded_text_id : list of encoded sentences
+    :return: res: the co-occurence matrix
+
+    """
+    res = np.zeros([n_terms, n_terms])
+    for row in encoded_text_id:
+        counts = Counter(row)
+        for key_from, key_to in permutations(counts, 2):
+            res[key_from, key_to] += counts[key_from] * counts[key_to]
+    return res
+
 
 def __calculate_PMI(AA, topKeywordsIndex):
     '''
