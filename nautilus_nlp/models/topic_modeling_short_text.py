@@ -1,9 +1,11 @@
 import re
 from collections import Counter
-from itertools import permutations
+from itertools import product
 from nautilus_nlp.models.nmf_model import *
+from nautilus_nlp.models.seanmf_model import *
 import numpy as np
 import pyLDAvis
+
 
 def prepare_data(text, vocab_min_count=1, vocab_max_size=10000):
     """
@@ -43,8 +45,9 @@ def prepare_data(text, vocab_min_count=1, vocab_max_size=10000):
     return encoded_text_id, vocab_list, vocab_arr
 
 
-def train_nmf_model(encoded_text_id, vocab_list, n_topics= 20, max_iter= 20, max_err=0.1, alpha = 0, beta=0):
+def train_shorttext_model(model_name, encoded_text_id, vocab_list, n_topics=20, max_iter=20, max_err=0.1, alpha=0, beta=0):
     """
+    :param model_name: string = 'nmf' or 'seanmf'
     :param encoded_text_id: list of encoded sentences
     :param vocab_list: list of vocabulary
     :param n_topics: number of topics
@@ -58,17 +61,43 @@ def train_nmf_model(encoded_text_id, vocab_list, n_topics= 20, max_iter= 20, max
     n_docs = len(encoded_text_id)
     n_terms = len(vocab_list)
 
+    if model_name == 'nmf':
+        dt_mat = __build_doc_term_matrix(n_terms, n_docs, encoded_text_id)
+        model = NMF(
+            dt_mat,
+            n_topic=n_topics,
+            max_iter=max_iter,
+            max_err=max_err)
+
+    elif model_name == 'seanmf':
+        # Calculate co-occurence matrix
+        cm = __build_cooccurence_matrix(n_terms, encoded_text_id)
+        # Calculate PPMI
+        SS = __calulate_PPMI(cm, n_terms)
+        # Build doc-term matrix
+        dt_mat = __build_doc_term_matrix(n_terms, n_docs, encoded_text_id)
+        model = SeaNMF(
+            dt_mat, SS,
+            alpha=alpha,
+            beta=beta,
+            n_topic=n_topics,
+            max_iter=max_iter,
+            max_err=max_err,
+            fix_seed=1024)
+
+    else:
+        model = None
+        print('Invalid model name: Use nmf or seanmf')
+
+    return model
+
+
+def __build_doc_term_matrix(n_terms, n_docs, encoded_text_id):
     dt_mat = np.zeros([n_terms, n_docs])
     for k in range(n_docs):
         for j in encoded_text_id[k]:
             dt_mat[j, k] += 1.0
-    model = NMF(
-        dt_mat,
-        n_topic=n_topics,
-        max_iter=max_iter,
-        max_err=max_err)
-
-    return model
+    return dt_mat
 
 
 def show_dominant_topic(model, encoded_text_id, vocab_list, n_topKeyword =10):
@@ -82,6 +111,7 @@ def show_dominant_topic(model, encoded_text_id, vocab_list, n_topKeyword =10):
     """
 
     dt_mat = __build_cooccurence_matrix(n_terms=len(vocab_list), encoded_text_id=encoded_text_id)
+    np.fill_diagonal(dt_mat, 0)
     W,_ = model.get_decomposition_matrix()
     n_topic = W.shape[1]
     PMI_arr = []
@@ -111,6 +141,7 @@ def get_assigned_topics(model):
     """
 
     _, H = model.get_decomposition_matrix()
+    # The weights of the H matrix are converted into probabilities
     H_probs = H / H.sum(axis=1, keepdims=True)
     topics_list = list(np.argmax(H_probs, axis=1))
 
@@ -165,14 +196,12 @@ def prepare_data_pyldavis(model, encoded_text_id, vocab_arr):
     return data
 
 
-
 def __build_cooccurence_matrix(n_terms, encoded_text_id):
     """
     The cooccurence matrix represents the number of times each word
     appeared in the same context as another word from the vocabulary.
-    The matrix has the size of vocab. columns and rows denote the vocab.
-    Cell values represent the number of times words occured together in the same sentence
-
+    The matrix has n_terms x n_terms size, columns and rows denote the vocab.
+    Cell values represent the number of times words occured together in the same sentence.
     :param :encoded_text_id : list of encoded sentences
     :return: res: the co-occurence matrix
 
@@ -180,9 +209,34 @@ def __build_cooccurence_matrix(n_terms, encoded_text_id):
     res = np.zeros([n_terms, n_terms])
     for row in encoded_text_id:
         counts = Counter(row)
-        for key_from, key_to in permutations(counts, 2):
+        for key_from, key_to in product(counts, repeat=2):
             res[key_from, key_to] += counts[key_from] * counts[key_to]
     return res
+
+
+def __calulate_PPMI(cm, n_terms):
+    D1 = np.sum(cm)
+    print('D1= ', D1)
+    SS = D1 * cm
+    print('SS= ',SS)
+    for k in range(n_terms):
+        SS[k] /= np.sum(cm[k])
+    for k in range(n_terms):
+        SS[:, k] /= np.sum(cm[:, k])
+    print('SS = ', SS )
+    cm = []  # release memory
+    SS[SS == 0] = 1.0
+    SS = np.log(SS)
+    SS[SS < 0.0] = 0.0
+    return SS
+
+
+def __build_doc_term_matrix(n_terms, n_docs, encoded_text_id):
+    dt_mat = np.zeros([n_terms, n_docs])
+    for k in range(n_docs):
+        for j in encoded_text_id[k]:
+            dt_mat[j, k] += 1.0
+    return dt_mat
 
 
 def __calculate_PMI(AA, topKeywordsIndex):
@@ -207,4 +261,3 @@ def __calculate_PMI(AA, topKeywordsIndex):
     avg_PMI = 2.0*np.sum(PMI)/float(n_tp)/(float(n_tp)-1.0)
 
     return avg_PMI
-
