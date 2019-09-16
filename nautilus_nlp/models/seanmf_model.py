@@ -12,9 +12,24 @@ class SeaNMF(object):
             IW=[], IWc=[], IH=[],
             alpha=1.0, beta=0.1, n_topic=10, max_iter=100, max_err=1e-3,
             rand_init=True, fix_seed=False):
-        '''
-        0.5*||A-WH^T||_F^2+0.5*alpha*||S-WW_c^T||_F^2+0.5*beta*||W||_1^2
-        '''
+        """
+        Seanmf is a topic modeling algorithm, paper:  http://dmkd.cs.vt.edu/papers/WWW18.pdf.
+        It finds an approximation to the term-document matrix A by two lower-rank matrices W and H,
+        at each iteration a context matrix Wc are computed and used to update W.
+        :param A: document term matrix
+        :param S: Word-context (semantic) correlation matrix
+        :param IW: topics Matrix, each column vector W(:,k) represents the k-th topic in terms of M keywords
+        and its elements are the weights of the corresponding keywords.
+        :param IWc: Latent factor matrix of contexts.
+        :param IH: The row vector H(j,:) is the latent representation for document j in terms of K topics
+        :param alpha: Seanmf algorithm parameter
+        :param beta: Seanmf algorithm parameter
+        :param n_topic: Number of selected topics
+        :param max_iter: Maximum number of iterations to update W and H
+        :param max_err: maximum error under which we consider that the loop converged
+        :param rand_init: random init boolean
+        :param fix_seed: int number to fix random seed.
+        """
         if fix_seed:
             np.random.seed(0)
 
