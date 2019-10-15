@@ -39,15 +39,15 @@ def tokenize(text: str, lang_module: str = 'en_spacy')-> list:
     list
         Outputs a list of tokens.
     """
-    if lang_module is 'en_nltk':
+    if lang_module == 'en_nltk':
         return nltk.word_tokenize(text)
-    elif lang_module is 'en_spacy':
+    elif lang_module == 'en_spacy':
         spacydoc = english_spacy(text)
         return [tokens.text for tokens in spacydoc]
-    elif lang_module is 'fr_spacy':
+    elif lang_module == 'fr_spacy':
         spacydoc = french_spacy(text)
         return [tokens.text for tokens in spacydoc]
-    elif lang_module is 'fr_moses':
+    elif lang_module == 'fr_moses':
         t = MosesTokenizer(lang='fr')
         return t.tokenize(text, escape=False)
 
