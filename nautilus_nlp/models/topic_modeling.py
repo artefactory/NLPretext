@@ -217,7 +217,7 @@ def load_model(model_path,model_name, model='gensim', model_prefix='composant'):
 
 def fit_data(model, bow):
     """Test the model on new, unseen documents"""
-    return model[bow]
+    return model.get_document_topics(bow, minimum_probability=0)
 
 
 # Visualization
