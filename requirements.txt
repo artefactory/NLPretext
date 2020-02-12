@@ -21,7 +21,7 @@ matplotlib>=3.0.3
 mosestokenizer
 numpy>1.15.4
 stop_words==2018.7.23
-nltk==3.4
+nltk>=3.4.5
 textblob==0.15.3
 textblob_fr==0.2.0
 pandas>=0.23.4
