@@ -25,6 +25,7 @@ import re
 import unicodedata
 
 import emoji as _emoji
+import regex
 from ftfy import fix_text as _fix_text
 from stop_words import get_stop_words as _get_stop_words
 from stop_words import LANGUAGE_MAPPING as _LANGUAGE_MAPPING
@@ -284,6 +285,22 @@ def unpack_english_contractions(text:str) -> str:
     return text
 
 
+def filter_non_latin_characters(text:str) -> str:
+    """
+    Function that filters non latin characters of a text
+
+    Parameters
+    ----------
+    text : string
+
+    Returns
+    -------
+    string
+    """
+    text = regex.sub(r'[^\p{Latin}1-9]', ' ', text).strip()
+    return re.sub(' +', ' ', text)
+
+
 def replace_urls(text:str, replace_with:str="*URL*") -> str:
     """
     Replace all URLs in ``text`` str with ``replace_with`` str.
@@ -318,7 +335,6 @@ def replace_emails(text, replace_with="*EMAIL*") -> str:
     string
     """
     return constants.EMAIL_REGEX.sub(replace_with, text)
-
 
 
 def replace_phone_numbers(text, replace_with:str="*PHONE*",
@@ -475,6 +491,72 @@ def remove_accents(text:str, method:str="unicode") -> str:
         raise ValueError(msg)
 
 
+def remove_mentions(text:str) -> str:
+    """
+    Function that removes words preceded with a '@'
+
+    Parameters
+    ----------
+    text : str
+    
+    Returns
+    -------
+    string
+    """
+    return normalize_whitespace(re.sub(r'@\w*', '', text))
+
+
+def extract_mentions(text:str) -> str:
+    """
+    Function that extracts words preceded with a '@'
+    eg. "I take care of my skin with @thisproduct" --> ["@thisproduct"]
+
+    Parameters
+    ----------
+    text : str
+    
+    Returns
+    -------
+    string
+    """
+    return re.findall(r'[@][^\s@]+', text)
+
+
+def remove_html_tags(text:str) -> str:
+    """
+    Function that removes words between < and >
+
+    Parameters
+    ----------
+    text : str
+    
+    Returns
+    -------
+    string
+    """
+    return normalize_whitespace(re.sub(r'<.*?>', '', text))
+
+
+def remove_smallwords(tokens_list:list, smallwords_threshold:int) -> list:
+    """
+    Function that removes words which length is below a threshold
+    ["hello", "my", "name", "is", "John", "Doe"] --> ["hello","name","John","Doe"]
+
+    Parameters
+    ----------
+    text : list
+        list of strings
+    smallwords_threshold: int
+        threshold of small word
+
+    Returns
+    -------
+    list
+    """
+    result = [word for word in tokens_list if len(word) > smallwords_threshold]
+    return result
+
+
 def remove_emoji(text:str) -> str:
     """
     Remove emoji from any str by stripping any unicode in the range of Emoji unicode
@@ -512,6 +594,60 @@ def convert_emoji_to_text(text:str, code_delimiters=(':', ':')) -> str:
         string 
     """
     return _emoji.demojize(text, delimiters=code_delimiters)
+
+
+def extract_emojis(text:str) -> list:
+    """
+    Function that extracts emojis from a text and translates them into words
+    eg. "I take care of my skin 😀 :(" --> [":grinning_face:"]
+
+    Parameters
+    ----------
+    text : str
+
+    Returns
+    -------
+    list
+        list of all emojis converted with their unicode conventions
+    """
+    emoji_pattern = _emoji.get_emoji_regexp()
+    emojis_in_text = re.findall(emoji_pattern, text)
+    emojis_converted = [convert_emoji_to_text(emoji_text) for emoji_text in emojis_in_text]
+    return emojis_converted
+
+
+def extract_hashtags(text) -> list:
+    """
+    Function that extracts words preceded with a '#'
+    eg. "I take care of my skin #selfcare#selfestim" --> ["skincare", "selfestim"]
+
+    Parameters
+    ----------
+    text : str
+
+    Returns
+    -------
+    list
+        list of all hashtags
+    """
+    return re.findall(r'[#][^\s#]+', text)
+
+
+def remove_hashtag(text) -> str:
+    """
+    Function that removes words preceded with a '#'
+    eg. "I take care of my skin #selfcare#selfestim" --> "I take care of my skin"
+
+    Parameters
+    ----------
+    text : str
+
+    Returns
+    -------
+    str
+        text of a post without hashtags
+    """
+    return normalize_whitespace(re.sub(r'#\w*', '', text))
 
 
 def preprocess_text(
