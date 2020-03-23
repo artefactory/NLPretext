@@ -28,7 +28,7 @@ Beware, this package has been tested on Python **3.6** & **3.7**, and will proba
 To install this library you should first clone the repository:
 
 ```
-git clone https://github.com/artefactory/nautilus_nlp/ && cd nautilus_nlp
+git clone git@github.com:artefactory/nautilus-nlp.git && cd nautilus_nlp/
 ```
 
 **If you don't use the docker container, we strongly advise you to do these steps in a virtual environnement**
