@@ -18,7 +18,7 @@
 
 import pytest
 import numpy as np
-from nautilus_nlp.preprocessing.preprocess import fix_bad_unicode
+from nautilus_nlp.preprocessing.main_preprocess import fix_bad_unicode
 
 
 
