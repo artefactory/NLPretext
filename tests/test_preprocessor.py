@@ -17,13 +17,27 @@
 # Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 import pytest
 import numpy as np
-from nautilus_nlp.preprocessing.preprocess import (
+from nautilus_nlp.preprocessing.additional_preprocess import (
     remove_multiple_spaces_and_strip_text,
+    remove_tokens_with_nonletters,
+    remove_special_caracters_from_tokenslist,
+    filter_non_latin_characters,
+    remove_smallwords
+)
+from nautilus_nlp.preprocessing.social_preprocess import (
+    remove_emoji,
+    convert_emoji_to_text,
+    extract_emojis,
+    remove_mentions,
+    extract_mentions,
+    remove_html_tags,
+    extract_hashtags,
+    remove_hashtag
+)
+from nautilus_nlp.preprocessing.main_preprocess import (
     remove_accents,
     fix_bad_unicode,
     remove_EOL_characters,
-    remove_tokens_with_nonletters,
-    remove_special_caracters_from_tokenslist,
     get_stopwords,
     remove_stopwords,
     normalize_whitespace,
@@ -34,16 +48,6 @@ from nautilus_nlp.preprocessing.preprocess import (
     replace_numbers,
     replace_currency_symbols,
     remove_punct,
-    remove_emoji,
-    convert_emoji_to_text,
-    extract_emojis,
-    remove_mentions,
-    extract_mentions,
-    remove_html_tags,
-    remove_smallwords,
-    extract_hashtags,
-    remove_hashtag,
-    filter_non_latin_characters
 )
 import nautilus_nlp.utils.phone_number as phone
 

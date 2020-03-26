@@ -16,7 +16,7 @@
 # along with this program; if not, write to the Free Software Foundation,
 # Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 from nautilus_nlp.models.fasttext_classifier import Fasttext_clf as langdetect
-from nautilus_nlp.preprocessing.preprocess import remove_EOL_characters
+from nautilus_nlp.preprocessing.main_preprocess import remove_EOL_characters
 import pkg_resources
 
 lang_path = pkg_resources.resource_filename(

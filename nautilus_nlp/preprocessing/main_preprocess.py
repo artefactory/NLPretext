@@ -23,7 +23,7 @@ import re
 import unicodedata
 from ftfy import fix_text as _fix_text
 
-from nautilus_nlp.utils.stopwords_utils import get_stopwords
+from nautilus_nlp.utils.stopwords import get_stopwords
 from nautilus_nlp.utils.phone_number import extract_phone_numbers as _extract_phone_numbers
 from nautilus_nlp.utils import constants
 

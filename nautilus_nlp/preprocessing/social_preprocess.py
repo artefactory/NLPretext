@@ -22,7 +22,7 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 import re
 import emoji as _emoji
 
-from nautilus_nlp.utils.preprocess import normalize_whitespace
+from nautilus_nlp.preprocessing.main_preprocess import normalize_whitespace
 
 
 def remove_mentions(text:str) -> str:
