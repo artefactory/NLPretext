@@ -202,7 +202,7 @@ def test_remove_stopwords_tokens(input_tokens, expected_output):
     np.testing.assert_array_equal(result, expected_output)
 
 @pytest.mark.parametrize(
-    "input_tokens, expected_output",
+    "input_str, expected_output",
     [
         ('I like when you move your body !', ['I', 'move', 'body', '!']),
     ],
