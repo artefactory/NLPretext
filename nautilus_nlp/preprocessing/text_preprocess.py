@@ -33,6 +33,9 @@ class TextPreprocessor():
     def __init__(self,text):
         self.text = text
 
+    def get_text(self):
+        return self.text
+
     def remove_EOL_characters(self) -> str:
         """
         Remove end of line (\n) char.
@@ -45,7 +48,8 @@ class TextPreprocessor():
         -------
         str
         """
-        return self.text.replace("\n", " ")
+        self.text = self.text.replace("\n", " ")
+        
 
     def remove_stopwords(self, stopwords: list) -> str:
         """ 
@@ -67,7 +71,9 @@ class TextPreprocessor():
             When inputs is not a string
         """
         if type(self.text) is str:
-            return ' '.join([word for word in self.text.strip() if word not in stopwords])
+            self.text =  ' '.join([word for word in self.text.strip() if word not in stopwords])
+            if return_text:
+                return self.text
         else:
             raise ValueError("Input must be a string")
 
@@ -92,7 +98,8 @@ class TextPreprocessor():
         -------
         string
         """
-        return _fix_text(self.text, normalization=normalization)
+        self.text = _fix_text(self.text, normalization=normalization)
+        
 
     def normalize_whitespace(self) -> str:
         """
@@ -108,9 +115,10 @@ class TextPreprocessor():
         -------
         string    
         """
-        return constants.NONBREAKING_SPACE_REGEX.sub(
+        self.text = constants.NONBREAKING_SPACE_REGEX.sub(
             " ", constants.LINEBREAK_REGEX.sub(r"\n", self.text)
         ).strip()
+        
 
     def unpack_english_contractions(self) -> str:
         """
@@ -152,7 +160,7 @@ class TextPreprocessor():
         self.text = re.sub(r"(\b)([Ww])on't", r"\1\2ill not", self.text)
         self.text = re.sub(r"(\b)([Ss])han't", r"\1\2hall not", self.text)
         self.text = re.sub(r"(\b)([Yy])(?:'all|a'll)", r"\1\2ou all", self.text)
-        return self.text
+        
 
     def replace_urls(self, replace_with:str="*URL*") -> str:
         """
@@ -168,9 +176,10 @@ class TextPreprocessor():
         -------
         string
         """    
-        return constants.URL_REGEX.sub(
+        self.text = constants.URL_REGEX.sub(
             replace_with, constants.SHORT_URL_REGEX.sub(replace_with, self.text)
         )
+        
 
     def replace_emails(self, replace_with="*EMAIL*") -> str:
         """
@@ -186,11 +195,13 @@ class TextPreprocessor():
         -------
         string
         """
-        return constants.EMAIL_REGEX.sub(replace_with, self.text)
+        self.text = constants.EMAIL_REGEX.sub(replace_with, self.text)
+        
 
     def replace_phone_numbers(self, replace_with:str="*PHONE*",
                                     method:str="regex",
-                                    country_format_to_detect:list=[None,'FR','US','GB']) -> str:
+                                    country_format_to_detect:list=[None,'FR','US','GB'],
+                                    return_text: bool = False) -> str:
         """
         Replace all phone numbers in ``text`` str with ``replace_with`` str
 
@@ -210,8 +221,7 @@ class TextPreprocessor():
         string
         """
         if method == 'regex':
-            return constants.PHONE_REGEX.sub(replace_with, self.text)
-            
+            self.text = constants.PHONE_REGEX.sub(replace_with, self.text)
         elif method == 'detection':
             found_nums = _extract_phone_numbers(self.text, countrylist=country_format_to_detect)
 
@@ -219,10 +229,9 @@ class TextPreprocessor():
             found_nums.sort(key=len,reverse=True) 
             for phone_number in found_nums:
                 self.text = self.text.replace(phone_number, replace_with)
-            
-            return self.text
         else:
             raise ValueError('Please input a valid method between "regex" or "detection"')
+        
 
     def replace_numbers(self, replace_with="*NUMBER*") -> str:
         """
@@ -238,7 +247,8 @@ class TextPreprocessor():
         -------
         string
         """        
-        return constants.NUMBERS_REGEX.sub(replace_with, self.text)
+        self.text = constants.NUMBERS_REGEX.sub(replace_with, self.text)
+        
 
     def replace_currency_symbols(self, replace_with=None) -> str:
         """
@@ -260,10 +270,10 @@ class TextPreprocessor():
         """          
         if replace_with is None:
             for k, v in constants.CURRENCIES.items():
-                self.text = self.text.replace(k, v)
-            return self.text
+                self.text = self.text.replace(k, v)                
         else:
-            return constants.CURRENCY_REGEX.sub(replace_with, self.text)
+            self.text = constants.CURRENCY_REGEX.sub(replace_with, self.text)
+        
 
     def remove_punct(self, marks=None) -> str:
         """
@@ -291,9 +301,10 @@ class TextPreprocessor():
         instead. The former's performance is about 5-10x faster.    
         """       
         if marks:
-            return re.sub("[{}]+".format(re.escape(marks)), " ", self.text, flags=re.UNICODE)
+            self.text = re.sub("[{}]+".format(re.escape(marks)), " ", self.text, flags=re.UNICODE)
         else:
-            return self.text.translate(constants.PUNCT_TRANSLATE_UNICODE)
+            self.text = self.text.translate(constants.PUNCT_TRANSLATE_UNICODE)
+        
 
     def remove_accents(self, method:str="unicode") -> str:
         """
@@ -322,13 +333,13 @@ class TextPreprocessor():
             if ``method`` is not in {'unicode', 'ascii'}   
         """
         if method == "unicode":
-            return "".join(
+            self.text = "".join(
                 c
                 for c in unicodedata.normalize("NFKD", self.text)
                 if not unicodedata.combining(c)
             )
         elif method == "ascii":
-            return (
+            self.text = (
                 unicodedata.normalize("NFKD", self.text)
                 .encode("ascii", errors="ignore")
                 .decode("ascii")
@@ -336,6 +347,7 @@ class TextPreprocessor():
         else:
             msg = '`method` must be either "unicode" and "ascii", not {}'.format(method)
             raise ValueError(msg)
+        
 
     def remove_multiple_spaces_and_strip_text(self) -> str:
         """
@@ -355,7 +367,7 @@ class TextPreprocessor():
         for regex_remove_multiple_spaces in regex_remove_multiple_spaces_list:
             self.text = re.sub(regex_remove_multiple_spaces, " ", self.text)
             self.text = self.text.strip()
-        return self.text
+        
 
     def filter_non_latin_characters(self) -> str:
         """
@@ -370,7 +382,8 @@ class TextPreprocessor():
         string
         """
         self.text = regex.sub(r'[^\p{Latin}1-9]', ' ', self.text).strip()
-        return re.sub(' +', ' ', self.text)
+        self.text = re.sub(' +', ' ', self.text)
+        
 
     def remove_smallwords(self, smallwords_threshold:int) -> list:
         """
@@ -387,8 +400,8 @@ class TextPreprocessor():
         -------
         str
         """
-        result = ' '.join([word for word in self.text.strip() if len(word) > smallwords_threshold])
-        return result
+        self.text = ' '.join([word for word in self.text.strip() if len(word) > smallwords_threshold])
+        
 
 
 

@@ -29,6 +29,9 @@ class SocialPreprocessor():
     def __init__(self,text):
         self.text = text
 
+    def get_text(self):
+        return self.text
+
     def remove_mentions(self) -> str:
         """
         Function that removes words preceded with a '@'
@@ -41,9 +44,9 @@ class SocialPreprocessor():
         -------
         string
         """
-        return self.normalize_whitespace(re.sub(r'@\w*', '', self.text))
+        self.text = self.normalize_whitespace(re.sub(r'@\w*', '', self.text))
 
-    def extract_mentions(self) -> str:
+    def extract_mentions(self) -> list:
         """
         Function that extracts words preceded with a '@'
         eg. "I take care of my skin with @thisproduct" --> ["@thisproduct"]
@@ -70,7 +73,7 @@ class SocialPreprocessor():
         -------
         string
         """
-        return self.normalize_whitespace(re.sub(r'<.*?>', '', self.text))
+        self.text = self.normalize_whitespace(re.sub(r'<.*?>', '', self.text))
 
     def remove_emoji(self) -> str:
         """
@@ -87,8 +90,7 @@ class SocialPreprocessor():
         str
         """
         emoji_pattern = _emoji.get_emoji_regexp()
-        word = emoji_pattern.sub("", self.text)
-        return word
+        self.text = emoji_pattern.sub("", self.text)
 
     def convert_emoji_to_text(self, code_delimiters=(':', ':')) -> str:
         """
@@ -107,7 +109,7 @@ class SocialPreprocessor():
         str
             string 
         """
-        return _emoji.demojize(self.text, delimiters=code_delimiters)
+        self.text = _emoji.demojize(self.text, delimiters=code_delimiters)
 
     def extract_emojis(self) -> list:
         """
@@ -158,7 +160,7 @@ class SocialPreprocessor():
         str
             text of a post without hashtags
         """
-        return self.normalize_whitespace(re.sub(r'#\w*', '', self.text))
+        self.text = self.normalize_whitespace(re.sub(r'#\w*', '', self.text))
 
     def normalize_whitespace(self, text) -> str:
         """
