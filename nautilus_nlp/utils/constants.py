@@ -23,12 +23,12 @@ from __future__ import unicode_literals
 
 import os
 import re
+import regex
 import sys
 import unicodedata
 
 from . import  compat
 from . import file_loader as util
-
 
 
 
@@ -213,3 +213,4 @@ LEAD_HYPHEN_TERM_RE = re.compile(r"^-([^\W\d_])", flags=re.UNICODE)
 NEG_DIGIT_TERM_RE = re.compile(r"(-) (\d)", flags=re.UNICODE)
 WEIRD_HYPHEN_SPACE_TERM_RE = re.compile(r"(?<=[^\W\d]) (-[^\W\d])", flags=re.UNICODE)
 WEIRD_APOSTR_SPACE_TERM_RE = re.compile(r"([^\W\d]+) ('[a-z]{1,2}\b)", flags=re.UNICODE)
+LATIN_CHARACTERS_RE = regex.compile(r'[^\p{Latin}1-9]')
