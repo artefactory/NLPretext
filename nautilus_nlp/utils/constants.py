@@ -26,6 +26,8 @@ import re
 import regex
 import sys
 import unicodedata
+import emoji as _emoji
+
 
 from . import  compat
 from . import file_loader as util
@@ -227,3 +229,9 @@ CONTRACTION_LET_LETUS = re.compile(r"(\b)(let)'s", re.IGNORECASE)
 CONTRACTION_WONT_WILLNOT = re.compile(r"(\b)(w)on't", re.IGNORECASE)
 CONTRACTION_SHANT_SHALLNOT = re.compile(r"(\b)(s)han't", re.IGNORECASE)
 CONTRACTION_YALL_YOUALL = re.compile(r"(\b)(y)(?:'all|a'll)", re.IGNORECASE)
+
+# SOCIAL DATA
+EMOJI_PATTERN = _emoji.get_emoji_regexp()
+HASHTAG_PATTERN = re.compile(r'#\w*')
+AT_PATTERN = re.compile(r'@\w*')
+HTML_TAG_PATTERN = re.compile(r'<.*?>')
