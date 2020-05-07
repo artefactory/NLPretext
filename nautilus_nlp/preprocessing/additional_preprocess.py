@@ -96,7 +96,6 @@ def filter_non_latin_characters(text:str) -> str:
     string
     """
     text = constants.LATIN_CHARACTERS_RE.sub(' ', text)
-    #text = regex.sub(r'[^\p{Latin}1-9]', ' ', text).strip()
     return normalize_whitespace(text)
 
 
