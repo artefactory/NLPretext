@@ -23,6 +23,7 @@ import re
 import emoji as _emoji
 
 from nautilus_nlp.preprocessing.main_preprocess import normalize_whitespace
+from nautilus_nlp.utils import constants
 
 
 def remove_mentions(text:str) -> str:
@@ -37,7 +38,7 @@ def remove_mentions(text:str) -> str:
     -------
     string
     """
-    return normalize_whitespace(re.sub(r'@\w*', '', text))
+    return normalize_whitespace(constants.AT_PATTERN.sub('', text))
 
 
 def extract_mentions(text:str) -> str:
@@ -53,7 +54,7 @@ def extract_mentions(text:str) -> str:
     -------
     string
     """
-    return re.findall(r'[@][^\s@]+', text)
+    return constants.AT_PATTERN.findall(text)
 
 
 def remove_html_tags(text:str) -> str:
@@ -68,7 +69,7 @@ def remove_html_tags(text:str) -> str:
     -------
     string
     """
-    return normalize_whitespace(re.sub(r'<.*?>', '', text))
+    return normalize_whitespace(constants.HTML_TAG_PATTERN.sub('', text))
 
 
 def remove_emoji(text:str) -> str:
@@ -85,8 +86,7 @@ def remove_emoji(text:str) -> str:
     -------
     str
     """
-    emoji_pattern = _emoji.get_emoji_regexp()
-    word = emoji_pattern.sub("", text)
+    word = constants.EMOJI_PATTERN.sub("", text)
     return word
 
 
@@ -124,8 +124,7 @@ def extract_emojis(text:str) -> list:
     list
         list of all emojis converted with their unicode conventions
     """
-    emoji_pattern = _emoji.get_emoji_regexp()
-    emojis_in_text = re.findall(emoji_pattern, text)
+    emojis_in_text = constants.EMOJI_PATTERN.findall(text)
     emojis_converted = [convert_emoji_to_text(emoji_text) for emoji_text in emojis_in_text]
     return emojis_converted
 
@@ -144,7 +143,7 @@ def extract_hashtags(text) -> list:
     list
         list of all hashtags
     """
-    return re.findall(r'[#][^\s#]+', text)
+    return constants.HASHTAG_PATTERN.findall(text)
 
 
 def remove_hashtag(text) -> str:
@@ -161,4 +160,4 @@ def remove_hashtag(text) -> str:
     str
         text of a post without hashtags
     """
-    return normalize_whitespace(re.sub(r'#\w*', '', text))
+    return normalize_whitespace(constants.HASHTAG_PATTERN.sub('', text))
