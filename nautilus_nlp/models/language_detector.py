@@ -50,6 +50,5 @@ class LangDetector:
             2-letter code for the language of the text
         """
         preprocessor = TextPreprocessor(text_to_detect)
-        preprocessor.remove_EOL_characters()
-        best_guesses = self.model.predict(preprocessor.get_text())
+        best_guesses = self.model.predict(preprocessor.remove_EOL_characters())
         return best_guesses[0][0].replace("__label__", ""), best_guesses[1][0]
