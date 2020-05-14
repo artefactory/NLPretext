@@ -93,7 +93,7 @@ class SocialPreprocessor():
         self.text = emoji_pattern.sub("", self.text)
         return self.text
 
-    def convert_emoji_to_text(self, text, code_delimiters=(':', ':')) -> str:
+    def convert_emoji_to_text(self, code_delimiters=(':', ':'), input_str=None) -> str:
         """
         Convert emoji to their CLDR Short Name, according to the unicode convention
         http://www.unicode.org/emoji/charts/full-emoji-list.html
@@ -110,7 +110,10 @@ class SocialPreprocessor():
         str
             string 
         """
-        return _emoji.demojize(text, delimiters=code_delimiters)
+        if input_str:
+            return _emoji.demojize(input_str, delimiters=code_delimiters)
+        else:
+            return _emoji.demojize(self.text, delimiters=code_delimiters)
 
     def extract_emojis(self) -> list:
         """
@@ -128,7 +131,7 @@ class SocialPreprocessor():
         """
         emoji_pattern = _emoji.get_emoji_regexp()
         emojis_in_text = re.findall(emoji_pattern, self.text)
-        emojis_converted = [self.convert_emoji_to_text(emoji_text) for emoji_text in emojis_in_text]
+        emojis_converted = [self.convert_emoji_to_text(input_str=emoji_text) for emoji_text in emojis_in_text]
         return emojis_converted
 
     def extract_hashtags(self) -> list:
