@@ -20,7 +20,9 @@
 from __future__ import absolute_import, division, print_function, unicode_literals
 
 import re
-import regex
+from nautilus_nlp.utils import constants
+from nautilus_nlp.preprocessing.main_preprocess import normalize_whitespace
+
 
 def remove_multiple_spaces_and_strip_text(text: str) -> str:
     """
@@ -93,8 +95,8 @@ def filter_non_latin_characters(text:str) -> str:
     -------
     string
     """
-    text = regex.sub(r'[^\p{Latin}1-9]', ' ', text).strip()
-    return re.sub(' +', ' ', text)
+    text = constants.LATIN_CHARACTERS_RE.sub(' ', text)
+    return normalize_whitespace(text)
 
 
 def remove_smallwords(tokens_list:list, smallwords_threshold:int) -> list:
