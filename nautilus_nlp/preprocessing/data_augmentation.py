@@ -5,9 +5,10 @@ import re
 
 def augment_utterance(text, method, stopwords, intent=None, entities=None):
     """
-    Given ``text`` str, replace one or more spacings with a single space, and one
-    or more linebreaks with a single newline. Also strip leading/trailing whitespace.
-    eg. "   foo  bar  " -> "foo bar"
+    Given ``text`` str, create a new similar utterance by modifying some words
+    in the initial sentence, modifications depend on the chosen method 
+    (substitution with synonym, addition, deletion). If intent and/or entities 
+    are given as input, they will remain unchanged.
 
     Parameters
     ----------
