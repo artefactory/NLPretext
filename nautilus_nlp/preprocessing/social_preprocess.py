@@ -93,7 +93,7 @@ class SocialPreprocessor():
         self.text = emoji_pattern.sub("", self.text)
         return self.text
 
-    def convert_emoji_to_text(self, code_delimiters=(':', ':')) -> str:
+    def convert_emoji_to_text(self, text, code_delimiters=(':', ':')) -> str:
         """
         Convert emoji to their CLDR Short Name, according to the unicode convention
         http://www.unicode.org/emoji/charts/full-emoji-list.html
@@ -110,8 +110,7 @@ class SocialPreprocessor():
         str
             string 
         """
-        self.text = _emoji.demojize(self.text, delimiters=code_delimiters)
-        return self.text
+        return _emoji.demojize(text, delimiters=code_delimiters)
 
     def extract_emojis(self) -> list:
         """

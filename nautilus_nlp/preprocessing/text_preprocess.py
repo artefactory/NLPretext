@@ -70,7 +70,7 @@ class TextPreprocessor():
             When inputs is not a string
         """
         if type(self.text) is str:
-            self.text =  ' '.join([word for word in self.text.strip() if word not in stopwords])
+            self.text =  ' '.join([word for word in self.text.split() if word not in stopwords])
         else:
             raise ValueError("Input must be a string")
         return self.text
@@ -410,7 +410,7 @@ class TextPreprocessor():
         -------
         str
         """
-        self.text = ' '.join([word for word in self.text.strip() if len(word) > smallwords_threshold])
+        self.text = ' '.join([word for word in self.text.split() if len(word) > smallwords_threshold])
         return self.text
         
 
