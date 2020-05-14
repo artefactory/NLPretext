@@ -24,14 +24,14 @@ import spacy.lang as spacylang
 #nltk.download('punkt')
 
 try:
-    french_spacy = spacylang.fr.French()
+    french_spacy = spacylang.fr.French().tokenizer
 except OSError:
     raise OSError("""You must install French langage to use SpaCy. 
                     python -m spacy download fr
                     See https://spacy.io/usage/ for details
                 """)
 try:
-    english_spacy = spacylang.en.English()
+    english_spacy = spacylang.en.English().tokenizer
 except OSError:
     raise OSError("""You must install english langage to use SpaCy. 
                     python -m spacy download en
@@ -59,10 +59,10 @@ def tokenize(text: str, lang_module: str = 'en_spacy'):
         return nltk.word_tokenize(text)
     elif lang_module is 'en_spacy':
         spacydoc = english_spacy(text)
-        return list(spacydoc)
+        return [spacy_token.text for spacy_token in spacydoc]
     elif lang_module is 'fr_spacy':
         spacydoc = french_spacy(text)
-        return list(spacydoc)
+        return [spacy_token.text for spacy_token in spacydoc]
     elif lang_module is 'fr_moses':
         t = MosesTokenizer(lang='fr')
         return t.tokenize(text, escape=False)
