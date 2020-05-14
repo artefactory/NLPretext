@@ -36,6 +36,16 @@ class TextPreprocessor():
         else:
             raise ValueError("Input must be a string")
 
+    def clean_text(self,lang='en') -> str:
+        stopwords = get_stopwords(lang)
+        self.text = self.fix_bad_unicode(normalization="NFC")
+        self.text = self.remove_EOL_characters()
+        self.text = self.remove_accents(method="unicode")
+        self.text = self.remove_punct()
+        self.text = self.text.lower()
+        self.text = self.remove_stopwords(stopwords=stopwords)
+        return self.normalize_whitespace()
+
     def remove_EOL_characters(self) -> str:
         """
         Remove end of line (\n) char.
