@@ -46,6 +46,5 @@ from nautilus_nlp.preprocessing.text_preprocess import TextPreprocessor
 )
 def test_remove_multiple_spaces_and_strip_text(input_str, expected_str):
     preprocessor = TextPreprocessor(input_str)
-    preprocessor.fix_bad_unicode()
-    result = preprocessor.get_text()
+    result = preprocessor.fix_bad_unicode()
     np.testing.assert_string_equal(result, expected_str)

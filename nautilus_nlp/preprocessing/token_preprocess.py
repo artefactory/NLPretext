@@ -26,8 +26,6 @@ class TokenPreprocessor():
     def __init__(self,tokens):
         self.tokens = tokens
 
-    def get_tokens(self):
-        return self.tokens
 
     def remove_stopwords(self, stopwords: list) -> str:
         """ 
@@ -52,6 +50,7 @@ class TokenPreprocessor():
             self.tokens = [word for word in self.tokens if word not in stopwords]
         else:
             raise ValueError("Input must be a list of tokens")
+        return self.tokens
 
     def remove_tokens_with_nonletters(self) -> list:
         """
@@ -70,6 +69,7 @@ class TokenPreprocessor():
             list of tokens without tokens with numbers
         """
         self.tokens = [word for word in self.tokens if re.search("[^a-zA-Z]", word) is None]
+        return self.tokens
 
     def remove_special_caracters_from_tokenslist(self) -> list:
         """ 
@@ -88,6 +88,7 @@ class TokenPreprocessor():
         
         """
         self.tokens = [word for word in self.tokens if re.search("[a-zA-Z0-9]", word)]
+        return self.tokens
 
     def remove_smallwords(self, smallwords_threshold:int) -> list:
         """
@@ -106,3 +107,4 @@ class TokenPreprocessor():
         list
         """
         self.tokens = [word for word in self.tokens if len(word) > smallwords_threshold]
+        return self.tokens

@@ -29,8 +29,6 @@ class SocialPreprocessor():
     def __init__(self,text):
         self.text = text
 
-    def get_text(self):
-        return self.text
 
     def remove_mentions(self) -> str:
         """
@@ -45,6 +43,7 @@ class SocialPreprocessor():
         string
         """
         self.text = self.normalize_whitespace(re.sub(r'@\w*', '', self.text))
+        return self.text
 
     def extract_mentions(self) -> list:
         """
@@ -74,6 +73,7 @@ class SocialPreprocessor():
         string
         """
         self.text = self.normalize_whitespace(re.sub(r'<.*?>', '', self.text))
+        return self.text
 
     def remove_emoji(self) -> str:
         """
@@ -91,6 +91,7 @@ class SocialPreprocessor():
         """
         emoji_pattern = _emoji.get_emoji_regexp()
         self.text = emoji_pattern.sub("", self.text)
+        return self.text
 
     def convert_emoji_to_text(self, code_delimiters=(':', ':')) -> str:
         """
@@ -110,6 +111,7 @@ class SocialPreprocessor():
             string 
         """
         self.text = _emoji.demojize(self.text, delimiters=code_delimiters)
+        return self.text
 
     def extract_emojis(self) -> list:
         """
@@ -161,6 +163,7 @@ class SocialPreprocessor():
             text of a post without hashtags
         """
         self.text = self.normalize_whitespace(re.sub(r'#\w*', '', self.text))
+        return self.text
 
     def normalize_whitespace(self, text) -> str:
         """
