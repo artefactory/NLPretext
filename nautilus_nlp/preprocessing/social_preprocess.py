@@ -29,7 +29,6 @@ class SocialPreprocessor():
     def __init__(self,text):
         self.text = text
 
-
     def remove_mentions(self) -> str:
         """
         Function that removes words preceded with a '@'

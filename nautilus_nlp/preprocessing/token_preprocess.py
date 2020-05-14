@@ -24,8 +24,10 @@ import re
 class TokenPreprocessor():
 
     def __init__(self,tokens):
-        self.tokens = tokens
-
+        if isinstance(tokens,list):
+            self.tokens = tokens
+        else:
+            raise ValueError("Input must be a list")
 
     def remove_stopwords(self, stopwords: list) -> str:
         """ 
@@ -46,10 +48,7 @@ class TokenPreprocessor():
         ValueError
             When inputs is not a list
         """
-        if type(self.tokens) is list:
-            self.tokens = [word for word in self.tokens if word not in stopwords]
-        else:
-            raise ValueError("Input must be a list of tokens")
+        self.tokens = [word for word in self.tokens if word not in stopwords]
         return self.tokens
 
     def remove_tokens_with_nonletters(self) -> list:

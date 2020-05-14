@@ -31,8 +31,10 @@ from nautilus_nlp.utils import constants
 class TextPreprocessor():
 
     def __init__(self,text):
-        self.text = text
-
+        if isinstance(text,str):
+            self.text = text
+        else:
+            raise ValueError("Input must be a string")
 
     def remove_EOL_characters(self) -> str:
         """
@@ -48,7 +50,6 @@ class TextPreprocessor():
         """
         self.text = self.text.replace("\n", " ")
         return self.text
-        
 
     def remove_stopwords(self, stopwords: list) -> str:
         """ 
@@ -69,10 +70,8 @@ class TextPreprocessor():
         ValueError
             When inputs is not a string
         """
-        if type(self.text) is str:
-            self.text =  ' '.join([word.strip() for word in self.text.split() if word not in stopwords])
-        else:
-            raise ValueError("Input must be a string")
+        self.text =  ' '.join([word.strip() for word in self.text.split() if word not in stopwords])
+        
         return self.text
 
     def fix_bad_unicode(self, normalization: str = "NFC") -> str:
@@ -98,7 +97,6 @@ class TextPreprocessor():
         """
         self.text = _fix_text(self.text, normalization=normalization)
         return self.text
-        
 
     def normalize_whitespace(self) -> str:
         """
@@ -118,7 +116,6 @@ class TextPreprocessor():
             " ", constants.LINEBREAK_REGEX.sub(r"\n", self.text)
         ).strip()
         return self.text
-        
 
     def unpack_english_contractions(self) -> str:
         """
@@ -161,7 +158,6 @@ class TextPreprocessor():
         self.text = re.sub(r"(\b)([Ss])han't", r"\1\2hall not", self.text)
         self.text = re.sub(r"(\b)([Yy])(?:'all|a'll)", r"\1\2ou all", self.text)
         return self.text
-        
 
     def replace_urls(self, replace_with:str="*URL*") -> str:
         """
@@ -181,7 +177,6 @@ class TextPreprocessor():
             replace_with, constants.SHORT_URL_REGEX.sub(replace_with, self.text)
         )
         return self.text
-        
 
     def replace_emails(self, replace_with="*EMAIL*") -> str:
         """
@@ -199,7 +194,6 @@ class TextPreprocessor():
         """
         self.text = constants.EMAIL_REGEX.sub(replace_with, self.text)
         return self.text
-        
 
     def replace_phone_numbers(self, replace_with:str="*PHONE*",
                                     method:str="regex",
@@ -235,7 +229,6 @@ class TextPreprocessor():
         else:
             raise ValueError('Please input a valid method between "regex" or "detection"')
         return self.text
-        
 
     def replace_numbers(self, replace_with="*NUMBER*") -> str:
         """
@@ -253,7 +246,6 @@ class TextPreprocessor():
         """        
         self.text = constants.NUMBERS_REGEX.sub(replace_with, self.text)
         return self.text
-        
 
     def replace_currency_symbols(self, replace_with=None) -> str:
         """
@@ -279,7 +271,6 @@ class TextPreprocessor():
         else:
             self.text = constants.CURRENCY_REGEX.sub(replace_with, self.text)
         return self.text
-        
 
     def remove_punct(self, marks=None) -> str:
         """
@@ -311,7 +302,6 @@ class TextPreprocessor():
         else:
             self.text = self.text.translate(constants.PUNCT_TRANSLATE_UNICODE)
         return self.text
-        
 
     def remove_accents(self, method:str="unicode") -> str:
         """
@@ -355,7 +345,6 @@ class TextPreprocessor():
             msg = '`method` must be either "unicode" and "ascii", not {}'.format(method)
             raise ValueError(msg)
         return self.text
-        
 
     def remove_multiple_spaces_and_strip_text(self) -> str:
         """
@@ -376,7 +365,6 @@ class TextPreprocessor():
             self.text = re.sub(regex_remove_multiple_spaces, " ", self.text)
             self.text = self.text.strip()
         return self.text
-        
 
     def filter_non_latin_characters(self) -> str:
         """
@@ -393,7 +381,6 @@ class TextPreprocessor():
         self.text = regex.sub(r'[^\p{Latin}1-9]', ' ', self.text).strip()
         self.text = re.sub(' +', ' ', self.text)
         return self.text
-        
 
     def remove_smallwords(self, smallwords_threshold:int) -> list:
         """
@@ -412,7 +399,6 @@ class TextPreprocessor():
         """
         self.text = ' '.join([word for word in self.text.split() if len(word) > smallwords_threshold])
         return self.text
-        
 
 
 
