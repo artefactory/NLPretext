@@ -194,7 +194,7 @@ def test_remove_stopwords_tokens(input_tokens, expected_output):
 @pytest.mark.parametrize(
     "input_str, expected_output",
     [
-        ('I like when you move your body !', ['I', 'move', 'body', '!']),
+        ('I like when you move your body !', 'I move body !'),
     ],
 )  
 def test_remove_stopwords_text(input_str, expected_output):
@@ -236,7 +236,7 @@ def test_remove_accents():
 )
 def test_fix_bad_unicode(input_str, expected_str):
     preprocessor = TextPreprocessor(input_str)
-    result = preprocessor.fix_bad_unicode(input_str)
+    result = preprocessor.fix_bad_unicode()
     np.testing.assert_string_equal(result, expected_str)
 
 
