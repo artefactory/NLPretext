@@ -18,7 +18,7 @@
 
 import pytest
 import numpy as np
-from nautilus_nlp.preprocessing.main_preprocess import fix_bad_unicode
+from nautilus_nlp.preprocessing.text_preprocess import TextPreprocessor
 
 
 
@@ -45,5 +45,6 @@ from nautilus_nlp.preprocessing.main_preprocess import fix_bad_unicode
     ],
 )
 def test_remove_multiple_spaces_and_strip_text(input_str, expected_str):
-    result = fix_bad_unicode(input_str)
+    preprocessor = TextPreprocessor(input_str)
+    result = preprocessor.fix_bad_unicode()
     np.testing.assert_string_equal(result, expected_str)

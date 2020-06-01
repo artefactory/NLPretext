@@ -16,7 +16,7 @@
 # along with this program; if not, write to the Free Software Foundation,
 # Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 from nautilus_nlp.models.fasttext_classifier import Fasttext_clf as langdetect
-from nautilus_nlp.preprocessing.main_preprocess import remove_EOL_characters
+from nautilus_nlp.preprocessing.text_preprocess import TextPreprocessor
 import pkg_resources
 
 lang_path = pkg_resources.resource_filename(
@@ -49,5 +49,6 @@ class LangDetector:
         language: 
             2-letter code for the language of the text
         """
-        best_guesses = self.model.predict(remove_EOL_characters(text_to_detect))
+        preprocessor = TextPreprocessor(text_to_detect)
+        best_guesses = self.model.predict(preprocessor.remove_EOL_characters())
         return best_guesses[0][0].replace("__label__", ""), best_guesses[1][0]
