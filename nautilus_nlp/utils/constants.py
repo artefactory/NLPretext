@@ -23,8 +23,10 @@ from __future__ import unicode_literals
 
 import os
 import re
+import regex
 import sys
 import unicodedata
+import emoji as _emoji
 
 from . import  compat
 from . import file_loader as util
@@ -213,3 +215,23 @@ LEAD_HYPHEN_TERM_RE = re.compile(r"^-([^\W\d_])", flags=re.UNICODE)
 NEG_DIGIT_TERM_RE = re.compile(r"(-) (\d)", flags=re.UNICODE)
 WEIRD_HYPHEN_SPACE_TERM_RE = re.compile(r"(?<=[^\W\d]) (-[^\W\d])", flags=re.UNICODE)
 WEIRD_APOSTR_SPACE_TERM_RE = re.compile(r"([^\W\d]+) ('[a-z]{1,2}\b)", flags=re.UNICODE)
+LATIN_CHARACTERS_RE = regex.compile(r'[^\p{Latin}1-9]')
+
+# ENGLISH CONTRACTIONS
+CONTRACTION_NT_NOT = re.compile(
+    r"(\b)(are|could|did|does|do|had|has|have|is|might|must|should|were|would)n't", re.IGNORECASE)
+CONTRACTION_LL_WILL = re.compile(r"(\b)(he|i|she|they|we|what|who|you)'ll", re.IGNORECASE)
+CONTRACTION_RE_ARE = re.compile(r"(\b)(they|we|what|who|you)'re", re.IGNORECASE)
+CONTRACTION_VE_HAVE = re.compile(r"(\b)(i|should|they|we|what|who|would|you)'ve", re.IGNORECASE)
+CONTRACTION_CANT_CANNOT = re.compile(r"(\b)(ca)n't", re.IGNORECASE)
+CONTRACTION_M_AM = re.compile(r"(\b)(i)'m", re.IGNORECASE)
+CONTRACTION_LET_LETUS = re.compile(r"(\b)(let)'s", re.IGNORECASE)
+CONTRACTION_WONT_WILLNOT = re.compile(r"(\b)(w)on't", re.IGNORECASE)
+CONTRACTION_SHANT_SHALLNOT = re.compile(r"(\b)(s)han't", re.IGNORECASE)
+CONTRACTION_YALL_YOUALL = re.compile(r"(\b)(y)(?:'all|a'll)", re.IGNORECASE)
+
+# SOCIAL DATA
+EMOJI_PATTERN = _emoji.get_emoji_regexp()
+HASHTAG_PATTERN = re.compile(r'#\w*')
+AT_PATTERN = re.compile(r'@\w*')
+HTML_TAG_PATTERN = re.compile(r'<.*?>')

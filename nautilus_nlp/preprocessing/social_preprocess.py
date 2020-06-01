@@ -41,7 +41,7 @@ class SocialPreprocessor():
         -------
         string
         """
-        self.text = self.normalize_whitespace(re.sub(r'@\w*', '', self.text))
+        self.text = self.normalize_whitespace(constants.AT_PATTERN.sub('', self.text))
         return self.text
 
     def extract_mentions(self) -> list:
@@ -57,7 +57,7 @@ class SocialPreprocessor():
         -------
         string
         """
-        return re.findall(r'[@][^\s@]+', self.text)
+        return constants.AT_PATTERN.findall(self.text)
 
     def remove_html_tags(self) -> str:
         """
@@ -71,7 +71,7 @@ class SocialPreprocessor():
         -------
         string
         """
-        self.text = self.normalize_whitespace(re.sub(r'<.*?>', '', self.text))
+        self.text = self.normalize_whitespace(constants.HTML_TAG_PATTERN.sub('', self.text))
         return self.text
 
     def remove_emoji(self) -> str:
@@ -88,8 +88,7 @@ class SocialPreprocessor():
         -------
         str
         """
-        emoji_pattern = _emoji.get_emoji_regexp()
-        self.text = emoji_pattern.sub("", self.text)
+        self.text = constants.EMOJI_PATTERN.sub("", self.text)
         return self.text
 
     def convert_emoji_to_text(self, code_delimiters=(':', ':'), input_str=None) -> str:
@@ -128,8 +127,7 @@ class SocialPreprocessor():
         list
             list of all emojis converted with their unicode conventions
         """
-        emoji_pattern = _emoji.get_emoji_regexp()
-        emojis_in_text = re.findall(emoji_pattern, self.text)
+        emojis_in_text = constants.EMOJI_PATTERN.findall(self.text)
         emojis_converted = [self.convert_emoji_to_text(input_str=emoji_text) for emoji_text in emojis_in_text]
         return emojis_converted
 
@@ -147,7 +145,7 @@ class SocialPreprocessor():
         list
             list of all hashtags
         """
-        return re.findall(r'[#][^\s#]+', self.text)
+        return constants.HASHTAG_PATTERN.findall(self.text)
 
     def remove_hashtag(self) -> str:
         """
@@ -163,7 +161,7 @@ class SocialPreprocessor():
         str
             text of a post without hashtags
         """
-        self.text = self.normalize_whitespace(re.sub(r'#\w*', '', self.text))
+        self.text = self.normalize_whitespace(constants.HASHTAG_PATTERN.sub('', self.text))
         return self.text
 
     def normalize_whitespace(self, text) -> str:

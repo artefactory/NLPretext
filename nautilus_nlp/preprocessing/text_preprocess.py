@@ -144,29 +144,25 @@ class TextPreprocessor():
         """
 
         # standard
-        self.text = re.sub(
-            r"(\b)([Aa]re|[Cc]ould|[Dd]id|[Dd]oes|[Dd]o|[Hh]ad|[Hh]as|[Hh]ave|[Ii]s|[Mm]ight|[Mm]ust|[Ss]hould|[Ww]ere|[Ww]ould)n't",
+        self.text = constants.CONTRACTION_NT_NOT.sub(
             r"\1\2 not",
             self.text,
         )
-        self.text = re.sub(
-            r"(\b)([Hh]e|[Ii]|[Ss]he|[Tt]hey|[Ww]e|[Ww]hat|[Ww]ho|[Yy]ou)'ll",
+        self.text = constants.CONTRACTION_LL_WILL.sub(
             r"\1\2 will",
             self.text,
         )
-        self.text = re.sub(r"(\b)([Tt]hey|[Ww]e|[Ww]hat|[Ww]ho|[Yy]ou)'re", r"\1\2 are", self.text)
-        self.text = re.sub(
-            r"(\b)([Ii]|[Ss]hould|[Tt]hey|[Ww]e|[Ww]hat|[Ww]ho|[Ww]ould|[Yy]ou)'ve",
+        self.text = constants.CONTRACTION_RE_ARE.sub(r"\1\2 are", text)
+        self.text = constants.CONTRACTION_VE_HAVE.sub(
             r"\1\2 have",
             self.text,
         )
-        # non-standard
-        self.text = re.sub(r"(\b)([Cc]a)n't", r"\1\2n not", self.text)
-        self.text = re.sub(r"(\b)([Ii])'m", r"\1\2 am", self.text)
-        self.text = re.sub(r"(\b)([Ll]et)'s", r"\1\2 us", self.text)
-        self.text = re.sub(r"(\b)([Ww])on't", r"\1\2ill not", self.text)
-        self.text = re.sub(r"(\b)([Ss])han't", r"\1\2hall not", self.text)
-        self.text = re.sub(r"(\b)([Yy])(?:'all|a'll)", r"\1\2ou all", self.text)
+        self.text = constants.CONTRACTION_CANT_CANNOT.sub(r"\1\2n not", text)
+        self.text = constants.CONTRACTION_M_AM.sub(r"\1\2 am", text)
+        self.text = constants.CONTRACTION_LET_LETUS.sub(r"\1\2 us", text)
+        self.text = constants.CONTRACTION_WONT_WILLNOT.sub(r"\1\2ill not", text)
+        self.text = constants.CONTRACTION_SHANT_SHALLNOT.sub(r"\1\2hall not", text)
+        self.text = constants.CONTRACTION_YALL_YOUALL.sub(r"\1\2ou all", text)
         return self.text
 
     def replace_urls(self, replace_with:str="*URL*") -> str:
@@ -372,8 +368,8 @@ class TextPreprocessor():
         """
         regex_remove_multiple_spaces_list = ["\\t", "[\\s\\-\\*]{2,}"]
         for regex_remove_multiple_spaces in regex_remove_multiple_spaces_list:
-            self.text = re.sub(regex_remove_multiple_spaces, " ", self.text)
-            self.text = self.text.strip()
+            self.text = constants.LATIN_CHARACTERS_RE.sub(' ', text)
+            self.text = self.normalize_whitespace()
         return self.text
 
     def filter_non_latin_characters(self) -> str:
