@@ -152,17 +152,17 @@ class TextPreprocessor():
             r"\1\2 will",
             self.text,
         )
-        self.text = constants.CONTRACTION_RE_ARE.sub(r"\1\2 are", text)
+        self.text = constants.CONTRACTION_RE_ARE.sub(r"\1\2 are", self.text)
         self.text = constants.CONTRACTION_VE_HAVE.sub(
             r"\1\2 have",
             self.text,
         )
-        self.text = constants.CONTRACTION_CANT_CANNOT.sub(r"\1\2n not", text)
-        self.text = constants.CONTRACTION_M_AM.sub(r"\1\2 am", text)
-        self.text = constants.CONTRACTION_LET_LETUS.sub(r"\1\2 us", text)
-        self.text = constants.CONTRACTION_WONT_WILLNOT.sub(r"\1\2ill not", text)
-        self.text = constants.CONTRACTION_SHANT_SHALLNOT.sub(r"\1\2hall not", text)
-        self.text = constants.CONTRACTION_YALL_YOUALL.sub(r"\1\2ou all", text)
+        self.text = constants.CONTRACTION_CANT_CANNOT.sub(r"\1\2n not", self.text)
+        self.text = constants.CONTRACTION_M_AM.sub(r"\1\2 am", self.text)
+        self.text = constants.CONTRACTION_LET_LETUS.sub(r"\1\2 us", self.text)
+        self.text = constants.CONTRACTION_WONT_WILLNOT.sub(r"\1\2ill not", self.text)
+        self.text = constants.CONTRACTION_SHANT_SHALLNOT.sub(r"\1\2hall not", self.text)
+        self.text = constants.CONTRACTION_YALL_YOUALL.sub(r"\1\2ou all", self.text)
         return self.text
 
     def replace_urls(self, replace_with:str="*URL*") -> str:
@@ -368,8 +368,8 @@ class TextPreprocessor():
         """
         regex_remove_multiple_spaces_list = ["\\t", "[\\s\\-\\*]{2,}"]
         for regex_remove_multiple_spaces in regex_remove_multiple_spaces_list:
-            self.text = constants.LATIN_CHARACTERS_RE.sub(' ', text)
-            self.text = self.normalize_whitespace()
+            self.text = re.sub(regex_remove_multiple_spaces, " ", self.text)
+            self.text = self.text.strip()
         return self.text
 
     def filter_non_latin_characters(self) -> str:
@@ -384,8 +384,8 @@ class TextPreprocessor():
         -------
         string
         """
-        self.text = regex.sub(r'[^\p{Latin}1-9]', ' ', self.text).strip()
-        self.text = re.sub(' +', ' ', self.text)
+        self.text = constants.LATIN_CHARACTERS_RE.sub(' ', self.text)
+        self.text = self.normalize_whitespace()
         return self.text
 
     def remove_smallwords(self, smallwords_threshold:int) -> list:
