@@ -15,20 +15,6 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with this program; if not, write to the Free Software Foundation,
 # Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
-from sklearn.feature_extraction.text import CountVectorizer
-from sklearn.base import BaseEstimator, ClassifierMixin
-
-
-class sk_vectorizer(BaseEstimator, ClassifierMixin):
-    def __init__(self):
-        self.model = CountVectorizer()
-
-    def fit(self, train_data):
-        self.model.fit(train_data)
-
-    def fit_transform(self, train_data):
-        self.model.fit_transform(train_data)
-        return train_data
-
-    def transform(self, data):
-        return self.model.transform(data)
+#!/bin/bash 
+wget -O trainingandtestdata.zip http://cs.stanford.edu/people/alecmgo/trainingandtestdata.zip trainingandtestdata.zip
+mkdir -p  tweets_sentiment && cp trainingandtestdata.zip tweets_sentiment && cd tweets_sentiment && unzip trainingandtestdata.zip
