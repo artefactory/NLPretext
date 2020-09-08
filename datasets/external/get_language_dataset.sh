@@ -16,5 +16,6 @@
 # along with this program; if not, write to the Free Software Foundation,
 # Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #!/bin/bash
-cp docker/Dockerfile .
-docker build -t nautilus_nlp:latest .
+wget -O wili.zip https://zenodo.org/record/841984/files/wili-2018.zip?download=1
+mkdir -p wili && cp wili.zip wili && cd wili && unzip wili.zip && cd ..
+
