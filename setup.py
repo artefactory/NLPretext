@@ -42,7 +42,7 @@ setup(
     packages=find_packages(),
     version=version,
     description='All the goto functions you need to handle NLP use-cases',
-    author='Robin Doumerc',
+    author='Artefact',
     license='MIT',
     url='https://github.com/artefactory/nautilus-nlp',
     classifiers=[
