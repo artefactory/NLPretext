@@ -19,7 +19,6 @@ biterm==0.1.5
 flashtext==2.7
 ftfy==5.8
 gensim==3.7.1
-ipython==7.18.1
 nlpaug==0.0.20
 nltk==3.5
 phonenumbers==8.12.9
