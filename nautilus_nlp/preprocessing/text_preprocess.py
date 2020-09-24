@@ -37,6 +37,7 @@ class TextPreprocessor():
             raise ValueError("Input must be a string")
 
     def clean_text(self,lang='en') -> str:
+        #TODO : check how to pipe operations
         stopwords = get_stopwords(lang)
         self.text = self.fix_bad_unicode(normalization="NFC")
         self.text = self.remove_EOL_characters()
