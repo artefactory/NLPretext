@@ -15,14 +15,18 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with this program; if not, write to the Free Software Foundation,
 # Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+from collections import Counter
+
 from flashtext import KeywordProcessor
+from nautilus_nlp.analysis.ngrams import create_ngrams
+
 
 def extract_keywords(text, keyword, case_sensitive=True):
     """
     Extract Keywords from a document.
 
     Parameters
-    ----------    
+    ----------
     text : str
         Text to extract keywords from
     keyword :
@@ -35,13 +39,13 @@ def extract_keywords(text, keyword, case_sensitive=True):
     list
         Return list of extracted keyworkds
     """
-    
-    processor=KeywordProcessor(case_sensitive=case_sensitive)
-    if isinstance(keyword,list):
+
+    processor = KeywordProcessor(case_sensitive=case_sensitive)
+    if isinstance(keyword, list):
         processor.add_keywords_from_list(keyword)
-    elif isinstance(keyword,str):
+    elif isinstance(keyword, str):
         processor.add_keyword(keyword)
-    elif isinstance(keyword,dict):
+    elif isinstance(keyword, dict):
         processor.add_keywords_from_dict(keyword)
 
     return processor.extract_keywords(text)
@@ -52,17 +56,17 @@ def frequent_words(list_words, ngrams_number=1, number_top_words=10):
     Create n-grams for list of tokens
 
     Parameters
-    ----------    
+    ----------
     ngrams_number : int
-    
-    number_top_words : int 
+
+    number_top_words : int
         output dataframe length
 
     Returns
     -------
     DataFrame
         Dataframe with the entities and their frequencies.
-    """             
+    """
     frequent = []
     if ngrams_number == 1:
         pass
