@@ -21,36 +21,35 @@ from summa.summarizer import summarize
 def is_list_of_strings(lst):
     """
     Parameters
-    ----------    
+    ----------
     lst : list
 
     Returns
     -------
     book
         boolean indicator
-    """      
-    
+    """
     return bool(lst) and isinstance(lst, list) and all(isinstance(elem, str) for elem in lst)
 
 
-def summarize_text(txt, ratio=0.2, language, words=None):
+def summarize_text(txt, ratio=0.2, language="english", words=None):
     """
     Parameters
-    ----------    
+    ----------
     txt : str
         Sting or list of strings containing text to summarize
     ratio : float
         Percentage giving the output text length in reference to the input length.
     language :
         text language. eg. "english"
-    words : 
+    words :
         number of words of the output text or None
 
     Returns
     -------
     string
         string containing the summarized text
-    """      
+    """
 
     if is_list_of_strings(txt):
         txt = ' '.join(txt)
