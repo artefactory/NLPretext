@@ -6,7 +6,9 @@ python-dotenv>=0.5.1
 pillow
 pytest==6.0.2
 
-numpy==1.18.1
+pyLDAvis==2.1.2
+gensim==3.7.1
+numpy==1.15.4
 chardet==3.0.4
 pandas==0.25.1
 spacy==2.2.4
@@ -17,17 +19,16 @@ matplotlib==3.1.1
 tqdm==4.45.0
 biterm==0.1.5
 flashtext==2.7
-ftfy==5.8
-gensim==3.7.1
+ftfy<5.0.0,>=4.2.0
 nlpaug==0.0.20
-nltk==3.5
-phonenumbers==8.12.9
-pyLDAvis==2.1.2
+nltk==3.4.5
+phonenumbers==8.10.12
 pytest==6.0.2
-regex==2020.7.14
+regex==2019.8.19
 sacremoses==0.0.43
-scikit_learn==0.23.2
+scikit_learn==0.20.3
 stop_words==2018.7.23
 wordcloud==1.8.0
+emoji>=0.5.2
 summa==1.2.0
 pylint==2.4.4
