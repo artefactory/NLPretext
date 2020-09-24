@@ -16,21 +16,15 @@
 # along with this program; if not, write to the Free Software Foundation,
 # Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 # -*- coding: utf-8 -*-
-"""
-Functions to calculate words or ngrams frequencies.
-"""
-from collections import Counter
-
-
-def create_ngrams(token_list, n):
+def create_ngrams(token_list, nb_elements):
     """
     Create n-grams for list of tokens
 
     Parameters
-    ----------    
+    ----------
     token_list : list
         list of strings
-    n :
+    nb_elements :
         number of elements in the n-gram
 
     Returns
@@ -38,5 +32,5 @@ def create_ngrams(token_list, n):
     Generator
         generator of all n-grams
     """
-    ngrams = zip(*[token_list[i:] for i in range(n)])
+    ngrams = zip(*[token_list[index_token:] for index_token in range(nb_elements)])
     return (" ".join(ngram) for ngram in ngrams)
