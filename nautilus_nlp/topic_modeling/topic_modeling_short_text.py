@@ -18,8 +18,8 @@
 import re
 from collections import Counter
 from itertools import product
-from nautilus_nlp.models.nmf_model import *
-from nautilus_nlp.models.seanmf_model import *
+from nautilus_nlp.topic_modeling.nmf_model import *
+from nautilus_nlp.topic_modeling.seanmf_model import *
 import numpy as np
 import pyLDAvis
 
