@@ -23,7 +23,6 @@ services:
   - docker
 
 before_script:
-  - wget https://github.com/facebookresearch/fastText/archive/v0.2.0.zip  && unzip v0.2.0.zip && cd fastText-0.2.0 && make && pip install . && cd ..
   - python3 -m spacy download fr &&  python3 -m spacy download en && python3 -m spacy download de && python3 -m spacy download nl && python3 -m spacy download it && python3 -m spacy download xx && python3 -m spacy validate
 
   - wget http://mallet.cs.umass.edu/dist/mallet-2.0.8.zip && unzip mallet-2.0.8.zip && rm mallet-2.0.8.zip
