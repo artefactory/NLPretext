@@ -15,7 +15,7 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with this program; if not, write to the Free Software Foundation,
 # Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
-from nautilus_nlp.models.topic_modeling_short_text import prepare_data, \
+from nautilus_nlp.topic_modeling.topic_modeling_short_text import prepare_data, \
     __build_cooccurence_matrix, train_shorttext_model, prepare_data_pyldavis, \
     show_dominant_topic, get_assigned_topics
 import numpy as np
