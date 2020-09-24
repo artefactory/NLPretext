@@ -22,3 +22,4 @@ scikit_learn==0.23.2
 stop_words==2018.7.23
 wordcloud==1.8.0
 summa==1.2.0
+pylint==2.4.4
