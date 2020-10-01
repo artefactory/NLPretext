@@ -17,7 +17,7 @@
 # Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 import phonenumbers as _phonenumbers
 
-SUPPORTED_COUNTRY = [None, 'US', 'AG', 'AI', 'AS', 'BB', 'BM', 'BS', 'CA', 'DM', 
+SUPPORTED_COUNTRY = [None, 'US', 'AG', 'AI', 'AS', 'BB', 'BM', 'BS', 'CA', 'DM',
                      'GD', 'GU', 'JM', 'KN', 'KY', 'LC', 'MP', 'MS', 'PR', 'SX', 'TC', 'TT',
                      'VC', 'VG', 'VI', 'RU', 'KZ', 'EG', 'ZA', 'GR', 'NL', 'BE', 'FR', 'ES',
                      'HU', 'IT', 'VA', 'RO', 'CH', 'AT', 'GB', 'GG', 'IM', 'JE', 'DK', 'SE',
@@ -39,6 +39,12 @@ SUPPORTED_COUNTRY = [None, 'US', 'AG', 'AI', 'AS', 'BB', 'BM', 'BS', 'CA', 'DM',
                      'IQ', 'KW', 'SA', 'YE', 'OM', 'PS', 'AE', 'IL', 'BH', 'QA', 'BT', 'MN',
                      'NP', 'TJ', 'TM', 'AZ', 'GE', 'KG', 'UZ', 'DO']
 
+FORMAT_NUMBERS = {
+    "E164": _phonenumbers.PhoneNumberFormat.E164,
+    "INTERNATIONAL": _phonenumbers.PhoneNumberFormat.INTERNATIONAL,
+    "NATIONAL": _phonenumbers.PhoneNumberFormat.NATIONAL,
+    "RFC3966": _phonenumbers.PhoneNumberFormat.RFC3966
+}
 
 def find_phone_numbers(string, region_code=None):
     """
@@ -82,7 +88,7 @@ def extract_phone_numbers(text: str, countrylist: list)->list:
     return list(set(all_phone_numbers))
 
 
-class phone_parser(object):
+class PhoneParser:
     """
     Python port of Google's libphonenumber.
     https://github.com/daviddrysdale/python-phonenumbers
@@ -118,10 +124,12 @@ class phone_parser(object):
         self.parsed_num = _phonenumbers.parse(self.text, self.region_code)
         return self.parsed_num
 
+
     def format_number(self, num_format):
         '''
         ['E164','INTERNATIONAL','NATIONAL','RFC3966']
         '''
-        # TODO: why exec ???
-        standard_format = exec('_phonenumbers.PhoneNumberFormat.'+num_format)
+        standard_format = FORMAT_NUMBERS.get(num_format)
+        if standard_format is None:
+            raise ValueError(f"Please choose a num_format in {list(FORMAT_NUMBERS.keys())}")
         return _phonenumbers.format_number(self.parsed_num, standard_format)
