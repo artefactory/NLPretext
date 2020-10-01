@@ -39,3 +39,4 @@ regex==2019.8.19
 emoji>=0.5.2
 summa==1.2.0
 biterm==0.1.5
+nlpaug==1.0.1
