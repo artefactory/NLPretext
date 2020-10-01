@@ -21,30 +21,23 @@ Collection of regular expressions and other (small, generally useful) constants.
 """
 from __future__ import unicode_literals
 
-import os
 import re
-import regex
 import sys
 import unicodedata
+
+import regex
+
 import emoji as _emoji
 
-
-from . import  compat
-from . import file_loader as util
-
-
-
-
-
 NUMERIC_NE_TYPES = {
-                    "ORDINAL",
-                    "CARDINAL",
-                    "MONEY",
-                    "QUANTITY",
-                    "PERCENT",
-                    "TIME",
-                    "DATE",
-                    }
+    "ORDINAL",
+    "CARDINAL",
+    "MONEY",
+    "QUANTITY",
+    "PERCENT",
+    "TIME",
+    "DATE",
+}
 SUBJ_DEPS = {"agent", "csubj", "csubjpass", "expl", "nsubj", "nsubjpass"}
 OBJ_DEPS = {"attr", "dobj", "dative", "oprd"}
 AUX_DEPS = {"aux", "auxpass", "neg"}
@@ -136,8 +129,8 @@ POS_REGEX_PATTERNS = {
 PUNCT_TRANSLATE_UNICODE = dict.fromkeys(
     (
         i
-        for i in compat.range_(sys.maxunicode)
-        if unicodedata.category(compat.chr_(i)).startswith("P")
+        for i in range(sys.maxunicode)
+        if unicodedata.category(chr(i)).startswith("P")
     ),
     " ",
 )
@@ -155,10 +148,11 @@ PHONE_REGEX = re.compile(
     r"(?:^|(?<=[^\w)]))(\+?1[ .-]?)?(\(?\d{3}\)?[ .-]?)?(\d{3}[ .-]?\d{4})(\s?(?:ext\.?|[#x-])\s?\d{2,6})?(?:$|(?=\W))"
 )
 NUMBERS_REGEX = re.compile(
-    r"(?:^|(?<=[^\w,.]))[+–-]?(([1-9]\d{0,2}(,\d{3})+(\.\d*)?)|([1-9]\d{0,2}([ .]\d{3})+(,\d*)?)|(\d*?[.,]\d+)|\d+)(?:|(?=\b))"
+    r"(?:^|(?<=[^\w,.]))[+–-]?(([1-9]\d{0,2}(,\d{3})+(\.\d*)?)|([1-9]\d{0,2}([ .]\d{3})+(,\d*)?)|"
+    r"(\d*?[.,]\d+)|\d+)(?:|(?=\b))"
 )
 CURRENCY_REGEX = re.compile(
-    "({})+".format("|".join(re.escape(c) for c in CURRENCIES.keys()))
+    "({})+".format("|".join(re.escape(c) for c in CURRENCIES))
 )
 LINEBREAK_REGEX = re.compile(r"((\r\n)|[\n\v])+")
 NONBREAKING_SPACE_REGEX = re.compile(r"(?!\n)\s+")
