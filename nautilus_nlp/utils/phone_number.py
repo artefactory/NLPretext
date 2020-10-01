@@ -66,9 +66,9 @@ def find_phone_numbers(string, region_code=None):
     return [match.raw_string for match in _phonenumbers.PhoneNumberMatcher(string, region_code)]
 
 
-def extract_phone_numbers(string:str, countrylist: list)->list:
+def extract_phone_numbers(text:str, countrylist: list)->list:
     '''
-    Find phone numbers in a string, returns a list of phone numbers. 
+    Find phone numbers in a text, returns a list of phone numbers. 
 
     Parameters
     ----------
@@ -76,11 +76,11 @@ def extract_phone_numbers(string:str, countrylist: list)->list:
         Look for phone numbers formatted according to the specified countlist. 
         supported value: look SUPPORTED_COUNTRY variable.
     '''
-    res = []
+    all_phone_numbers = []
     for country in countrylist:
-        new_numbers_founds = find_phone_numbers(string, region_code=country)
-        res += new_numbers_founds
-    return list(set(res))
+        new_numbers_founds = find_phone_numbers(text, region_code=country)
+        all_phone_numbers.extend(new_numbers_founds)
+    return list(set(all_phone_numbers))
 
 
 class phoneParser(object):
