@@ -15,7 +15,6 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with this program; if not, write to the Free Software Foundation,
 # Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
-import pytest
 import nautilus_nlp.utils.phone_number as phone
 
 def test_extract_phone_number():
@@ -42,18 +41,18 @@ def test_extract_phone_number_international():
     res = phone.extract_phone_numbers(input_str, countrylist=['US', 'GB', 'FR', None])
     assert res == expected
 
-def test_phoneParser_us():
+def test_phone_parser_us():
     input_str = '(541) 754-3010'
     expected = '541-754-3010'
-    p = phone.phoneParser()
-    p.parse_number(input_str,region_code='US')
+    p = phone.phone_parser()
+    p.parse_number(input_str, region_code='US')
     res = p.format_number('INTERNATIONAL')
     assert res == expected
 
-def test_phoneParser_fr():
+def test_phone_parser_fr():
     input_str = '0625093267'
     expected = '6 25 09 32 67'
-    p = phone.phoneParser()
-    p.parse_number(input_str,region_code='FR')
+    p = phone.phone_parser()
+    p.parse_number(input_str, region_code='FR')
     res = p.format_number('E164')
-    assert res == expected    
+    assert res == expected
