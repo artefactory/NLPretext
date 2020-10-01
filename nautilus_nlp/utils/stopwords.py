@@ -43,10 +43,10 @@ def get_stopwords(lang: str = "en") -> list:
     ----------
     lang : str
         Supported languages: ['ar', 'bg', 'ca', 'cz', 'da', 'nl', 'en',
-         'fi', 'fr', 'de', 'hi', 'hu', 'id', 'it', 'nb', 'pl', 'pt', 'ro', 'ru', 
-         'sk', 'es', 'sv', 'tr', 'uk', 'vi', 'af', 'ha', 'so', 'st', 'sw', 'yo', 
+         'fi', 'fr', 'de', 'hi', 'hu', 'id', 'it', 'nb', 'pl', 'pt', 'ro', 'ru',
+         'sk', 'es', 'sv', 'tr', 'uk', 'vi', 'af', 'ha', 'so', 'st', 'sw', 'yo',
          'zu', 'da', 'de', 'es', 'et', 'fi', 'fr', 'hr', 'hu', 'it', 'ko', 'nl',
-          'no', 'pl', 'pt', 'ru', 'sv', 'tr', 'zh', 'eo', 'he', 'la', 'sk', 'sl', 
+          'no', 'pl', 'pt', 'ru', 'sv', 'tr', 'zh', 'eo', 'he', 'la', 'sk', 'sl',
           'br', 'ca', 'cs', 'el', 'eu', 'ga', 'gl', 'hy', 'id', 'ja', 'lv', 'th',
            'ar', 'bg', 'bn', 'fa', 'hi', 'mr', 'ro', 'en']
 
@@ -60,9 +60,8 @@ def get_stopwords(lang: str = "en") -> list:
     ValueError
         When language is not available yet or incorrect country code
     """
-    if type(lang) == str and len(lang) == 2:
+    if isinstance(lang, str) and len(lang) == 2:
         lang = lang.lower()
-
         custom_stopwords = _load_stopwords_from_json(STOPWORDS_JSON_FILEPATH)
         stopwords = []
 
