@@ -66,7 +66,7 @@ def find_phone_numbers(string, region_code=None):
     return [match.raw_string for match in _phonenumbers.PhoneNumberMatcher(string, region_code)]
 
 
-def extract_phone_numbers(string:str, countrylist:list=[None,'FR','US','GB'])->list:
+def extract_phone_numbers(string:str, countrylist: list)->list:
     '''
     Find phone numbers in a string, returns a list of phone numbers. 
 

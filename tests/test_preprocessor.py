@@ -150,9 +150,9 @@ def test_remove_multiple_spaces_and_strip_text(input_str, expected_str):
         ("hello world\n", "hello world ")
     ],
 )
-def test_remove_EOL_characters(input_str, expected_str):
+def test_remove_eol_characters(input_str, expected_str):
     preprocessor = TextPreprocessor(input_str)
-    result = preprocessor.remove_EOL_characters()
+    result = preprocessor.remove_eol_characters()
     np.testing.assert_string_equal(result, expected_str)    
 
 
