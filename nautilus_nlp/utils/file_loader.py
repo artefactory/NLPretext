@@ -15,16 +15,16 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with this program; if not, write to the Free Software Foundation,
 # Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
-import io
-import chardet
+import codecs
 import glob
-import re
-import os 
-from os import listdir
-from os.path import isfile, isdir, join
+import io
 import json
 import logging
+import os
+import re
+import shutil
 
+import chardet
 
 logging.basicConfig(level=logging.INFO)
 
@@ -36,38 +36,39 @@ def open_textfile(filepath, encoding='utf-8'):
 
 
 def detect_encoding(file_path_or_string, n_lines=100):
-    """ 
+    """
     Predict a file's encoding using chardet
-    
+
     Parameters
     ----------
     file_path_or_string : string
         if filepath, will open the file. Otherwise will predict from the string
     n_lines : int
-        number of line to predict from 
-       
+        number of line to predict from
+
     Returns
     -------
     the code of the detected encoding
     """
-    if isfile(file_path_or_string):
+    if os.path.isfile(file_path_or_string):
         with open(file_path_or_string, 'rb') as f:                      # Open the file as binary data
-            rawdata = b''.join([f.readline() for _ in range(n_lines)])  # Join binary lines for specified number of lines
-    elif type(file_path_or_string) is bytes:
+            # Join binary lines for specified number of lines
+            rawdata = b''.join([f.readline() for _ in range(n_lines)])
+    elif isinstance(file_path_or_string, bytes):
         rawdata = file_path_or_string
     return chardet.detect(rawdata)
 
 
 def text_loader(filepath, encoding=None, detectencoding=True):
     '''
-    This util loads a file. If the encoding is specified, will use the specified 
-    encoding to load the text file. 
-    If not specified, this function tries to open the doc as UTF-U, and if 
-    it fails it will try to detect the encoding using **detect_encoding** 
+    This util loads a file. If the encoding is specified, will use the specified
+    encoding to load the text file.
+    If not specified, this function tries to open the doc as UTF-U, and if
+    it fails it will try to detect the encoding using **detect_encoding**
 
     Parameters
     ----------
-    filepath : str 
+    filepath : str
     encoding : str
         If the encoding is specified, will use the specified encoding to load the text file.
     detect_encoding : bool
@@ -79,25 +80,24 @@ def text_loader(filepath, encoding=None, detectencoding=True):
     '''
     if encoding is not None:
         return open_textfile(filepath, encoding=encoding)
-    else:
-        try:
-            return open_textfile(filepath, encoding='utf-8')
-        except UnicodeDecodeError:
-            logging.warning('Encoding for {} is not UTF-8.'.format(filepath))
-            if detectencoding is True:
-                logging.warning('Trying to detect encoding for {}'.format(filepath))
-                detected_encoding = detect_encoding(filepath)
-                logging.info('{filepath}: detected encoding is {encod}, with a confidence rate of {conf_rate}'.format(filepath=filepath, encod=detected_encoding['encoding'],
-                                                                                                        conf_rate=detected_encoding['confidence']))
-                return open_textfile(filepath, encoding=detected_encoding['encoding'])
-            else:
-                raise UnicodeDecodeError('Cannot load document using utf-8. Try to detect encoding using detectencoding=True')
+    try:
+        return open_textfile(filepath, encoding='utf-8')
+    except UnicodeDecodeError:
+        logging.warning('Encoding for {} is not UTF-8.'.format(filepath))
+        if detectencoding is True:
+            logging.warning('Trying to detect encoding for {}'.format(filepath))
+            detected_encoding = detect_encoding(filepath)
+            logging.info('{filepath}: detected encoding is {encod}, with a confidence rate of {conf_rate}'.format(
+                filepath=filepath, encod=detected_encoding['encoding'], conf_rate=detected_encoding['confidence']))
+            return open_textfile(filepath, encoding=detected_encoding['encoding'])
+        raise UnicodeDecodeError(
+            'Cannot load document using utf-8. Try to detect encoding using detectencoding=True')
 
 
 def get_subfolders_path(folder):
     if not folder.endswith("/"):
         folder = folder + "/"
-    return [folder + f+'/' for f in listdir(folder)if isdir(join(folder, f)) and f != ".DS_Store"]
+    return [folder + f+'/' for f in os.listdir(folder)if os.path.isdir(os.path.join(folder, f)) and f != ".DS_Store"]
 
 
 def list_files_in_subdir(filepath):
@@ -105,29 +105,29 @@ def list_files_in_subdir(filepath):
     Get a list of all the filepath of files in directory and subdirectory.
     '''
     res = []
-    for path, subdirs, files in os.walk(filepath):
+    for path, _, files in os.walk(filepath):
         for name in files:
             res.append(os.path.join(path, name))
     return res
 
 
-def list_files(filepath:str):
-    """  
-    inputs a filepath. 
-    Outputs a list of filepath. 
+def list_files(filepath: str):
+    """
+    inputs a filepath.
+    Outputs a list of filepath.
     Supports regex
     """
 
-    if isdir(filepath) and len(re.findall(r"[\w.]$",filepath)):
-        filepath=filepath+'/*'
+    if os.path.isdir(filepath) and len(re.findall(r"[\w.]$", filepath)) > 0:
+        filepath = filepath+'/*'
     if filepath.endswith('/'):
-        filepath=filepath+'*'
-    return[file for file in glob.glob(filepath) if isfile(file)]            
+        filepath = filepath+'*'
+    return[file for file in glob.glob(filepath) if os.path.isdir(file)]
 
 
-def documents_loader(filepath:str, encoding=None, detectencoding=True, output_as='dict'):
+def documents_loader(filepath: str, encoding=None, detectencoding=True, output_as='dict'):
     '''
-    Input a filepath, a filepath with wildcard (eg. *.txt), 
+    Input a filepath, a filepath with wildcard (eg. *.txt),
     or a list of filepaths.
     Output a string, or a dict of strings.
 
@@ -137,41 +137,41 @@ def documents_loader(filepath:str, encoding=None, detectencoding=True, output_as
         A filepath with wildcard (eg. *.txt), or a list of filepaths.
     output_as: list or dict.
         If dict, key will be the filename.
-    encoding: 
-        if not specified, will try to detect encoding except if detectencoding is false. 
-    detectencoding : bool 
-        if True and if encoding is not specified, will try to detect encoding using chardet. 
-    
+    encoding:
+        if not specified, will try to detect encoding except if detectencoding is false.
+    detectencoding : bool
+        if True and if encoding is not specified, will try to detect encoding using chardet.
+
     Returns
     -------
     string
     the document loaded
     '''
-   
-    if type(filepath) is str:
+    if isinstance(filepath, str):
         documents = list_files(filepath)
         nb_of_documents = len(documents)
-    elif type(filepath) is list:
+    elif isinstance(filepath, list):
         nb_of_documents = len(filepath)
         documents = filepath
     else:
         raise IOError('Please enter a valid filepath or a valid list of filepath')
-    
+
     if nb_of_documents == 1:
-        return text_loader(documents[0],encoding=encoding, detectencoding=detectencoding)
-    elif nb_of_documents > 1:
+        return text_loader(
+            documents[0], encoding=encoding, detectencoding=detectencoding)
+    if nb_of_documents > 1:
         if output_as == 'list':
-            return [text_loader(document, encoding=encoding, detectencoding=detectencoding) for document in documents]
-        elif output_as == 'dict':
-            return { document : text_loader(document, encoding=encoding, detectencoding=detectencoding) for document in documents}
-        else:
-            raise ValueError('Enter a valid output format between list or dict')
-    else:
-        raise IOError('No files detected in {}'.format(filepath))        
+            return [text_loader(
+                document, encoding=encoding, detectencoding=detectencoding) for document in documents]
+        if output_as == 'dict':
+            return {document: text_loader(
+                document, encoding=encoding, detectencoding=detectencoding) for document in documents}
+        raise ValueError('Enter a valid output format between list or dict')
+    raise IOError('No files detected in {}'.format(filepath))
 
 
 #################
-## CSV Loader
+# CSV Loader
 
 def encode_columns(df, columns_to_encode):
     '''
@@ -187,21 +187,17 @@ def decode_columns(df, columns_to_encode):
     '''
     for col in columns_to_encode:
         df[col] = df[col].apply(json.loads)
-  
+
 
 #################
-## Encoding functions
+# Encoding functions
 
 
 def convert_encoding(file_path, input_encoding, output_encoding):
     '''
     Encode a file according to a specified encoding
     '''
-    import codecs
-    import shutil
-
     with codecs.open(file_path, encoding=input_encoding) as input_file:
         with codecs.open(
                 'encoded_'+file_path, "w", encoding=output_encoding) as output_file:
             shutil.copyfileobj(input_file, output_file)
-
