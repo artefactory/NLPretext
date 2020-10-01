@@ -43,16 +43,16 @@ def test_extract_phone_number_international():
 
 def test_phone_parser_us():
     input_str = '(541) 754-3010'
-    expected = '541-754-3010'
-    p = phone.phone_parser()
+    expected = '+1 541-754-3010'
+    p = phone.PhoneParser()
     p.parse_number(input_str, region_code='US')
     res = p.format_number('INTERNATIONAL')
     assert res == expected
 
 def test_phone_parser_fr():
     input_str = '0625093267'
-    expected = '6 25 09 32 67'
-    p = phone.phone_parser()
+    expected = '+33625093267'
+    p = phone.PhoneParser()
     p.parse_number(input_str, region_code='FR')
     res = p.format_number('E164')
     assert res == expected
