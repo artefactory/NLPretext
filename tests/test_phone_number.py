@@ -28,18 +28,18 @@ def test_extract_phone_number_us():
     input_str = '(541) 754-3010 is a US. Phone'
     expected = ['(541) 754-3010']
     res = phone.extract_phone_numbers(input_str, countrylist=['US'])
-    assert res == expected    
+    assert res == expected
 
 def test_extract_phone_number_fr():
     input_str = '06.25.09.32.56 is a FR Phone'
     expected = ['06.25.09.32.56']
-    res = phone.extract_phone_numbers(input_str)
+    res = phone.extract_phone_numbers(input_str, countrylist=['FR'])
     assert res == expected
 
 def test_extract_phone_number_international():
     input_str = '+33625093423 is an international Phone number'
     expected = ['+33625093423']
-    res = phone.extract_phone_numbers(input_str)
+    res = phone.extract_phone_numbers(input_str, countrylist=['US', 'GB', 'FR', None])
     assert res == expected
 
 def test_phoneParser_us():
