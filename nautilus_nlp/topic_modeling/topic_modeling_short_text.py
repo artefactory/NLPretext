@@ -82,6 +82,8 @@ def train_shorttext_model(model_name, encoded_text_id, vocab_list, n_topics=20, 
         dt_mat = __build_doc_term_matrix(n_terms, n_docs, encoded_text_id)
         model = NMF(
             dt_mat,
+            mat_iw=[],
+            mat_ih=[],
             n_topic=n_topics,
             max_iter=max_iter,
             max_err=max_err)
@@ -95,6 +97,9 @@ def train_shorttext_model(model_name, encoded_text_id, vocab_list, n_topics=20, 
         dt_mat = __build_doc_term_matrix(n_terms, n_docs, encoded_text_id)
         model = SeaNMF(
             dt_mat, SS,
+            mat_iw=[],
+            mat_iwc=[],
+            mat_ih=[],
             alpha=alpha,
             beta=beta,
             n_topic=n_topics,
