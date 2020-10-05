@@ -20,21 +20,19 @@ import numpy as np
 from numpy.linalg import norm
 from tqdm import tqdm
 
-'''
-Topic Modeling via NMF
-'''
 
-class NMF(object):
+class NMF:
+
+    # pylint: disable=too-many-instance-attributes
+
     def __init__(
-            self,
-            A, IW=[], IH=[],
-            n_topic=10, max_iter=100, max_err=1e-3,
-            rand_init=True):
+            self, mat_a, mat_iw, mat_ih, n_topic=10,
+            max_iter=100, max_err=1e-3, rand_init=True):
         """
         The objective of the NMF model is to approximate the term-document matrix A by two lower-rank matrices W and H.
         The process is iterative and we denote IW and IH the the matrix W and H that are updated at each step.
 
-        :param A: The term-document matrix
+        :param a: The term-document matrix
         :param IW: topics Matrix, each column vector W(:,k) represents the k-th topic in terms of M keywords
         and its elements are the weights of the corresponding keywords.
         :param IH: The row vector H(j,:) is the latent representation for document j in terms of K topics
@@ -43,9 +41,11 @@ class NMF(object):
         :param max_err: maximum error under which we consider that the loop converged
         :param rand_init: random init boolean
         """
-        self.A = A
-        self.n_row = A.shape[0]
-        self.n_col = A.shape[1]
+        self.mat_a = mat_a
+        self.mat_iw = mat_iw
+        self.mat_ih = mat_ih
+        self.n_row = mat_a.shape[0]
+        self.n_col = mat_a.shape[1]
 
         self.n_topic = n_topic
         self.max_iter = max_iter
@@ -61,13 +61,13 @@ class NMF(object):
         :param rand_init: Boolean indicating initial random init
         """
         if rand_init:
-            self.W = np.random.random((self.n_row, self.n_topic))
-            self.H = np.random.random((self.n_col, self.n_topic))
+            self.mat_w = np.random.random((self.n_row, self.n_topic))
+            self.mat_h = np.random.random((self.n_col, self.n_topic))
         else:
-            self.W = IW
-            self.H = IH
+            self.mat_w = self.mat_iw
+            self.mat_h = self.mat_ih
         for k in range(self.n_topic):
-            self.W[:, k] /= norm(self.W[:, k])
+            self.mat_w[:, k] /= norm(self.mat_w[:, k])
 
     def nmf_iter(self):
         """
@@ -94,25 +94,25 @@ class NMF(object):
         '''
         epss = 1e-20
 
-        HtH = self.H.T.dot(self.H)
-        AH = self.A.dot(self.H)
+        mat_hth = self.mat_h.T.dot(self.mat_h)
+        mat_ah = self.mat_a.dot(self.mat_h)
         for k in range(self.n_topic):
-            tmpW = self.W[:, k] * HtH[k, k] + AH[:, k] - np.dot(self.W, HtH[:, k])
-            self.W[:, k] = np.maximum(tmpW, epss)
-            self.W[:, k] /= norm(self.W[:, k]) + epss
+            tmp_w = self.mat_w[:, k] * mat_hth[k, k] + mat_ah[:, k] - np.dot(self.mat_w, mat_hth[:, k])
+            self.mat_w[:, k] = np.maximum(tmp_w, epss)
+            self.mat_w[:, k] /= norm(self.mat_w[:, k]) + epss
 
-        WtW = self.W.T.dot(self.W)
-        AtW = self.A.T.dot(self.W)
+        mat_wtw = self.mat_w.T.dot(self.mat_w)
+        mat_atw = self.mat_a.T.dot(self.mat_w)
         for k in range(self.n_topic):
-            self.H[:, k] = self.H[:, k] * WtW[k, k] + AtW[:, k] - np.dot(self.H, WtW[:, k])
-            self.H[:, k] = np.maximum(self.H[:, k], epss)
+            self.mat_h[:, k] = self.mat_h[:, k] * mat_wtw[k, k] + mat_atw[:, k] - np.dot(self.mat_h, mat_wtw[:, k])
+            self.mat_h[:, k] = np.maximum(self.mat_h[:, k], epss)
 
     def nmf_loss(self):
-        loss = norm(self.A - np.dot(self.W, np.transpose(self.H)), 'fro') ** 2 / 2.0
+        loss = norm(self.mat_a - np.dot(self.mat_w, np.transpose(self.mat_h)), 'fro') ** 2 / 2.0
         return loss
 
     def get_loss(self):
         return np.array(self.loss_hist)
 
     def get_decomposition_matrix(self):
-        return self.W, self.H
+        return self.mat_w, self.mat_h
