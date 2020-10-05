@@ -40,4 +40,4 @@ emoji>=0.5.2
 summa==1.2.0
 biterm==0.1.5
 nlpaug==1.0.1
-IPython==7.18.1
+ipython==7.18.1
