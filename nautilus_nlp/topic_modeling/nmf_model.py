@@ -32,10 +32,10 @@ class NMF:
         The objective of the NMF model is to approximate the term-document matrix A by two lower-rank matrices W and H.
         The process is iterative and we denote IW and IH the the matrix W and H that are updated at each step.
 
-        :param a: The term-document matrix
-        :param IW: topics Matrix, each column vector W(:,k) represents the k-th topic in terms of M keywords
+        :param mat_a: The term-document matrix
+        :param mat_iw: topics Matrix, each column vector W(:,k) represents the k-th topic in terms of M keywords
         and its elements are the weights of the corresponding keywords.
-        :param IH: The row vector H(j,:) is the latent representation for document j in terms of K topics
+        :param mat_ih: The row vector H(j,:) is the latent representation for document j in terms of K topics
         :param n_topic: Number of selected topics
         :param max_iter: Maximum number of iterations to update W and H
         :param max_err: maximum error under which we consider that the loop converged
