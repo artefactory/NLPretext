@@ -62,7 +62,7 @@ def test_show_dominant_topic(model_name, n_topics, n_keywords):
     encoded_text_id, vocab_list, _ = prepare_data(TEXT)
 
     model = train_shorttext_model(model_name, encoded_text_id, vocab_list, n_topics=n_topics)
-    topics, pmi_score = show_dominant_topic(model, encoded_text_id, vocab_list, n_topKeyword=n_keywords)
+    topics, pmi_score = show_dominant_topic(model, encoded_text_id, vocab_list, n_top_keyword=n_keywords)
 
     assert len(pmi_score) == n_topics
     assert len(topics) == n_topics
