@@ -41,3 +41,4 @@ summa==1.2.0
 biterm==0.1.5
 nlpaug==1.0.1
 ipython==7.16.1
+pylint==2.4.4
