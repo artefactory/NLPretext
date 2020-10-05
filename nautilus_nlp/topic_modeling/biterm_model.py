@@ -16,13 +16,15 @@
 # along with this program; if not, write to the Free Software Foundation,
 # Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 import numpy as np
-from biterm.btm import oBTM
-from biterm.utility import vec_to_biterms, topic_summuary
-from sklearn.feature_extraction.text import CountVectorizer
 import pyLDAvis
+from biterm.btm import oBTM
+from biterm.utility import topic_summuary, vec_to_biterms
+from sklearn.feature_extraction.text import CountVectorizer
 
 
 class BitermModel:
+
+    # pylint: disable=too-many-instance-attributes
 
     def __init__(self, data, nb_topics, nb_iteration, lang):
         """
@@ -43,7 +45,7 @@ class BitermModel:
         -------
         string
             the text with removed multiple spaces and strip text
-        """        
+        """
         self.is_int_positive(nb_topics)
         self.is_int_positive(nb_iteration)
         self.is_list_of_string(data)
@@ -60,19 +62,19 @@ class BitermModel:
     @staticmethod
     def is_int_positive(number):
         """
-        Function to check if the input parameter is a integer and positive 
+        Function to check if the input parameter is a integer and positive
         otherwise raise an error
 
         Parameters
         ----------
         number : str
-            
+
         Returns
         -------
         str:
             the text with removed multiple spaces and strip text
-            
-        """  
+
+        """
         if not isinstance(number, int):
             raise ValueError("Parameter {} has to be an integer".format(number))
         if number < 1:
@@ -82,11 +84,11 @@ class BitermModel:
     def is_list_of_string(data):
         """
         Function to check if the input parameter is a list of strings otherwise raise an error
-        
+
         Parameters
         ----------
         data
-        
+
         Returns
         -------
         """
@@ -101,15 +103,15 @@ class BitermModel:
     def compute_topics(self, nb_word_per_cluster):
         """
         Main function computing the topic modeling, topics
-        
+
         Parameters
         ----------
         nb_word_per_cluster : positive integer
-        
+
         Returns
         -------
-        dict :    
-            a dictionary containing the the different topics with the top words 
+        dict :
+            a dictionary containing the the different topics with the top words
             and coherence associated
         """
         vec = CountVectorizer(stop_words=self.lang)
@@ -120,14 +122,17 @@ class BitermModel:
         self._btm = oBTM(num_topics=self.nb_topics, V=self._vocabulary)
         self._topics = self._btm.fit_transform(biterms, iterations=self.nb_iteration)
 
-        results = topic_summuary(self._btm.phi_wz.T, self._vectorize_text, self._vocabulary, nb_word_per_cluster, verbose=False)
+        results = topic_summuary(
+            self._btm.phi_wz.T, self._vectorize_text,
+            self._vocabulary, nb_word_per_cluster, verbose=False
+        )
 
         return results
 
     def get_document_topic(self, index):
         """
         Get the cluster associated to the specified document
-                
+
         Parameters
         ----------
         index : positive integer
@@ -142,10 +147,10 @@ class BitermModel:
 
         return self._topics[index].argmax()
 
-    def save_pyLDAvis_plot_as_html(self, path_to_output='./biterm_pyLDAavis_plot.html'):
+    def save_pyldavis_plot_as_html(self, path_to_output='./biterm_pyLDAavis_plot.html'):
         """
         Function saving the pyLDAvis plot associated with the compute_topics function
-                
+
         Parameters
         ----------
         path_to_output : str
@@ -153,10 +158,13 @@ class BitermModel:
 
         Returns
         -------
-        """        
+        """
         if self._topics is None or self._btm is None or self._vectorize_text is None or self._vocabulary is None:
             raise ValueError("Model needs to be trained first")
 
-        vis = pyLDAvis.prepare(self._btm.phi_wz.T, self._topics, np.count_nonzero(self._vectorize_text, axis=1), self._vocabulary,
-                               np.sum(self._vectorize_text, axis=0))
+        vis = pyLDAvis.prepare(
+            self._btm.phi_wz.T, self._topics,
+            np.count_nonzero(self._vectorize_text, axis=1), self._vocabulary,
+            np.sum(self._vectorize_text, axis=0)
+        )
         pyLDAvis.save_html(vis, path_to_output)
