@@ -32,7 +32,7 @@ def is_list_of_strings(lst):
     return bool(lst) and isinstance(lst, list) and all(isinstance(elem, str) for elem in lst)
 
 
-def summarize_text(txt, ratio=0.2, language="english", words=None):
+def summarize_text(txt, ratio=0.2, language="english", nb_words=None):
     """
     Parameters
     ----------
@@ -42,7 +42,7 @@ def summarize_text(txt, ratio=0.2, language="english", words=None):
         Percentage giving the output text length in reference to the input length.
     language :
         text language. eg. "english"
-    words :
+    nb_words :
         number of words of the output text or None
 
     Returns
@@ -55,4 +55,4 @@ def summarize_text(txt, ratio=0.2, language="english", words=None):
         txt = ' '.join(txt)
     elif not isinstance(txt, str):
         raise TypeError("Text parameter must be a Unicode object (str) or list of str!")
-    return summarize(txt, ratio, words, language)
+    return summarize(txt, ratio, nb_words, language)
