@@ -58,7 +58,7 @@ def find_phone_numbers(string, region_code=None):
     eg. 06.25.09.32.67 if "FR" is specified.
 
     If not specified, only works for international-formatted phone numbers.
-    - ie. phone number with +counttry code specified
+    - ie. phone number with +country code specified
     eg. 06.25.09.32.67 will return an error but +33 6 25 09 32 67 will work.
 
     region_code
@@ -108,7 +108,7 @@ class PhoneParser:
         eg. 06.25.09.32.67 if "FR" is specified.
 
         If not specified, only works for international-formatted phone numbers.
-        - ie. phone number with +counttry code specified
+        - ie. phone number with +country code specified
         eg. 06.25.09.32.67 will return an error but +33 6 25 09 32 67 will work.
 
         region_code
