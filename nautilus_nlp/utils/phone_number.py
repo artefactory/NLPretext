@@ -77,7 +77,7 @@ def extract_phone_numbers(text: str, countrylist: list)->list:
 
     Parameters
     ----------
-    countrylist: list
+    countrylist: list (eg. [None,'FR','US','GB'])
         Look for phone numbers formatted according to the specified countlist.
         supported value: look SUPPORTED_COUNTRY variable.
     '''
