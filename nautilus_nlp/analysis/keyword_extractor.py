@@ -58,7 +58,6 @@ def frequent_words(list_words, ngrams_number=1, number_top_words=10):
     Parameters
     ----------
     ngrams_number : int
-
     number_top_words : int
         output dataframe length
 
