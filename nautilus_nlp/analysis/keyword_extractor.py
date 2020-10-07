@@ -74,6 +74,6 @@ def frequent_words(list_words, ngrams_number=1, number_top_words=10):
         list_words = create_ngrams(list_words, ngrams_number)
     else:
         raise ValueError("number of n-grams should be >= 1")
-    x = Counter(list_words)
-    frequent = x.most_common(number_top_words)
+    counter = Counter(list_words)
+    frequent = counter.most_common(number_top_words)
     return frequent
