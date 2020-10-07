@@ -30,14 +30,14 @@ def test_extract_phone_number_us():
     assert res == expected
 
 def test_extract_phone_number_fr():
-    input_str = '06.25.09.32.56 is a FR Phone'
-    expected = ['06.25.09.32.56']
+    input_str = '06.00.00.00.00 is a FR Phone'
+    expected = ['06.00.00.00.00']
     res = phone.extract_phone_numbers(input_str, countrylist=['FR'])
     assert res == expected
 
 def test_extract_phone_number_international():
-    input_str = '+33625093423 is an international Phone number'
-    expected = ['+33625093423']
+    input_str = '+33600000000 is an international Phone number'
+    expected = ['+33600000000']
     res = phone.extract_phone_numbers(input_str, countrylist=['US', 'GB', 'FR', None])
     assert res == expected
 
@@ -50,8 +50,8 @@ def test_phone_parser_us():
     assert res == expected
 
 def test_phone_parser_fr():
-    input_str = '0625093267'
-    expected = '+33625093267'
+    input_str = '0600000000'
+    expected = '+33600000000'
     p = phone.PhoneParser()
     p.parse_number(input_str, region_code='FR')
     res = p.format_number('E164')
