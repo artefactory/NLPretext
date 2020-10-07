@@ -55,11 +55,11 @@ def find_phone_numbers(string, region_code=None):
     ----------
     region_code
         If specified, will find the number of the specified country.
-    eg. 06.25.09.32.67 if "FR" is specified.
+    eg. 06.00.00.00.00 if "FR" is specified.
 
     If not specified, only works for international-formatted phone numbers.
     - ie. phone number with +country code specified
-    eg. 06.25.09.32.67 will return an error but +33 6 25 09 32 67 will work.
+    eg. 06.00.00.00.00 will return an error but +33 6 00 00 00 00 will work.
 
     region_code
         supported value: look SUPPORTED_COUNTRY variable.
@@ -105,11 +105,11 @@ class PhoneParser:
         ----------
         region_code
             If specified, will find the number of the specified country.
-        eg. 06.25.09.32.67 if "FR" is specified.
+        eg. 06.00.00.00.00 if "FR" is specified.
 
         If not specified, only works for international-formatted phone numbers.
         - ie. phone number with +country code specified
-        eg. 06.25.09.32.67 will return an error but +33 6 25 09 32 67 will work.
+        eg. 06.00.00.00.00 will return an error but +33 6 00 00 00 00 will work.
 
         region_code
             supported value: look SUPPORTED_COUNTRY variable.
