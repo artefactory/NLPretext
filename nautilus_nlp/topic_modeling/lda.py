@@ -15,36 +15,36 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with this program; if not, write to the Free Software Foundation,
 # Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
-import gensim
 import logging
 import os
+
+import gensim
+import matplotlib.pyplot as plt
 import pyLDAvis
-import pyLDAvis.gensim 
+import pyLDAvis.gensim
 from gensim.models import CoherenceModel
 from gensim.models.wrappers import LdaMallet
-import matplotlib.pyplot as plt
-
 from IPython.display import HTML
 
 logging.getLogger("gensim").setLevel(logging.WARNING)
 
 
 def create_dictionary(data):
-    """ 
+    """
     Create a Dictionary encapsulates the mapping between normalized words and their integer ids.
-    
+
     Parameters
     ----------
     data : list of list of tokens
-       
+
     Returns
     -------
     list of list of tuples
     """
     return gensim.corpora.Dictionary(data)
 
-def filter_extremes(dictionary, no_below=15, no_above=0.3 , **kwargs) :
-    """ 
+def filter_extremes(dictionary, no_below=15, no_above=0.3, **kwargs):
+    """
     Remove very rare and very common words
 
     Parameters
@@ -62,15 +62,15 @@ def filter_extremes(dictionary, no_below=15, no_above=0.3 , **kwargs) :
 
 
 def create_bow_corpus(data, dictionary):
-    
-    """ 
+
+    """
     Create the corpus: one of the two main inputs to the LDA topic model with the dictionary (id2word)
     The produced corpus is a mapping of (token_id, token_count).
 
     Parameters
     ----------
     data : list of list of tokens
-       
+
     Returns
     -------
     list of list of tuples
@@ -85,7 +85,7 @@ def compute_coherence_values(dictionary, bow_corpus, texts, limit=25, start=2, s
     """
     Compute c_v coherence for various number of topics
 
-    /!\ It takes a really long time.
+    WARNING: It takes a really long time.
 
     Parameters:
     ----------
@@ -102,13 +102,15 @@ def compute_coherence_values(dictionary, bow_corpus, texts, limit=25, start=2, s
     coherence_values = []
     model_list = []
     for num_topics in range(start, limit, step):
-        model = gensim.models.ldamodel.LdaModel(corpus=bow_corpus,
-                                           id2word=dictionary,
-                                          num_topics=num_topics, 
-                                          random_state=0,
-                                          update_every=5,
-                                          chunksize=1000,
-                                          passes=10)
+        model = gensim.models.ldamodel.LdaModel(
+            corpus=bow_corpus,
+            id2word=dictionary,
+            num_topics=num_topics,
+            random_state=0,
+            update_every=5,
+            chunksize=1000,
+            passes=10
+        )
         model_list.append(model)
         coherencemodel = CoherenceModel(model=model, texts=texts, dictionary=dictionary, coherence='c_v')
         coherence_values.append(coherencemodel.get_coherence())
@@ -142,23 +144,24 @@ def print_coherence_scores(coherence_values, start=2, limit=25, step=4):
     Print the coherences scores for the ldamodels that had been tested with different number of topics
     """
     x = range(start, limit, step)
-    for m, cv in zip(x, coherence_values):
-        print("Num Topics =", m, " has Coherence Value of", round(cv, 4))
+    for m, c_value in zip(x, coherence_values):
+        print("Num Topics =", m, " has Coherence Value of", round(c_value, 4))
 
 
 ### LdaModel: Gensim & Mallet
 
 def train_lda_model(bow_corpus, dictionary, num_topics, model='gensim', mallet_path=None, **kwargs):
     """ Train the lda model on the corpus
-      
+
     Parameters
     ----------
-    bow_corpus : iterable of list of tokens. Stream of document vectors or sparse matrix of shape (num_terms, num_documents).
+    bow_corpus : iterable of list of tokens. Stream of document vectors or sparse matrix of shape \
+    (num_terms, num_documents).
     dictionary: corpora.Dictionary. Mapping from word IDs to words
     num_topics: int
     model : str. Precise the topic modeling model wanted, must be "gensim" or "mallet"
-    mallet_path: str, optionnal if model='gensim', required if model='mallet'. Path to the mallet-2.0.8 file 
-    
+    mallet_path: str, optionnal if model='gensim', required if model='mallet'. Path to the mallet-2.0.8 file
+
     Returns
     -------
     gensim.ldamodel
@@ -168,39 +171,42 @@ def train_lda_model(bow_corpus, dictionary, num_topics, model='gensim', mallet_p
     elif model == 'mallet':
         if mallet_path is None:
             raise ValueError('You must precise the path to the mallet-2.0.8 file that has been downloaded before')
-        else:
-            model = train_lda_mallet(bow_corpus, dictionary, num_topics, mallet_path, **kwargs)
+        model = train_lda_mallet(bow_corpus, dictionary, num_topics, mallet_path, **kwargs)
     else:
         raise ValueError('Please enter a valid model name: gensim or mallet')
     return model
 
 def train_lda_gensim(bow_corpus, dictionary, num_topics, **kwargs):
-
-    model = gensim.models.ldamodel.LdaModel(corpus=bow_corpus, id2word=dictionary, num_topics=num_topics, passes=10, minimum_probability=0.001, random_state=0, **kwargs)
+    model = gensim.models.ldamodel.LdaModel(
+        corpus=bow_corpus, id2word=dictionary, num_topics=num_topics,
+        passes=10, minimum_probability=0.001, random_state=0, **kwargs
+    )
     return model
 
 def train_lda_mallet(bow_corpus, dictionary, num_topics, mallet_path, **kwargs):
-    
     os.environ['MALLET_PATH'] = mallet_path
     mallet = '$MALLET_PATH/mallet-2.0.8/bin/mallet'
-    model = gensim.models.wrappers.LdaMallet(mallet, corpus=bow_corpus, id2word=dictionary, num_topics=num_topics, prefix='composant', random_seed=0, **kwargs)
+    model = gensim.models.wrappers.LdaMallet(
+        mallet, corpus=bow_corpus, id2word=dictionary, num_topics=num_topics,
+        prefix='composant', random_seed=0, **kwargs
+    )
     return model
 
 
 def save_model(model, model_name):
-    """ 
+    """
     Save the model that has been trained. The model will be saved on your current emplacement.
-        
+
     Parameters
     ----------
     model: ldamodel
-    model_name: str. 
+    model_name: str.
         Name the model that will be saved
     """
     return model.save(os.path.join(model_name))
 
 
-def load_model(model_path,model_name, model='gensim', model_prefix='composant'):
+def load_model(model_path, model_name, model='gensim', model_prefix='composant'):
     """
     Detected the language of a text
 
@@ -213,19 +219,19 @@ def load_model(model_path,model_name, model='gensim', model_prefix='composant'):
     model : str
         Precise the topic modeling model wanted, must be "gensim" or "mallet"
     model_prefix : str
-        By default, 'composant' default prefix used while saving the mallet model with train_lda_model function.         
-    
+        By default, 'composant' default prefix used while saving the mallet model with train_lda_model function.
+
     Returns
     -------
-    is_reliable : 
+    is_reliable :
         is the top language is much better than 2nd best language?
-    language: 
+    language:
         2-letter code for the language of the text
     """
-    if model =='gensim':
-        ldamodel = gensim.models.LdaModel.load(os.path.join(model_path,model_name))
-    elif model =='mallet':
-        ldamodel = LdaMallet.load(os.path.join(model_path,model_name))
+    if model == 'gensim':
+        ldamodel = gensim.models.LdaModel.load(os.path.join(model_path, model_name))
+    elif model == 'mallet':
+        ldamodel = LdaMallet.load(os.path.join(model_path, model_name))
         if model_prefix is not None:
             ldamodel.prefix = model_path+'/'+ model_prefix
     else:
@@ -241,17 +247,17 @@ def fit_data(model, bow):
 
 
 def visualize_topics(model, bow_corpus, dictionary, model_type=None):
-    """ 
+    """
     Visualize the topics-keywords with the pyLDAvis interactive chart.
         (Work well in notebook)
-        
+
     Parameters
     ----------
     model: LDA model: gensim or mallet
-    bow_corpus : iterable of list of tokens. 
+    bow_corpus : iterable of list of tokens.
     dictionary: corpora.Dictionary. Dictionary encapsulates the mapping between normalized words and their integer ids.
     model : str. Precise the topic modeling model used, must be "gensim" or "mallet"
-    
+
     Returns:
     ----------
     3D interactive chart
@@ -263,25 +269,25 @@ def visualize_topics(model, bow_corpus, dictionary, model_type=None):
     elif model_type is None:
         raise ValueError('You forgot to precise your model type, it must be: gensim or mallet')
     else:
-        raise ValueError('Please enter a valid model name: gensim or mallet') 
+        raise ValueError('Please enter a valid model name: gensim or mallet')
     return pyLDAvis.gensim.prepare(model_vis, bow_corpus, dictionary)
 
 def save_pyldavis(pyldavis, vis_path, vis_name):
-    """ 
+    """
     Save the pyldavis interactive chart
-    
+
     Parameters
     ----------
     pyldavis: pyLDAvis._prepare.PreparedData
     vis_path: str
     vis_name: str
-    """ 
+    """
     return pyLDAvis.save_html(pyldavis, os.path.join(vis_path, vis_name + '{}'.format('.html')))
 
 
 
 def show_pyldavis(vis_path, vis_name):
-    """ 
+    """
     Display the HTML of the saved pyldavis interactive chart
 
     Parameters
@@ -293,7 +299,7 @@ def show_pyldavis(vis_path, vis_name):
 
 def show_dominant_topic(model, bow_corpus, topic_number=1, topn=5):
     """ Print the dominant topics in the document, its score and the topics' top keywords.
-    
+
     Quick way to interpret the topics
 
     Parameters
@@ -306,10 +312,10 @@ def show_dominant_topic(model, bow_corpus, topic_number=1, topn=5):
 
     """
     i = 0
-    for index, score in sorted(model[bow_corpus], key=lambda tup: -1*tup[1]): 
+    for index, score in sorted(model[bow_corpus], key=lambda tup: -1*tup[1]):
         weight = model.show_topic(index, topn=topn)
         keywords = [i[0] for i in weight]
         print("Score: {}\t Topic: {}".format(score, keywords))
-        i +=1
+        i += 1
         if i == topic_number:
             break

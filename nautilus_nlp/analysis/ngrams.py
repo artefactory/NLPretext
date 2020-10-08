@@ -15,28 +15,22 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with this program; if not, write to the Free Software Foundation,
 # Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
-import sys
+# -*- coding: utf-8 -*-
+def create_ngrams(token_list, nb_elements):
+    """
+    Create n-grams for list of tokens
 
-REQUIRED_PYTHON = "python3"
+    Parameters
+    ----------
+    token_list : list
+        list of strings
+    nb_elements :
+        number of elements in the n-gram
 
-
-def main():
-    system_major = sys.version_info.major
-    if REQUIRED_PYTHON == "python":
-        required_major = 2
-    elif REQUIRED_PYTHON == "python3":
-        required_major = 3
-    else:
-        raise ValueError("Unrecognized python interpreter: {}".format(
-            REQUIRED_PYTHON))
-
-    if system_major != required_major:
-        raise TypeError(
-            "This project requires Python {}. Found: Python {}".format(
-                required_major, sys.version))
-    else:
-        print(">>> Development environment passes all tests!")
-
-
-if __name__ == '__main__':
-    main()
+    Returns
+    -------
+    Generator
+        generator of all n-grams
+    """
+    ngrams = zip(*[token_list[index_token:] for index_token in range(nb_elements)])
+    return (" ".join(ngram) for ngram in ngrams)

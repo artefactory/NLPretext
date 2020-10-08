@@ -18,34 +18,55 @@
 import nltk
 from sacremoses import MosesTokenizer, MosesDetokenizer
 import spacy
-from spacy.lang.fr import French
-from spacy.lang.en import English
-import spacy.lang as spacylang
-#nltk.download('punkt')
 
-try:
-    french_spacy = spacylang.fr.French().tokenizer
-except OSError:
-    raise OSError("""You must install French langage to use SpaCy. 
-                    python -m spacy download fr
-                    See https://spacy.io/usage/ for details
-                """)
-try:
-    english_spacy = spacylang.en.English().tokenizer
-except OSError:
-    raise OSError("""You must install english langage to use SpaCy. 
-                    python -m spacy download en
-                    See https://spacy.io/usage/ for details
-                """)             
+class LanguageNotHandled(Exception):
+    pass
+
+class SpacyModel:
+    class SingletonSpacyModel:
+        def __init__(self, lang):
+            self.lang = lang
+            if lang == 'en':
+                self.model = spacy.load('en_core_web_sm')
+            elif lang == 'fr':
+                self.model = spacy.load('fr_core_news_sm')
+            elif lang == 'ko':
+                self.model = spacy.blank('ko')
+            elif lang == 'ja':
+                self.model = spacy.blank('ja')
+            else:
+                raise(LanguageNotHandled('This spacy model is not available'))
+
+    model = None
+
+    def __init__(self, lang):
+        if not SpacyModel.model:
+            SpacyModel.model = SpacyModel.SingletonSpacyModel(lang).model
+
+    def get_lang_model(self):
+        return self.model.lang
+
+
+def _get_spacy_tokenizer(lang):
+    """
+    Function that gets the right tokenizer given the language
+    :param str lang: language in which text is written
+                     Languages handled : ["en", "fr", "ko", "ja"]
+
+    :return: spacy tokenizer
+    :rtype: spacy.tokenizer.Tokenizer
+    """
+    model = SpacyModel(lang).model
+    return model.tokenizer
 
 
 def tokenize(text: str, lang_module: str = 'en_spacy'):
     """
-    Convert text to a list of tokens. 
+    Convert text to a list of tokens.
 
     Parameters
-    ----------    
-    lang_module : ({'en_spacy', 'en_nltk', 'fr_spacy', 'fr_moses'})
+    ----------
+    lang_module : ({'en_spacy', 'en_nltk', 'fr_spacy', 'fr_moses', 'ko_spacy', 'ja_spacy'})
         choose the tokenization module according to the langage and the implementation.
         Recommanded: Spacy (faster, better results). To process other langages
         import models.Spacy_models
@@ -54,18 +75,18 @@ def tokenize(text: str, lang_module: str = 'en_spacy'):
     -------
     list
         list of string
-    """      
-    if lang_module is 'en_nltk':
+    """
+    if "spacy" in lang_module:
+        lang = lang_module.split()[0]
+        spacymodel = _get_spacy_tokenizer(lang)
+        spacydoc = spacymodel(text)
+        return [spacy_token.text for spacy_token in spacydoc]
+    if lang_module == 'en_nltk':
         return nltk.word_tokenize(text)
-    elif lang_module is 'en_spacy':
-        spacydoc = english_spacy(text)
-        return [spacy_token.text for spacy_token in spacydoc]
-    elif lang_module is 'fr_spacy':
-        spacydoc = french_spacy(text)
-        return [spacy_token.text for spacy_token in spacydoc]
-    elif lang_module is 'fr_moses':
-        t = MosesTokenizer(lang='fr')
-        return t.tokenize(text, escape=False)
+    if lang_module == 'fr_moses':
+        return MosesTokenizer(lang='fr').tokenize(text, escape=False)
+    raise ValueError("Please pass a lang_module in list of values "\
+                     "{'en_spacy', 'en_nltk', 'fr_spacy', 'fr_moses', 'ko_spacy', 'ja_spacy'}")
 
 
 def untokenize(tokens, lang='fr'):
@@ -74,32 +95,30 @@ def untokenize(tokens, lang='fr'):
     ["J'", 'ai'] >>> "J' ai"
 
     Parameters
-    ----------    
+    ----------
     lang : string
-        language code 
+        language code
     '''
     d = MosesDetokenizer(lang=lang)
     text = d.detokenize(tokens, unescape=False)
-    return text    
+    return text
 
 
 def _convert_tokens_to_string(tokens_or_str):
-    if type(tokens_or_str) is str:
+    if isinstance(tokens_or_str, str):
         return tokens_or_str
-    elif type(tokens_or_str) is list:
+    if isinstance(tokens_or_str, list):
         return untokenize(tokens_or_str)
-    elif type(tokens_or_str) is None:
+    if tokens_or_str is None:
         return ''
-    else:
-        raise ValueError('Please input string or tokens')
+    raise TypeError('Please input string or tokens')
 
 
 def _convert_string_to_tokens(tokens_or_str, lang_module='en_spacy'):
-    if type(tokens_or_str) is str:
+    if isinstance(tokens_or_str, str):
         return tokenize(tokens_or_str, lang_module=lang_module)
-    elif type(tokens_or_str) is list:
+    if isinstance(tokens_or_str, list):
         return tokens_or_str
-    elif type(tokens_or_str) is None:
+    if tokens_or_str is None:
         return []
-    else:
-        raise ValueError('Please input string or tokens')
+    raise TypeError('Please input string or tokens')

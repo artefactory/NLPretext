@@ -18,10 +18,11 @@
 import re
 from collections import Counter
 from itertools import product
-from nautilus_nlp.models.nmf_model import *
-from nautilus_nlp.models.seanmf_model import *
+
 import numpy as np
 import pyLDAvis
+from nautilus_nlp.topic_modeling.nmf_model import NMF
+from nautilus_nlp.topic_modeling.seanmf_model import SeaNMF
 
 
 def prepare_data(text, vocab_min_count=1, vocab_max_size=10000):
@@ -36,9 +37,9 @@ def prepare_data(text, vocab_min_count=1, vocab_max_size=10000):
     vocab = {}
 
     # Tokens_list is a list of sub-lists where each sub-list contains a sentences' tokens.
-    tokens_list=[]
+    tokens_list = []
     for sentence in text:
-        sentence = re.split('\s', sentence)
+        sentence = re.split(r'\s', sentence)
         tokens_list.append(sentence)
     vocab = dict(Counter(x for xs in tokens_list for x in xs))
 
@@ -48,21 +49,23 @@ def prepare_data(text, vocab_min_count=1, vocab_max_size=10000):
     vocab_arr = vocab_arr[:vocab_max_size]
     vocab_arr = sorted(vocab_arr)
 
-    vocab_list = list(map(lambda x:x[0], vocab_arr))
+    vocab_list = list(map(lambda x: x[0], vocab_arr))
     # Create Vocab to ID dictionnary
     vocab2id = {itm[1][0]: itm[0] for itm in enumerate(vocab_arr)}
 
     # Create ID representation of text (ie: each sentence is a list of vocabId )
     encoded_text_id = []
     for sentence in text:
-        sentence = re.split('\s', sentence)
+        sentence = re.split(r'\s', sentence)
         sentence = [int(vocab2id[wd]) for wd in sentence if wd in vocab2id]
         encoded_text_id.append(sentence)
 
     return encoded_text_id, vocab_list, vocab_arr
 
 
-def train_shorttext_model(model_name, encoded_text_id, vocab_list, n_topics=20, max_iter=20, max_err=0.1, alpha=0, beta=0):
+def train_shorttext_model(
+    model_name, encoded_text_id, vocab_list, n_topics=20,
+    max_iter=20, max_err=0.1, alpha=0, beta=0):
     """
     :param model_name: string = 'nmf' or 'seanmf'
     :param encoded_text_id: list of encoded sentences
@@ -82,19 +85,24 @@ def train_shorttext_model(model_name, encoded_text_id, vocab_list, n_topics=20, 
         dt_mat = __build_doc_term_matrix(n_terms, n_docs, encoded_text_id)
         model = NMF(
             dt_mat,
+            mat_iw=[],
+            mat_ih=[],
             n_topic=n_topics,
             max_iter=max_iter,
             max_err=max_err)
 
     elif model_name == 'seanmf':
         # Calculate co-occurence matrix
-        cm = __build_cooccurence_matrix(n_terms, encoded_text_id)
+        cooc_mat = __build_cooccurence_matrix(n_terms, encoded_text_id)
         # Calculate PPMI
-        SS = __calulate_PPMI(cm, n_terms)
+        mat_ss = __calculate_ppmi(cooc_mat, n_terms)
         # Build doc-term matrix
         dt_mat = __build_doc_term_matrix(n_terms, n_docs, encoded_text_id)
         model = SeaNMF(
-            dt_mat, SS,
+            dt_mat, mat_ss,
+            mat_iw=[],
+            mat_iwc=[],
+            mat_ih=[],
             alpha=alpha,
             beta=beta,
             n_topic=n_topics,
@@ -109,15 +117,7 @@ def train_shorttext_model(model_name, encoded_text_id, vocab_list, n_topics=20, 
     return model
 
 
-def __build_doc_term_matrix(n_terms, n_docs, encoded_text_id):
-    dt_mat = np.zeros([n_terms, n_docs])
-    for k in range(n_docs):
-        for j in encoded_text_id[k]:
-            dt_mat[j, k] += 1.0
-    return dt_mat
-
-
-def show_dominant_topic(model, encoded_text_id, vocab_list, n_topKeyword =10):
+def show_dominant_topic(model, encoded_text_id, vocab_list, n_top_keyword=10):
     """
     Computes the PMi score for each topic and the topKeywords describing each of them.
     :param model: trained NMF model
@@ -129,23 +129,23 @@ def show_dominant_topic(model, encoded_text_id, vocab_list, n_topKeyword =10):
 
     dt_mat = __build_cooccurence_matrix(n_terms=len(vocab_list), encoded_text_id=encoded_text_id)
     np.fill_diagonal(dt_mat, 0)
-    W,_ = model.get_decomposition_matrix()
-    n_topic = W.shape[1]
-    PMI_arr = []
+    mat_w, _ = model.get_decomposition_matrix()
+    n_topic = mat_w.shape[1]
+    pmi_arr = []
     for k in range(n_topic):
-        top_keywords_index = W[:, k].argsort()[::-1][:n_topKeyword]
-        PMI_arr.append(__calculate_PMI(dt_mat, top_keywords_index))
+        top_keywords_index = mat_w[:, k].argsort()[::-1][:n_top_keyword]
+        pmi_arr.append(__calculate_pmi(dt_mat, top_keywords_index))
 
-    index = np.argsort(PMI_arr)
+    index = np.argsort(pmi_arr)
     topics = {}
     pmi_score = {}
     for k in index:
         words = []
-        for w in np.argsort(W[:, k])[::-1][:n_topKeyword]:
+        for w in np.argsort(mat_w[:, k])[::-1][:n_top_keyword]:
             words.append(vocab_list[w])
         # Complete the topic and the score dicts. Format {Topic_number: words or score}
         topics[k] = words
-        pmi_score[k] = PMI_arr[k]
+        pmi_score[k] = pmi_arr[k]
 
     return topics, pmi_score
 
@@ -157,10 +157,10 @@ def get_assigned_topics(model):
     :return topics_list: list having the same length as the training text containing topics assigned to each sentence.
     """
 
-    _, H = model.get_decomposition_matrix()
+    _, mat_h = model.get_decomposition_matrix()
     # The weights of the H matrix are converted into probabilities
-    H_probs = H / H.sum(axis=1, keepdims=True)
-    topics_list = list(np.argmax(H_probs, axis=1))
+    h_probs = mat_h / mat_h.sum(axis=1, keepdims=True)
+    topics_list = list(np.argmax(h_probs, axis=1))
 
     return topics_list
 
@@ -188,20 +188,20 @@ def prepare_data_pyldavis(model, encoded_text_id, vocab_arr):
     """
 
     # 1 List of documents lengths
-    doc_length_values=[]
+    doc_length_values = []
     for doc in encoded_text_id:
         doc_length_values.append(len(doc))
     # 2 List of vocab
     list_vocab = list(map(lambda x: x[0], vocab_arr))
     # 3 List of vocab. Frequency
     freq_vocab = list(map(lambda x: x[1], vocab_arr))
-    W, H = model.get_decomposition_matrix()
+    mat_w, mat_h = model.get_decomposition_matrix()
     # Normlize the decomposition to get probabilities
-    W_probs = W / W.sum(axis=1, keepdims=True)
+    w_probs = mat_w / mat_w.sum(axis=1, keepdims=True)
     # 4 topic term matrix phi
-    phi = W_probs.T
+    phi = w_probs.T
     # 5 document term matrix theta
-    theta = H / H.sum(axis=1, keepdims=True)
+    theta = mat_h / mat_h.sum(axis=1, keepdims=True)
 
     data = {'topic_term_dists': phi,
             'doc_topic_dists': theta,
@@ -231,21 +231,21 @@ def __build_cooccurence_matrix(n_terms, encoded_text_id):
     return res
 
 
-def __calulate_PPMI(cm, n_terms):
-    D1 = np.sum(cm)
-    print('D1= ', D1)
-    SS = D1 * cm
-    print('SS= ',SS)
+def __calculate_ppmi(cooc_mat, n_terms):
+    mat_d1 = np.sum(cooc_mat)
+    print('D1= ', mat_d1)
+    mat_ss = mat_d1 * cooc_mat
+    print('SS= ', mat_ss)
     for k in range(n_terms):
-        SS[k] /= np.sum(cm[k])
+        mat_ss[k] /= np.sum(cooc_mat[k])
     for k in range(n_terms):
-        SS[:, k] /= np.sum(cm[:, k])
-    print('SS = ', SS )
-    cm = []  # release memory
-    SS[SS == 0] = 1.0
-    SS = np.log(SS)
-    SS[SS < 0.0] = 0.0
-    return SS
+        mat_ss[:, k] /= np.sum(cooc_mat[:, k])
+    print('SS = ', mat_ss)
+    cooc_mat = []  # release memory
+    mat_ss[mat_ss == 0] = 1.0
+    mat_ss = np.log(mat_ss)
+    mat_ss[mat_ss < 0.0] = 0.0
+    return mat_ss
 
 
 def __build_doc_term_matrix(n_terms, n_docs, encoded_text_id):
@@ -256,25 +256,25 @@ def __build_doc_term_matrix(n_terms, n_docs, encoded_text_id):
     return dt_mat
 
 
-def __calculate_PMI(AA, topKeywordsIndex):
+def __calculate_pmi(mat_aa, top_keywords_index):
     '''
     Method to compute PMi score
     Reference:
     Short and Sparse Text Topic Modeling via Self-Aggregation
     '''
 
-    D1 = np.sum(AA)
-    n_tp = len(topKeywordsIndex)
-    PMI = []
-    for index1 in topKeywordsIndex:
-        for index2 in topKeywordsIndex:
+    mat_d1 = np.sum(mat_aa)
+    n_tp = len(top_keywords_index)
+    mat_pmi = []
+    for index1 in top_keywords_index:
+        for index2 in top_keywords_index:
             if index2 < index1:
-                if AA[index1, index2] == 0:
-                    PMI.append(0.0)
+                if mat_aa[index1, index2] == 0:
+                    mat_pmi.append(0.0)
                 else:
-                    C1 = np.sum(AA[index1])
-                    C2 = np.sum(AA[index2])
-                    PMI.append(np.log(AA[index1,index2]*D1/C1/C2))
-    avg_PMI = 2.0*np.sum(PMI)/float(n_tp)/(float(n_tp)-1.0)
+                    mat_c1 = np.sum(mat_aa[index1])
+                    mat_c2 = np.sum(mat_aa[index2])
+                    mat_pmi.append(np.log(mat_aa[index1,index2]*mat_d1/mat_c1/mat_c2))
+    avg_pmi = 2.0*np.sum(mat_pmi)/float(n_tp)/(float(n_tp)-1.0)
 
-    return avg_PMI
+    return avg_pmi
