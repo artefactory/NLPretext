@@ -15,18 +15,16 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with this program; if not, write to the Free Software Foundation,
 # Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+import codecs
 import glob
 import io
 import json
-import logging
 import os
 import re
-import codecs
 import shutil
+import warnings
 
 import chardet
-
-logging.basicConfig(level=logging.INFO)
 
 
 def open_textfile(filepath, encoding='utf-8'):
@@ -80,12 +78,11 @@ def text_loader(filepath, encoding=None, detectencoding=True):
     try:
         return open_textfile(filepath, encoding='utf-8')
     except UnicodeDecodeError:
-        logging.warning('Encoding for {} is not UTF-8.'.format(filepath))
+        warnings.warn(f'Encoding for {filepath} is not UTF-8.')
         if detectencoding is True:
-            logging.warning('Trying to detect encoding for {}'.format(filepath))
             detected_encoding = detect_encoding(filepath)
-            logging.info('{filepath}: detected encoding is {encod}, with a confidence rate of {conf_rate}'.format(
-                filepath=filepath, encod=detected_encoding['encoding'], conf_rate=detected_encoding['confidence']))
+            warnings.warn(f'{filepath}: detected encoding is {detected_encoding["encoding"]},\
+                            with a confidence rate of {detected_encoding["confidence"]}')
             return open_textfile(filepath, encoding=detected_encoding['encoding'])
         raise UnicodeDecodeError('Cannot load document using utf-8. '\
                                     'Try to detect encoding using detectencoding=True')
