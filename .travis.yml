@@ -33,4 +33,6 @@ install:
   - pip install -r requirements.txt
   - pip install -e .
 script:
+  - pylint nautilus_nlp/
+  - pylint tests/
   - pytest tests/*

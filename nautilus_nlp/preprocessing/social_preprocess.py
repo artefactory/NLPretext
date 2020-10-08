@@ -19,14 +19,13 @@
 
 from __future__ import absolute_import, division, print_function, unicode_literals
 
-import re
 import emoji as _emoji
 from nautilus_nlp.utils import constants
 
 
 class SocialPreprocessor():
 
-    def __init__(self,text):
+    def __init__(self, text):
         self.text = text
 
     def remove_mentions(self) -> str:
@@ -36,7 +35,7 @@ class SocialPreprocessor():
         Parameters
         ----------
         text : str
-        
+
         Returns
         -------
         string
@@ -52,7 +51,7 @@ class SocialPreprocessor():
         Parameters
         ----------
         text : str
-        
+
         Returns
         -------
         string
@@ -66,7 +65,7 @@ class SocialPreprocessor():
         Parameters
         ----------
         text : str
-        
+
         Returns
         -------
         string
@@ -77,7 +76,7 @@ class SocialPreprocessor():
     def remove_emoji(self) -> str:
         """
         Remove emoji from any str by stripping any unicode in the range of Emoji unicode
-        as defined in the unicode convention: 
+        as defined in the unicode convention:
         http://www.unicode.org/emoji/charts/full-emoji-list.html
 
         Parameters
@@ -100,18 +99,17 @@ class SocialPreprocessor():
         Parameters
         ----------
         text : str
-            code_delimiters : tuple of symbols around the emoji code. 
+            code_delimiters : tuple of symbols around the emoji code.
             eg: (':',':') --> :grinning_face:
 
         Returns
         -------
         str
-            string 
+            string
         """
-        if input_str:
+        if input_str is not None:
             return _emoji.demojize(input_str, delimiters=code_delimiters)
-        else:
-            return _emoji.demojize(self.text, delimiters=code_delimiters)
+        return _emoji.demojize(self.text, delimiters=code_delimiters)
 
     def extract_emojis(self) -> list:
         """
@@ -164,7 +162,8 @@ class SocialPreprocessor():
         self.text = self.normalize_whitespace(constants.HASHTAG_PATTERN.sub('', self.text))
         return self.text
 
-    def normalize_whitespace(self, text) -> str:
+    @staticmethod
+    def normalize_whitespace(text) -> str:
         """
         Given ``text`` str, replace one or more spacings with a single space, and one
         or more linebreaks with a single newline. Also strip leading/trailing whitespace.
@@ -176,7 +175,7 @@ class SocialPreprocessor():
 
         Returns
         -------
-        string    
+        string
         """
         return constants.NONBREAKING_SPACE_REGEX.sub(
             " ", constants.LINEBREAK_REGEX.sub(r"\n", text)

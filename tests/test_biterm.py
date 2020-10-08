@@ -15,11 +15,11 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with this program; if not, write to the Free Software Foundation,
 # Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
-from nautilus_nlp.models.biterm_model import BitermModel
 import pandas as pd
 import pytest
+from nautilus_nlp.topic_modeling.biterm_model import BitermModel
 
-text = ['Cola 1.5L Carrefour',
+TEXT = ['Cola 1.5L Carrefour',
         'Pepsi Cola Light 1.5L',
         'Pepsi Cola Twist Light',
         'Cola 1.5L CRF DISC',
@@ -33,30 +33,30 @@ text = ['Cola 1.5L Carrefour',
         'Penne de riz 100g sans gluten',
         'Spaghetti de maïs 50g sans Glute']
 
-nb_topics = 5
-nb_word_per_cluster = 5
-nb_iteration = 100
-language = 'english'
+NB_TOPICS = 5
+NB_WORD_PER_CLUSTER = 5
+NB_ITERATION = 100
+LANGUAGE = 'english'
 
 
 @pytest.mark.parametrize(
     "input_text, input_nb_topic , input_nb_iteration , input_language",
     [
-        (text, -1, nb_iteration, language),
-        (text, "Panzani", nb_iteration, language),
-        (text, 3.4, nb_iteration, language),
-        (text, (3, 5), nb_iteration, language),
-        (text, [3, 5], nb_iteration, language),
-        (text, nb_topics, (2, 4), language),
-        (text, nb_topics, [1, 3], language),
-        (text, nb_topics, -1, language),
-        (text, nb_topics, "Panzani", language),
-        (text, nb_topics, 2.4, language),
-        (3, nb_topics, nb_iteration, language),
-        ("Panzani", nb_topics, nb_iteration, language),
-        (("Panzani", "Rustichella"), nb_topics, nb_iteration, language),
-        ([], nb_topics, nb_iteration, language),
-        (["Panzani", "Rustichella", 3], nb_topics, nb_iteration, language)
+        (TEXT, -1, NB_ITERATION, LANGUAGE),
+        (TEXT, "Panzani", NB_ITERATION, LANGUAGE),
+        (TEXT, 3.4, NB_ITERATION, LANGUAGE),
+        (TEXT, (3, 5), NB_ITERATION, LANGUAGE),
+        (TEXT, [3, 5], NB_ITERATION, LANGUAGE),
+        (TEXT, NB_TOPICS, (2, 4), LANGUAGE),
+        (TEXT, NB_TOPICS, [1, 3], LANGUAGE),
+        (TEXT, NB_TOPICS, -1, LANGUAGE),
+        (TEXT, NB_TOPICS, "Panzani", LANGUAGE),
+        (TEXT, NB_TOPICS, 2.4, LANGUAGE),
+        (3, NB_TOPICS, NB_ITERATION, LANGUAGE),
+        ("Panzani", NB_TOPICS, NB_ITERATION, LANGUAGE),
+        (("Panzani", "Rustichella"), NB_TOPICS, NB_ITERATION, LANGUAGE),
+        ([], NB_TOPICS, NB_ITERATION, LANGUAGE),
+        (["Panzani", "Rustichella", 3], NB_TOPICS, NB_ITERATION, LANGUAGE)
     ]
 )
 def text_input_parameter_error_handling(input_text
@@ -68,18 +68,18 @@ def text_input_parameter_error_handling(input_text
 
 
 def test_number_topic_correct():
-    biterm_model = BitermModel(data=text
-                               , nb_topics=nb_topics
-                               , nb_iteration=nb_iteration
-                               , lang=language)
-    clusters = biterm_model.compute_topics(nb_word_per_cluster=nb_word_per_cluster)
-    assert len(pd.DataFrame(clusters)) == nb_topics
+    biterm_model = BitermModel(data=TEXT
+                               , nb_topics=NB_TOPICS
+                               , nb_iteration=NB_ITERATION
+                               , lang=LANGUAGE)
+    clusters = biterm_model.compute_topics(nb_word_per_cluster=NB_WORD_PER_CLUSTER)
+    assert len(pd.DataFrame(clusters)) == NB_TOPICS
 
 
 def test_no_initialisation():
     with pytest.raises(ValueError):
-        biter_model = BitermModel(data=text
-                                  , nb_topics=nb_topics
-                                  , nb_iteration=nb_iteration,
-                                  lang=language)
+        biter_model = BitermModel(data=TEXT,
+                                  nb_topics=NB_TOPICS,
+                                  nb_iteration=NB_ITERATION,
+                                  lang=LANGUAGE)
         biter_model.get_document_topic(2)

@@ -17,36 +17,39 @@
 # Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 # -*- coding: utf-8 -*-
 
-from __future__ import absolute_import, division, print_function, unicode_literals
+from __future__ import (absolute_import, division, print_function,
+                        unicode_literals)
 
 import re
-import regex
 import unicodedata
-from ftfy import fix_text as _fix_text
 
-from nautilus_nlp.utils.stopwords import get_stopwords
-from nautilus_nlp.utils.phone_number import extract_phone_numbers as _extract_phone_numbers
+from ftfy import fix_text as _fix_text
 from nautilus_nlp.utils import constants
+from nautilus_nlp.utils.phone_number import \
+    extract_phone_numbers as _extract_phone_numbers
+from nautilus_nlp.utils.stopwords import get_stopwords
+
 
 class TextPreprocessor():
 
-    def __init__(self,text):
-        if isinstance(text,str):
+    def __init__(self, text):
+        if isinstance(text, str):
             self.text = text
         else:
             raise ValueError("Input must be a string")
 
-    def clean_text(self,lang='en') -> str:
+    def clean_text(self, lang='en') -> str:
+        #TODO : check how to pipe operations
         stopwords = get_stopwords(lang)
         self.text = self.fix_bad_unicode(normalization="NFC")
-        self.text = self.remove_EOL_characters()
+        self.text = self.remove_eol_characters()
         self.text = self.remove_accents(method="unicode")
         self.text = self.remove_punct()
         self.text = self.text.lower()
         self.text = self.remove_stopwords(stopwords=stopwords)
         return self.normalize_whitespace()
 
-    def remove_EOL_characters(self) -> str:
+    def remove_eol_characters(self) -> str:
         """
         Remove end of line (\n) char.
 
@@ -62,7 +65,7 @@ class TextPreprocessor():
         return self.text
 
     def remove_stopwords(self, stopwords: list) -> str:
-        """ 
+        """
         Remove stopwords from a text.
         eg. 'I like when you move your body !' -> 'I move body !'
 
@@ -80,8 +83,7 @@ class TextPreprocessor():
         ValueError
             When inputs is not a string
         """
-        self.text =  ' '.join([word.strip() for word in self.text.split() if word not in stopwords])
-        
+        self.text = ' '.join([word.strip() for word in self.text.split() if word not in stopwords])
         return self.text
 
     def fix_bad_unicode(self, normalization: str = "NFC") -> str:
@@ -94,7 +96,7 @@ class TextPreprocessor():
         ----------
         text : string
 
-        normalization ({'NFC', 'NFKC', 'NFD', 'NFKD'}): 
+        normalization ({'NFC', 'NFKC', 'NFD', 'NFKD'}):
             if 'NFC', combines characters and diacritics written using separate code points,
             e.g. converting "e" plus an acute accent modifier into "é"; unicode
             can be converted to NFC form without any change in its meaning!
@@ -120,7 +122,7 @@ class TextPreprocessor():
 
         Returns
         -------
-        string    
+        string
         """
         self.text = constants.NONBREAKING_SPACE_REGEX.sub(
             " ", constants.LINEBREAK_REGEX.sub(r"\n", self.text)
@@ -140,7 +142,7 @@ class TextPreprocessor():
 
         Returns
         -------
-        string    
+        string
         """
 
         # standard
@@ -165,7 +167,7 @@ class TextPreprocessor():
         self.text = constants.CONTRACTION_YALL_YOUALL.sub(r"\1\2ou all", self.text)
         return self.text
 
-    def replace_urls(self, replace_with:str="*URL*") -> str:
+    def replace_urls(self, replace_with: str = "*URL*") -> str:
         """
         Replace all URLs in ``text`` str with ``replace_with`` str.
 
@@ -178,7 +180,7 @@ class TextPreprocessor():
         Returns
         -------
         string
-        """    
+        """
         self.text = constants.URL_REGEX.sub(
             replace_with, constants.SHORT_URL_REGEX.sub(replace_with, self.text)
         )
@@ -201,10 +203,9 @@ class TextPreprocessor():
         self.text = constants.EMAIL_REGEX.sub(replace_with, self.text)
         return self.text
 
-    def replace_phone_numbers(self, replace_with:str="*PHONE*",
-                                    method:str="regex",
-                                    country_format_to_detect:list=[None,'FR','US','GB'],
-                                    return_text: bool = False) -> str:
+    def replace_phone_numbers(self, country_format_to_detect: list,
+                              replace_with: str = "*PHONE*",
+                              method: str = "regex") -> str:
         """
         Replace all phone numbers in ``text`` str with ``replace_with`` str
 
@@ -214,9 +215,9 @@ class TextPreprocessor():
         replace_with : string
             the string you want the phone number to be replaced with.
         method : ['regex','detection']
-            regex is faster but will omit a lot of numbers, while detection will 
+            regex is faster but will omit a lot of numbers, while detection will
             catch every numbers, but takes a while.
-        country_format_to_detect : list 
+        country_format_to_detect : list
             If a list of country code is specified, will catch every number formatted.
             Only when method = 'detection'.
         Returns
@@ -229,7 +230,7 @@ class TextPreprocessor():
             found_nums = _extract_phone_numbers(self.text, countrylist=country_format_to_detect)
 
             # order by lenght to avoid truncated numbers to be removed first.
-            found_nums.sort(key=len,reverse=True) 
+            found_nums.sort(key=len, reverse=True)
             for phone_number in found_nums:
                 self.text = self.text.replace(phone_number, replace_with)
         else:
@@ -249,7 +250,7 @@ class TextPreprocessor():
         Returns
         -------
         string
-        """        
+        """
         self.text = constants.NUMBERS_REGEX.sub(replace_with, self.text)
         return self.text
 
@@ -270,10 +271,10 @@ class TextPreprocessor():
         Returns
         -------
         string
-        """          
+        """
         if replace_with is None:
             for k, v in constants.CURRENCIES.items():
-                self.text = self.text.replace(k, v)                
+                self.text = self.text.replace(k, v)
         else:
             self.text = constants.CURRENCY_REGEX.sub(replace_with, self.text)
         return self.text
@@ -287,7 +288,7 @@ class TextPreprocessor():
         ----------
         text : str
             raw text
-        
+
         marks : str or None
             If specified, remove only the characters in this string,
             e.g. ``marks=',;:'`` removes commas, semi-colons, and colons.
@@ -301,15 +302,15 @@ class TextPreprocessor():
         -------
         When ``marks=None``, Python's built-in :meth:`str.translate()` is
         used to remove punctuation; otherwise, a regular expression is used
-        instead. The former's performance is about 5-10x faster.    
-        """       
+        instead. The former's performance is about 5-10x faster.
+        """
         if marks:
             self.text = re.sub("[{}]+".format(re.escape(marks)), " ", self.text, flags=re.UNICODE)
         else:
             self.text = self.text.translate(constants.PUNCT_TRANSLATE_UNICODE)
         return self.text
 
-    def remove_accents(self, method:str="unicode") -> str:
+    def remove_accents(self, method: str = "unicode") -> str:
         """
         Remove accents from any accented unicode characters in ``text`` str, either by
         transforming them into ascii equivalents or removing them entirely.
@@ -318,7 +319,7 @@ class TextPreprocessor():
         ----------
         text : str
             raw text
-        
+
         method : ({'unicode', 'ascii'})
             if 'unicode', remove accented
             char for any unicode symbol with a direct ASCII equivalent; if 'ascii',
@@ -333,7 +334,7 @@ class TextPreprocessor():
         Raises
         -------
         ValueError
-            if ``method`` is not in {'unicode', 'ascii'}   
+            if ``method`` is not in {'unicode', 'ascii'}
         """
         if method == "unicode":
             self.text = "".join(
@@ -388,7 +389,7 @@ class TextPreprocessor():
         self.text = self.normalize_whitespace()
         return self.text
 
-    def remove_smallwords(self, smallwords_threshold:int) -> list:
+    def remove_smallwords(self, smallwords_threshold: int) -> list:
         """
         Function that removes words which length is below a threshold
         'Hello my name is John Doe' --> 'Hello name John Doe'
@@ -405,13 +406,3 @@ class TextPreprocessor():
         """
         self.text = ' '.join([word for word in self.text.split() if len(word) > smallwords_threshold])
         return self.text
-
-
-
-
-
-
-
-
-
-

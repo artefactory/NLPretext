@@ -23,14 +23,14 @@ import re
 
 class TokenPreprocessor():
 
-    def __init__(self,tokens):
-        if isinstance(tokens,list):
+    def __init__(self, tokens):
+        if isinstance(tokens, list):
             self.tokens = tokens
         else:
-            raise ValueError("Input must be a list")
+            raise TypeError("Input must be a list")
 
     def remove_stopwords(self, stopwords: list) -> str:
-        """ 
+        """
         Remove stopwords from a text.
         eg. 'I like when you move your body !' -> 'I move body !'
 
@@ -71,8 +71,8 @@ class TokenPreprocessor():
         return self.tokens
 
     def remove_special_caracters_from_tokenslist(self) -> list:
-        """ 
-        Remove tokens that doesn't contains any number or letter. 
+        """
+        Remove tokens that doesn't contains any number or letter.
         eg. ['foo','bar','---',"'s",'#'] -> ['foo','bar',"'s"]
 
         Parameters
@@ -84,12 +84,12 @@ class TokenPreprocessor():
         -------
         list
             list of tokens without tokens that contains only special caracters
-        
+
         """
         self.tokens = [word for word in self.tokens if re.search("[a-zA-Z0-9]", word)]
         return self.tokens
 
-    def remove_smallwords(self, smallwords_threshold:int) -> list:
+    def remove_smallwords(self, smallwords_threshold: int) -> list:
         """
         Function that removes words which length is below a threshold
         ["hello", "my", "name", "is", "John", "Doe"] --> ["hello","name","John","Doe"]
