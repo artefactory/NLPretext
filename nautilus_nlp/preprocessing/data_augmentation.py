@@ -11,7 +11,7 @@ class CouldNotAugment(ValueError):
 class UnavailableAugmenter(ValueError):
     pass
 
-def augment_utterance(text, method, stopwords, intent=None, entities=None):
+def augment_utterance(text, method, stopwords, entities=None):
     """
     Given ``text`` str, create a new similar utterance by modifying some words
     in the initial sentence, modifications depend on the chosen method
@@ -25,8 +25,6 @@ def augment_utterance(text, method, stopwords, intent=None, entities=None):
         augmenter to use ('wordnet_synonym' or 'aug_sub_bert')
     stopwords : list
         list of words to freeze throughout the augmentation
-    intent : string
-        intent associated to text if any
     entities : list
         entities associated to text if any, must be in the following format:
         [
@@ -43,25 +41,22 @@ def augment_utterance(text, method, stopwords, intent=None, entities=None):
 
     Returns
     -------
-    dictionary with augmented text and optional keys depending on input
+    Augmented text and optional augmented entities
     """
-    new_utt = {}
     augmenter = get_augmenter(method, stopwords)
-    new_utt['text'] = augmenter.augment(text)
-    if intent is not None:
-        new_utt['intent'] = intent
+    augmented_text = augmenter.augment(text)
     if entities is not None:
         formatted_entities = [(
             text[entities[i]['startCharIndex']:entities[i]['endCharIndex']].strip(),
             entities[i]['entity']) for i in range(len(entities))]
-        if are_entities_in_augmented_text(entities, new_utt['text']):
-            new_utt['entities'] = get_augmented_entities(
-                new_utt['text'],
+        if are_entities_in_augmented_text(entities, augmented_text):
+            augmented_entities = get_augmented_entities(
+                augmented_text,
                 formatted_entities
             )
-            return clean_sentence_entities(new_utt)
+            return clean_sentence_entities(text, augmented_entities)
         raise CouldNotAugment('Text was not correctly augmented so not added')
-    return new_utt
+    return augmented_text
 
 
 def are_entities_in_augmented_text(entities, augmented_text):
@@ -158,38 +153,46 @@ def get_augmented_entities(sentence_augmented, entities):
     return entities_augmented
 
 
-def clean_sentence_entities(sentence_input):
+def clean_sentence_entities(text, entities):
     """
     Paired entities check to remove nested entities, the longest entity is kept
 
     Parameters
     ----------
-    sentence_input : dict
-        dictionary in the following format
-        {
-            'text' : str,
-            'entities' : list of dict,
-            'intent' : str (optional)
-        }
+    text : str
+        augmented text
+    entities : list
+        entities associated to augmented text, must be in the following format:
+        [
+            {
+                'entity': str,
+                'word': str,
+                'startCharIndex': int,
+                'endCharIndex': int
+            },
+            {
+                ...
+            }
+        ]
 
     Returns
     -------
-    Sentence input with cleaned entities
+    Augmented text and cleaned entities
     """
-    sentence = copy.copy(sentence_input)
-    for element1 in sentence['entities']:
-        for element2 in sentence['entities']:
+    entities_to_clean = copy.copy(entities)
+    for element1 in entities_to_clean:
+        for element2 in entities_to_clean:
             result = check_interval_included(element1, element2)
             if result is not None:
                 try:
-                    sentence[1]['entities'].remove(result[0])
+                    entities_to_clean.remove(result[0])
                 except IndexError:
                     logging.warning(
                         "Cant remove entity : {} \n entities are now :{} \n for sentence : {} ".format(
-                            result, sentence['entities'],
-                            sentence['text']))
+                            result, entities_to_clean,
+                            text))
                     continue
-    return sentence
+    return text, entities_to_clean
 
 
 def check_interval_included(element1, element2):
