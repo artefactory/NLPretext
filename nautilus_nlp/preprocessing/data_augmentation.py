@@ -53,8 +53,7 @@ def augment_utterance(text, method, stopwords, intent=None, entities=None):
     if entities is not None:
         formatted_entities = [(
             text[entities[i]['startCharIndex']:entities[i]['endCharIndex']].strip(),
-            entities[i]['entity']) for i in range(len(entities)
-        )]
+            entities[i]['entity']) for i in range(len(entities))]
         if are_entities_in_augmented_text(entities, new_utt['text']):
             new_utt['entities'] = get_augmented_entities(
                 new_utt['text'],
