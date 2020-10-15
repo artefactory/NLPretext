@@ -11,12 +11,13 @@ class CouldNotAugment(ValueError):
 class UnavailableAugmenter(ValueError):
     pass
 
-def augment_utterance(text, method, stopwords, entities=None):
+def augment_text(text, method, stopwords=None, entities=None):
     """
-    Given ``text`` str, create a new similar utterance by modifying some words
-    in the initial sentence, modifications depend on the chosen method
-    (substitution with synonym, addition, deletion). If intent and/or entities
-    are given as input, they will remain unchanged.
+    Given a text with or without associated entities, generate a new text by
+    modifying some words in the initial one, modifications depend on the chosen
+    method (substitution with synonym, addition, deletion). If entities are
+    given as input, they will remain unchanged. If you want some words other
+    than entities to remain unchanged, specify it within the stopwords argument.
 
     Parameters
     ----------
@@ -110,7 +111,8 @@ def get_augmenter(method, stopwords=None):
         return naw.SynonymAug(aug_src='wordnet', stopwords=stopwords)
     if method == 'aug_sub_bert':
         return naw.ContextualWordEmbsAug(model_path='bert-base-uncased', action="substitute", stopwords=stopwords)
-    raise UnavailableAugmenter('The given augmenter is not supported yet')
+    raise UnavailableAugmenter('The given augmenter is not supported. You must choose one \
+        of the following: wordnet_synonym or aug_sub_bert')
 
 
 def get_augmented_entities(sentence_augmented, entities):
