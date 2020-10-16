@@ -1,3 +1,4 @@
+from typing import List, Optional
 import copy
 import logging
 import re
@@ -9,7 +10,8 @@ class CouldNotAugment(ValueError):
     pass
 
 
-def augment_utterance(text, method, stopwords, intent=None, entities=None):
+def augment_utterance(
+        text: str, method: str, stopwords: list[str], intent: Optional[str] = None, entities: Optional[list]=None) -> dict:
     """
     Given ``text`` str, create a new similar utterance by modifying some words
     in the initial sentence, modifications depend on the chosen method
@@ -19,7 +21,7 @@ def augment_utterance(text, method, stopwords, intent=None, entities=None):
     Parameters
     ----------
     text : string
-    method : string
+    method : string {'wordnet_synonym', 'aug_sub_bert'}
         augmenter to use ('wordnet_synonym' or 'aug_sub_bert')
     stopwords : list
         list of words to freeze throughout the augmentation
@@ -40,24 +42,25 @@ def augment_utterance(text, method, stopwords, intent=None, entities=None):
 
     Returns
     -------
-    dictionary with augmented text and optional keys depending on input
+    dict
+        dictionary with augmented text and optional keys depending on input
     """
     new_utt = {}
-    augmenter = select_augmenter(method, stopwords)
+    augmenter = _select_augmenter(method, stopwords)
     new_utt['text'] = augmenter.augment(text)
     if intent is not None:
         new_utt['intent'] = intent
     if entities is not None:
         formatted_entities = [(text[entities[i]['startCharIndex']:entities[i]['endCharIndex']
                                     ].strip(), entities[i]['entity']) for i in range(len(entities))]
-        if are_entities_in_augmented_text(entities, new_utt['text']):
+        if _are_entities_in_augmented_text(entities, new_utt['text']):
             new_utt['entities'] = get_augmented_entities(new_utt['text'], formatted_entities)
             return clean_sentence_entities(new_utt)
         raise CouldNotAugment('Text was not correctly augmented so not added')
     return new_utt
 
 
-def are_entities_in_augmented_text(entities, augmented_text):
+def _are_entities_in_augmented_text(entities: list, augmented_text: str) -> bool:
     check = True
     for ent in entities:
         if ent['word'] not in augmented_text:
@@ -65,7 +68,7 @@ def are_entities_in_augmented_text(entities, augmented_text):
     return check
 
 
-def select_augmenter(method, stopwords, use_stopwords=True):
+def _select_augmenter(method, stopwords, use_stopwords=True):
     if not use_stopwords:
         stopwords = []
     if method == 'wordnet_synonym':
