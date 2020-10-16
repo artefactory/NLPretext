@@ -15,6 +15,7 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with this program; if not, write to the Free Software Foundation,
 # Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+from typing import List
 import nltk
 from sacremoses import MosesTokenizer, MosesDetokenizer
 import spacy
@@ -47,26 +48,31 @@ class SpacyModel:
         return self.model.lang
 
 
-def _get_spacy_tokenizer(lang):
+def _get_spacy_tokenizer(lang: str) -> spacy.tokenizer.Tokenizer:
     """
     Function that gets the right tokenizer given the language
-    :param str lang: language in which text is written
-                     Languages handled : ["en", "fr", "ko", "ja"]
 
-    :return: spacy tokenizer
-    :rtype: spacy.tokenizer.Tokenizer
+    Parameters
+    ----------
+    lang : str
+        Language in which text is written. Languages handled : ["en", "fr", "ko", "ja"]
+
+    Returns
+    -------
+    spacy.tokenizer.Tokenizer
+        spacy tokenizer
     """
     model = SpacyModel(lang).model
     return model.tokenizer
 
 
-def tokenize(text: str, lang_module: str = 'en_spacy'):
+def tokenize(text: str, lang_module: str = 'en_spacy') -> List[str]:
     """
     Convert text to a list of tokens.
 
     Parameters
     ----------
-    lang_module : ({'en_spacy', 'en_nltk', 'fr_spacy', 'fr_moses', 'ko_spacy', 'ja_spacy'})
+    lang_module : str {'en_spacy', 'en_nltk', 'fr_spacy', 'fr_moses', 'ko_spacy', 'ja_spacy'}
         choose the tokenization module according to the langage and the implementation.
         Recommanded: Spacy (faster, better results). To process other langages
         import models.Spacy_models
@@ -75,6 +81,11 @@ def tokenize(text: str, lang_module: str = 'en_spacy'):
     -------
     list
         list of string
+
+    Raises
+    ------
+    ValueError
+        If lang_module is not a valid module name
     """
     if "spacy" in lang_module:
         lang = lang_module.split()[0]
@@ -89,7 +100,7 @@ def tokenize(text: str, lang_module: str = 'en_spacy'):
                      "{'en_spacy', 'en_nltk', 'fr_spacy', 'fr_moses', 'ko_spacy', 'ja_spacy'}")
 
 
-def untokenize(tokens, lang='fr'):
+def untokenize(tokens: List[str], lang: str = 'fr') -> str:
     '''
     Inputs a list of tokens output string.
     ["J'", 'ai'] >>> "J' ai"
@@ -98,13 +109,18 @@ def untokenize(tokens, lang='fr'):
     ----------
     lang : string
         language code
+
+    Returns
+    -------
+    string
+        text
     '''
     d = MosesDetokenizer(lang=lang)
     text = d.detokenize(tokens, unescape=False)
     return text
 
 
-def _convert_tokens_to_string(tokens_or_str):
+def convert_tokens_to_string(tokens_or_str):
     if isinstance(tokens_or_str, str):
         return tokens_or_str
     if isinstance(tokens_or_str, list):
@@ -114,7 +130,7 @@ def _convert_tokens_to_string(tokens_or_str):
     raise TypeError('Please input string or tokens')
 
 
-def _convert_string_to_tokens(tokens_or_str, lang_module='en_spacy'):
+def convert_string_to_tokens(tokens_or_str, lang_module='en_spacy'):
     if isinstance(tokens_or_str, str):
         return tokenize(tokens_or_str, lang_module=lang_module)
     if isinstance(tokens_or_str, list):

@@ -51,7 +51,7 @@ TEXT = ['Cola 1.5L Carrefour',
                           (['', ''],
                            []), ],)
 def test_prepare_data(input_text, expected_output):
-    assert prepare_data(input_text), expected_output
+    assert prepare_data(input_text) == expected_output
 
 
 @pytest.mark.parametrize("model_name", ['nmf', 'seanmf'])

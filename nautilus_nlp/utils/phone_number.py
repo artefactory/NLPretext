@@ -15,6 +15,7 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with this program; if not, write to the Free Software Foundation,
 # Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+from typing import Optional
 import phonenumbers as _phonenumbers
 
 SUPPORTED_COUNTRY = [None, 'US', 'AG', 'AI', 'AS', 'BB', 'BM', 'BS', 'CA', 'DM',
@@ -46,32 +47,38 @@ FORMAT_NUMBERS = {
     "RFC3966": _phonenumbers.PhoneNumberFormat.RFC3966
 }
 
-def find_phone_numbers(string, region_code=None):
+def find_phone_numbers(string: str, region_code: Optional[str] = None) -> str:
     """
     Python port of Google's libphonenumber.
     https://github.com/daviddrysdale/python-phonenumbers
 
     Parameters
     ----------
-    region_code
+    region_code : str
         If specified, will find the number of the specified country.
     eg. 06.00.00.00.00 if "FR" is specified.
 
     If not specified, only works for international-formatted phone numbers.
     - ie. phone number with +country code specified
     eg. 06.00.00.00.00 will return an error but +33 6 00 00 00 00 will work.
+    supported value: look SUPPORTED_COUNTRY variable.
 
-    region_code
-        supported value: look SUPPORTED_COUNTRY variable.
+    Returns
+    -------
+    list
+        list of matched phone numbers.
 
+    Raises
+    ------
+    ValueError
+        if country code is not supported.
     """
     if region_code not in SUPPORTED_COUNTRY:
         raise ValueError('Please enter a valid contry code. See SUPPORTED_COUNTRY list.')
-
     return [match.raw_string for match in _phonenumbers.PhoneNumberMatcher(string, region_code)]
 
 
-def extract_phone_numbers(text: str, countrylist: list)->list:
+def extract_phone_numbers(text: str, countrylist: list) -> list:
     '''
     Find phone numbers in a text, returns a list of phone numbers.
 
@@ -80,6 +87,11 @@ def extract_phone_numbers(text: str, countrylist: list)->list:
     countrylist: list (eg. [None,'FR','US','GB'])
         Look for phone numbers formatted according to the specified countlist.
         supported value: look SUPPORTED_COUNTRY variable.
+
+    Returns
+    -------
+    list
+        List of unique phone numbers found.
     '''
     all_phone_numbers = []
     for country in countrylist:
@@ -99,20 +111,24 @@ class PhoneParser:
         self.text = None
         self.parsed_num = None
 
-    def parse_number(self, text: str, region_code=None):
+    def parse_number(self, text: str, region_code: Optional[str] = None) -> str:
         '''
+        Extract phone number from text
+
         Parameters
         ----------
-        region_code
+        region_code : Optional[str] 
             If specified, will find the number of the specified country.
         eg. 06.00.00.00.00 if "FR" is specified.
-
         If not specified, only works for international-formatted phone numbers.
         - ie. phone number with +country code specified
         eg. 06.00.00.00.00 will return an error but +33 6 00 00 00 00 will work.
+        supported value: look SUPPORTED_COUNTRY variable.
 
-        region_code
-            supported value: look SUPPORTED_COUNTRY variable.
+        Returns
+        -------
+        str
+            The parsed number
 
         Raises
         ------
@@ -125,9 +141,18 @@ class PhoneParser:
         return self.parsed_num
 
 
-    def format_number(self, num_format):
+    def format_number(self, num_format: str) -> str:
         '''
-        ['E164','INTERNATIONAL','NATIONAL','RFC3966']
+        Convert a phone number to another standard format. 
+
+        Parameters
+        ----------
+        num_format : str {'E164','INTERNATIONAL','NATIONAL','RFC3966'}
+
+        Returns
+        -------
+        str
+            Number formatted
         '''
         standard_format = FORMAT_NUMBERS.get(num_format)
         if standard_format is None:
