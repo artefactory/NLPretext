@@ -54,7 +54,8 @@ class SocialPreprocessor():
 
         Returns
         -------
-        string
+        list
+            list of mentions
         """
         return constants.AT_PATTERN.findall(self.text)
 
@@ -69,6 +70,7 @@ class SocialPreprocessor():
         Returns
         -------
         string
+            text without HTML tags
         """
         self.text = self.normalize_whitespace(constants.HTML_TAG_PATTERN.sub('', self.text))
         return self.text
@@ -85,10 +87,12 @@ class SocialPreprocessor():
 
         Returns
         -------
-        str
+        string
+            text without emojies
         """
         self.text = constants.EMOJI_PATTERN.sub("", self.text)
         return self.text
+
 
     def convert_emoji_to_text(self, code_delimiters=(':', ':'), input_str=None) -> str:
         """
@@ -99,8 +103,12 @@ class SocialPreprocessor():
         Parameters
         ----------
         text : str
-            code_delimiters : tuple of symbols around the emoji code.
-            eg: (':',':') --> :grinning_face:
+        
+        code_delimiters : tuple
+            Tuple of symbols around the emoji code. eg: (':',':') --> :grinning_face:
+        
+        input_str : str
+            if specified, will remove emoji from this text rather than the class
 
         Returns
         -------
