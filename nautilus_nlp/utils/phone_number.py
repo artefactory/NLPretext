@@ -54,7 +54,7 @@ def find_phone_numbers(string: str, region_code: Optional[str] = None) -> str:
 
     Parameters
     ----------
-    region_code : str
+    region_code : str, optional
         If specified, will find the number of the specified country.
     eg. 06.00.00.00.00 if "FR" is specified.
 
@@ -117,7 +117,7 @@ class PhoneParser:
 
         Parameters
         ----------
-        region_code : Optional[str] 
+        region_code : str, optional
             If specified, will find the number of the specified country.
         eg. 06.00.00.00.00 if "FR" is specified.
         If not specified, only works for international-formatted phone numbers.

@@ -46,7 +46,7 @@ def summarize_text(
         Percentage giving the output text length in reference to the input length.
     language : str
         text language. eg. "english"
-    nb_words : int 
+    nb_words : int, optional
         number of words of the output text or None
 
     Returns

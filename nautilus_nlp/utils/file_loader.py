@@ -68,7 +68,7 @@ def text_loader(filepath: str, encoding: Optional[str] = None, detectencoding: b
     Parameters
     ----------
     filepath : str
-    encoding : str
+    encoding : str, optional
         If the encoding is specified, will use the specified encoding to load the text file.
     detectencoding : bool
         If file is not encoded into UTF-8, try to detect encoding using the chardet library.
@@ -153,7 +153,7 @@ def documents_loader(
     ----------
     filepath : str
         A filepath with wildcard (eg. *.txt), or a list of filepaths.
-    encoding : Optional[str] 
+    encoding : str, optional
         if not specified, will try to detect encoding except if detectencoding is false.
     detectencoding : bool
         if True and if encoding is not specified, will try to detect encoding using chardet.
