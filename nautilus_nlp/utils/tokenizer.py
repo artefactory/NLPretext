@@ -15,7 +15,7 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with this program; if not, write to the Free Software Foundation,
 # Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
-from typing import List
+from typing import List, Union
 import nltk
 from sacremoses import MosesTokenizer, MosesDetokenizer
 import spacy
@@ -120,7 +120,7 @@ def untokenize(tokens: List[str], lang: str = 'fr') -> str:
     return text
 
 
-def convert_tokens_to_string(tokens_or_str):
+def convert_tokens_to_string(tokens_or_str: Union[str, List[str]]) -> str:
     if isinstance(tokens_or_str, str):
         return tokens_or_str
     if isinstance(tokens_or_str, list):
@@ -130,7 +130,8 @@ def convert_tokens_to_string(tokens_or_str):
     raise TypeError('Please input string or tokens')
 
 
-def convert_string_to_tokens(tokens_or_str, lang_module='en_spacy'):
+def convert_string_to_tokens(
+        tokens_or_str: Union[str, List[str]], lang_module: str = 'en_spacy') -> List[str]:
     if isinstance(tokens_or_str, str):
         return tokenize(tokens_or_str, lang_module=lang_module)
     if isinstance(tokens_or_str, list):
