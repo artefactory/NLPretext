@@ -70,10 +70,11 @@ def print_concordance(
     context = width // 4  # approx number of words of context
 
     results = [i for i, j in enumerate(tokens) if j == query_word]
-    if len(results) > 0:
+    nb_results = len(results)
+    if nb_results > 0:
         if n_results is None:
-            n_results = len(results)
-        print('{} matches for "{}":'.format(len(results), query_word))
+            n_results = nb_results
+        print(f'{nb_results} matches for "{query_word}":')
         for i in results[:n_results]:
             # Find the context of query word.
             left_context = tokens[max(0, i - context): i]
@@ -85,4 +86,4 @@ def print_concordance(
             line_print = ' '.join([left_print, query_word, right_print])
             print(line_print)
     else:
-        warnings.warn('No match for "{}"'.format(query_word))
+        warnings.warn(f'No match for "{query_word}"')
