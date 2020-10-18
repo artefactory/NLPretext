@@ -200,7 +200,6 @@ def get_assigned_topics(model):
         list of topics. Having the same length as the training text containing topics assigned \
         to each sentence.
     """
-
     _, mat_h = model.get_decomposition_matrix()
     # The weights of the H matrix are converted into probabilities
     h_probs = mat_h / mat_h.sum(axis=1, keepdims=True)
