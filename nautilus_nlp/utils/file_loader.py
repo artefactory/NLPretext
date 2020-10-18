@@ -23,7 +23,7 @@ import os
 import re
 import shutil
 import warnings
-from typing import Optional, Union
+from typing import Optional, Union, List
 
 import chardet
 
@@ -117,7 +117,7 @@ def list_files_in_subdir(filepath: str) -> list:
     return res
 
 
-def list_files(filepath: str) -> list[str]:
+def list_files(filepath: str) -> List[str]:
     """
     List files within a given filepath. 
 
