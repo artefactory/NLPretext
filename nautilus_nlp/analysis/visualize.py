@@ -34,7 +34,7 @@ def make_word_cloud(text_or_counter: Union[str, list], stop_words: Optional[List
     text_or_counter : Union[str, list]
         The text or the Counter to be ploted as wordcloud. 
         Example of counter: [('cat', 2), ('dog', 1)]
-    stop_words: Optional[List[str]]
+    stop_words: List[str], optional
         List of words to be ignored
     '''    
     if isinstance(text_or_counter, str):
@@ -63,7 +63,7 @@ def print_concordance(
         the word to be searched for in the list of tokens
     width : int
         Number of caracters to be display per text chunk
-    n_results : Optional[int]
+    n_results : int, optional
         If specified, will print only the N results
     '''
     half_width = (width - len(query_word) - 2) // 2

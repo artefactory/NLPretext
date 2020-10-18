@@ -21,13 +21,13 @@ def augment_utterance(
     Parameters
     ----------
     text : string
-    method : string {'wordnet_synonym', 'aug_sub_bert'}
+    method : {'wordnet_synonym', 'aug_sub_bert'}
         augmenter to use ('wordnet_synonym' or 'aug_sub_bert')
     stopwords : list
         list of words to freeze throughout the augmentation
-    intent : string
+    intent : string, optional
         intent associated to text if any
-    entities : list
+    entities : list, optional
         entities associated to text if any, must be in the following format:
         [
             {

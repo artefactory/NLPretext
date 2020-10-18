@@ -266,7 +266,7 @@ class TextPreprocessor():
         ----------
         text : str
             raw text
-        replace_with : Optional[str]
+        replace_with : str, optional
             if None (default), replace symbols with their standard 3-letter abbreviations \
                 (e.g. '$' with 'USD', '£' with 'GBP'); otherwise, pass in a string with \
                     which to replace all symbols (e.g. "*CURRENCY*")
@@ -291,7 +291,7 @@ class TextPreprocessor():
         ----------
         text : str
             raw text
-        marks : Optional[str]
+        marks : str, optional
             If specified, remove only the characters in this string,
             e.g. ``marks=',;:'`` removes commas, semi-colons, and colons.
             Otherwise, all punctuation marks are removed.

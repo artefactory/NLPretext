@@ -55,9 +55,9 @@ def filter_extremes(
     ----------
     dictionary : dict 
         dictionary containing the number of times a word appears in the dataset set
-    no_below : Optional[int]
+    no_below : int, optional
         Keep tokens which are contained in at least `no_below` documents.
-    no_above : Optional[float]
+    no_above : float, optional
         Keep tokens which are contained in no more than `no_above` documents. (fraction\
             of total corpus size, not an absolute number).
 
