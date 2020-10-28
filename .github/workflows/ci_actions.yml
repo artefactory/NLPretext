@@ -3,7 +3,7 @@ name: CI
 on: [push, pull_request]
 
 jobs:
-  - job : CI
+  CI:
     name: Launching CI
     runs-on: ubuntu-latest
 
