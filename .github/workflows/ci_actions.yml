@@ -1,0 +1,24 @@
+name: CI
+
+on:
+  push
+  pull_request
+
+jobs:
+  - job : CI
+    name: Launching CI
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Install requirements
+        run: pip install -r requirements.txt
+
+      - name: Run pylint
+        run: |
+          pip install pylint
+          pylint nautilus_nlp tests
+
+      - name: Run pytest
+        run: |
+          pip install pytest
+          pytest tests
