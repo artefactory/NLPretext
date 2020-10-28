@@ -9,14 +9,17 @@ jobs:
 
     steps:
       - name: Install requirements
+        working-directory: .
         run: pip install -r requirements.txt
 
       - name: Run pylint
+        working-directory: .
         run: |
           pip install pylint
           pylint nautilus_nlp tests
 
       - name: Run pytest
+        working-directory: .
         run: |
           pip install pytest
           pytest tests
