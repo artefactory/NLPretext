@@ -56,7 +56,8 @@ def augment_text(text, method, stopwords=None, entities=None):
                 augmented_text,
                 formatted_entities
             )
-            return clean_sentence_entities(text, augmented_entities)
+            clean_entities = clean_sentence_entities(augmented_text, augmented_entities)
+            return augmented_text, clean_entities
         raise CouldNotAugment('Text was not correctly augmented because entities were altered')
     return augmented_text
 
@@ -87,10 +88,12 @@ def are_entities_in_augmented_text(entities, augmented_text):
     -------
     True if all entities are present in augmented text, False otherwise
     """
+    check = True
     for ent in entities:
         if ent['word'] not in augmented_text:
-            return False
-    return True
+            check = False
+            return check
+    return check
 
 
 def get_augmenter(method, stopwords=None):
