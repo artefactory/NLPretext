@@ -181,7 +181,7 @@ def clean_sentence_entities(text, entities):
 
     Returns
     -------
-    Augmented text and cleaned entities
+    Cleaned entities
     """
     entities_to_clean = [dict(s) for s in set(frozenset(d.items()) for d in entities)]
     for element1, element2 in combinations(entities_to_clean, 2):
