@@ -1,4 +1,3 @@
-import copy
 import logging
 import re
 from itertools import combinations
