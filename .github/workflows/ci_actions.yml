@@ -23,23 +23,27 @@ jobs:
   CI:
     name: Launching CI
     runs-on: ubuntu-latest
-    #env:
-       #working-directory: ...
+    strategy:
+      matrix:
+        python-version: [3.6]
 
     steps:
       - uses: actions/checkout@v2
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v2
+        with:
+          python-version: ${{ matrix.python-version }}
       - name: Install requirements
-        #working-directory: ${{env.working-directory}}
-        run: pip install -r requirements.txt
+        run: 
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
 
       - name: Run pylint
-        #working-directory: ${{env.working-directory}}
         run: |
           pip install pylint
           pylint nautilus_nlp tests
 
       - name: Run pytest
-        #working-directory: ${{env.working-directory}}
         run: |
           pip install pytest
           pytest tests
