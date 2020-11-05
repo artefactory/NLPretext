@@ -1,6 +1,7 @@
 import copy
 import logging
 import re
+from itertools import combinations
 
 import nlpaug.augmenter.word as naw
 
@@ -56,7 +57,7 @@ def augment_text(text, method, stopwords=None, entities=None):
                 formatted_entities
             )
             return clean_sentence_entities(text, augmented_entities)
-        raise CouldNotAugment('Text was not correctly augmented so not added')
+        raise CouldNotAugment('Text was not correctly augmented because entities were altered')
     return augmented_text
 
 
@@ -86,11 +87,10 @@ def are_entities_in_augmented_text(entities, augmented_text):
     -------
     True if all entities are present in augmented text, False otherwise
     """
-    check = True
     for ent in entities:
         if ent['word'] not in augmented_text:
-            check = False
-    return check
+            return False
+    return True
 
 
 def get_augmenter(method, stopwords=None):
@@ -182,18 +182,17 @@ def clean_sentence_entities(text, entities):
     Augmented text and cleaned entities
     """
     entities_to_clean = copy.copy(entities)
-    for element1 in entities_to_clean:
-        for element2 in entities_to_clean:
-            result = check_interval_included(element1, element2)
-            if result is not None:
-                try:
-                    entities_to_clean.remove(result[0])
-                except IndexError:
-                    logging.warning(
-                        "Cant remove entity : {} \n entities are now :{} \n for sentence : {} ".format(
-                            result, entities_to_clean,
-                            text))
-                    continue
+    for element1, element2 in combinations(entities_to_clean, 2):
+        result = check_interval_included(element1, element2)
+        if result is not None:
+            try:
+                entities_to_clean.remove(result[0])
+            except IndexError:
+                logging.warning(
+                    "Cant remove entity : {} \n entities are now :{} \n for sentence : {} ".format(
+                        result, entities_to_clean,
+                        text))
+                continue
     return text, entities_to_clean
 
 
