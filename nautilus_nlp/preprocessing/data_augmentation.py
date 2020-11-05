@@ -184,7 +184,7 @@ def clean_sentence_entities(text, entities):
     -------
     Augmented text and cleaned entities
     """
-    entities_to_clean = copy.copy(entities)
+    entities_to_clean = [dict(s) for s in set(frozenset(d.items()) for d in entities)]
     for element1, element2 in combinations(entities_to_clean, 2):
         result = check_interval_included(element1, element2)
         if result is not None:
@@ -196,7 +196,7 @@ def clean_sentence_entities(text, entities):
                         result, entities_to_clean,
                         text))
                 continue
-    return text, entities_to_clean
+    return entities_to_clean
 
 
 def check_interval_included(element1, element2):
