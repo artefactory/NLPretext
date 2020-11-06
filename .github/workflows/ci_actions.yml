@@ -35,9 +35,16 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
 
-      - name: Install fastText and spacy models
+      - name: Install fastText
         run:
-          wget https://github.com/facebookresearch/fastText/archive/v0.2.0.zip  && unzip v0.2.0.zip && cd fastText-0.2.0 && make && pip install . && cd ..
+          wget https://github.com/facebookresearch/fastText/archive/v0.2.0.zip  
+          unzip v0.2.0.zip
+          cd fastText-0.2.0
+          make
+          pip install .
+
+      - name: Install spacy models
+        run:
           python3 -m spacy download fr
           python3 -m spacy download en
           python3 -m spacy download de
