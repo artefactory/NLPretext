@@ -74,7 +74,7 @@ def test_remove_html_tags(text, expected_result):
                            ["take", "care", "skin"]),
                           (["This", "text", "contains", "only", "long", "words"],
                            2,
-                           ["This", "text", "contains", "only", "long", "words"])])
+                           ["This", "text", "contains", "only", "nimportequoi", "words"])])
 def test_remove_smallwords(tokens_list, smallwords_threshold, expected_result):
     preprocessor = TokenPreprocessor(tokens_list)
     result = preprocessor.remove_smallwords(smallwords_threshold)
