@@ -40,16 +40,6 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
-      - name: Install spacy models
-        run:
-          python3 -m spacy download fr
-          python3 -m spacy download en
-          python3 -m spacy download de
-          python3 -m spacy download nl
-          python3 -m spacy download it
-          python3 -m spacy download xx
-          python3 -m spacy validate
-
       - name: Run pylint
         run: |
           pip install pylint
