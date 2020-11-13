@@ -18,6 +18,7 @@
 import re
 from collections import Counter
 from itertools import product
+from typing import List
 
 import numpy as np
 import pyLDAvis
@@ -25,12 +26,12 @@ from nautilus_nlp.topic_modeling.nmf_model import NMF
 from nautilus_nlp.topic_modeling.seanmf_model import SeaNMF
 
 
-def prepare_data(text: str, vocab_min_count: int = 1, vocab_max_size: int = 10000):
+def prepare_data(docs: List[str], vocab_min_count: int = 1, vocab_max_size: int = 10000):
     """
     Parameters
     ----------
-    text : str
-        list of str on which the topic modeling will be performed
+    docs : list
+        list of sentences on which the topic modeling will be performed
     vocab_min_count : int
         minimum number of occurrences of a word to be considered in the vocabulary
     vocab_max_size : int
@@ -49,7 +50,7 @@ def prepare_data(text: str, vocab_min_count: int = 1, vocab_max_size: int = 1000
 
     # Tokens_list is a list of sub-lists where each sub-list contains a sentences' tokens.
     tokens_list = []
-    for sentence in text:
+    for sentence in docs:
         sentence = re.split(r'\s', sentence)
         tokens_list.append(sentence)
     vocab = dict(Counter(x for xs in tokens_list for x in xs))
@@ -66,7 +67,7 @@ def prepare_data(text: str, vocab_min_count: int = 1, vocab_max_size: int = 1000
 
     # Create ID representation of text (ie: each sentence is a list of vocabId )
     encoded_text_id = []
-    for sentence in text:
+    for sentence in docs:
         sentence = re.split(r'\s', sentence)
         sentence = [int(vocab2id[wd]) for wd in sentence if wd in vocab2id]
         encoded_text_id.append(sentence)
