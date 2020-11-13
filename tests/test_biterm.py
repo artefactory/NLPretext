@@ -63,7 +63,7 @@ def text_input_parameter_error_handling(input_text
                                         , input_nb_topic
                                         , input_nb_iteration
                                         , input_language):
-    with pytest.raises(ValueError):
+    with pytest.raises(TypeError):
         BitermModel(data=input_text, nb_topics=input_nb_topic, nb_iteration=input_nb_iteration, lang=input_language)
 
 
