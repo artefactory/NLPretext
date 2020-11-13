@@ -98,10 +98,13 @@ def text_loader(filepath: str, encoding: Optional[str] = None, detectencoding: b
 
 
 def get_subfolders_path(folder: str) -> list:
+    """
+    Get a list of all the subfolder for a folder path
+    """
     if not folder.endswith("/"):
         folder = folder + "/"
     return [
-        folder + f+'/' for f in os.listdir(folder) 
+        folder + f+'/' for f in os.listdir(folder)
         if os.path.isdir(os.path.join(folder, f)) and f != ".DS_Store"
         ]
 
