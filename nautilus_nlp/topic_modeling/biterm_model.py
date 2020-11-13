@@ -17,7 +17,7 @@
 # Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 from typing import List, Any
 import numpy as np
-import pyLDAvis
+from pyLDAvis import prepare, save_html
 from biterm.btm import oBTM
 from biterm.utility import topic_summuary, vec_to_biterms
 from sklearn.feature_extraction.text import CountVectorizer
@@ -162,9 +162,9 @@ class BitermModel:
         if self._topics is None or self._btm is None or self._vectorize_text is None or self._vocabulary is None:
             raise ValueError("Model needs to be trained first")
 
-        vis = pyLDAvis.prepare(
+        vis = prepare(
             self._btm.phi_wz.T, self._topics,
             np.count_nonzero(self._vectorize_text, axis=1), self._vocabulary,
             np.sum(self._vectorize_text, axis=0)
         )
-        pyLDAvis.save_html(vis, path_to_output)
+        save_html(vis, path_to_output)
