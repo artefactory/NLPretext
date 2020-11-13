@@ -8,6 +8,7 @@ coverage
 python-dotenv>=0.5.1
 pillow
 pytest
+scikit-learn==0.23.2
 
 #library requirements
 pyLDAvis==2.1.2
@@ -42,4 +43,3 @@ biterm==0.1.5
 nlpaug==1.0.1
 ipython==7.16.1
 pylint==2.4.4
-scikit-learn==0.23.2
