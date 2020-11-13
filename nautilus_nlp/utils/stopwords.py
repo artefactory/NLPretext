@@ -22,11 +22,11 @@ from __future__ import (absolute_import, division, print_function,
 
 import json
 import os
-
-from nautilus_nlp.config.config import ROOT_FOLDER
-from nautilus_nlp.utils.file_loader import documents_loader
 from stop_words import LANGUAGE_MAPPING as _LANGUAGE_MAPPING
 from stop_words import get_stop_words as _get_stop_words
+from nautilus_nlp.config.config import ROOT_FOLDER
+from nautilus_nlp.utils.file_loader import documents_loader
+
 
 STOPWORDS_JSON_FILEPATH = os.path.join(ROOT_FOLDER, "data", "stopwords.json")
 

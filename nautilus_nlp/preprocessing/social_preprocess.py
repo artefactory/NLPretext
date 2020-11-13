@@ -103,10 +103,10 @@ class SocialPreprocessor():
         Parameters
         ----------
         text : str
-        
+
         code_delimiters : tuple
             Tuple of symbols around the emoji code. eg: (':',':') --> :grinning_face:
-        
+
         input_str : str
             if specified, will remove emoji from this text rather than the class
 
