@@ -5,8 +5,8 @@ from nautilus_nlp.analysis.keyword_extractor import get_frequent_words, extract_
 @pytest.mark.parametrize(
     "input_tokens, expected, ngrams_number, number_top_words",
     [
-        (['I', 'eat', 'orange', 'oranges', 'at', 'orange'], [('orange', 2)], 1, 1), 
-        (['Un', 'chat', 'rose', 'reste', 'un', 'chat', 'rose'], [('chat rose', 2)], 2, 1), 
+        (['I', 'eat', 'orange', 'oranges', 'at', 'orange'], [('orange', 2)], 1, 1),
+        (['Un', 'chat', 'rose', 'reste', 'un', 'chat', 'rose'], [('chat rose', 2)], 2, 1),
     ]
     )
 def test_get_frequent_words(input_tokens, expected, ngrams_number, number_top_words):
