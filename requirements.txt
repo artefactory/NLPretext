@@ -8,7 +8,6 @@ coverage
 python-dotenv>=0.5.1
 pillow
 pytest
-scikit-learn==0.23.2
 
 #library requirements
 pyLDAvis==2.1.2
@@ -31,7 +30,7 @@ setuptools==40.8.0
 textacy==0.6.3
 #fastText==0.8.3
 gensim==3.7.1
-scikit_learn==0.20.3
+scikit-learn==0.23.2
 vaderSentiment==3.2.1
 google-compute-engine==2.8.13
 flashtext==2.7
