@@ -81,7 +81,7 @@ def create_bow_corpus(data, dictionary):
     Returns
     -------
     list
-        listof list of tuples
+        list of list of tuples
     """
     corpus = [dictionary.doc2bow(text) for text in data]
     return corpus
