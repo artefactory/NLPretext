@@ -144,7 +144,7 @@ class PhoneParser:
 
     def format_number(self, num_format: str) -> str:
         '''
-        Convert a phone number to another standard format. 
+        Convert a phone number to another standard format.
 
         Parameters
         ----------

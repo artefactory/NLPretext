@@ -48,7 +48,7 @@ class SpacyModel:
         return self.model.lang
 
 
-def _get_spacy_tokenizer(lang: str) -> spacy.tokenizer.Tokenizer:
+def _get_spacy_tokenizer(lang: str):
     """
     Function that gets the right tokenizer given the language
 

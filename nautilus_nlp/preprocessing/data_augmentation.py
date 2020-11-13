@@ -13,7 +13,9 @@ class UnavailableAugmenter(ValueError):
     pass
 
 
-def augment_text(text: str, method: str, stopwords: Optional[List[str]]=None, entities: Optional[list]=None) -> Tuple[str, list]:
+def augment_text(
+        text: str, method: str, stopwords: Optional[List[str]] = None, entities: Optional[list] = None
+        ) -> Tuple[str, list]:
     """
     Given a text with or without associated entities, generate a new text by
     modifying some words in the initial one, modifications depend on the chosen

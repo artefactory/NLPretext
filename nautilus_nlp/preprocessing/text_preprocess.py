@@ -205,10 +205,10 @@ class TextPreprocessor():
         self.text = constants.EMAIL_REGEX.sub(replace_with, self.text)
         return self.text
 
-    def replace_phone_numbers(self, 
-            country_format_to_detect: list,
-            replace_with: str = "*PHONE*",
-            method: str = "regex") -> str:
+    def replace_phone_numbers(self,
+                              country_format_to_detect: list,
+                              replace_with: str = "*PHONE*",
+                              method: str = "regex") -> str:
         """
         Replace all phone numbers in ``text`` str with ``replace_with`` str
 
@@ -241,7 +241,7 @@ class TextPreprocessor():
             raise ValueError('Please input a valid method between "regex" or "detection"')
         return self.text
 
-    def replace_numbers(self, replace_with: str="*NUMBER*") -> str:
+    def replace_numbers(self, replace_with: str = "*NUMBER*") -> str:
         """
         Replace all numbers in ``text`` str with ``replace_with`` str.
 
