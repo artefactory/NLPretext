@@ -15,6 +15,7 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with this program; if not, write to the Free Software Foundation,
 # Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+from typing import List, Optional
 import logging
 import os
 
@@ -29,54 +30,60 @@ from IPython.display import HTML
 logging.getLogger("gensim").setLevel(logging.WARNING)
 
 
-def create_dictionary(data):
+def create_dictionary(data: List[List[str]]) -> List[List[tuple]]:
     """
     Create a Dictionary encapsulates the mapping between normalized words and their integer ids.
 
     Parameters
     ----------
-    data : list of list of tokens
+    data : list
+        list of list of tokens
 
     Returns
     -------
-    list of list of tuples
+    list
+        List of list of tuples
     """
     return gensim.corpora.Dictionary(data)
 
-def filter_extremes(dictionary, no_below=15, no_above=0.3, **kwargs):
+def filter_extremes(
+        dictionary: gensim.corpora.Dictionary, no_below: Optional[int]=15, no_above: Optional[float]=0.3, **kwargs) -> gensim.corpora.Dictionary:
     """
     Remove very rare and very common words
 
     Parameters
     ----------
-    dictionary: dictionary containing the number of times a word appears in the dataset set
+    dictionary : dict 
+        dictionary containing the number of times a word appears in the dataset set
     no_below : int, optional
-    Keep tokens which are contained in at least `no_below` documents.
+        Keep tokens which are contained in at least `no_below` documents.
     no_above : float, optional
-    Keep tokens which are contained in no more than `no_above` documents
-    (fraction of total corpus size, not an absolute number).
+        Keep tokens which are contained in no more than `no_above` documents. (fraction\
+            of total corpus size, not an absolute number).
 
-    (Add to docstring) + other func
+    Returns
+    -------
+    gensim.corpora.Dictionary
     """
     return dictionary.filter_extremes(no_below=no_below, no_above=no_above, **kwargs)
 
 
 def create_bow_corpus(data, dictionary):
-
     """
     Create the corpus: one of the two main inputs to the LDA topic model with the dictionary (id2word)
     The produced corpus is a mapping of (token_id, token_count).
 
     Parameters
     ----------
-    data : list of list of tokens
+    data : list 
+        list of list of tokens
 
     Returns
     -------
-    list of list of tuples
+    list
+        list of list of tuples
     """
-    texts = data
-    corpus = [dictionary.doc2bow(text) for text in texts]
+    corpus = [dictionary.doc2bow(text) for text in data]
     return corpus
 
 ### Find Number of topics
@@ -89,15 +96,22 @@ def compute_coherence_values(dictionary, bow_corpus, texts, limit=25, start=2, s
 
     Parameters:
     ----------
-    dictionary : Gensim dictionary
+    dictionary : gensim.corpora.Dictionary
+        Gensim dictionary
     bow_corpus : Gensim bow corpus
-    texts : List of input texts
-    limit : Max num of topics
+    texts : list 
+        List of input texts
+    limit : int
+        Max number of topics
+    start : int
+    step : int
 
     Returns:
     -------
-    model_list : List of LDA topic models
-    coherence_values : Coherence values corresponding to the LDA model with respective number of topics
+    model_list : list
+        List of LDA topic models
+    coherence_values :
+        Coherence values corresponding to the LDA model with respective number of topics
     """
     coherence_values = []
     model_list = []
@@ -123,12 +137,15 @@ def plot_optimal_topic_number(coherence_values, start=2, limit=25, step=4):
 
     Parameters:
     ----------
-    coherence_values : list of coherence scores for various number of topics
-    start : int. Min num of topics
-    limit : int. Max num of topics
+    coherence_values : list
+        list of coherence scores for various number of topics
+    start : int
+        Min num of topics
+    limit : int
+        Max num of topics
     step: int
 
-    Output:
+    Returns
     -------
     Lineplot
     """
@@ -150,21 +167,29 @@ def print_coherence_scores(coherence_values, start=2, limit=25, step=4):
 
 ### LdaModel: Gensim & Mallet
 
-def train_lda_model(bow_corpus, dictionary, num_topics, model='gensim', mallet_path=None, **kwargs):
+def train_lda_model(bow_corpus, dictionary: gensim.corpora.Dictionary, num_topics, model='gensim', mallet_path=None, **kwargs):
     """ Train the lda model on the corpus
 
     Parameters
     ----------
-    bow_corpus : iterable of list of tokens. Stream of document vectors or sparse matrix of shape \
+    bow_corpus : list
+        iterable of list of tokens. Stream of document vectors or sparse matrix of shape \
     (num_terms, num_documents).
-    dictionary: corpora.Dictionary. Mapping from word IDs to words
+    dictionary: gensim.corpora.Dictionary
+        Mapping from word IDs to words
     num_topics: int
-    model : str. Precise the topic modeling model wanted, must be "gensim" or "mallet"
-    mallet_path: str, optionnal if model='gensim', required if model='mallet'. Path to the mallet-2.0.8 file
+    model : str
+        Precise the topic modeling model wanted, must be "gensim" or "mallet"
+    mallet_path: Optional[str]
+        If model='gensim', required if model='mallet'. Path to the mallet-2.0.8 file
 
     Returns
     -------
     gensim.ldamodel
+
+    Raises
+    ------
+    ValueError
     """
     if model == 'gensim':
         model = train_lda_gensim(bow_corpus, dictionary, num_topics, **kwargs)
@@ -200,7 +225,7 @@ def save_model(model, model_name):
     Parameters
     ----------
     model: ldamodel
-    model_name: str.
+    model_name: str
         Name the model that will be saved
     """
     return model.save(os.path.join(model_name))
@@ -220,13 +245,6 @@ def load_model(model_path, model_name, model='gensim', model_prefix='composant')
         Precise the topic modeling model wanted, must be "gensim" or "mallet"
     model_prefix : str
         By default, 'composant' default prefix used while saving the mallet model with train_lda_model function.
-
-    Returns
-    -------
-    is_reliable :
-        is the top language is much better than 2nd best language?
-    language:
-        2-letter code for the language of the text
     """
     if model == 'gensim':
         ldamodel = gensim.models.LdaModel.load(os.path.join(model_path, model_name))
@@ -253,14 +271,19 @@ def visualize_topics(model, bow_corpus, dictionary, model_type=None):
 
     Parameters
     ----------
-    model: LDA model: gensim or mallet
-    bow_corpus : iterable of list of tokens.
-    dictionary: corpora.Dictionary. Dictionary encapsulates the mapping between normalized words and their integer ids.
-    model : str. Precise the topic modeling model used, must be "gensim" or "mallet"
+    model: 
+        LDA model: gensim or mallet
+    bow_corpus : list
+        iterable of list of tokens.
+    dictionary: corpora.Dictionary
+        Dictionary encapsulates the mapping between normalized words and their integer ids.
+    model : str
+        Precise the topic modeling model used, must be "gensim" or "mallet"
 
-    Returns:
-    ----------
-    3D interactive chart
+    Returns
+    -------
+    pyLDAvis
+        3D interactive chart
     """
     if model_type == 'mallet':
         model_vis = gensim.models.wrappers.ldamallet.malletmodel2ldamodel(model)
@@ -304,11 +327,14 @@ def show_dominant_topic(model, bow_corpus, topic_number=1, topn=5):
 
     Parameters
     ----------
-    gensim.ldamodel
-    model: ldamodel
-    bow_corpus: iterable of list of tokens.
-    topic_number: int. Pick the number of topics displayed
-    topn: int. Number of topics' top keyword displayed
+    model
+        gensim.ldamodel
+    bow_corpus : list
+        iterable of list of tokens.
+    topic_number: int
+        Pick the number of topics displayed
+    topn : int 
+        Number of topics' top keyword displayed
 
     """
     i = 0
