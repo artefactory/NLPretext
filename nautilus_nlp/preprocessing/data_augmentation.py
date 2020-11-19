@@ -1,6 +1,7 @@
 import logging
 import re
 from itertools import combinations
+from typing import List, Optional, Tuple
 
 import nlpaug.augmenter.word as naw
 
@@ -11,7 +12,10 @@ class CouldNotAugment(ValueError):
 class UnavailableAugmenter(ValueError):
     pass
 
-def augment_text(text, method, stopwords=None, entities=None):
+
+def augment_text(
+        text: str, method: str, stopwords: Optional[List[str]] = None, entities: Optional[list] = None
+        ) -> Tuple[str, list]:
     """
     Given a text with or without associated entities, generate a new text by
     modifying some words in the initial one, modifications depend on the chosen
@@ -22,11 +26,11 @@ def augment_text(text, method, stopwords=None, entities=None):
     Parameters
     ----------
     text : string
-    method : string
+    method : {'wordnet_synonym', 'aug_sub_bert'}
         augmenter to use ('wordnet_synonym' or 'aug_sub_bert')
-    stopwords : list
+    stopwords : list, optional
         list of words to freeze throughout the augmentation
-    entities : list
+    entities : list, optional
         entities associated to text if any, must be in the following format:
         [
             {
@@ -61,7 +65,7 @@ def augment_text(text, method, stopwords=None, entities=None):
     return augmented_text
 
 
-def are_entities_in_augmented_text(entities, augmented_text):
+def are_entities_in_augmented_text(entities: list, augmented_text: str) -> bool:
     """
     Given a list of entities, check if all the words associated to each entity
     are still present in augmented text.
@@ -95,7 +99,7 @@ def are_entities_in_augmented_text(entities, augmented_text):
     return check
 
 
-def get_augmenter(method, stopwords=None):
+def get_augmenter(method: str, stopwords: List[str] = None) -> naw.SynonymAug:
     """
     Initialize an augmenter depending on the given method.
 
@@ -117,7 +121,7 @@ def get_augmenter(method, stopwords=None):
         of the following: wordnet_synonym or aug_sub_bert')
 
 
-def get_augmented_entities(sentence_augmented, entities):
+def get_augmented_entities(sentence_augmented: str, entities: list) -> list:
     """
     Get entities with updated positions (start and end) in augmented text
 
@@ -157,7 +161,7 @@ def get_augmented_entities(sentence_augmented, entities):
     return entities_augmented
 
 
-def clean_sentence_entities(text, entities):
+def clean_sentence_entities(text: str, entities: list) -> list:
     """
     Paired entities check to remove nested entities, the longest entity is kept
 
@@ -198,7 +202,7 @@ def clean_sentence_entities(text, entities):
     return entities_to_clean
 
 
-def check_interval_included(element1, element2):
+def check_interval_included(element1: dict, element2: dict) -> Optional[Tuple[dict, dict]]:
     """
     Comparison of two entities on start and end positions to find if they are nested
 

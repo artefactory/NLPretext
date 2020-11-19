@@ -15,29 +15,36 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with this program; if not, write to the Free Software Foundation,
 # Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+from typing import Union, List, Tuple, Dict
 from collections import Counter
 
 from flashtext import KeywordProcessor
 from nautilus_nlp.analysis.ngrams import create_ngrams
 
 
-def extract_keywords(text, keyword, case_sensitive=True):
+def extract_keywords(
+        text: str, keyword: Union[str, List[str], Dict[str, List[str]]], case_sensitive: bool = True
+    ) -> List[str]:
     """
-    Extract Keywords from a document.
+    Extract Keywords from a document, using FlashText
 
     Parameters
     ----------
     text : str
-        Text to extract keywords from
-    keyword :
-        Single keyword (str) or list of keywords (list)
-    case_sensitive :
+        Text to extract keywords from. 
+    keyword : Union[str, list[str], dict[str, list[str]]]
+        Single keyword (str), list of keywords (list), or keyword dict.
+        Example of keyword dict: keyword_dict = {
+                    "java": ["java_2e", "java programing"],
+                    "product management": ["PM", "product manager"]
+                }
+    case_sensitive : bool
         If False, will be case insensitive.
 
     Returns
     -------
     list
-        Return list of extracted keyworkds
+        Return list of extracted keywords
     """
 
     processor = KeywordProcessor(case_sensitive=case_sensitive)
@@ -51,28 +58,31 @@ def extract_keywords(text, keyword, case_sensitive=True):
     return processor.extract_keywords(text)
 
 
-def frequent_words(list_words, ngrams_number=1, number_top_words=10):
+def get_frequent_words(
+        tokens: List[str], ngrams_number: int = 1, number_top_words: int = 10) -> List[Tuple[str, int]]:
     """
-    Create n-grams for list of tokens
+    Create n-grams for a list of tokens
 
     Parameters
     ----------
+    tokens : list
+        list of tokens
     ngrams_number : int
     number_top_words : int
-        output dataframe length
+        number of top keywords to return
 
     Returns
     -------
-    DataFrame
-        Dataframe with the entities and their frequencies.
+    list[tuple[str, int]]
+        Returns a list of the top n words ().
     """
     frequent = []
     if ngrams_number == 1:
         pass
     elif ngrams_number >= 2:
-        list_words = create_ngrams(list_words, ngrams_number)
+        tokens = create_ngrams(tokens, ngrams_number)
     else:
         raise ValueError("number of n-grams should be >= 1")
-    counter = Counter(list_words)
+    counter = Counter(tokens)
     frequent = counter.most_common(number_top_words)
     return frequent

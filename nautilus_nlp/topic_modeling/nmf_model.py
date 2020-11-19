@@ -29,17 +29,28 @@ class NMF:
             self, mat_a, mat_iw, mat_ih, n_topic=10,
             max_iter=100, max_err=1e-3, rand_init=True):
         """
-        The objective of the NMF model is to approximate the term-document matrix A by two lower-rank matrices W and H.
-        The process is iterative and we denote IW and IH the the matrix W and H that are updated at each step.
+        The objective of the NMF model is to approximate the term-document matrix A by two \
+            lower-rank matrices W and H.
+        The process is iterative and we denote IW and IH the the matrix W and H that are \
+            updated at each step.
 
-        :param mat_a: The term-document matrix
-        :param mat_iw: topics Matrix, each column vector W(:,k) represents the k-th topic in terms of M keywords
+        Parameters
+        ----------
+        mat_a
+            The term-document matrix
+        mat_iw
+            topics Matrix, each column vector W(:,k) represents the k-th topic in terms of M keywords
         and its elements are the weights of the corresponding keywords.
-        :param mat_ih: The row vector H(j,:) is the latent representation for document j in terms of K topics
-        :param n_topic: Number of selected topics
-        :param max_iter: Maximum number of iterations to update W and H
-        :param max_err: maximum error under which we consider that the loop converged
-        :param rand_init: random init boolean
+        mat_ih
+            The row vector H(j,:) is the latent representation for document j in terms of K topics
+        n_topic
+            Number of selected topics
+        max_iter
+            Maximum number of iterations to update W and H
+        max_err
+            maximum error under which we consider that the loop converged
+        rand_init : bool
+            random init boolean
         """
         self.mat_a = mat_a
         self.mat_iw = mat_iw
@@ -58,7 +69,11 @@ class NMF:
     def nmf_mat_init(self, rand_init):
         """
         Init Matrices W and H initially either randomly or using existing IW, IH matrices taken when iterating.
-        :param rand_init: Boolean indicating initial random init
+
+        Parameters
+        ----------
+        rand_init : Boolean
+            Indicating initial random init
         """
         if rand_init:
             self.mat_w = np.random.random((self.n_row, self.n_topic))

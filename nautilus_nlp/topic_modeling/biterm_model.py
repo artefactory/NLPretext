@@ -15,8 +15,9 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with this program; if not, write to the Free Software Foundation,
 # Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+from typing import List, Any
 import numpy as np
-import pyLDAvis
+from pyLDAvis import prepare, save_html
 from biterm.btm import oBTM
 from biterm.utility import topic_summuary, vec_to_biterms
 from sklearn.feature_extraction.text import CountVectorizer
@@ -26,7 +27,7 @@ class BitermModel:
 
     # pylint: disable=too-many-instance-attributes
 
-    def __init__(self, data, nb_topics, nb_iteration, lang):
+    def __init__(self, data: List[str], nb_topics: int, nb_iteration: int, lang: str):
         """
         Model for topic modelling. Particularly useful for short texts.
 
@@ -60,58 +61,59 @@ class BitermModel:
         self._vocabulary = None
 
     @staticmethod
-    def is_int_positive(number):
+    def is_int_positive(number: Any):
         """
         Function to check if the input parameter is a integer and positive
         otherwise raise an error
 
         Parameters
         ----------
-        number : str
+        number : Any
 
-        Returns
-        -------
-        str:
-            the text with removed multiple spaces and strip text
-
+        Raises
+        ------
+        ValueError
+            If the input is not a positive integer
         """
         if not isinstance(number, int):
-            raise ValueError("Parameter {} has to be an integer".format(number))
+            raise ValueError(f"Parameter {number} has to be an integer")
         if number < 1:
-            raise ValueError("Parameter {} has to be positive".format(number))
+            raise ValueError(f"Parameter {number} has to be positive")
 
     @staticmethod
-    def is_list_of_string(data):
+    def is_list_of_string(data: Any):
         """
         Function to check if the input parameter is a list of strings otherwise raise an error
 
         Parameters
         ----------
-        data
+        data: Any
 
-        Returns
-        -------
+        Raises
+        ------
+        ValueError
+            if data is not a list of string, or if is emply
         """
         if not isinstance(data, list):
-            raise ValueError("{} has to be a list".format(data))
+            raise ValueError(f"{data} has to be a list")
         if len(data) == 0:
-            raise ValueError("{} is empty".format(data))
+            raise ValueError(f"{data} is empty")
         for document in data:
             if not isinstance(document, str):
-                raise ValueError("All elements of {} have to be a string, problem with {}".format(data, document))
+                raise ValueError(f"All elements of {data} have to be a string, problem with {document}")
 
-    def compute_topics(self, nb_word_per_cluster):
+    def compute_topics(self, nb_word_per_cluster: int) -> dict:
         """
         Main function computing the topic modeling, topics
 
         Parameters
         ----------
-        nb_word_per_cluster : positive integer
+        nb_word_per_cluster : int
 
         Returns
         -------
-        dict :
-            a dictionary containing the the different topics with the top words
+        dict
+            A dictionary containing the the different topics with the top words
             and coherence associated
         """
         vec = CountVectorizer(stop_words=self.lang)
@@ -129,25 +131,26 @@ class BitermModel:
 
         return results
 
-    def get_document_topic(self, index):
+    def get_document_topic(self, index: int) -> int:
         """
         Get the cluster associated to the specified document
 
         Parameters
         ----------
-        index : positive integer
-            the document index
+        index : int
+            The document index
 
         Returns
         -------
-        the cluster index
+        int
+            the cluster index
         """
         if self._topics is None:
             raise ValueError("Model needs to be trained first")
 
         return self._topics[index].argmax()
 
-    def save_pyldavis_plot_as_html(self, path_to_output='./biterm_pyLDAavis_plot.html'):
+    def save_pyldavis_plot_as_html(self, path_to_output: str = './biterm_pyLDAavis_plot.html'):
         """
         Function saving the pyLDAvis plot associated with the compute_topics function
 
@@ -155,16 +158,13 @@ class BitermModel:
         ----------
         path_to_output : str
             path to save the plut, must be a html file
-
-        Returns
-        -------
         """
         if self._topics is None or self._btm is None or self._vectorize_text is None or self._vocabulary is None:
             raise ValueError("Model needs to be trained first")
 
-        vis = pyLDAvis.prepare(
+        vis = prepare(
             self._btm.phi_wz.T, self._topics,
             np.count_nonzero(self._vectorize_text, axis=1), self._vocabulary,
             np.sum(self._vectorize_text, axis=0)
         )
-        pyLDAvis.save_html(vis, path_to_output)
+        save_html(vis, path_to_output)

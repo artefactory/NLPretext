@@ -33,19 +33,34 @@ class SeaNMF:
         Seanmf is a topic modeling algorithm, paper:  http://dmkd.cs.vt.edu/papers/WWW18.pdf.
         It finds an approximation to the term-document matrix A by two lower-rank matrices W and H,
         at each iteration a context matrix Wc are computed and used to update W.
-        :param mat_a: document term matrix
-        :param mat_s: Word-context (semantic) correlation matrix
-        :param mat_iw: topics Matrix, each column vector W(:,k) represents the k-th topic in terms of M keywords
+
+        Parameters
+        ----------
+        mat_a
+            document term matrix
+        mat_s
+            Word-context (semantic) correlation matrix
+        mat_iw
+            topics Matrix, each column vector W(:,k) represents the k-th topic in terms of M keywords
         and its elements are the weights of the corresponding keywords.
-        :param mat_iwc: Latent factor matrix of contexts.
-        :param mat_ih: The row vector H(j,:) is the latent representation for document j in terms of K topics
-        :param alpha: Seanmf algorithm parameter
-        :param beta: Seanmf algorithm parameter
-        :param n_topic: Number of selected topics
-        :param max_iter: Maximum number of iterations to update W and H
-        :param max_err: maximum error under which we consider that the loop converged
-        :param rand_init: random init boolean
-        :param fix_seed: int number to fix random seed.
+        mat_iwc
+            Latent factor matrix of contexts.
+        mat_ih
+            The row vector H(j,:) is the latent representation for document j in terms of K topics
+        alpha
+            Seanmf algorithm parameter
+        beta
+            Seanmf algorithm parameter
+        n_topic
+            Number of selected topics
+        max_iter
+            Maximum number of iterations to update W and H
+        max_err
+            maximum error under which we consider that the loop converged
+        rand_init
+            random init boolean
+        fix_seed
+            int number to fix random seed.
         """
         if fix_seed:
             np.random.seed(0)
@@ -68,7 +83,11 @@ class SeaNMF:
     def snmf_mat_init(self, rand_init, mat_iw, mat_iwc, mat_ih):
         """
         Init Matrices W,Wc and H initially either randomly or using existing IW,IWc IH matrices taken when iterating.
-        :param rand_init: Boolean indicating initial random init
+        
+        Parameters
+        ----------
+        rand_init : bool
+            Boolean indicating initial random init
         """
         if rand_init:
             self.mat_w = np.random.random((self.n_row, self.n_topic))
