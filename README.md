@@ -45,9 +45,9 @@ then you can install it via pip:
 pip install -e .
 ```
 
-# Quick start
+This library uses Spacy as tokenizer. Current models supported are `en_core_web_sm` and `fr_core_news_sm`.
 
-The [notebook](notebooks/) folder contains various notebook on how to use this library.
+# Quick start
 
 Here is a quick example:
 
