@@ -47,3 +47,4 @@ def extract_keywords(text, keyword, case_sensitive=True):
         processor.add_keywords_from_dict(keyword)
 
     return processor.extract_keywords(text)
+    
