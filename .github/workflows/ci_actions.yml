@@ -48,4 +48,5 @@ jobs:
       - name: Run pytest
         run: |
           pip install pytest
-          pytest tests
+          pip install pytest-cov
+          pytest --cov=nautilus_nlp tests

@@ -8,6 +8,7 @@ coverage
 python-dotenv>=0.5.1
 pillow
 pytest
+pytest-cov
 
 #library requirements
 pyLDAvis==2.1.2
