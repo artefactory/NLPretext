@@ -15,16 +15,36 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with this program; if not, write to the Free Software Foundation,
 # Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
-language: python
 
-os:
-  - linux
-services:
-  - docker
-install:
-  - pip install -r requirements.txt
-  - pip install -e .
-script:
-  - pylint nautilus_nlp/
-  - pylint tests/
-  - pytest tests/*
+from flashtext import KeywordProcessor
+
+
+def extract_keywords(text, keyword, case_sensitive=True):
+    """
+    Extract Keywords from a document.
+
+    Parameters
+    ----------
+    text : str
+        Text to extract keywords from
+    keyword :
+        Single keyword (str) or list of keywords (list)
+    case_sensitive :
+        If False, will be case insensitive.
+
+    Returns
+    -------
+    list
+        Return list of extracted keyworkds
+    """
+
+    processor = KeywordProcessor(case_sensitive=case_sensitive)
+    if isinstance(keyword, list):
+        processor.add_keywords_from_list(keyword)
+    elif isinstance(keyword, str):
+        processor.add_keyword(keyword)
+    elif isinstance(keyword, dict):
+        processor.add_keywords_from_dict(keyword)
+
+    return processor.extract_keywords(text)
+    
