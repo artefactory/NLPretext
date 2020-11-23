@@ -7,8 +7,8 @@ sphinx_rtd_theme
 coverage
 python-dotenv>=0.5.1
 pillow
-pytest
-pytest-cov
+pytest==6.1.1
+pytest-cov==2.10.1
 
 #library requirements
 pyLDAvis==2.1.2
