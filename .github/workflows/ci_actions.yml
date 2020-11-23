@@ -42,11 +42,8 @@ jobs:
 
       - name: Run pylint
         run: |
-          pip install pylint
           pylint nautilus_nlp tests
 
       - name: Run pytest
         run: |
-          pip install pytest
-          pip install pytest-cov
           pytest --cov=nautilus_nlp tests
