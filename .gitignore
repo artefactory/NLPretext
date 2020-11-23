@@ -89,12 +89,6 @@ venv/
 # Mypy cache
 .mypy_cache/
 
-# Fasttext Word_vector
-*.bin
-*.vec
-*.gz
-*.ftz
-!/nautilus_nlp/data/lang_identification.ftz
 
 # PyTest cache
 .pytest_cache/
