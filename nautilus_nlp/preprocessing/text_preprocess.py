@@ -22,7 +22,7 @@ from __future__ import (absolute_import, division, print_function,
 
 import re
 import unicodedata
-
+from typing import Optional
 from ftfy import fix_text as _fix_text
 from nautilus_nlp.utils import constants
 from nautilus_nlp.utils.phone_number import \
@@ -38,7 +38,7 @@ class TextPreprocessor():
         else:
             raise ValueError("Input must be a string")
 
-    def clean_text(self, lang='en') -> str:
+    def clean_text(self, lang: str = 'en') -> str:
         #TODO : check how to pipe operations
         stopwords = get_stopwords(lang)
         self.text = self.fix_bad_unicode(normalization="NFC")
@@ -71,7 +71,8 @@ class TextPreprocessor():
 
         Parameters
         ----------
-        stopwords : list of stopwords to remove
+        stopwords : list
+            list of stopwords to remove
 
         Returns
         -------
@@ -96,13 +97,14 @@ class TextPreprocessor():
         ----------
         text : string
 
-        normalization ({'NFC', 'NFKC', 'NFD', 'NFKD'}):
+        normalization : string {'NFC', 'NFKC', 'NFD', 'NFKD'}
             if 'NFC', combines characters and diacritics written using separate code points,
             e.g. converting "e" plus an acute accent modifier into "é"; unicode
             can be converted to NFC form without any change in its meaning!
             if 'NFKC', additional normalizations are applied that can change
             the meanings of characters, e.g. ellipsis characters will be replaced
             with three periods
+
         Returns
         -------
         string
@@ -186,7 +188,7 @@ class TextPreprocessor():
         )
         return self.text
 
-    def replace_emails(self, replace_with="*EMAIL*") -> str:
+    def replace_emails(self, replace_with: str = "*EMAIL*") -> str:
         """
         Replace all emails in ``text`` str with ``replace_with`` str
 
@@ -203,7 +205,8 @@ class TextPreprocessor():
         self.text = constants.EMAIL_REGEX.sub(replace_with, self.text)
         return self.text
 
-    def replace_phone_numbers(self, country_format_to_detect: list,
+    def replace_phone_numbers(self,
+                              country_format_to_detect: list,
                               replace_with: str = "*PHONE*",
                               method: str = "regex") -> str:
         """
@@ -214,12 +217,13 @@ class TextPreprocessor():
         text : string
         replace_with : string
             the string you want the phone number to be replaced with.
-        method : ['regex','detection']
+        method : string {'regex','detection'}
             regex is faster but will omit a lot of numbers, while detection will
             catch every numbers, but takes a while.
         country_format_to_detect : list
             If a list of country code is specified, will catch every number formatted.
             Only when method = 'detection'.
+
         Returns
         -------
         string
@@ -237,7 +241,7 @@ class TextPreprocessor():
             raise ValueError('Please input a valid method between "regex" or "detection"')
         return self.text
 
-    def replace_numbers(self, replace_with="*NUMBER*") -> str:
+    def replace_numbers(self, replace_with: str = "*NUMBER*") -> str:
         """
         Replace all numbers in ``text`` str with ``replace_with`` str.
 
@@ -254,7 +258,7 @@ class TextPreprocessor():
         self.text = constants.NUMBERS_REGEX.sub(replace_with, self.text)
         return self.text
 
-    def replace_currency_symbols(self, replace_with=None) -> str:
+    def replace_currency_symbols(self, replace_with: Optional[str] = None) -> str:
         """
         Replace all currency symbols in ``text`` str with string specified by ``replace_with`` str.
 
@@ -262,11 +266,10 @@ class TextPreprocessor():
         ----------
         text : str
             raw text
-        replace_with : None or string
-            if None (default), replace symbols with
-                their standard 3-letter abbreviations (e.g. '$' with 'USD', '£' with 'GBP');
-                otherwise, pass in a string with which to replace all symbols
-                (e.g. "*CURRENCY*")
+        replace_with : str, optional
+            if None (default), replace symbols with their standard 3-letter abbreviations \
+                (e.g. '$' with 'USD', '£' with 'GBP'); otherwise, pass in a string with \
+                    which to replace all symbols (e.g. "*CURRENCY*")
 
         Returns
         -------
@@ -279,7 +282,7 @@ class TextPreprocessor():
             self.text = constants.CURRENCY_REGEX.sub(replace_with, self.text)
         return self.text
 
-    def remove_punct(self, marks=None) -> str:
+    def remove_punct(self, marks: Optional[str] = None) -> str:
         """
         Remove punctuation from ``text`` by replacing all instances of ``marks``
         with whitespace.
@@ -288,8 +291,7 @@ class TextPreprocessor():
         ----------
         text : str
             raw text
-
-        marks : str or None
+        marks : str, optional
             If specified, remove only the characters in this string,
             e.g. ``marks=',;:'`` removes commas, semi-colons, and colons.
             Otherwise, all punctuation marks are removed.
@@ -320,7 +322,7 @@ class TextPreprocessor():
         text : str
             raw text
 
-        method : ({'unicode', 'ascii'})
+        method : str ({'unicode', 'ascii'})
             if 'unicode', remove accented
             char for any unicode symbol with a direct ASCII equivalent; if 'ascii',
             remove accented char for any unicode symbol
@@ -379,7 +381,7 @@ class TextPreprocessor():
 
         Parameters
         ----------
-        text : string
+        text : str
 
         Returns
         -------

@@ -36,7 +36,8 @@ class TokenPreprocessor():
 
         Parameters
         ----------
-        stopwords : list of stopwords to remove
+        stopwords : list
+            List of stopwords to remove
 
         Returns
         -------
