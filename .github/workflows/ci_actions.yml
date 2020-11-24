@@ -17,7 +17,6 @@
 # Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 name: CI
 
-<<<<<<< HEAD:.github/workflows/ci_actions.yml
 on: [push, pull_request]
 
 jobs:
@@ -48,16 +47,3 @@ jobs:
       - name: Run pytest
         run: |
           pytest --cov=nautilus_nlp tests
-=======
-os:
-  - linux
-services:
-  - docker
-install:
-  - pip install -r requirements.txt
-  - pip install -e .
-script:
-  - pylint nautilus_nlp/
-  - pylint tests/
-  - pytest tests/*
->>>>>>> dev:.travis.yml
