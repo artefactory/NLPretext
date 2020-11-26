@@ -3,13 +3,15 @@ Insert new lib name here
 
 **Insert new logo here**
 
-Working on an NLP project and tired of always looking for the same silly preprocessing functions on the web? :tired_face:
+:tired_face: Working on an NLP project and tired of always looking for the same silly preprocessing functions on the web? 
 
-:disappointed_relieved: Need to efficiently extract mail adresses in a document? Hashtags in tweets? Remove accents from a French tweet? 
+:disappointed_relieved: Need to efficiently extract email adresses from a document? Hashtags from tweets? Remove accents from a French post? 
 
 **Insert new lib name here** got you covered! :rocket:
 
-**Insert new lib name here** packages in a unique library all the text preprocessing functions you need to ease your NLP project. :mag: Quickly explore below our referential.
+**Insert new lib name here** packages in a unique library all the text preprocessing functions you need to ease your NLP project. 
+
+:mag: Quickly explore below our functions referential.
 
 * [Replacing emails](#replace_emails)
 * [Replacing phone numbers](#replace_phone_numbers)
@@ -90,9 +92,8 @@ You can generate the doc with
 You can now open the file index.html located in the build folder.
 
 # Project Organization
-
-**à updater**
 ------------
+**à updater**
 
     ├── LICENSE
     ├── Makefile           <- Makefile with commands like `make data` or `make train`
