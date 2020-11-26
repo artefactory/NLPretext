@@ -149,10 +149,10 @@ def get_augmented_entities(sentence_augmented: str, entities: list) -> list:
     """
     entities_augmented = []
     for entity in entities:
-        regex = r'(?:^|\W)' + re.escape(entity[0].strip()) + r'(?:$|\W)'
-        if (re.search(re.compile(regex), sentence_augmented)):
-            start_index = re.search(regex, sentence_augmented).start()+1
-            end_index = re.search(regex, sentence_augmented).end()-1
+        search = re.search(entity[0].strip(), sentence_augmented)
+        if search:
+            start_index = search.start()
+            end_index = search.end()
             new_entity = {
                 'entity': entity[1],
                 'word': sentence_augmented[start_index: end_index],
