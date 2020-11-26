@@ -1,81 +1,85 @@
-Nautilus_NLP [![Build Status](https://travis-ci.com/artefactory/nautilus-nlp.svg?token=Ssg4shz5pz9qGnYCybSj&branch=master)](https://travis-ci.com/artefactory/nautilus-nlp)
+Insert new lib name here
 ==============================
-![Nautilus-NLP](/references/nautilus_nlp_logo.png)
 
-The Nautilus NLP library aimed to be a meta-library to be used to help you get started on handling your NLP use-case.
+**Insert new logo here**
 
-This library can help you with:
+Working on an NLP project and tired of always looking for the same silly preprocessing functions on the web? :tired_face:
 
-    1. Cleaning text data
-    2. Normalizing your dataset
-    3. Training automatically multiclass, multilabel classifier
-    4. Help you discover topics and cluster your data
+:disappointed_relieved: Need to efficiently extract mail adresses in a document? Hashtags in tweets? Remove accents from a French tweet? 
 
-You can find a list of the available features [in this article.](https://artefactory.atlassian.net/wiki/spaces/CK/pages/822837299/Nautilus+NLP+-+key+features)
+**Insert new lib name here** got you covered! :rocket:
 
-# Feature Request
+**Insert new lib name here** packages in a unique library all the text preprocessing functions you need to ease your NLP project. :mag: Quickly explore below our referential.
 
-As an Artefact user, you might be working on a NLP use case, and wish to use Nautilus.
+* [Replacing emails](#replace_emails)
+* [Replacing phone numbers](#replace_phone_numbers)
+* [Removing hashtags](#remove_hashtags)
+* [Extracting emojis](#extract_emojis)
 
-However, if you think Nautilus is lacking features that can be useful not only to your use case but also others, feel free to to [fill up an issue](https://github.com/artefactory/nautilus-nlp/issues) with the label "Feature-request".
 
-We will try to put it in the roadmap and implement it as soon as possible.
+Cannot find a new one? Feel free to open an [issue]((https://github.com/artefactory/nautilus-nlp/issues) )).
+
+
 
 # Installation
 
-Beware, this package has been tested on Python **3.6** & **3.7**, and will probably not be working under python **2.7** as **Python2.7** EOL is scheduled for December 2019. 
+This package has been tested on Python **3.7**.
 
 To install this library you should first clone the repository:
 
-```
+```bash
 git clone git@github.com:artefactory/nautilus-nlp.git && cd nautilus_nlp/
 ```
 
-**If you don't use the docker container, we strongly advise you to do these steps in a virtual environnement**
+We strongly advise you to do the remaining steps in a virtual environnement.
 
-First you need to install the required files:
+First install the required files:
 
-```
+```bash
 pip install -r requirements.txt
 ```
 
-then you can install it via pip:
+then install the library with pip:
 
-```
+```bash
 pip install -e .
 ```
 
 This library uses Spacy as tokenizer. Current models supported are `en_core_web_sm` and `fr_core_news_sm`.
 
-# Quick start
 
-Here is a quick example:
+# Functions
 
-```
->>> from nautilus_nlp.preprocessing.preprocess import preprocess_text
->>> from nautilus_nlp.preprocessing.tokenizer import tokenize
->>> from nautilus_nlp.preprocessing.lemmatization import lemmatize_english_tokens
-[nltk_data] Downloading package wordnet to /Users/hugo/nltk_data...
-[nltk_data]   Package wordnet is already up-to-date!
->>> text = """Tropical Storm Nicole was a short-lived and unusually asymmetric tropical cyclone that caused extensive flooding in Jamaica during the 2010 Atlantic hurricane season.\nSource:https://en.wikipedia.org/wiki/Tropical_Storm_Nicole_(2010)"""
->>> clean_text = preprocess_text(text, lowercase=True,
-...                                         no_punct=True,
-...                                         no_numbers=True,
-...                                         no_stopwords='en',
-...                                         no_urls=True,
-...                                         replace_with='')
->>> clean_text
-'tropical storm nicole short lived unusually asymmetric tropical cyclone caused extensive flooding jamaica atlantic hurricane season source'
->>> tokenized_text = tokenize(clean_text)
->>> tokenized_text
-['tropical', 'storm', 'nicole', 'short', 'lived', 'unusually', 'asymmetric', 'tropical', 'cyclone', 'caused', 'extensive', 'flooding', 'jamaica', 'atlantic', 'hurricane', 'season', 'source']
->>> lemma_text = lemmatize_english_tokens(tokenized_text)
->>> lemma_text
-['tropical', 'storm', 'nicole', 'short', 'live', 'unusually', 'asymmetric', 'tropical', 'cyclone', 'cause', 'extensive', 'flooding', 'jamaica', 'atlantic', 'hurricane', 'season', 'source']
+## Replacing emails <a name="replace_emails"></a>
+
+```python
+example = "I have forwarded this email to obama@whitehouse.gov"
+example = replace_emails(replace_with="*EMAIL*")
+print(example)
+# "I have forwarded this email to *EMAIL*"
 ```
 
+## Replacing phone numbers <a name="replace_phone_numbers"></a>
+
+```python
+Insert example here
+```
+
+## Removing Hashtags <a name="remove_hashtags"></a>
+
+```python
+Insert example here
+```
+
+## Extracting emojis <a name="extract_emojis"></a>
+
+```python
+Insert example here
+```
 
 # Make HTML documentation
+
+**à updater**
 
 In order to make the html Sphinx documentation, you need to run at the nautilus_nlp root path:
 `sphinx-apidoc -f nautilus_nlp -o docs/`
@@ -84,7 +88,10 @@ You can generate the doc with
 `cd docs && make html`
 
 You can now open the file index.html located in the build folder.
+
 # Project Organization
+
+**à updater**
 ------------
 
     ├── LICENSE
