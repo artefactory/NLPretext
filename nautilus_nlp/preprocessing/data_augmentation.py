@@ -51,18 +51,22 @@ def augment_text(
     augmenter = get_augmenter(method, stopwords)
     augmented_text = augmenter.augment(text)
     if entities is not None:
-        formatted_entities = [(
-            text[entities[i]['startCharIndex']:entities[i]['endCharIndex']].strip(),
-            entities[i]['entity']) for i in range(len(entities))]
-        if are_entities_in_augmented_text(entities, augmented_text):
-            augmented_entities = get_augmented_entities(
-                augmented_text,
-                formatted_entities
-            )
-            clean_entities = clean_sentence_entities(augmented_text, augmented_entities)
-            return augmented_text, clean_entities
-        raise CouldNotAugment('Text was not correctly augmented because entities were altered')
+        return process_entities_and_text(entities, text, augmented_text)
     return augmented_text
+
+
+def process_entities_and_text(entities, text, augmented_text):
+    formatted_entities = [(
+        text[entities[i]['startCharIndex']:entities[i]['endCharIndex']].strip(),
+        entities[i]['entity']) for i in range(len(entities))]
+    if are_entities_in_augmented_text(entities, augmented_text):
+        augmented_entities = get_augmented_entities(
+            augmented_text,
+            formatted_entities
+        )
+        clean_entities = clean_sentence_entities(augmented_text, augmented_entities)
+        return augmented_text, clean_entities
+    raise CouldNotAugment('Text was not correctly augmented because entities were altered')
 
 
 def are_entities_in_augmented_text(entities: list, augmented_text: str) -> bool:
