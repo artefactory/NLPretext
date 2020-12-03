@@ -15,16 +15,35 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with this program; if not, write to the Free Software Foundation,
 # Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
-language: python
+name: CI
 
-os:
-  - linux
-services:
-  - docker
-install:
-  - pip install -r requirements.txt
-  - pip install -e .
-script:
-  - pylint nautilus_nlp/
-  - pylint tests/
-  - pytest tests/*
+on: [push, pull_request]
+
+jobs:
+  CI:
+    name: Launching CI
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: [3.6]
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v2
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Install requirements
+        run:
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Run pylint
+        run: |
+          pylint nautilus_nlp tests
+
+      - name: Run pytest
+        run: |
+          pytest --cov=nautilus_nlp tests
