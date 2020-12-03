@@ -145,9 +145,7 @@ def get_augmenter(method: str, stopwords: List[str] = None) -> naw.SynonymAug:
     if method == 'wordnet_synonym':
         return naw.SynonymAug(aug_src='wordnet', stopwords=stopwords)
     if method == 'aug_sub_bert':
-        return naw.ContextualWordEmbsAug(model_path='bert-base-uncased',
-                                             action="substitute",
-                                             stopwords=stopwords)
+        return naw.ContextualWordEmbsAug(model_path='bert-base-uncased', action="substitute", stopwords=stopwords)
     raise UnavailableAugmenter('The given augmenter is not supported. You must choose one \
         of the following: wordnet_synonym or aug_sub_bert')
 
