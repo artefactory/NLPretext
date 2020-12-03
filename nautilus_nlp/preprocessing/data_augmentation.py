@@ -2,7 +2,6 @@ import logging
 import re
 from itertools import combinations
 from typing import List, Optional, Tuple
-
 import nlpaug.augmenter.word as naw
 
 
@@ -51,18 +50,48 @@ def augment_text(
     augmenter = get_augmenter(method, stopwords)
     augmented_text = augmenter.augment(text)
     if entities is not None:
-        formatted_entities = [(
-            text[entities[i]['startCharIndex']:entities[i]['endCharIndex']].strip(),
-            entities[i]['entity']) for i in range(len(entities))]
-        if are_entities_in_augmented_text(entities, augmented_text):
-            augmented_entities = get_augmented_entities(
-                augmented_text,
-                formatted_entities
-            )
-            clean_entities = clean_sentence_entities(augmented_text, augmented_entities)
-            return augmented_text, clean_entities
-        raise CouldNotAugment('Text was not correctly augmented because entities were altered')
+        return process_entities_and_text(entities, text, augmented_text)
     return augmented_text
+
+
+def process_entities_and_text(entities: list, text: str, augmented_text: str):
+    """
+    Given a list of initial entities, verify that they have not been altered by
+    the data augmentation operation and are still in the augmented text.
+    Parameters
+    ----------
+    entities: list
+        entities associated to text, must be in the following format:
+        [
+            {
+                'entity': str,
+                'word': str,
+                'startCharIndex': int,
+                'endCharIndex': int
+            },
+            {
+                ...
+            }
+        ]
+    text: str
+        initial text
+    augmented_text: str
+        new text resulting of data augmentation operation
+    Returns
+    -------
+    Augmented text and entities with their updated position in augmented text
+    """
+    formatted_entities = [(
+        text[entities[i]['startCharIndex']:entities[i]['endCharIndex']].strip(),
+        entities[i]['entity']) for i in range(len(entities))]
+    if are_entities_in_augmented_text(entities, augmented_text):
+        augmented_entities = get_augmented_entities(
+            augmented_text,
+            formatted_entities
+        )
+        clean_entities = clean_sentence_entities(augmented_text, augmented_entities)
+        return augmented_text, clean_entities
+    raise CouldNotAugment('Text was not correctly augmented because entities were altered')
 
 
 def are_entities_in_augmented_text(entities: list, augmented_text: str) -> bool:
@@ -149,10 +178,10 @@ def get_augmented_entities(sentence_augmented: str, entities: list) -> list:
     """
     entities_augmented = []
     for entity in entities:
-        regex = r'(?:^|\W)' + re.escape(entity[0].strip()) + r'(?:$|\W)'
-        if (re.search(re.compile(regex), sentence_augmented)):
-            start_index = re.search(regex, sentence_augmented).start()+1
-            end_index = re.search(regex, sentence_augmented).end()-1
+        search = re.search(entity[0].strip(), sentence_augmented)
+        if search:
+            start_index = search.start()
+            end_index = search.end()
             new_entity = {
                 'entity': entity[1],
                 'word': sentence_augmented[start_index: end_index],
