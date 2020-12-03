@@ -55,7 +55,33 @@ def augment_text(
     return augmented_text
 
 
-def process_entities_and_text(entities, text, augmented_text):
+def process_entities_and_text(entities: list, text: str, augmented_text: str):
+    """
+    Given a list of initial entities, verify that they have not been altered by
+    the data augmentation operation and are still in the augmented text.
+    Parameters
+    ----------
+    entities: list
+        entities associated to text, must be in the following format:
+        [
+            {
+                'entity': str,
+                'word': str,
+                'startCharIndex': int,
+                'endCharIndex': int
+            },
+            {
+                ...
+            }
+        ]
+    text: str
+        initial text
+    augmented_text: str
+        new text resulting of data augmentation operation
+    Returns
+    -------
+    Augmented text and entities with their updated position in augmented text
+    """
     formatted_entities = [(
         text[entities[i]['startCharIndex']:entities[i]['endCharIndex']].strip(),
         entities[i]['entity']) for i in range(len(entities))]
