@@ -4,8 +4,9 @@
 # external requirements
 coverage
 pillow
+pytest==6.1.1
+pytest-cov==2.10.1
 python-dotenv>=0.5.1
-pytest
 Sphinx
 sphinx_rtd_theme
 
