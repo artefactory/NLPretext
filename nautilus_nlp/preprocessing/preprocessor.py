@@ -7,7 +7,7 @@ from nautilus_nlp.preprocessing import social_preprocess
 from nautilus_nlp.preprocessing import text_preprocess
 
 
-class Preprocessor(object):
+class Preprocessor():
     def __init__(
             self, social_pipelines=None, text_pipelines=None):
         """
