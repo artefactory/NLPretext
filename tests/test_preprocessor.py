@@ -296,7 +296,7 @@ def test_replace_phone_numbers(input_str, expected_str):
         input_str,
         replace_with="*PHONE*",
         method="detection",
-        country_format_to_detect=phone.SUPPORTED_COUNTRY)
+        country_to_detect=phone.SUPPORTED_COUNTRY)
     np.testing.assert_equal(result, expected_str)
 
 
