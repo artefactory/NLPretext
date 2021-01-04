@@ -10,6 +10,14 @@ class Preprocessor():
     def __init__(
             self, social_functions=None, text_functions=None):
         """
+        Initialize preprocessor object to apply all text transformation
+
+        Parameters
+        ----------
+        social_functions : iterable|None
+            list of functions of social preprocessing
+        text_functions : iterable|None
+            list of functions of text preprocessing
         """
         if social_functions is None:
             social_functions = (remove_html_tags, remove_mentions, remove_emoji, remove_hashtag)
@@ -20,6 +28,18 @@ class Preprocessor():
 
     @staticmethod
     def build_pipeline(function_list):
+        """
+        Build sklearn pipeline from a function list
+
+        Parameters
+        ----------
+        function_list : iterable
+            list of functions of preprocessing
+
+        Returns
+        -------
+        sklearn.pipeline.Pipeline
+        """
         return Pipeline(
             steps=[
                 (function.__name__, FunctionTransformer(function))
@@ -28,9 +48,35 @@ class Preprocessor():
 
     @staticmethod
     def apply_pipeline(text, pipeline):
+        """
+        Apply preprocessing pipeline to a text
+
+        Parameters
+        ----------
+        text : string
+            text to preprocess
+        pipeline : sklearn.pipeline.Pipeline
+            pipeline to transform the text
+
+        Returns
+        -------
+        string
+        """
         return pipeline.fit_transform(text)
 
     def apply_all_pipeline(self, text):
+        """
+        Apply social and text pipeline to text
+
+        Parameters
+        ----------
+        text : string
+            text to preprocess
+
+        Returns
+        -------
+        string
+        """
         text = self.apply_pipeline(text, self.social_pipeline)
         text = self.apply_pipeline(text, self.text_pipeline)
         return text
