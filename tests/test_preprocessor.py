@@ -29,6 +29,8 @@ from nautilus_nlp.preprocessing.social_preprocess import (remove_mentions, extra
 from nautilus_nlp.preprocessing.token_preprocess import (remove_stopwords, remove_tokens_with_nonletters,
                                                          remove_special_caracters_from_tokenslist,
                                                          remove_smallwords)
+from nautilus_nlp.preprocessing.preprocessor import Preprocessor
+
 import nautilus_nlp.utils.phone_number as phone
 from nautilus_nlp.utils.stopwords import get_stopwords
 
@@ -385,3 +387,42 @@ def test_remove_emoji(input_str, expected_str):
 def test_convert_emoji_to_text(input_str, expected_str):
     result = convert_emoji_to_text(input_str)
     np.testing.assert_equal(result, expected_str)
+
+
+@pytest.mark.parametrize(
+    "social_functions, text_functions",
+    [
+        (None, None),
+        (None, [remove_punct]),
+        ([remove_emoji], None),
+        ([remove_emoji], [remove_punct])
+
+    ]
+)
+def test_init_preprocessor(social_functions, text_functions):
+    assert Preprocessor(
+        social_functions=social_functions,
+        text_functions=text_functions)
+
+
+def test_apply_preprocessor():
+    # Given
+    text = "Some text with @mentions and whitespaces    and #hashtags"
+    social_functions = (remove_mentions, remove_hashtag)
+    text_functions = (normalize_whitespace,)
+
+    preprocessor = Preprocessor(
+        social_functions=social_functions,
+        text_functions=text_functions)
+
+    expected_result = text
+    for function in social_functions:
+        expected_result = function(expected_result)
+    for function in text_functions:
+        expected_result = function(expected_result)
+
+    # When
+    result = preprocessor.apply_all_pipeline(text)
+
+    # Then
+    assert expected_result ==  result
