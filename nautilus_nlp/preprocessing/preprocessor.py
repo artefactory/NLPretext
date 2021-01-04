@@ -1,35 +1,36 @@
-from inspect import getmembers, isfunction
-
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import FunctionTransformer
 
-from nautilus_nlp.preprocessing import social_preprocess
-from nautilus_nlp.preprocessing import text_preprocess
+from nautilus_nlp.preprocessing.social_preprocess import (remove_html_tags, remove_mentions, remove_emoji,
+                                                          remove_hashtag)
+from nautilus_nlp.preprocessing.text_preprocess import normalize_whitespace, remove_eol_characters, fix_bad_unicode
 
 
 class Preprocessor():
     def __init__(
-            self, social_pipelines=None, text_pipelines=None):
+            self, social_functions=None, text_functions=None):
         """
         """
-        if social_pipelines is None:
-            self.social_pipelines = Pipeline(
-                steps=[(function_name, FunctionTransformer(function_callable))
-                       for function_name, function_callable in getmembers(social_preprocess)
-                       if isfunction(function_callable)])
-        if text_pipelines is None:
-            self.text_pipelines = Pipeline(
-                steps=[(function_name, FunctionTransformer(function_callable))
-                       for function_name, function_callable in getmembers(text_preprocess)
-                       if isfunction(function_callable)])
+        if social_functions is None:
+            social_functions = (remove_html_tags, remove_mentions, remove_emoji, remove_hashtag)
+        if text_functions is None:
+            text_functions = (remove_eol_characters, fix_bad_unicode, normalize_whitespace)
+        self.social_pipeline = self.build_pipeline(social_functions)
+        self.text_pipeline = self.build_pipeline(text_functions)
 
-    def apply_social_pipeline(self, text):
-        return self.social_pipelines.fit_transform(text)
+    @staticmethod
+    def build_pipeline(function_list):
+        return Pipeline(
+            steps=[
+                (function.__name__, FunctionTransformer(function))
+                for function in function_list])
 
-    def apply_text_pipeline(self, text):
-        return self.text_pipelines.fit_transform(text)
+
+    @staticmethod
+    def apply_pipeline(text, pipeline):
+        return pipeline.fit_transform(text)
 
     def apply_all_pipeline(self, text):
-        text = self.apply_social_pipeline(text)
-        text = self.apply_text_pipeline(text)
+        text = self.apply_pipeline(text, self.social_pipeline)
+        text = self.apply_pipeline(text, self.text_pipeline)
         return text
