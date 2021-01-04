@@ -38,7 +38,6 @@ jobs:
       - name: Install requirements
         run:
           pip install -r requirements.txt
-          echo "requirements installed"
 
       - name: Run pylint
         run: |
