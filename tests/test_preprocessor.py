@@ -425,4 +425,4 @@ def test_apply_preprocessor():
     result = preprocessor.apply_all_pipeline(text)
 
     # Then
-    assert expected_result ==  result
+    assert expected_result == result
