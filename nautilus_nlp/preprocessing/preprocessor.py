@@ -1,3 +1,5 @@
+from typing import List, Callable, Optional
+
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import FunctionTransformer
 
@@ -8,7 +10,9 @@ from nautilus_nlp.preprocessing.text_preprocess import normalize_whitespace, rem
 
 class Preprocessor():
     def __init__(
-            self, social_functions=None, text_functions=None):
+            self,
+            social_functions: Optional[Callable] = None,
+            text_functions: Optional[Callable] = None):
         """
         Initialize preprocessor object to apply all text transformation
 
@@ -27,7 +31,7 @@ class Preprocessor():
         self.text_pipeline = self.build_pipeline(text_functions)
 
     @staticmethod
-    def build_pipeline(function_list):
+    def build_pipeline(function_list: List[Callable]) -> Pipeline:
         """
         Build sklearn pipeline from a function list
 
@@ -47,7 +51,7 @@ class Preprocessor():
 
 
     @staticmethod
-    def apply_pipeline(text, pipeline):
+    def apply_pipeline(text: str, pipeline: Pipeline) -> str:
         """
         Apply preprocessing pipeline to a text
 
@@ -64,7 +68,7 @@ class Preprocessor():
         """
         return pipeline.fit_transform(text)
 
-    def apply_all_pipeline(self, text):
+    def apply_all_pipeline(self, text: str) -> str:
         """
         Apply social and text pipeline to text
 
