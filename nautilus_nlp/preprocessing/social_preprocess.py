@@ -90,7 +90,7 @@ def remove_emoji(text) -> str:
     return text
 
 
-def convert_emoji_to_text(text, code_delimiters=(':', ':'), input_str=None) -> str:
+def convert_emoji_to_text(text, code_delimiters=(':', ':')) -> str:
     """
     Convert emoji to their CLDR Short Name, according to the unicode convention
     http://www.unicode.org/emoji/charts/full-emoji-list.html
@@ -99,16 +99,14 @@ def convert_emoji_to_text(text, code_delimiters=(':', ':'), input_str=None) -> s
     Parameters
     ----------
     text : str
-        code_delimiters : tuple of symbols around the emoji code.
-        eg: (':',':') --> :grinning_face:
+    code_delimiters : tuple of symbols around the emoji code.
+    eg: (':',':') --> :grinning_face:
 
     Returns
     -------
     str
         string
     """
-    if input_str is not None:
-        return _emoji.demojize(input_str, delimiters=code_delimiters)
     return _emoji.demojize(text, delimiters=code_delimiters)
 
 
@@ -127,7 +125,7 @@ def extract_emojis(text) -> list:
         list of all emojis converted with their unicode conventions
     """
     emojis_in_text = constants.EMOJI_PATTERN.findall(text)
-    emojis_converted = [convert_emoji_to_text(text, input_str=emoji_text) for emoji_text in emojis_in_text]
+    emojis_converted = [convert_emoji_to_text(emoji_text) for emoji_text in emojis_in_text]
     return emojis_converted
 
 
