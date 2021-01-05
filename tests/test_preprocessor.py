@@ -407,9 +407,7 @@ def test_apply_preprocessor():
     text = "Some text with @mentions and whitespaces    and #hashtags"
     function_list = (remove_mentions, remove_hashtag, normalize_whitespace)
 
-    preprocessor = Preprocessor(
-        functions=function_list
-            )
+    preprocessor = Preprocessor(functions=function_list)
 
     expected_result = text
     for function in function_list:
