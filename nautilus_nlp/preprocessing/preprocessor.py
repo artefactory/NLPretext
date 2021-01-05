@@ -11,24 +11,21 @@ from nautilus_nlp.preprocessing.text_preprocess import normalize_whitespace, rem
 class Preprocessor():
     def __init__(
             self,
-            social_functions: Optional[Callable] = None,
-            text_functions: Optional[Callable] = None):
+            functions: Optional[Callable] = None):
         """
         Initialize preprocessor object to apply all text transformation
 
         Parameters
         ----------
-        social_functions : iterable|None
-            list of functions of social preprocessing
-        text_functions : iterable|None
-            list of functions of text preprocessing
+        functions : iterable|None
+            list of functions of preprocessing
         """
-        if social_functions is None:
-            social_functions = (remove_html_tags, remove_mentions, remove_emoji, remove_hashtag)
-        if text_functions is None:
-            text_functions = (remove_eol_characters, fix_bad_unicode, normalize_whitespace)
-        self.social_pipeline = self.build_pipeline(social_functions)
-        self.text_pipeline = self.build_pipeline(text_functions)
+        if functions is None:
+            functions = (remove_html_tags, remove_mentions, remove_emoji, remove_hashtag,
+                         remove_eol_characters, fix_bad_unicode, normalize_whitespace)
+        if len(functions) == 0:
+            raise ValueError("Cannot initialize a preprocessor with 0 function")
+        self.pipeline = self.build_pipeline(functions)
 
     @staticmethod
     def build_pipeline(function_list: List[Callable]) -> Pipeline:
@@ -50,27 +47,9 @@ class Preprocessor():
                 for function in function_list])
 
 
-    @staticmethod
-    def apply_pipeline(text: str, pipeline: Pipeline) -> str:
+    def apply_pipeline(self, text: str) -> str:
         """
-        Apply preprocessing pipeline to a text
-
-        Parameters
-        ----------
-        text : string
-            text to preprocess
-        pipeline : sklearn.pipeline.Pipeline
-            pipeline to transform the text
-
-        Returns
-        -------
-        string
-        """
-        return pipeline.fit_transform(text)
-
-    def apply_all_pipeline(self, text: str) -> str:
-        """
-        Apply social and text pipeline to text
+        Apply pipeline to text
 
         Parameters
         ----------
@@ -81,6 +60,5 @@ class Preprocessor():
         -------
         string
         """
-        text = self.apply_pipeline(text, self.social_pipeline)
-        text = self.apply_pipeline(text, self.text_pipeline)
+        text = self.pipeline.fit_transform(text)
         return text
