@@ -390,39 +390,33 @@ def test_convert_emoji_to_text(input_str, expected_str):
 
 
 @pytest.mark.parametrize(
-    "social_functions, text_functions",
+    "functions",
     [
-        (None, None),
-        (None, [remove_punct]),
-        ([remove_emoji], None),
-        ([remove_emoji], [remove_punct])
+        (None),
+        ([remove_punct, remove_emoji])
 
     ]
 )
-def test_init_preprocessor(social_functions, text_functions):
+def test_init_preprocessor(functions):
     assert Preprocessor(
-        social_functions=social_functions,
-        text_functions=text_functions)
+        functions=functions)
 
 
 def test_apply_preprocessor():
     # Given
     text = "Some text with @mentions and whitespaces    and #hashtags"
-    social_functions = (remove_mentions, remove_hashtag)
-    text_functions = (normalize_whitespace,)
+    function_list = (remove_mentions, remove_hashtag, normalize_whitespace)
 
     preprocessor = Preprocessor(
-        social_functions=social_functions,
-        text_functions=text_functions)
+        functions=function_list
+            )
 
     expected_result = text
-    for function in social_functions:
-        expected_result = function(expected_result)
-    for function in text_functions:
+    for function in function_list:
         expected_result = function(expected_result)
 
     # When
-    result = preprocessor.apply_all_pipeline(text)
+    result = preprocessor.apply_pipeline(text)
 
     # Then
     assert expected_result == result
