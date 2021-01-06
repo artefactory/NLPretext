@@ -17,9 +17,20 @@
 # Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 import pytest
 import numpy as np
-from nautilus_nlp.preprocessing.text_preprocess import TextPreprocessor
-from nautilus_nlp.preprocessing.social_preprocess import SocialPreprocessor
-from nautilus_nlp.preprocessing.token_preprocess import TokenPreprocessor
+from nautilus_nlp.preprocessing.text_preprocess import (normalize_whitespace, remove_eol_characters,
+                                                        fix_bad_unicode, unpack_english_contractions,
+                                                        replace_urls, replace_emails, replace_phone_numbers,
+                                                        replace_numbers, replace_currency_symbols, remove_punct,
+                                                        remove_accents, remove_multiple_spaces_and_strip_text,
+                                                        filter_non_latin_characters)
+from nautilus_nlp.preprocessing.social_preprocess import (remove_mentions, extract_mentions, remove_html_tags,
+                                                          remove_emoji, convert_emoji_to_text, extract_emojis,
+                                                          extract_hashtags, remove_hashtag)
+from nautilus_nlp.preprocessing.token_preprocess import (remove_stopwords, remove_tokens_with_nonletters,
+                                                         remove_special_caracters_from_tokenslist,
+                                                         remove_smallwords)
+from nautilus_nlp.preprocessing.preprocessor import Preprocessor
+
 import nautilus_nlp.utils.phone_number as phone
 from nautilus_nlp.utils.stopwords import get_stopwords
 
@@ -30,8 +41,7 @@ from nautilus_nlp.utils.stopwords import get_stopwords
                           ("This is a text without emojis",
                            [])])
 def test_extract_emojis(text, expected_result):
-    preprocessor = SocialPreprocessor(text)
-    result = preprocessor.extract_emojis()
+    result = extract_emojis(text)
     assert expected_result == result
 
 
@@ -41,8 +51,7 @@ def test_extract_emojis(text, expected_result):
                           ("This is a text without mentions",
                            "This is a text without mentions")])
 def test_remove_mentions(text, expected_result):
-    preprocessor = SocialPreprocessor(text)
-    result = preprocessor.remove_mentions()
+    result = remove_mentions(text)
     assert expected_result == result
 
 
@@ -52,8 +61,7 @@ def test_remove_mentions(text, expected_result):
                           ("This is a text without mentions",
                            [])])
 def test_extract_mentions(text, expected_result):
-    preprocessor = SocialPreprocessor(text)
-    result = preprocessor.extract_mentions()
+    result = extract_mentions(text)
     assert expected_result == result
 
 
@@ -63,8 +71,7 @@ def test_extract_mentions(text, expected_result):
                           ("This is a text without html tags",
                            "This is a text without html tags")])
 def test_remove_html_tags(text, expected_result):
-    preprocessor = SocialPreprocessor(text)
-    result = preprocessor.remove_html_tags()
+    result = remove_html_tags(text)
     assert expected_result == result
 
 
@@ -76,8 +83,7 @@ def test_remove_html_tags(text, expected_result):
                            2,
                            ["This", "text", "contains", "only", "long", "words"])])
 def test_remove_smallwords(tokens_list, smallwords_threshold, expected_result):
-    preprocessor = TokenPreprocessor(tokens_list)
-    result = preprocessor.remove_smallwords(smallwords_threshold)
+    result = remove_smallwords(tokens_list, smallwords_threshold)
     assert expected_result == result
 
 
@@ -94,8 +100,7 @@ def test_remove_smallwords(tokens_list, smallwords_threshold, expected_result):
                            ["#many", "#hashtags"])]
                          )
 def test_extract_hashtags(text, expected_result):
-    preprocessor = SocialPreprocessor(text)
-    result = preprocessor.extract_hashtags()
+    result = extract_hashtags(text)
     assert expected_result == result
 
 
@@ -112,8 +117,7 @@ def test_extract_hashtags(text, expected_result):
                            "this is a text with")]
                          )
 def test_remove_hashtag(text, expected_result):
-    preprocessor = SocialPreprocessor(text)
-    result = preprocessor.remove_hashtag()
+    result = remove_hashtag(text)
     assert expected_result == result
 
 
@@ -121,8 +125,7 @@ def test_remove_hashtag(text, expected_result):
                          [("كلمات Learn 3 Arabic كلمات words EASILY- Vocabulary #1 تعلم ٣ جديدة",
                            "Learn 3 Arabic words EASILY Vocabulary 1")])
 def test_filter_non_latin_characters(text, expected_filtered_text):
-    preprocessor = TextPreprocessor(text)
-    result = preprocessor.filter_non_latin_characters()
+    result = filter_non_latin_characters(text)
     assert expected_filtered_text == result
 
 
@@ -137,8 +140,7 @@ def test_filter_non_latin_characters(text, expected_filtered_text):
     ],
 )
 def test_remove_multiple_spaces_and_strip_text(input_str, expected_str):
-    preprocessor = TextPreprocessor(input_str)
-    result = preprocessor.remove_multiple_spaces_and_strip_text()
+    result = remove_multiple_spaces_and_strip_text(input_str)
     np.testing.assert_string_equal(result, expected_str)
 
 
@@ -151,24 +153,21 @@ def test_remove_multiple_spaces_and_strip_text(input_str, expected_str):
     ],
 )
 def test_remove_eol_characters(input_str, expected_str):
-    preprocessor = TextPreprocessor(input_str)
-    result = preprocessor.remove_eol_characters()
+    result = remove_eol_characters(input_str)
     np.testing.assert_string_equal(result, expected_str)
 
 
 def test_remove_tokens_with_nonletters():
     input_tokens = ['foo', 'bar', '124', '34euros']
     expected_output = ['foo', 'bar']
-    preprocessor = TokenPreprocessor(input_tokens)
-    result = preprocessor.remove_tokens_with_nonletters()
+    result = remove_tokens_with_nonletters(input_tokens)
     np.testing.assert_array_equal(result, expected_output)
 
 
 def test_remove_special_caracters_from_tokenslist():
     input_tokens = ['foo', 'bar', '---', "'s", '#']
     expected_output = ['foo', 'bar', "'s"]
-    preprocessor = TokenPreprocessor(input_tokens)
-    result = preprocessor.remove_special_caracters_from_tokenslist()
+    result = remove_special_caracters_from_tokenslist(input_tokens)
     np.testing.assert_array_equal(result, expected_output)
 
 
@@ -187,29 +186,14 @@ def test_get_stopwords():
 )
 def test_remove_stopwords_tokens(input_tokens, expected_output):
     stopwords = get_stopwords('en')
-    preprocessor = TokenPreprocessor(input_tokens)
-    result = preprocessor.remove_stopwords(stopwords)
-    np.testing.assert_array_equal(result, expected_output)
-
-
-@pytest.mark.parametrize(
-    "input_str, expected_output",
-    [
-        ('I like when you move your body !', 'I move body !'),
-    ],
-)
-def test_remove_stopwords_text(input_str, expected_output):
-    stopwords = get_stopwords('en')
-    preprocessor = TextPreprocessor(input_str)
-    result = preprocessor.remove_stopwords(stopwords)
+    result = remove_stopwords(input_tokens, stopwords)
     np.testing.assert_array_equal(result, expected_output)
 
 
 def test_remove_accents():
     input_str = "éèëêàù"
     expected_str = "eeeeau"
-    preprocessor = TextPreprocessor(input_str)
-    result = preprocessor.remove_accents()
+    result = remove_accents(input_str)
     np.testing.assert_string_equal(result, expected_str)
 
 
@@ -231,8 +215,7 @@ def test_remove_accents():
      ('18 mois de trop....ca suffit macron', '18 mois de trop....ca suffit macron'),
      ('EgalitÃ© devant les infractions routiÃ¨res', 'Egalité devant les infractions routières')],)
 def test_fix_bad_unicode(input_str, expected_str):
-    preprocessor = TextPreprocessor(input_str)
-    result = preprocessor.fix_bad_unicode()
+    result = fix_bad_unicode(input_str)
     np.testing.assert_string_equal(result, expected_str)
 
 
@@ -244,8 +227,7 @@ def test_fix_bad_unicode(input_str, expected_str):
     ],
 )
 def test_normalize_whitespace(input_str, expected_str):
-    preprocessor = TextPreprocessor(input_str)
-    result = preprocessor.normalize_whitespace()
+    result = normalize_whitespace(input_str)
     np.testing.assert_equal(result, expected_str)
 
 
@@ -261,8 +243,7 @@ def test_normalize_whitespace(input_str, expected_str):
     ]
 )
 def test_unpack_english_contractions(input_str, expected_str):
-    preprocessor = TextPreprocessor(input_str)
-    result = preprocessor.unpack_english_contractions()
+    result = unpack_english_contractions(input_str)
     np.testing.assert_equal(result, expected_str)
 
 
@@ -278,8 +259,7 @@ def test_unpack_english_contractions(input_str, expected_str):
      ("Ishttps://waaaou.com/ available?", 'Is*URL* available?'),
      ("mailto:hugo.vasselin@artefact.com", '*URL*')])
 def test_replace_urls(input_str, expected_str):
-    preprocessor = TextPreprocessor(input_str)
-    result = preprocessor.replace_urls()
+    result = replace_urls(input_str)
     np.testing.assert_equal(result, expected_str)
 
 
@@ -293,8 +273,7 @@ def test_replace_urls(input_str, expected_str):
     ]
 )
 def test_replace_emails(input_str, expected_str):
-    preprocessor = TextPreprocessor(input_str)
-    result = preprocessor.replace_emails()
+    result = replace_emails(input_str)
     np.testing.assert_equal(result, expected_str)
 
 
@@ -315,12 +294,11 @@ def test_replace_emails(input_str, expected_str):
     ]
 )
 def test_replace_phone_numbers(input_str, expected_str):
-    preprocessor = TextPreprocessor(input_str)
-    result = preprocessor.replace_phone_numbers(
+    result = replace_phone_numbers(
+        input_str,
         replace_with="*PHONE*",
         method="detection",
-        country_format_to_detect=phone.SUPPORTED_COUNTRY
-    )
+        country_to_detect=phone.SUPPORTED_COUNTRY)
     np.testing.assert_equal(result, expected_str)
 
 
@@ -334,8 +312,7 @@ def test_replace_phone_numbers(input_str, expected_str):
     ]
 )
 def test_replace_numbers(input_str, expected_str):
-    preprocessor = TextPreprocessor(input_str)
-    result = preprocessor.replace_numbers()
+    result = replace_numbers(input_str)
     np.testing.assert_equal(result, expected_str)
 
 
@@ -350,8 +327,7 @@ def test_replace_numbers(input_str, expected_str):
     ]
 )
 def test_replace_currency_symbols(input_str, param, expected_str):
-    preprocessor = TextPreprocessor(input_str)
-    result = preprocessor.replace_currency_symbols(replace_with=param)
+    result = replace_currency_symbols(input_str, replace_with=param)
     np.testing.assert_equal(result, expected_str)
 
 
@@ -377,8 +353,7 @@ def test_replace_currency_symbols(input_str, param, expected_str):
     ]
 )
 def test_remove_punct(input_str, param, expected_str):
-    preprocessor = TextPreprocessor(input_str)
-    result = preprocessor.remove_punct(marks=param)
+    result = remove_punct(input_str, marks=param)
     np.testing.assert_equal(result, expected_str)
 
 
@@ -396,8 +371,7 @@ def test_remove_punct(input_str, param, expected_str):
     ]
 )
 def test_remove_emoji(input_str, expected_str):
-    preprocessor = SocialPreprocessor(input_str)
-    result = preprocessor.remove_emoji()
+    result = remove_emoji(input_str)
     np.testing.assert_equal(result, expected_str)
 
 
@@ -411,6 +385,36 @@ def test_remove_emoji(input_str, expected_str):
     ]
 )
 def test_convert_emoji_to_text(input_str, expected_str):
-    preprocessor = SocialPreprocessor(input_str)
-    result = preprocessor.convert_emoji_to_text()
+    result = convert_emoji_to_text(input_str)
     np.testing.assert_equal(result, expected_str)
+
+
+@pytest.mark.parametrize(
+    "functions",
+    [
+        (None),
+        ([remove_punct, remove_emoji])
+
+    ]
+)
+def test_init_preprocessor(functions):
+    assert Preprocessor(
+        functions=functions)
+
+
+def test_apply_preprocessor():
+    # Given
+    text = "Some text with @mentions and whitespaces    and #hashtags"
+    function_list = (remove_mentions, remove_hashtag, normalize_whitespace)
+
+    preprocessor = Preprocessor(functions=function_list)
+
+    expected_result = text
+    for function in function_list:
+        expected_result = function(expected_result)
+
+    # When
+    result = preprocessor.apply_pipeline(text)
+
+    # Then
+    assert expected_result == result
