@@ -88,7 +88,7 @@ def tokenize(text: str, lang_module: str = 'en_spacy') -> List[str]:
         If lang_module is not a valid module name
     """
     if "spacy" in lang_module:
-        lang = lang_module.split()[0]
+        lang = lang_module.split("_")[0]
         spacymodel = _get_spacy_tokenizer(lang)
         spacydoc = spacymodel(text)
         return [spacy_token.text for spacy_token in spacydoc]
