@@ -15,28 +15,36 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with this program; if not, write to the Free Software Foundation,
 # Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
-import sys
 
-REQUIRED_PYTHON = "python3"
-
-
-def main():
-    system_major = sys.version_info.major
-    if REQUIRED_PYTHON == "python":
-        required_major = 2
-    elif REQUIRED_PYTHON == "python3":
-        required_major = 3
-    else:
-        raise ValueError("Unrecognized python interpreter: {}".format(
-            REQUIRED_PYTHON))
-
-    if system_major != required_major:
-        raise TypeError(
-            "This project requires Python {}. Found: Python {}".format(
-                required_major, sys.version))
-    else:
-        print(">>> Development environment passes all tests!")
+from flashtext import KeywordProcessor
 
 
-if __name__ == '__main__':
-    main()
+def extract_keywords(text, keyword, case_sensitive=True):
+    """
+    Extract Keywords from a document.
+
+    Parameters
+    ----------
+    text : str
+        Text to extract keywords from
+    keyword :
+        Single keyword (str) or list of keywords (list)
+    case_sensitive :
+        If False, will be case insensitive.
+
+    Returns
+    -------
+    list
+        Return list of extracted keyworkds
+    """
+
+    processor = KeywordProcessor(case_sensitive=case_sensitive)
+    if isinstance(keyword, list):
+        processor.add_keywords_from_list(keyword)
+    elif isinstance(keyword, str):
+        processor.add_keyword(keyword)
+    elif isinstance(keyword, dict):
+        processor.add_keywords_from_dict(keyword)
+
+    return processor.extract_keywords(text)
+    

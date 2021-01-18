@@ -15,34 +15,25 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with this program; if not, write to the Free Software Foundation,
 # Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
-from flashtext import KeywordProcessor
+# -*- coding: utf-8 -*-
+from typing import List, Generator
 
-def extract_keywords(text, keyword, case_sensitive=True):
+
+def create_ngrams(tokens: List[str], nb_elements: int) -> Generator:
     """
-    Extract Keywords from a document.
+    Create n-grams for list of tokens
 
     Parameters
-    ----------    
-    text : str
-        Text to extract keywords from
-    keyword :
-        Single keyword (str) or list of keywords (list)
-    case_sensitive :
-        If False, will be case insensitive.
+    ----------
+    tokens : list
+        list of strings
+    nb_elements : int
+        number of elements in the n-gram
 
     Returns
     -------
-    list
-        Return list of extracted keyworkds
+    Generator
+        generator of all n-grams
     """
-    
-    processor=KeywordProcessor(case_sensitive=case_sensitive)
-    if isinstance(keyword,list):
-        processor.add_keywords_from_list(keyword)
-    elif isinstance(keyword,str):
-        processor.add_keyword(keyword)
-    elif isinstance(keyword,dict):
-        processor.add_keywords_from_dict(keyword)
-
-    return processor.extract_keywords(text)
-    
+    ngrams = zip(*[tokens[index_token:] for index_token in range(nb_elements)])
+    return (" ".join(ngram) for ngram in ngrams)

@@ -37,8 +37,8 @@ sys.path.insert(0, os.path.abspath('../'))
 # -- Project information -----------------------------------------------------
 
 project = 'Nautilus_nlp'
-copyright = '2019, Robin Doumerc'
-author = 'Robin Doumerc'
+copyright = '2020, Artefact'
+author = 'Artefact'
 
 # The short X.Y version
 version = '0.1.0'

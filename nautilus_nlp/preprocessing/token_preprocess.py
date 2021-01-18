@@ -21,89 +21,85 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 
 import re
 
-class TokenPreprocessor():
 
-    def __init__(self,tokens):
-        if isinstance(tokens,list):
-            self.tokens = tokens
-        else:
-            raise ValueError("Input must be a list")
+def remove_stopwords(tokens, stopwords: list) -> str:
+    """
+    Remove stopwords from a text.
+    eg. 'I like when you move your body !' -> 'I move body !'
 
-    def remove_stopwords(self, stopwords: list) -> str:
-        """ 
-        Remove stopwords from a text.
-        eg. 'I like when you move your body !' -> 'I move body !'
+    Parameters
+    ----------
+    stopwords : list of stopwords to remove
 
-        Parameters
-        ----------
-        stopwords : list of stopwords to remove
+    Returns
+    -------
+    list
+        tokens without stopwords
 
-        Returns
-        -------
-        list
-            tokens without stopwords
+    Raises
+    ------
+    ValueError
+        When inputs is not a list
+    """
+    tokens = [word for word in tokens if word not in stopwords]
+    return tokens
 
-        Raises
-        ------
-        ValueError
-            When inputs is not a list
-        """
-        self.tokens = [word for word in self.tokens if word not in stopwords]
-        return self.tokens
 
-    def remove_tokens_with_nonletters(self) -> list:
-        """
-        Inputs a list of tokens, outputs a list of tokens without tokens that
-        includes numbers of special caracters.
-        ['foo','bar','124','34euros'] -> ['foo','bar']
+def remove_tokens_with_nonletters(tokens) -> list:
+    """
+    Inputs a list of tokens, outputs a list of tokens without tokens that
+    includes numbers of special caracters.
+    ['foo','bar','124','34euros'] -> ['foo','bar']
 
-        Parameters
-        ----------
-        tokens : list
-            list of tokens to be cleaned
+    Parameters
+    ----------
+    tokens : list
+        list of tokens to be cleaned
 
-        Returns
-        -------
-        list
-            list of tokens without tokens with numbers
-        """
-        self.tokens = [word for word in self.tokens if re.search("[^a-zA-Z]", word) is None]
-        return self.tokens
+    Returns
+    -------
+    list
+        list of tokens without tokens with numbers
+    """
+    tokens = [word for word in tokens if re.search("[^a-zA-Z]", word) is None]
+    return tokens
 
-    def remove_special_caracters_from_tokenslist(self) -> list:
-        """ 
-        Remove tokens that doesn't contains any number or letter. 
-        eg. ['foo','bar','---',"'s",'#'] -> ['foo','bar',"'s"]
 
-        Parameters
-        ----------
-        tokens : list
-            list of tokens to be cleaned
+def remove_special_caracters_from_tokenslist(tokens) -> list:
+    """
+    Remove tokens that doesn't contains any number or letter.
+    eg. ['foo','bar','---',"'s",'#'] -> ['foo','bar',"'s"]
 
-        Returns
-        -------
-        list
-            list of tokens without tokens that contains only special caracters
-        
-        """
-        self.tokens = [word for word in self.tokens if re.search("[a-zA-Z0-9]", word)]
-        return self.tokens
+    Parameters
+    ----------
+    tokens : list
+        list of tokens to be cleaned
 
-    def remove_smallwords(self, smallwords_threshold:int) -> list:
-        """
-        Function that removes words which length is below a threshold
-        ["hello", "my", "name", "is", "John", "Doe"] --> ["hello","name","John","Doe"]
+    Returns
+    -------
+    list
+        list of tokens without tokens that contains only special caracters
 
-        Parameters
-        ----------
-        text : list
-            list of strings
-        smallwords_threshold: int
-            threshold of small word
+    """
+    tokens = [word for word in tokens if re.search("[a-zA-Z0-9]", word)]
+    return tokens
 
-        Returns
-        -------
-        list
-        """
-        self.tokens = [word for word in self.tokens if len(word) > smallwords_threshold]
-        return self.tokens
+
+def remove_smallwords(tokens, smallwords_threshold: int) -> list:
+    """
+    Function that removes words which length is below a threshold
+    ["hello", "my", "name", "is", "John", "Doe"] --> ["hello","name","John","Doe"]
+
+    Parameters
+    ----------
+    text : list
+        list of strings
+    smallwords_threshold: int
+        threshold of small word
+
+    Returns
+    -------
+    list
+    """
+    tokens = [word for word in tokens if len(word) > smallwords_threshold]
+    return tokens

@@ -31,9 +31,6 @@ class PostInstallCommand(setuptools.command.install.install):
             pass
 
 
-with open(Path(__file__).resolve().parent.joinpath('requirements.txt'), 'r') as fh:
-    requirements = [r.split('#', 1)[0].strip() for r in fh.read().split('\n')]
-    print(requirements)
 with open(Path(__file__).resolve().parent.joinpath('VERSION'), 'r') as fh:
     version = fh.read()
 
@@ -42,7 +39,7 @@ setup(
     packages=find_packages(),
     version=version,
     description='All the goto functions you need to handle NLP use-cases',
-    author='Robin Doumerc',
+    author='Artefact',
     license='MIT',
     url='https://github.com/artefactory/nautilus-nlp',
     classifiers=[
@@ -50,7 +47,6 @@ setup(
         'License :: OSI Approved :: MIT License',
         'Operating System :: OS Independent',
     ],
-    install_requires=requirements,
     cmdclass={
         'install': PostInstallCommand,
     },
