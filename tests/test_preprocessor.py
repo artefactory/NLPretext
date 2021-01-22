@@ -29,7 +29,7 @@ from nautilus_nlp.preprocessing.social_preprocess import (remove_mentions, extra
 from nautilus_nlp.preprocessing.token_preprocess import (remove_stopwords, remove_tokens_with_nonletters,
                                                          remove_special_caracters_from_tokenslist,
                                                          remove_smallwords)
-from nautilus_nlp.preprocessing.preprocessor import Preprocessor
+from nautilus_nlp import Preprocessor
 
 import nautilus_nlp.utils.phone_number as phone
 from nautilus_nlp.utils.stopwords import get_stopwords
