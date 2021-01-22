@@ -1,4 +1,4 @@
-from typing import List, Callable, Optional
+from typing import List, Callable
 
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import FunctionTransformer
@@ -10,32 +10,33 @@ from nautilus_nlp.preprocessing.text_preprocess import normalize_whitespace, rem
 
 class Preprocessor():
     def __init__(
-            self,
-            functions: Optional[Callable] = None):
+            self):
         """
         Initialize preprocessor object to apply all text transformation
+        """
+        self.__operations = []
+        self.pipeline = None
+
+    def pipe(self, operation: Callable):
+        """
+        Add an operation to pipe in the preprocessor
 
         Parameters
         ----------
-        functions : iterable|None
-            list of functions of preprocessing
+        operation : callable
+            text preprocessing function
         """
-        if functions is None:
-            functions = (remove_html_tags, remove_mentions, remove_emoji, remove_hashtag,
-                         remove_eol_characters, fix_bad_unicode, normalize_whitespace)
-        if len(functions) == 0:
-            raise ValueError("Cannot initialize a preprocessor with 0 function")
-        self.pipeline = self.build_pipeline(functions)
+        self.__operations.append(operation)
 
     @staticmethod
-    def build_pipeline(function_list: List[Callable]) -> Pipeline:
+    def build_pipeline(operation_list: List[Callable]) -> Pipeline:
         """
-        Build sklearn pipeline from a function list
+        Build sklearn pipeline from a operation list
 
         Parameters
         ----------
-        function_list : iterable
-            list of functions of preprocessing
+        operation_list : iterable
+            list of __operations of preprocessing
 
         Returns
         -------
@@ -43,11 +44,11 @@ class Preprocessor():
         """
         return Pipeline(
             steps=[
-                (function.__name__, FunctionTransformer(function))
-                for function in function_list])
+                (operation.__name__, FunctionTransformer(operation))
+                for operation in operation_list])
 
 
-    def apply_pipeline(self, text: str) -> str:
+    def run(self, text: str) -> str:
         """
         Apply pipeline to text
 
@@ -60,5 +61,10 @@ class Preprocessor():
         -------
         string
         """
+        operations = self.__operations
+        if operations == []:
+            operations = (remove_html_tags, remove_mentions, remove_emoji, remove_hashtag,
+                          remove_eol_characters, fix_bad_unicode, normalize_whitespace)
+        self.pipeline = self.build_pipeline(operations)
         text = self.pipeline.fit_transform(text)
         return text
