@@ -15,25 +15,4 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with this program; if not, write to the Free Software Foundation,
 # Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
-# -*- coding: utf-8 -*-
-from typing import List, Generator
-
-
-def create_ngrams(tokens: List[str], nb_elements: int) -> Generator:
-    """
-    Create n-grams for list of tokens
-
-    Parameters
-    ----------
-    tokens : list
-        list of strings
-    nb_elements : int
-        number of elements in the n-gram
-
-    Returns
-    -------
-    Generator
-        generator of all n-grams
-    """
-    ngrams = zip(*[tokens[index_token:] for index_token in range(nb_elements)])
-    return (" ".join(ngram) for ngram in ngrams)
+from nautilus_nlp.preprocessor import Preprocessor
