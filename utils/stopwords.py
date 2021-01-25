@@ -21,7 +21,6 @@ from __future__ import (absolute_import, division, print_function,
                         unicode_literals)
 
 import json
-import os
 from stop_words import LANGUAGE_MAPPING as _LANGUAGE_MAPPING
 from stop_words import get_stop_words as _get_stop_words
 from config.config import STOPWORDS_JSON_FILEPATH
