@@ -20,6 +20,7 @@ class Preprocessor():
     def pipe(self, operation: Callable):
         """
         Add an operation to pipe in the preprocessor
+
         Parameters
         ----------
         operation : callable
@@ -31,10 +32,12 @@ class Preprocessor():
     def build_pipeline(operation_list: List[Callable]) -> Pipeline:
         """
         Build sklearn pipeline from a operation list
+
         Parameters
         ----------
         operation_list : iterable
             list of __operations of preprocessing
+
         Returns
         -------
         sklearn.pipeline.Pipeline
@@ -48,10 +51,12 @@ class Preprocessor():
     def run(self, text: str) -> str:
         """
         Apply pipeline to text
+
         Parameters
         ----------
         text : string
             text to preprocess
+
         Returns
         -------
         string
