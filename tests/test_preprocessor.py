@@ -17,22 +17,25 @@
 # Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 import pytest
 import numpy as np
-from nautilus_nlp.preprocessing.text_preprocess import (normalize_whitespace, remove_eol_characters,
-                                                        fix_bad_unicode, unpack_english_contractions,
-                                                        replace_urls, replace_emails, replace_phone_numbers,
-                                                        replace_numbers, replace_currency_symbols, remove_punct,
-                                                        remove_accents, remove_multiple_spaces_and_strip_text,
-                                                        filter_non_latin_characters)
-from nautilus_nlp.preprocessing.social_preprocess import (remove_mentions, extract_mentions, remove_html_tags,
-                                                          remove_emoji, convert_emoji_to_text, extract_emojis,
-                                                          extract_hashtags, remove_hashtag)
-from nautilus_nlp.preprocessing.token_preprocess import (remove_stopwords, remove_tokens_with_nonletters,
-                                                         remove_special_caracters_from_tokenslist,
-                                                         remove_smallwords)
-from nautilus_nlp import Preprocessor
+from nautilus_nlp.classic.preprocess import (
+    normalize_whitespace, remove_eol_characters, fix_bad_unicode,
+    unpack_english_contractions, replace_urls, replace_emails,
+    replace_phone_numbers, replace_numbers, replace_currency_symbols,
+    remove_punct, remove_accents, remove_multiple_spaces_and_strip_text,
+    filter_non_latin_characters
+)
+from nautilus_nlp.social.preprocess import (
+    remove_mentions, extract_mentions, remove_html_tags, remove_emoji,
+    convert_emoji_to_text, extract_emojis, extract_hashtags, remove_hashtag
+)
+from nautilus_nlp.token.preprocess import (
+    remove_stopwords, remove_tokens_with_nonletters,
+    remove_special_caracters_from_tokenslist, remove_smallwords
+)
+from nautilus_nlp.preprocessor import Preprocessor
 
-import nautilus_nlp.utils.phone_number as phone
-from nautilus_nlp.utils.stopwords import get_stopwords
+import utils.phone_number as phone
+from utils.stopwords import get_stopwords
 
 
 @pytest.mark.parametrize("text, expected_result",

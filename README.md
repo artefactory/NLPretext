@@ -96,30 +96,23 @@ You can now open the file index.html located in the build folder.
 **à updater**
 
     ├── LICENSE
-    ├── Makefile           <- Makefile with commands like `make data` or `make train`
-    ├── README.md          <- The top-level README for developers using this project.
-    ├── data               <- Scripts & bits to download datasets to try nautilus
-    │   ├── external
-    │   ├── interim
-    │   ├── processed
-    │   └── raw
-    ├── docker             <- Where to build a docker image using this lib
-    ├── docs               <- Sphinx HTML documentation
+    ├── Makefile            <- Makefile with commands like `make data` or `make train`
+    ├── README.md           <- The top-level README for developers using this project.
+    ├── config              <- Where the configuration and constants live
+    ├── datasets/external   <- Bash scripts to download external datasets
+    ├── docker              <- Where to build a docker image using this lib
+    ├── docs                <- Sphinx HTML documentation
     │   ├── _build
     │   │   └── html
     │   ├── source
-    ├── models
-    ├── nautilus_nlp       <- Main Nautilus Package. This is where the code lives
-    │   ├── config
-    │   ├── data
-    │   ├── models
-    │   ├── preprocessing
-    │   ├── scripts
-    │   └── utils
-    ├──notebooks           <- Various notebooks explaining how to use Nautilus_NLP library
-    ├── tests <- Where the tests lives
-    │   └── testfolder_fileloader
-    ├── wiki               <- Where the Markdown for the Wiki lives
-    ├── setup.py           <- makes project pip installable (pip install -e .) so nautilus_nlp can be imported
-    ├── requirements.txt   <- The requirements file for reproducing the analysis environment, e.g.
+    ├── nautilus_nlp        <- Main Nautilus Package. This is where the code lives
+    │   ├── preprocessor.py <- Main preprocessing script
+    │   ├── augmentation    <- Text augmentation script
+    │   ├── classic         <- Classic text preprocessing 
+    │   ├── social          <- Social text preprocessing
+    │   └── token           <- Token preprocessing
+    ├── utils               <- Where preprocessing utils scripts lives
+    ├── tests               <- Where the tests lives
+    ├── setup.py            <- makes project pip installable (pip install -e .) so nautilus_nlp can be imported
+    ├── requirements.txt    <- The requirements file for reproducing the analysis environment, e.g.
                               generated with `pip freeze > requirements.txt`    
