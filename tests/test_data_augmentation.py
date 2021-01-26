@@ -1,6 +1,8 @@
 import pytest
-from nautilus_nlp.preprocessing.data_augmentation import process_entities_and_text, \
-    get_augmenter, CouldNotAugment, UnavailableAugmenter
+from nautilus_nlp.augmentation.text_augmentation import (
+    process_entities_and_text, get_augmenter, CouldNotAugment,
+    UnavailableAugmenter
+)
 
 @pytest.mark.parametrize(
     "text, text_augmented, entities, expected",

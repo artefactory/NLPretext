@@ -3,9 +3,9 @@ from typing import List, Callable
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import FunctionTransformer
 
-from nautilus_nlp.preprocessing.social_preprocess import (remove_html_tags, remove_mentions, remove_emoji,
-                                                          remove_hashtag)
-from nautilus_nlp.preprocessing.text_preprocess import normalize_whitespace, remove_eol_characters, fix_bad_unicode
+from nautilus_nlp.social.preprocess import (
+    remove_html_tags, remove_mentions, remove_emoji, remove_hashtag)
+from nautilus_nlp.classic.preprocess import normalize_whitespace, remove_eol_characters, fix_bad_unicode
 
 
 class Preprocessor():

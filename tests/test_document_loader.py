@@ -20,7 +20,7 @@
 import os
 
 import numpy as np
-from nautilus_nlp.utils.file_loader import (detect_encoding, documents_loader)
+from utils.file_loader import (detect_encoding, documents_loader)
 
 TESTDOC_LATIN1 = "J'aime les frites bien grasse étalon châpeau!"
 TESTDOC_UTF8 = "Un deuxième exemple de texte en utf-8 cette fois!"
