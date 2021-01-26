@@ -29,7 +29,7 @@ from nautilus_nlp.preprocessing.social_preprocess import (remove_mentions, extra
 from nautilus_nlp.preprocessing.token_preprocess import (remove_stopwords, remove_tokens_with_nonletters,
                                                          remove_special_caracters_from_tokenslist,
                                                          remove_smallwords)
-from nautilus_nlp.preprocessing.preprocessor import Preprocessor
+from nautilus_nlp import Preprocessor
 
 import nautilus_nlp.utils.phone_number as phone
 from nautilus_nlp.utils.stopwords import get_stopwords
@@ -389,32 +389,36 @@ def test_convert_emoji_to_text(input_str, expected_str):
     np.testing.assert_equal(result, expected_str)
 
 
-@pytest.mark.parametrize(
-    "functions",
-    [
-        (None),
-        ([remove_punct, remove_emoji])
+def test_custom_preprocess():
+    # Given
+    text = "Some text with @mentions and #hashtags"
 
-    ]
-)
-def test_init_preprocessor(functions):
-    assert Preprocessor(
-        functions=functions)
+    preprocessor = Preprocessor()
+    preprocessor.pipe(remove_hashtag)
+    preprocessor.pipe(remove_mentions)
+    expected_result = remove_hashtag(text)
+    expected_result = remove_mentions(expected_result)
 
+    # When
+    result = preprocessor.run(text)
+
+    # Then
+    assert expected_result == result
 
 def test_apply_preprocessor():
     # Given
     text = "Some text with @mentions and whitespaces    and #hashtags"
-    function_list = (remove_mentions, remove_hashtag, normalize_whitespace)
+    operations = (remove_html_tags, remove_mentions, remove_emoji, remove_hashtag,
+                  remove_eol_characters, fix_bad_unicode, normalize_whitespace)
 
-    preprocessor = Preprocessor(functions=function_list)
+    preprocessor = Preprocessor()
 
     expected_result = text
-    for function in function_list:
+    for function in operations:
         expected_result = function(expected_result)
 
     # When
-    result = preprocessor.apply_pipeline(text)
+    result = preprocessor.run(text)
 
     # Then
     assert expected_result == result
