@@ -42,8 +42,8 @@ jobs:
 
       - name: Run pylint
         run: |
-          pylint config preprocessing utils tests
+          pylint config nautilus_nlp utils tests
 
       - name: Run pytest
         run: |
-          pytest --cov=preprocessing tests
+          pytest --cov=nautilus_nlp tests

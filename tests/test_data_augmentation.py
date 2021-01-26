@@ -1,5 +1,5 @@
 import pytest
-from preprocessing.augmentation.text_augmentation import (
+from nautilus_nlp.augmentation.text_augmentation import (
     process_entities_and_text, get_augmenter, CouldNotAugment,
     UnavailableAugmenter
 )
