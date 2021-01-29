@@ -24,13 +24,19 @@ from nautilus_nlp.classic.preprocess import (
     remove_punct, remove_accents, remove_multiple_spaces_and_strip_text,
     filter_non_latin_characters
 )
+from nautilus_nlp.classic.preprocess import (
+    remove_stopwords as remove_stopwords_text
+)
 from nautilus_nlp.social.preprocess import (
     remove_mentions, extract_mentions, remove_html_tags, remove_emoji,
     convert_emoji_to_text, extract_emojis, extract_hashtags, remove_hashtag
 )
 from nautilus_nlp.token.preprocess import (
-    remove_stopwords, remove_tokens_with_nonletters,
+    remove_tokens_with_nonletters,
     remove_special_caracters_from_tokenslist, remove_smallwords
+)
+from nautilus_nlp.token.preprocess import (
+    remove_stopwords as remove_stopwords_token
 )
 from nautilus_nlp.preprocessor import Preprocessor
 
@@ -189,7 +195,36 @@ def test_get_stopwords():
 )
 def test_remove_stopwords_tokens(input_tokens, expected_output):
     stopwords = get_stopwords('en')
-    result = remove_stopwords(input_tokens, stopwords)
+    result = remove_stopwords_token(input_tokens, stopwords)
+    np.testing.assert_array_equal(result, expected_output)
+
+
+@pytest.mark.parametrize(
+    "input_text, lang, expected_output",
+    [
+        ('I like when you move your body !', 'en', 'I move body !'),
+        ('Can I get a beer?', 'en', 'Can I beer ?'),
+        ('Je vous recommande ce film !', 'fr', 'Je recommande film !'),
+        ('je vous recommande ce film !', 'fr', 'recommande film !'),
+        ('Quiero una cerveza, por favor.', 'es', 'Quiero cerveza, favor.')
+    ],
+)
+def test_remove_stopwords_text(input_text, lang, expected_output):
+    result = remove_stopwords_text(input_text, lang)
+    np.testing.assert_array_equal(result, expected_output)
+
+
+@pytest.mark.parametrize(
+    "input_text, lang, custom_stopwords, expected_output",
+    [
+        ('I like when you move your body !', 'en', ['body'], 'I move !'),
+        ('Je vous recommande ce film la scène de fin est géniale !', 'fr',
+         ['film', 'scène'], 'Je recommande fin géniale !'),
+    ],
+)
+def test_remove_custom_stopwords_text(
+        input_text, lang, custom_stopwords, expected_output):
+    result = remove_stopwords_text(input_text, lang, custom_stopwords)
     np.testing.assert_array_equal(result, expected_output)
 
 
