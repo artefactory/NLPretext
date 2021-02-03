@@ -1,4 +1,4 @@
-Insert new lib name here
+CasText
 ==============================
 
 **Insert new logo here**
@@ -7,19 +7,20 @@ Insert new lib name here
 
 :disappointed_relieved: Need to efficiently extract email adresses from a document? Hashtags from tweets? Remove accents from a French post? 
 
-**Insert new lib name here** got you covered! :rocket:
+CasText got you covered! :rocket:
 
-**Insert new lib name here** packages in a unique library all the text preprocessing functions you need to ease your NLP project. 
+CasText packages in a unique library all the text preprocessing functions you need to ease your NLP project. 
 
-:mag: Quickly explore below our functions referential.
+:mag: Quickly explore below our preprocessing pipelines and individual functions referential.
 
-* [Replacing emails](#replace_emails)
+* [Default preprocessing pipeline](#default_pipeline)
+* [Custom preprocessing pipeline](#custom_pipeline)
 * [Replacing phone numbers](#replace_phone_numbers)
 * [Removing hashtags](#remove_hashtags)
 * [Extracting emojis](#extract_emojis)
 
 
-Cannot find a new one? Feel free to open an [issue]((https://github.com/artefactory/nautilus-nlp/issues) )).
+Cannot find what you were looking for? Feel free to open an [issue]((https://github.com/artefactory/castext/issues) ).
 
 
 
@@ -30,7 +31,7 @@ This package has been tested on Python **3.7**.
 To install this library you should first clone the repository:
 
 ```bash
-git clone git@github.com:artefactory/nautilus-nlp.git && cd nautilus_nlp/
+git clone git@github.com:artefactory/castext.git && cd castext/
 ```
 
 We strongly advise you to do the remaining steps in a virtual environnement.
@@ -49,14 +50,55 @@ pip install -e .
 
 This library uses Spacy as tokenizer. Current models supported are `en_core_web_sm` and `fr_core_news_sm`.
 
+# Preprocessing pipeline
 
-# Functions
+## Default pipeline <a name="default_pipeline"></a>
+
+Need to preprocess your text data but no clue about what function to use and in which order? The default preprocessing pipeline got you covered:
+
+```python
+from castext import Preprocessor
+text = "I just got the best dinner in my entire life @latourdargent !!! I  recommend 😀 #food #paris \n"
+preprocessor = Preprocessor()
+text = preprocessor.run(text)
+print(text)
+# "I just got the best dinner in my entire life !!! I recommend"
+```
+
+## Create your custom pipeline <a name="custom_pipeline"></a>
+
+Another possibility is to create your custom pipeline if you know exactly what function to apply on your data, here's an example:
+
+```python
+from castext import Preprocessor
+from nautilus_nlp.classic.preprocess import normalize_whitespace, remove_punct, remove_eol_characters, remove_stopwords, lower_text
+from nautilus_nlp.social.preprocess import remove_mentions, remove_hashtag, remove_emoji
+text = "I just got the best dinner in my entire life @latourdargent !!! I  recommend 😀 #food #paris \n"
+preprocessor = Preprocessor()
+preprocessor.pipe(lower_text)
+preprocessor.pipe(remove_mentions)
+preprocessor.pipe(remove_hashtag)
+preprocessor.pipe(remove_emoji)
+preprocessor.pipe(remove_eol_characters)
+preprocessor.pipe(remove_stopwords, args={'lang': 'en'})
+preprocessor.pipe(remove_punct)
+preprocessor.pipe(normalize_whitespace)
+text = preprocessor.run(text)
+print(text)
+# "dinner entire life recommend"
+```
+
+Take a look at all the functions that are available [here](https://github.com/artefactory/nautilus-nlp/tree/master/nautilus_nlp) in the ```preprocess.py``` scripts in the different folders: classic, social, token.
+
+
+# Individual Functions
 
 ## Replacing emails <a name="replace_emails"></a>
 
 ```python
+from castext.classic.preprocess import replace_emails
 example = "I have forwarded this email to obama@whitehouse.gov"
-example = replace_emails(replace_with="*EMAIL*")
+example = replace_emails(example, replace_with="*EMAIL*")
 print(example)
 # "I have forwarded this email to *EMAIL*"
 ```
@@ -64,27 +106,39 @@ print(example)
 ## Replacing phone numbers <a name="replace_phone_numbers"></a>
 
 ```python
-Insert example here
+from castext.classic.preprocess import replace_phone_numbers
+example = "My phone number is 0606060606"
+example = replace_phone_numbers(example, country_to_detect=["FR"], replace_with="*PHONE*")
+print(example)
+# "My phone number is *PHONE*"
 ```
 
 ## Removing Hashtags <a name="remove_hashtags"></a>
 
 ```python
-Insert example here
+from castext.social.preprocess import remove_hashtag
+example = "This restaurant was amazing #food #foodie #foodstagram #dinner"
+example = remove_hashtag(example)
+print(example)
+# "This restaurant was amazing"
 ```
 
 ## Extracting emojis <a name="extract_emojis"></a>
 
 ```python
-Insert example here
+from castext.social.preprocess import extract_emojis
+example = "I take care of my skin 😀"
+example = extract_emojis(example)
+print(example)
+# [':grinning_face:']
 ```
 
 # Make HTML documentation
 
 **à updater**
 
-In order to make the html Sphinx documentation, you need to run at the nautilus_nlp root path:
-`sphinx-apidoc -f nautilus_nlp -o docs/`
+In order to make the html Sphinx documentation, you need to run at the castext root path:
+`sphinx-apidoc -f castext -o docs/`
 This will generate the .rst files.
 You can generate the doc with
 `cd docs && make html`
@@ -105,7 +159,7 @@ You can now open the file index.html located in the build folder.
     │   ├── _build
     │   │   └── html
     │   ├── source
-    ├── nautilus_nlp        <- Main Nautilus Package. This is where the code lives
+    ├── castext             <- Main Package. This is where the code lives
     │   ├── preprocessor.py <- Main preprocessing script
     │   ├── augmentation    <- Text augmentation script
     │   ├── classic         <- Classic text preprocessing 
@@ -113,6 +167,6 @@ You can now open the file index.html located in the build folder.
     │   └── token           <- Token preprocessing
     ├── utils               <- Where preprocessing utils scripts lives
     ├── tests               <- Where the tests lives
-    ├── setup.py            <- makes project pip installable (pip install -e .) so nautilus_nlp can be imported
+    ├── setup.py            <- makes project pip installable (pip install -e .) so the package can be imported
     ├── requirements.txt    <- The requirements file for reproducing the analysis environment, e.g.
                               generated with `pip freeze > requirements.txt`    

@@ -49,6 +49,19 @@ def normalize_whitespace(text) -> str:
     ).strip()
     return text
 
+def lower_text(text: str):
+    """
+    Given ``text`` str, transform it into lowercase
+
+    Parameters
+    ----------
+    text : string
+
+    Returns
+    -------
+    string
+    """
+    return text.lower()
 
 def remove_stopwords(text: str, lang: str, custom_stopwords: list = None) -> str:
     """
