@@ -24,7 +24,9 @@ import re
 import unicodedata
 from ftfy import fix_text as _fix_text
 from config import constants
+from nautilus_nlp.token.tokenizer import tokenize
 from utils.phone_number import extract_phone_numbers as _extract_phone_numbers
+from utils.stopwords import get_stopwords
 
 
 def normalize_whitespace(text) -> str:
@@ -46,6 +48,34 @@ def normalize_whitespace(text) -> str:
         " ", constants.LINEBREAK_REGEX.sub(r"\n", text)
     ).strip()
     return text
+
+
+def remove_stopwords(text: str, lang: str, custom_stopwords: list = None) -> str:
+    """
+    Given ``text`` str, remove classic stopwords for a given language and
+    custom stopwords given as a list.
+
+    Parameters
+    ----------
+    text : string
+    lang : string
+    custom_stopwords : list of strings
+
+    Returns
+    -------
+    string
+    """
+    stopwords = get_stopwords(lang)
+    if custom_stopwords:
+        stopwords += custom_stopwords
+    if lang in ["fr", "en"]:
+        lang_module = {
+            "fr" : "fr_spacy",
+            "en" : "en_spacy"
+        }[lang]
+        return ' '.join(
+            [x for x in tokenize(text, lang_module) if x not in stopwords])
+    return ' '.join([x for x in text.split() if x not in stopwords])
 
 
 def remove_eol_characters(text) -> str:
