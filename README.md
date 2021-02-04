@@ -58,11 +58,11 @@ Need to preprocess your text data but no clue about what function to use and in 
 
 ```python
 from castext import Preprocessor
-text = "I just got the best dinner in my entire life @latourdargent !!! I  recommend 😀 #food #paris \n"
+text = "I just got the best dinner in my life @latourdargent !!! I  recommend 😀 #food #paris \n"
 preprocessor = Preprocessor()
 text = preprocessor.run(text)
 print(text)
-# "I just got the best dinner in my entire life !!! I recommend"
+# "I just got the best dinner in my life !!! I recommend"
 ```
 
 ## Create your custom pipeline <a name="custom_pipeline"></a>
@@ -71,9 +71,10 @@ Another possibility is to create your custom pipeline if you know exactly what f
 
 ```python
 from castext import Preprocessor
-from nautilus_nlp.classic.preprocess import normalize_whitespace, remove_punct, remove_eol_characters, remove_stopwords, lower_text
-from nautilus_nlp.social.preprocess import remove_mentions, remove_hashtag, remove_emoji
-text = "I just got the best dinner in my entire life @latourdargent !!! I  recommend 😀 #food #paris \n"
+from castext.basic.preprocess import (normalize_whitespace, remove_punct, remove_eol_characters,
+remove_stopwords, lower_text)
+from castext.social.preprocess import remove_mentions, remove_hashtag, remove_emoji
+text = "I just got the best dinner in my life @latourdargent !!! I  recommend 😀 #food #paris \n"
 preprocessor = Preprocessor()
 preprocessor.pipe(lower_text)
 preprocessor.pipe(remove_mentions)
@@ -85,10 +86,10 @@ preprocessor.pipe(remove_punct)
 preprocessor.pipe(normalize_whitespace)
 text = preprocessor.run(text)
 print(text)
-# "dinner entire life recommend"
+# "dinner life recommend"
 ```
 
-Take a look at all the functions that are available [here](https://github.com/artefactory/nautilus-nlp/tree/master/nautilus_nlp) in the ```preprocess.py``` scripts in the different folders: classic, social, token.
+Take a look at all the functions that are available [here](https://github.com/artefactory/nautilus-nlp/tree/master/nautilus_nlp) in the ```preprocess.py``` scripts in the different folders: basic, social, token.
 
 
 # Individual Functions
@@ -96,7 +97,7 @@ Take a look at all the functions that are available [here](https://github.com/ar
 ## Replacing emails <a name="replace_emails"></a>
 
 ```python
-from castext.classic.preprocess import replace_emails
+from castext.basic.preprocess import replace_emails
 example = "I have forwarded this email to obama@whitehouse.gov"
 example = replace_emails(example, replace_with="*EMAIL*")
 print(example)
@@ -106,7 +107,7 @@ print(example)
 ## Replacing phone numbers <a name="replace_phone_numbers"></a>
 
 ```python
-from castext.classic.preprocess import replace_phone_numbers
+from castext.basic.preprocess import replace_phone_numbers
 example = "My phone number is 0606060606"
 example = replace_phone_numbers(example, country_to_detect=["FR"], replace_with="*PHONE*")
 print(example)
@@ -162,7 +163,7 @@ You can now open the file index.html located in the build folder.
     ├── castext             <- Main Package. This is where the code lives
     │   ├── preprocessor.py <- Main preprocessing script
     │   ├── augmentation    <- Text augmentation script
-    │   ├── classic         <- Classic text preprocessing 
+    │   ├── basic           <- Basic text preprocessing 
     │   ├── social          <- Social text preprocessing
     │   └── token           <- Token preprocessing
     ├── utils               <- Where preprocessing utils scripts lives
