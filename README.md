@@ -1,7 +1,6 @@
 CasText
 ==============================
 
-**Insert new logo here**
 
 :tired_face: Working on an NLP project and tired of always looking for the same silly preprocessing functions on the web? 
 
@@ -136,7 +135,6 @@ print(example)
 
 # Make HTML documentation
 
-**à updater**
 
 In order to make the html Sphinx documentation, you need to run at the castext root path:
 `sphinx-apidoc -f castext -o docs/`
@@ -148,7 +146,6 @@ You can now open the file index.html located in the build folder.
 
 # Project Organization
 ------------
-**à updater**
 
     ├── LICENSE
     ├── Makefile            <- Makefile with commands like `make data` or `make train`
