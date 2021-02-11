@@ -1,4 +1,4 @@
-Nautilus_NLP
+NLPretext
 ==============================
 
 # Docstring format

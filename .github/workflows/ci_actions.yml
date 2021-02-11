@@ -42,8 +42,8 @@ jobs:
 
       - name: Run pylint
         run: |
-          pylint nautilus_nlp tests
+          pylint nlpretext tests
 
       - name: Run pytest
         run: |
-          pytest --cov=nautilus_nlp tests
+          pytest --cov=nlpretext tests

@@ -1,4 +1,4 @@
-CasText
+NLPretext
 ==============================
 
 
@@ -6,9 +6,9 @@ CasText
 
 :disappointed_relieved: Need to efficiently extract email adresses from a document? Hashtags from tweets? Remove accents from a French post? 
 
-CasText got you covered! :rocket:
+NLPretext got you covered! :rocket:
 
-CasText packages in a unique library all the text preprocessing functions you need to ease your NLP project. 
+NLPretext packages in a unique library all the text preprocessing functions you need to ease your NLP project. 
 
 :mag: Quickly explore below our preprocessing pipelines and individual functions referential.
 
@@ -19,7 +19,7 @@ CasText packages in a unique library all the text preprocessing functions you ne
 * [Extracting emojis](#extract_emojis)
 
 
-Cannot find what you were looking for? Feel free to open an [issue]((https://github.com/artefactory/castext/issues) ).
+Cannot find what you were looking for? Feel free to open an [issue]((https://github.com/artefactory/nlpretext/issues) ).
 
 
 
@@ -30,7 +30,7 @@ This package has been tested on Python **3.7**.
 To install this library you should first clone the repository:
 
 ```bash
-git clone git@github.com:artefactory/castext.git && cd castext/
+git clone git@github.com:artefactory/nlpretext.git && cd nlpretext/
 ```
 
 We strongly advise you to do the remaining steps in a virtual environnement.
@@ -56,7 +56,7 @@ This library uses Spacy as tokenizer. Current models supported are `en_core_web_
 Need to preprocess your text data but no clue about what function to use and in which order? The default preprocessing pipeline got you covered:
 
 ```python
-from castext import Preprocessor
+from nlpretext import Preprocessor
 text = "I just got the best dinner in my life @latourdargent !!! I  recommend 😀 #food #paris \n"
 preprocessor = Preprocessor()
 text = preprocessor.run(text)
@@ -69,10 +69,10 @@ print(text)
 Another possibility is to create your custom pipeline if you know exactly what function to apply on your data, here's an example:
 
 ```python
-from castext import Preprocessor
-from castext.basic.preprocess import (normalize_whitespace, remove_punct, remove_eol_characters,
+from nlpretext import Preprocessor
+from nlpretext.basic.preprocess import (normalize_whitespace, remove_punct, remove_eol_characters,
 remove_stopwords, lower_text)
-from castext.social.preprocess import remove_mentions, remove_hashtag, remove_emoji
+from nlpretext.social.preprocess import remove_mentions, remove_hashtag, remove_emoji
 text = "I just got the best dinner in my life @latourdargent !!! I  recommend 😀 #food #paris \n"
 preprocessor = Preprocessor()
 preprocessor.pipe(lower_text)
@@ -88,7 +88,7 @@ print(text)
 # "dinner life recommend"
 ```
 
-Take a look at all the functions that are available [here](https://github.com/artefactory/nautilus-nlp/tree/master/nautilus_nlp) in the ```preprocess.py``` scripts in the different folders: basic, social, token.
+Take a look at all the functions that are available [here](https://github.com/artefactory/nautilus-nlp/tree/master/nlpretext) in the ```preprocess.py``` scripts in the different folders: basic, social, token.
 
 
 # Individual Functions
@@ -96,7 +96,7 @@ Take a look at all the functions that are available [here](https://github.com/ar
 ## Replacing emails <a name="replace_emails"></a>
 
 ```python
-from castext.basic.preprocess import replace_emails
+from nlpretext.basic.preprocess import replace_emails
 example = "I have forwarded this email to obama@whitehouse.gov"
 example = replace_emails(example, replace_with="*EMAIL*")
 print(example)
@@ -106,7 +106,7 @@ print(example)
 ## Replacing phone numbers <a name="replace_phone_numbers"></a>
 
 ```python
-from castext.basic.preprocess import replace_phone_numbers
+from nlpretext.basic.preprocess import replace_phone_numbers
 example = "My phone number is 0606060606"
 example = replace_phone_numbers(example, country_to_detect=["FR"], replace_with="*PHONE*")
 print(example)
@@ -116,7 +116,7 @@ print(example)
 ## Removing Hashtags <a name="remove_hashtags"></a>
 
 ```python
-from castext.social.preprocess import remove_hashtag
+from nlpretext.social.preprocess import remove_hashtag
 example = "This restaurant was amazing #food #foodie #foodstagram #dinner"
 example = remove_hashtag(example)
 print(example)
@@ -126,7 +126,7 @@ print(example)
 ## Extracting emojis <a name="extract_emojis"></a>
 
 ```python
-from castext.social.preprocess import extract_emojis
+from nlpretext.social.preprocess import extract_emojis
 example = "I take care of my skin 😀"
 example = extract_emojis(example)
 print(example)
@@ -136,8 +136,8 @@ print(example)
 # Make HTML documentation
 
 
-In order to make the html Sphinx documentation, you need to run at the castext root path:
-`sphinx-apidoc -f castext -o docs/`
+In order to make the html Sphinx documentation, you need to run at the nlpretext root path:
+`sphinx-apidoc -f nlpretext -o docs/`
 This will generate the .rst files.
 You can generate the doc with
 `cd docs && make html`
@@ -157,7 +157,7 @@ You can now open the file index.html located in the build folder.
     │   ├── _build
     │   │   └── html
     │   ├── source
-    ├── castext             <- Main Package. This is where the code lives
+    ├── nlpretext           <- Main Package. This is where the code lives
     │   ├── preprocessor.py <- Main preprocessing script
     │   ├── augmentation    <- Text augmentation script
     │   ├── basic           <- Basic text preprocessing 
