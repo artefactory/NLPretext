@@ -7,7 +7,7 @@
 PROJECT_DIR := $(shell dirname $(realpath $(lastword $(MAKEFILE_LIST))))
 BUCKET = [OPTIONAL] your-bucket-for-syncing-data (do not include 's3://')
 PROFILE = default
-PROJECT_NAME = nautilus_nlp
+PROJECT_NAME = nlpretext
 PYTHON_INTERPRETER = python3
 
 ifeq (,$(shell which conda))
@@ -36,7 +36,7 @@ clean:
 
 ## Lint using flake8
 lint:
-	black nautilus_nlp
+	black nlpretext
 
 ## Upload Data to S3
 sync_data_to_s3:

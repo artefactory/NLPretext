@@ -34,7 +34,7 @@ class PostInstallCommand(setuptools.command.install.install):
 with open(Path(__file__).resolve().parent.joinpath('VERSION'), 'r') as fh:
     version = fh.read()
 setup(
-    name='nautilus_nlp',
+    name='nlpretext',
     packages=find_packages(),
     version=version,
     description='All the goto functions you need to handle NLP use-cases',
