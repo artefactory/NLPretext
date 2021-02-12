@@ -40,8 +40,8 @@ from nlpretext.token.preprocess import (
 )
 from nlpretext.preprocessor import Preprocessor
 
-import nautilus_nlp._utils.phone_number as phone
-from nautilus_nlp._utils.stopwords import get_stopwords
+import nlpretext._utils.phone_number as phone
+from nlpretext._utils.stopwords import get_stopwords
 
 
 @pytest.mark.parametrize("text, expected_result",

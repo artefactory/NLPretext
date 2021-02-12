@@ -1,14 +1,14 @@
 NLPretext
 ==============================
+<font size="4"> **No more pretext for dirty text** :pencil: </font>
 
+:tired_face: *Working on an NLP project and tired of always looking for the same silly preprocessing functions on the web?* 
 
-:tired_face: Working on an NLP project and tired of always looking for the same silly preprocessing functions on the web? 
+:disappointed_relieved: *Need to efficiently extract email adresses from a document? Hashtags from tweets? Remove accents from a French post?*
 
-:disappointed_relieved: Need to efficiently extract email adresses from a document? Hashtags from tweets? Remove accents from a French post? 
+**NLPretext got you covered!** :rocket:
 
-NLPretext got you covered! :rocket:
-
-NLPretext packages in a unique library all the text preprocessing functions you need to ease your NLP project. 
+NLPretext packages in a **unique** library all the text **preprocessing** functions you need to **ease** your NLP project. 
 
 :mag: Quickly explore below our preprocessing pipelines and individual functions referential.
 
@@ -25,29 +25,25 @@ Cannot find what you were looking for? Feel free to open an [issue]((https://git
 
 # Installation
 
-This package has been tested on Python **3.7**.
+This package has been tested on Python **3.6**, **3.7** and **3.8**.
 
-To install this library you should first clone the repository:
+To install this library you just have to run the following command:
 
 ```bash
-git clone git@github.com:artefactory/nlpretext.git && cd nlpretext/
+pip install git+https://github.com/artefactory/NLPretext.git
 ```
 
 We strongly advise you to do the remaining steps in a virtual environnement.
 
-First install the required files:
 
+This library uses Spacy as tokenizer. Current models supported are `en_core_web_sm` and `fr_core_news_sm`. If not installed, run the following commands:
 ```bash
-pip install -r requirements.txt
+pip install https://github.com/explosion/spacy-models/releases/download/en_core_web_sm-2.3.1/en_core_web_sm-2.3.1.tar.gz
 ```
 
-then install the library with pip:
-
 ```bash
-pip install -e .
+pip install https://github.com/explosion/spacy-models/releases/download/fr_core_news_sm-2.3.0/fr_core_news_sm-2.3.0.tar.gz
 ```
-
-This library uses Spacy as tokenizer. Current models supported are `en_core_web_sm` and `fr_core_news_sm`.
 
 # Preprocessing pipeline
 
