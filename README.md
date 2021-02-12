@@ -154,9 +154,6 @@ You can now open the file index.html located in the build folder.
     ├── .github/workflows   <- Where the CI lives
     ├── datasets/external   <- Bash scripts to download external datasets
     ├── docs                <- Sphinx HTML documentation
-    │   ├── _build
-    │   │   └── html
-    │   ├── source
     ├── nlpretext           <- Main Package. This is where the code lives
     │   ├── preprocessor.py <- Main preprocessing script
     │   ├── augmentation    <- Text augmentation script
