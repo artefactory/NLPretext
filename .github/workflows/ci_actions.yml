@@ -42,7 +42,7 @@ jobs:
 
       - name: Run pylint
         run: |
-          pylint config nautilus_nlp utils tests
+          pylint nautilus_nlp tests
 
       - name: Run pytest
         run: |
