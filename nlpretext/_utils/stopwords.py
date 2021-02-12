@@ -20,17 +20,10 @@
 from __future__ import (absolute_import, division, print_function,
                         unicode_literals)
 
-import json
 from stop_words import LANGUAGE_MAPPING as _LANGUAGE_MAPPING
 from stop_words import get_stop_words as _get_stop_words
-from nautilus_nlp._config.config import STOPWORDS_JSON_FILEPATH
-from nautilus_nlp._utils.file_loader import documents_loader
+from nlpretext._config.stopwords import STOPWORDS
 
-
-def _load_stopwords_from_json(filepath=STOPWORDS_JSON_FILEPATH):
-    stopwords = documents_loader(filepath)
-    stopwords = json.loads(stopwords)
-    return stopwords
 
 
 def get_stopwords(lang: str = "en") -> list:
@@ -60,7 +53,7 @@ def get_stopwords(lang: str = "en") -> list:
     """
     if isinstance(lang, str) and len(lang) == 2:
         lang = lang.lower()
-        custom_stopwords = _load_stopwords_from_json(STOPWORDS_JSON_FILEPATH)
+        custom_stopwords = STOPWORDS
         stopwords = []
 
         supported_lang_lib = list(_LANGUAGE_MAPPING.keys())
