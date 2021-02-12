@@ -1,6 +1,8 @@
 NLPretext
 ==============================
-<font size="4"> **No more pretext for dirty text** :pencil: </font>
+
+### **No more pretext for dirty text** :pencil:
+
 
 :tired_face: *Working on an NLP project and tired of always looking for the same silly preprocessing functions on the web?* 
 
