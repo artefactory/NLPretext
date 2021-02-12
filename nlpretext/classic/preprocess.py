@@ -23,10 +23,10 @@ from __future__ import (absolute_import, division, print_function,
 import re
 import unicodedata
 from ftfy import fix_text as _fix_text
-from nautilus_nlp._config import constants
-from nautilus_nlp.token.tokenizer import tokenize
-from nautilus_nlp._utils.phone_number import extract_phone_numbers as _extract_phone_numbers
-from nautilus_nlp._utils.stopwords import get_stopwords
+from nlpretext._config import constants
+from nlpretext.token.tokenizer import tokenize
+from nlpretext._utils.phone_number import extract_phone_numbers as _extract_phone_numbers
+from nlpretext._utils.stopwords import get_stopwords
 
 
 def normalize_whitespace(text) -> str:
@@ -49,6 +49,19 @@ def normalize_whitespace(text) -> str:
     ).strip()
     return text
 
+def lower_text(text: str):
+    """
+    Given ``text`` str, transform it into lowercase
+
+    Parameters
+    ----------
+    text : string
+
+    Returns
+    -------
+    string
+    """
+    return text.lower()
 
 def remove_stopwords(text: str, lang: str, custom_stopwords: list = None) -> str:
     """

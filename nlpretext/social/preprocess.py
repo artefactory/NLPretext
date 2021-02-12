@@ -20,8 +20,8 @@
 from __future__ import absolute_import, division, print_function, unicode_literals
 
 import emoji as _emoji
-from nautilus_nlp._config import constants
-from nautilus_nlp.classic.preprocess import normalize_whitespace
+from nlpretext._config import constants
+from nlpretext.classic.preprocess import normalize_whitespace
 
 
 def remove_mentions(text) -> str:

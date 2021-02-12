@@ -22,9 +22,6 @@ import phonenumbers as _phonenumbers
 
 ROOT_FOLDER = os.path.abspath(os.path.join(os.path.dirname(__file__), '../..'))
 
-# Stopwords config
-STOPWORDS_JSON_FILEPATH = os.path.join(ROOT_FOLDER, "nautilus_nlp", "_config", "stopwords.json")
-
 # Country config
 COUNTRY_MAPPING_ISO = {
     'af': 'Afghanistan', 'ax': 'Åland Islands', 'al': 'Albania', 'dz': 'Algeria', 'as': 'American Samoa', 'ad':
