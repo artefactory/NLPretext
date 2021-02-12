@@ -148,11 +148,11 @@ You can now open the file index.html located in the build folder.
 ------------
 
     ├── LICENSE
-    ├── Makefile            <- Makefile with commands like `make data` or `make train`
+    ├── VERSION
+    ├── CONTRIBUTING.md     <- Contribution guidelines
     ├── README.md           <- The top-level README for developers using this project.
-    ├── config              <- Where the configuration and constants live
+    ├── .github/workflows   <- Where the CI lives
     ├── datasets/external   <- Bash scripts to download external datasets
-    ├── docker              <- Where to build a docker image using this lib
     ├── docs                <- Sphinx HTML documentation
     │   ├── _build
     │   │   └── html
@@ -162,9 +162,11 @@ You can now open the file index.html located in the build folder.
     │   ├── augmentation    <- Text augmentation script
     │   ├── basic           <- Basic text preprocessing 
     │   ├── social          <- Social text preprocessing
-    │   └── token           <- Token preprocessing
-    ├── utils               <- Where preprocessing utils scripts lives
+    │   ├── token           <- Token text preprocessing
+    │   ├── _config         <- Where the configuration and constants live
+    │   └── _utils          <- Where preprocessing utils scripts lives
     ├── tests               <- Where the tests lives
     ├── setup.py            <- makes project pip installable (pip install -e .) so the package can be imported
     ├── requirements.txt    <- The requirements file for reproducing the analysis environment, e.g.
-                              generated with `pip freeze > requirements.txt`    
+                              generated with `pip freeze > requirements.txt`
+    └── pylintrc            <- The linting configuration file

@@ -42,7 +42,7 @@ jobs:
 
       - name: Run pylint
         run: |
-          pylint nlpretext tests --max-module-lines 15000
+          pylint nlpretext tests
 
       - name: Run pytest
         run: |
