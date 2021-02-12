@@ -168,5 +168,5 @@ You can now open the file index.html located in the build folder.
     ├── tests               <- Where the tests lives
     ├── setup.py            <- makes project pip installable (pip install -e .) so the package can be imported
     ├── requirements.txt    <- The requirements file for reproducing the analysis environment, e.g.
-                              generated with `pip freeze > requirements.txt`
+    │                          generated with `pip freeze > requirements.txt`
     └── pylintrc            <- The linting configuration file
