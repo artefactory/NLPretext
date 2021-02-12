@@ -17,7 +17,7 @@
 # Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 from typing import Optional
 import phonenumbers as _phonenumbers
-from nautilus_nlp._config.config import SUPPORTED_COUNTRY, FORMAT_NUMBERS
+from nlpretext._config.config import SUPPORTED_COUNTRY, FORMAT_NUMBERS
 
 
 def find_phone_numbers(string: str, region_code: Optional[str] = None) -> str:

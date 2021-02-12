@@ -3,9 +3,9 @@ from typing import List, Callable
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import FunctionTransformer
 
-from nautilus_nlp.social.preprocess import (
+from nlpretext.social.preprocess import (
     remove_html_tags, remove_mentions, remove_emoji, remove_hashtag)
-from nautilus_nlp.classic.preprocess import normalize_whitespace, remove_eol_characters, fix_bad_unicode
+from nlpretext.classic.preprocess import normalize_whitespace, remove_eol_characters, fix_bad_unicode
 
 
 class Preprocessor():
@@ -17,19 +17,24 @@ class Preprocessor():
         self.__operations = []
         self.pipeline = None
 
-    def pipe(self, operation: Callable):
+    def pipe(self, operation: Callable, args: dict = None):
         """
-        Add an operation to pipe in the preprocessor
+        Add an operation and its arguments to pipe in the preprocessor
 
         Parameters
         ----------
         operation : callable
             text preprocessing function
+        args : dict of arguments
         """
-        self.__operations.append(operation)
+        self.__operations.append({
+            'operation': operation,
+            'args': args
+        })
+
 
     @staticmethod
-    def build_pipeline(operation_list: List[Callable]) -> Pipeline:
+    def build_pipeline(operation_list: List[dict]) -> Pipeline:
         """
         Build sklearn pipeline from a operation list
 
@@ -44,7 +49,10 @@ class Preprocessor():
         """
         return Pipeline(
             steps=[
-                (operation.__name__, FunctionTransformer(operation))
+                (
+                    operation['operation'].__name__,
+                    FunctionTransformer(operation['operation'], kw_args=operation['args'])
+                )
                 for operation in operation_list])
 
 
@@ -63,8 +71,11 @@ class Preprocessor():
         """
         operations = self.__operations
         if operations == []:
-            operations = (remove_html_tags, remove_mentions, remove_emoji, remove_hashtag,
-                          remove_eol_characters, fix_bad_unicode, normalize_whitespace)
+            operations_to_pipe = (
+                remove_html_tags, remove_mentions, remove_emoji, remove_hashtag,
+                remove_eol_characters, fix_bad_unicode, normalize_whitespace
+            )
+            operations = [{'operation': operation, 'args': None} for operation in operations_to_pipe]
         self.pipeline = self.build_pipeline(operations)
         text = self.pipeline.fit_transform(text)
         return text
