@@ -4,13 +4,15 @@ NLPretext
 ### **No more pretext for dirty text** :pencil:
 
 
-:tired_face: *Working on an NLP project and tired of always looking for the same silly preprocessing functions on the web?* 
+> *Working on an NLP project and tired of always looking for the same silly preprocessing functions on the web?*  :tired_face: 
 
-:disappointed_relieved: *Need to efficiently extract email adresses from a document? Hashtags from tweets? Remove accents from a French post?*
+> *Need to efficiently extract email adresses from a document? Hashtags from tweets? Remove accents from a French post?* :disappointed_relieved:
+
 
 **NLPretext got you covered!** :rocket:
 
 NLPretext packages in a **unique** library all the text **preprocessing** functions you need to **ease** your NLP project. 
+
 
 :mag: Quickly explore below our preprocessing pipelines and individual functions referential.
 
