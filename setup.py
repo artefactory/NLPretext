@@ -33,7 +33,6 @@ class PostInstallCommand(setuptools.command.install.install):
 
 with open(Path(__file__).resolve().parent.joinpath('VERSION'), 'r') as fh:
     version = fh.read()
-
 setup(
     name='nautilus_nlp',
     packages=find_packages(),

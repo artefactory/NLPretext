@@ -41,7 +41,7 @@ from nautilus_nlp.token.preprocess import (
 from nautilus_nlp.preprocessor import Preprocessor
 
 import utils.phone_number as phone
-from utils.stopwords import get_stopwords
+from nautilus_nlp._utils.stopwords import get_stopwords
 
 
 @pytest.mark.parametrize("text, expected_result",
