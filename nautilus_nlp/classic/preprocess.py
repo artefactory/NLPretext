@@ -23,10 +23,10 @@ from __future__ import (absolute_import, division, print_function,
 import re
 import unicodedata
 from ftfy import fix_text as _fix_text
-from config import constants
+from nautilus_nlp._config import constants
 from nautilus_nlp.token.tokenizer import tokenize
-from utils.phone_number import extract_phone_numbers as _extract_phone_numbers
-from utils.stopwords import get_stopwords
+from nautilus_nlp._utils.phone_number import extract_phone_numbers as _extract_phone_numbers
+from nautilus_nlp._utils.stopwords import get_stopwords
 
 
 def normalize_whitespace(text) -> str:

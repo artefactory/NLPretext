@@ -20,7 +20,7 @@
 from __future__ import absolute_import, division, print_function, unicode_literals
 
 import emoji as _emoji
-from config import constants
+from nautilus_nlp._config import constants
 from nautilus_nlp.classic.preprocess import normalize_whitespace
 
 
