@@ -15,38 +15,29 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with this program; if not, write to the Free Software Foundation,
 # Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
-from setuptools import find_packages, setup
 import setuptools
-import setuptools.command.install
 from pathlib import Path
-
-class PostInstallCommand(setuptools.command.install.install):
-    """Post-installation command."""
-    def run(self):
-        setuptools.command.install.install.run(self)
-        try:
-            import spacy
-            spacy.cli.validate()
-        except ModuleNotFoundError:
-            pass
 
 
 with open(Path(__file__).resolve().parent.joinpath('VERSION'), 'r') as fh:
     version = fh.read()
-setup(
+
+with open("requirements.txt", "r") as fr:
+    requirements = [req for req in fr.read().splitlines() if not req.startswith("#")]
+
+setuptools.setup(
     name='nlpretext',
-    packages=find_packages(),
+    packages=setuptools.find_packages(),
+    scripts=["VERSION", "requirements.txt"],
     version=version,
     description='All the goto functions you need to handle NLP use-cases',
     author='Artefact',
     license='MIT',
-    url='https://github.com/artefactory/nautilus-nlp',
+    url='https://github.com/artefactory/NLPretext',
+    install_requires=requirements,
     classifiers=[
-        'Programming Language :: Python :: 3.6',
+        'Programming Language :: Python :: 3.7',
         'License :: OSI Approved :: MIT License',
         'Operating System :: OS Independent',
     ],
-    cmdclass={
-        'install': PostInstallCommand,
-    },
 )
