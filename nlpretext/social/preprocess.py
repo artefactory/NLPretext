@@ -21,7 +21,7 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 
 import emoji as _emoji
 from nlpretext._config import constants
-from nlpretext.classic.preprocess import normalize_whitespace
+from nlpretext.basic.preprocess import normalize_whitespace
 
 
 def remove_mentions(text) -> str:
