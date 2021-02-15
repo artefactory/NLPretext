@@ -17,10 +17,14 @@
 # Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 name: CD
 
-on: [push, pull_request]
+on:
+  pull_request:
+    branches:
+      - master
+    types: [closed]
 
 jobs:
-  CI:
+  CD:
     name: Launching CD
     runs-on: ubuntu-latest
     strategy:
@@ -43,7 +47,6 @@ jobs:
       - name: Building package distribution
         run: |
           python setup.py sdist bdist_wheel
-          ls
 
       - name: Publish new package version on PyPI
         uses: pypa/gh-action-pypi-publish@master
