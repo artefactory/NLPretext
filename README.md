@@ -70,7 +70,7 @@ Another possibility is to create your custom pipeline if you know exactly what f
 
 ```python
 from nlpretext import Preprocessor
-from nlpretext.classic.preprocess import (normalize_whitespace, remove_punct, remove_eol_characters,
+from nlpretext.basic.preprocess import (normalize_whitespace, remove_punct, remove_eol_characters,
 remove_stopwords, lower_text)
 from nlpretext.social.preprocess import remove_mentions, remove_hashtag, remove_emoji
 text = "I just got the best dinner in my life @latourdargent !!! I  recommend 😀 #food #paris \n"
@@ -96,7 +96,7 @@ Take a look at all the functions that are available [here](https://github.com/ar
 ## Replacing emails <a name="replace_emails"></a>
 
 ```python
-from nlpretext.classic.preprocess import replace_emails
+from nlpretext.basic.preprocess import replace_emails
 example = "I have forwarded this email to obama@whitehouse.gov"
 example = replace_emails(example, replace_with="*EMAIL*")
 print(example)
@@ -106,7 +106,7 @@ print(example)
 ## Replacing phone numbers <a name="replace_phone_numbers"></a>
 
 ```python
-from nlpretext.classic.preprocess import replace_phone_numbers
+from nlpretext.basic.preprocess import replace_phone_numbers
 example = "My phone number is 0606060606"
 example = replace_phone_numbers(example, country_to_detect=["FR"], replace_with="*PHONE*")
 print(example)
@@ -157,7 +157,7 @@ You can now open the file index.html located in the build folder.
     ├── nlpretext           <- Main Package. This is where the code lives
     │   ├── preprocessor.py <- Main preprocessing script
     │   ├── augmentation    <- Text augmentation script
-    │   ├── classic         <- Classic text preprocessing 
+    │   ├── basic           <- Basic text preprocessing 
     │   ├── social          <- Social text preprocessing
     │   ├── token           <- Token text preprocessing
     │   ├── _config         <- Where the configuration and constants live
