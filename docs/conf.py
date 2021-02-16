@@ -159,7 +159,7 @@ latex_elements = {
 # (source start file, target name, title,
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
-    (master_doc, 'NLPretext.tex', 'Nautilus\\_nlp Documentation',
+    (master_doc, 'NLPretext.tex', 'NLPretext Documentation',
      'Artefact', 'manual'),
 ]
 
