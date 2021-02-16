@@ -188,14 +188,13 @@ def test_get_stopwords():
 
 
 @pytest.mark.parametrize(
-    "input_tokens, expected_output",
+    "input_tokens, lang, expected_output",
     [
-        (['I', 'like', 'when', 'you', 'move', 'your', 'body', '!'], ['I', 'move', 'body', '!'])
+        (['I', 'like', 'when', 'you', 'move', 'your', 'body', '!'], "en", ['I', 'move', 'body', '!'])
     ],
 )
-def test_remove_stopwords_tokens(input_tokens, expected_output):
-    stopwords = get_stopwords('en')
-    result = remove_stopwords_token(input_tokens, stopwords)
+def test_remove_stopwords_tokens(input_tokens, lang, expected_output):
+    result = remove_stopwords_token(input_tokens, lang)
     np.testing.assert_array_equal(result, expected_output)
 
 
