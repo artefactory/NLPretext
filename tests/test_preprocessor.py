@@ -17,14 +17,14 @@
 # Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 import pytest
 import numpy as np
-from nlpretext.classic.preprocess import (
+from nlpretext.basic.preprocess import (
     normalize_whitespace, remove_eol_characters, fix_bad_unicode,
     unpack_english_contractions, replace_urls, replace_emails,
     replace_phone_numbers, replace_numbers, replace_currency_symbols,
     remove_punct, remove_accents, remove_multiple_spaces_and_strip_text,
     filter_non_latin_characters
 )
-from nlpretext.classic.preprocess import (
+from nlpretext.basic.preprocess import (
     remove_stopwords as remove_stopwords_text
 )
 from nlpretext.social.preprocess import (
@@ -188,14 +188,13 @@ def test_get_stopwords():
 
 
 @pytest.mark.parametrize(
-    "input_tokens, expected_output",
+    "input_tokens, lang, expected_output",
     [
-        (['I', 'like', 'when', 'you', 'move', 'your', 'body', '!'], ['I', 'move', 'body', '!'])
+        (['I', 'like', 'when', 'you', 'move', 'your', 'body', '!'], "en", ['I', 'move', 'body', '!'])
     ],
 )
-def test_remove_stopwords_tokens(input_tokens, expected_output):
-    stopwords = get_stopwords('en')
-    result = remove_stopwords_token(input_tokens, stopwords)
+def test_remove_stopwords_tokens(input_tokens, lang, expected_output):
+    result = remove_stopwords_token(input_tokens, lang)
     np.testing.assert_array_equal(result, expected_output)
 
 
