@@ -1,7 +1,7 @@
-nautilus_nlp
-============
+nlpretext
+=========
 
 .. toctree::
    :maxdepth: 4
 
-   nautilus_nlp
+   nlpretext
