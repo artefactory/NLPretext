@@ -88,7 +88,7 @@ print(text)
 # "dinner life recommend"
 ```
 
-Take a look at all the functions that are available [here](https://github.com/artefactory/NLPretext/tree/feature/readme/nlpretext) in the ```preprocess.py``` scripts in the different folders: basic, social, token.
+Take a look at all the functions that are available [here](https://github.com/artefactory/NLPretext/tree/master) in the ```preprocess.py``` scripts in the different folders: basic, social, token.
 
 
 # Individual Functions
