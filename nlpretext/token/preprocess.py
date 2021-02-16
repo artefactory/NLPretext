@@ -20,16 +20,22 @@
 from __future__ import absolute_import, division, print_function, unicode_literals
 
 import re
+from nlpretext._utils.stopwords import get_stopwords
 
 
-def remove_stopwords(tokens, stopwords: list) -> str:
+def remove_stopwords(tokens: list, lang: str, custom_stopwords: list = None)  -> str:
     """
     Remove stopwords from a text.
     eg. 'I like when you move your body !' -> 'I move body !'
 
     Parameters
     ----------
-    stopwords : list of stopwords to remove
+    tokens: list(str)
+        list of tokens
+    lang: str
+        language iso code (e.g : "en")
+    custom_stopwords : list(str)|None
+        list of custom stopwords to add. None by default
 
     Returns
     -------
@@ -41,6 +47,9 @@ def remove_stopwords(tokens, stopwords: list) -> str:
     ValueError
         When inputs is not a list
     """
+    stopwords = get_stopwords(lang)
+    if custom_stopwords:
+        stopwords += custom_stopwords
     tokens = [word for word in tokens if word not in stopwords]
     return tokens
 
