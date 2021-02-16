@@ -1,21 +1,9 @@
-# local package
-#-e .
-
-# external requirements
-coverage
-pillow
-pytest==6.1.1
-pytest-cov==2.10.1
-python-dotenv>=0.5.1
-Sphinx
-sphinx_rtd_theme
-
 #library requirements
 chardet==3.0.4
 emoji>=0.5.2
 flashtext==2.7
 ftfy<5.0.0,>=4.2.0
-mosestokenizer
+mosestokenizer==1.1.0
 nlpaug==1.0.1
 nltk>=3.4.5
 numpy>1.15.4
@@ -24,8 +12,5 @@ pylint==2.4.4
 regex==2019.8.19
 sacremoses==0.0.13
 scikit_learn==0.23.2
-setuptools==40.8.0
 spacy==2.3.4
-https://github.com/explosion/spacy-models/releases/download/en_core_web_sm-2.3.1/en_core_web_sm-2.3.1.tar.gz
-https://github.com/explosion/spacy-models/releases/download/fr_core_news_sm-2.3.0/fr_core_news_sm-2.3.0.tar.gz
 stop_words==2018.7.23

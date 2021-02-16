@@ -31,17 +31,20 @@
 #
 import os
 import sys
+from pathlib import Path
+
 sys.path.insert(0, os.path.abspath('../'))
 
 
 # -- Project information -----------------------------------------------------
 
-project = 'Nautilus_nlp'
+project = 'NLPretext'
 copyright = '2020, Artefact'
 author = 'Artefact'
 
-# The short X.Y version
-version = '0.1.0'
+with open(Path(__file__).resolve().parent.joinpath('../VERSION'), 'r') as fh:
+    version = fh.read()
+
 # The full version, including alpha/beta/rc tags
 release = ''
 
@@ -129,7 +132,7 @@ html_static_path = ['_static']
 # -- Options for HTMLHelp output ---------------------------------------------
 
 # Output file base name for HTML help builder.
-htmlhelp_basename = 'Nautilus_nlpdoc'
+htmlhelp_basename = 'NLPretextdoc'
 
 
 # -- Options for LaTeX output ------------------------------------------------
@@ -156,8 +159,8 @@ latex_elements = {
 # (source start file, target name, title,
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
-    (master_doc, 'Nautilus_nlp.tex', 'Nautilus\\_nlp Documentation',
-     'Robin Doumerc', 'manual'),
+    (master_doc, 'NLPretext.tex', 'NLPretext Documentation',
+     'Artefact', 'manual'),
 ]
 
 
@@ -166,7 +169,7 @@ latex_documents = [
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
 man_pages = [
-    (master_doc, 'nautilus_nlp', 'Nautilus_nlp Documentation',
+    (master_doc, 'NLPretext', 'NLPretext Documentation',
      [author], 1)
 ]
 
@@ -177,8 +180,8 @@ man_pages = [
 # (source start file, target name, title, author,
 #  dir menu entry, description, category)
 texinfo_documents = [
-    (master_doc, 'Nautilus_nlp', 'Nautilus_nlp Documentation',
-     author, 'Nautilus_nlp', 'One line description of project.',
+    (master_doc, 'NLPretext', 'NLPretext Documentation',
+     author, 'NLPretext', 'One line description of project.',
      'Miscellaneous'),
 ]
 
