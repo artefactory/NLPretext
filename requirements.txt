@@ -3,7 +3,7 @@ chardet==3.0.4
 emoji>=0.5.2
 flashtext==2.7
 ftfy<5.0.0,>=4.2.0
-mosestokenizer
+mosestokenizer==1.1.0
 nlpaug==1.0.1
 nltk>=3.4.5
 numpy>1.15.4
