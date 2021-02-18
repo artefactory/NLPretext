@@ -1,8 +1,9 @@
 NLPretext
 ==============================
 
-### **No more pretext for dirty text** :pencil:
-
+<p align="center">
+    <img src="/references/logo_nlpretext.png" />
+</p>
 
 > *Working on an NLP project and tired of always looking for the same silly preprocessing functions on the web?*  :tired_face: 
 
@@ -21,6 +22,7 @@ NLPretext packages in a **unique** library all the text **preprocessing** functi
 * [Replacing phone numbers](#replace_phone_numbers)
 * [Removing hashtags](#remove_hashtags)
 * [Extracting emojis](#extract_emojis)
+* [Data augmentation](#data_augmentation)
 
 
 Cannot find what you were looking for? Feel free to open an [issue]((https://github.com/artefactory/nlpretext/issues) ).
@@ -34,7 +36,7 @@ This package has been tested on Python **3.6**, **3.7** and **3.8**.
 To install this library you just have to run the following command:
 
 ```bash
-pip install git+https://github.com/artefactory/NLPretext.git
+pip install nlpretext
 ```
 
 We strongly advise you to do the remaining steps in a virtual environnement.
@@ -132,6 +134,20 @@ example = extract_emojis(example)
 print(example)
 # [':grinning_face:']
 ```
+
+# Data augmentation <a name="data_augmentation"></a>
+
+The augmentation module helps you to **generate new texts** based on your given examples by modifying some words in the initial ones and to **keep associated entities unchanged**, if any, in the case of **NER tasks**. If you want words other than entities to remain unchanged, you can specify it within the `stopwords` argument. Modifications depend on the chosen method, the ones currently supported by the module are **substitutions with synonyms** using Wordnet or BERT from the [`nlpaug`](https://github.com/makcedward/nlpaug) library. 
+
+```python
+from nlpretext.augmentation.text_augmentation import augment_text
+example = "I want to buy a small black handbag please."
+entities = [{'entity': 'Color', 'word': 'black', 'startCharIndex': 22, 'endCharIndex': 27}]
+example = augment_text(example, method=”wordnet_synonym”, entities=entities)
+print(example)
+# "I need to buy a small black pocketbook please."
+```
+
 
 # Make HTML documentation
 
