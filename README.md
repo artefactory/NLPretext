@@ -2,7 +2,7 @@ NLPretext
 ==============================
 
 
-<img src="/references/logo_nlpretext.png" width="200" height="53">
+<img src="/references/logo_nlpretext.png" width="500" height="133">
 
 
 > *Working on an NLP project and tired of always looking for the same silly preprocessing functions on the web?*  :tired_face: 
