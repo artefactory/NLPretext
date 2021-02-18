@@ -33,13 +33,14 @@ Cannot find what you were looking for? Feel free to open an [issue]((https://git
 
 This package has been tested on Python **3.6**, **3.7** and **3.8**.
 
+We strongly advise you to do the remaining steps in a virtual environnement.
+
 To install this library you just have to run the following command:
 
 ```bash
 pip install nlpretext
 ```
 
-We strongly advise you to do the remaining steps in a virtual environnement.
 
 
 This library uses Spacy as tokenizer. Current models supported are `en_core_web_sm` and `fr_core_news_sm`. If not installed, run the following commands:
