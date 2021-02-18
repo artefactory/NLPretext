@@ -2,7 +2,7 @@ NLPretext
 ==============================
 
 
-![NLPretext](/references/logo_nlpretext.png)
+![NLPretext](/references/logo_nlpretext.png | width=100)
 
 
 > *Working on an NLP project and tired of always looking for the same silly preprocessing functions on the web?*  :tired_face: 
