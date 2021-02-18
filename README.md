@@ -1,9 +1,9 @@
 NLPretext
 ==============================
 
-
-![NLPretext](/references/logo_nlpretext.png)
-
+<p align="center">
+    <img src="/references/logo_nlpretext.png" />
+</p>
 
 > *Working on an NLP project and tired of always looking for the same silly preprocessing functions on the web?*  :tired_face: 
 
@@ -36,7 +36,7 @@ This package has been tested on Python **3.6**, **3.7** and **3.8**.
 To install this library you just have to run the following command:
 
 ```bash
-pip install git+https://github.com/artefactory/NLPretext.git
+pip install nlpretext
 ```
 
 We strongly advise you to do the remaining steps in a virtual environnement.
