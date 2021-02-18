@@ -1,9 +1,9 @@
 NLPretext
 ==============================
 
-<p align="center">
-<img src="/references/logo_nlpretext.png" width="800" height="212">
-</p>
+
+![NLPretext](/references/logo_nlpretext.png)
+
 
 > *Working on an NLP project and tired of always looking for the same silly preprocessing functions on the web?*  :tired_face: 
 
