@@ -37,12 +37,12 @@ setuptools.setup(
     long_description=long_description,
     long_description_content_type='text/markdown',
     author='Artefact',
-    license='MIT',
+    license='Apache',
     url='https://github.com/artefactory/NLPretext',
     install_requires=requirements,
     classifiers=[
         'Programming Language :: Python :: 3.7',
-        'License :: OSI Approved :: MIT License',
+        'License :: OSI Approved :: Apache Software License',
         'Operating System :: OS Independent',
     ],
 )
