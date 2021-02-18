@@ -1,8 +1,6 @@
 NLPretext
 ==============================
 
-### **No more pretext for dirty text** :pencil:
-
 
 ![NLPretext](/references/logo_nlpretext.png)
 
