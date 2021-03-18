@@ -24,6 +24,8 @@ from nlpretext.basic.preprocess import normalize_whitespace
 def remove_mentions(text) -> str:
     """
     Function that removes words preceded with a '@'
+    eg. "This is a tweet with a @mention" --> "This is a tweet with a"
+
 
     Parameters
     ----------
@@ -40,7 +42,7 @@ def remove_mentions(text) -> str:
 def extract_mentions(text) -> list:
     """
     Function that extracts words preceded with a '@'
-    eg. "I take care of my skin with @thisproduct" --> ["@thisproduct"]
+    eg. "This is a tweet with a @mention" --> ["@mention"]
 
     Parameters
     ----------
@@ -110,7 +112,7 @@ def convert_emoji_to_text(text, code_delimiters=(':', ':')) -> str:
 def extract_emojis(text) -> list:
     """
     Function that extracts emojis from a text and translates them into words
-    eg. "I take care of my skin 😀 :(" --> [":grinning_face:"]
+    eg. "This is a text with emojis 😀 :(" --> [":grinning_face:"]
 
     Parameters
     ----------
@@ -129,7 +131,7 @@ def extract_emojis(text) -> list:
 def extract_hashtags(text) -> list:
     """
     Function that extracts words preceded with a '#'
-    eg. "I take care of my skin #selfcare#selfestim" --> ["skincare", "selfestim"]
+    eg. "This is a text with #hashtag1#hashtag2" --> ["hashtag1", "hashtag2"]
 
     Parameters
     ----------
@@ -146,7 +148,7 @@ def extract_hashtags(text) -> list:
 def remove_hashtag(text) -> str:
     """
     Function that removes words preceded with a '#'
-    eg. "I take care of my skin #selfcare#selfestim" --> "I take care of my skin"
+    eg. "This is a text with #hashtag1#hashtag2" --> "This is a text with"
 
     Parameters
     ----------

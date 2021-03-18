@@ -45,7 +45,7 @@ from nlpretext._utils.stopwords import get_stopwords
 
 
 @pytest.mark.parametrize("text, expected_result",
-                         [("ACV water + cinnamon + turmeric + cucumber + lemon. 👍🏻",
+                         [("This is a test with a thumbs up 👍🏻",
                            [":thumbs_up_light_skin_tone:"]),
                           ("This is a text without emojis",
                            [])])
@@ -55,8 +55,8 @@ def test_extract_emojis(text, expected_result):
 
 
 @pytest.mark.parametrize("text, expected_result",
-                         [("I take care of my skin with @hellobody",
-                           "I take care of my skin with"),
+                         [("This is a text with a @mention",
+                           "This is a text with a"),
                           ("This is a text without mentions",
                            "This is a text without mentions")])
 def test_remove_mentions(text, expected_result):
@@ -65,8 +65,8 @@ def test_remove_mentions(text, expected_result):
 
 
 @pytest.mark.parametrize("text, expected_result",
-                         [("I take care of my skin with @hellobody",
-                           ["@hellobody"]),
+                         [("This is a text with a @mention",
+                           ["@mention"]),
                           ("This is a text without mentions",
                            [])])
 def test_extract_mentions(text, expected_result):
@@ -75,19 +75,19 @@ def test_extract_mentions(text, expected_result):
 
 
 @pytest.mark.parametrize("text, expected_result",
-                         [("This is a text with <html> content of html tag </html>",
-                           "This is a text with content of html tag"),
-                          ("This is a text without html tags",
-                           "This is a text without html tags")])
+                         [("Example with <html> content of html tag </html>",
+                           "Example with content of html tag"),
+                          ("Example without html tags",
+                           "Example without html tags")])
 def test_remove_html_tags(text, expected_result):
     result = remove_html_tags(text)
     assert expected_result == result
 
 
 @pytest.mark.parametrize("tokens_list, smallwords_threshold, expected_result",
-                         [(["I", "take", "care", "of", "my", "skin"],
+                         [(["This", "is", "a", "text", "with", "small", "words"],
                            2,
-                           ["take", "care", "skin"]),
+                           ["This", "text", "with", "small", "words"]),
                           (["This", "text", "contains", "only", "long", "words"],
                            2,
                            ["This", "text", "contains", "only", "long", "words"])])
@@ -97,15 +97,15 @@ def test_remove_smallwords(tokens_list, smallwords_threshold, expected_result):
 
 
 @pytest.mark.parametrize("text, expected_result",
-                         [("this is a #hashtag in the middle of the text",
+                         [("This is a text with a #hashtag in the middle of the text",
                            ["#hashtag"]),
-                          ("#this is a hashtag in the beginning of the text",
-                           ["#this"]),
-                          ("this is a hashtag in the end of the #text",
+                          ("#This is a text with a hashtag at the beginning of the text",
+                           ["#This"]),
+                          ("This is a text with a hashtag in the end of the #text",
                            ["#text"]),
-                          ("this is a text with no hashtag",
+                          ("This is a text with no hashtag",
                            []),
-                          ("this is a text with #many #hashtags",
+                          ("This is a text with more than one hashtag #many #hashtags",
                            ["#many", "#hashtags"])]
                          )
 def test_extract_hashtags(text, expected_result):
@@ -114,16 +114,16 @@ def test_extract_hashtags(text, expected_result):
 
 
 @pytest.mark.parametrize("text, expected_result",
-                         [("this is a #hashtag in the middle of the text",
-                           "this is a in the middle of the text"),
-                          ("#this is a hashtag in the beginning of the text",
-                           "is a hashtag in the beginning of the text"),
-                          ("this is a hashtag in the end of the #text",
-                           "this is a hashtag in the end of the"),
-                          ("this is a text with no hashtag",
-                           "this is a text with no hashtag"),
-                          ("this is a text with #many #hashtags",
-                           "this is a text with")]
+                         [("This is a text with a #hashtag in the middle of the text",
+                           "This is a text with a in the middle of the text"),
+                          ("#This is a text with a hashtag at the beginning of the text",
+                           "is a text with a hashtag at the beginning of the text"),
+                          ("This is a text with a hashtag in the end of the #text",
+                           "This is a text with a hashtag in the end of the"),
+                          ("This is a text with no hashtag",
+                           "This is a text with no hashtag"),
+                          ("This is a text with more than one hashtag #many #hashtags",
+                           "This is a text with more than one hashtag")]
                          )
 def test_remove_hashtag(text, expected_result):
     result = remove_hashtag(text)
@@ -131,8 +131,8 @@ def test_remove_hashtag(text, expected_result):
 
 
 @pytest.mark.parametrize("text, expected_filtered_text",
-                         [("كلمات Learn 3 Arabic كلمات words EASILY- Vocabulary #1 تعلم ٣ جديدة",
-                           "Learn 3 Arabic words EASILY Vocabulary 1")])
+                         [("卓悦世界, hello world, بونجور موند ,124 Vocab",
+                           "hello world 124 Vocab")])
 def test_filter_non_latin_characters(text, expected_filtered_text):
     result = filter_non_latin_characters(text)
     assert expected_filtered_text == result
