@@ -25,19 +25,24 @@ with open(Path(__file__).resolve().parent.joinpath('VERSION'), 'r') as fh:
 with open("requirements.txt", "r") as fr:
     requirements = [req for req in fr.read().splitlines() if not req.startswith("#")]
 
+with open("README.md", "r") as fr:
+    long_description = fr.read()
+
 setuptools.setup(
     name='nlpretext',
     packages=setuptools.find_packages(),
-    scripts=["VERSION", "requirements.txt"],
+    scripts=["VERSION", "requirements.txt", "README.md"],
     version=version,
     description='All the goto functions you need to handle NLP use-cases',
+    long_description=long_description,
+    long_description_content_type='text/markdown',
     author='Artefact',
-    license='MIT',
+    license='Apache',
     url='https://github.com/artefactory/NLPretext',
     install_requires=requirements,
     classifiers=[
         'Programming Language :: Python :: 3.7',
-        'License :: OSI Approved :: MIT License',
+        'License :: OSI Approved :: Apache Software License',
         'Operating System :: OS Independent',
     ],
 )
