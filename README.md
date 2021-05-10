@@ -152,7 +152,6 @@ print(example)
 
 # Make HTML documentation
 
-
 In order to make the html Sphinx documentation, you need to run at the nlpretext root path:
 `sphinx-apidoc -f nlpretext -o docs/`
 This will generate the .rst files.
@@ -184,3 +183,19 @@ You can now open the file index.html located in the build folder.
     ├── requirements.txt    <- The requirements file for reproducing the analysis environment, e.g.
     │                          generated with `pip freeze > requirements.txt`
     └── pylintrc            <- The linting configuration file
+
+
+# Credits
+
+- [textacy](https://github.com/chartbeat-labs/textacy) for the following basic preprocessing functions:
+    - `fix_bad_unicode`
+    - `normalize_whitespace`
+    - `unpack_english_contractions`
+    - `replace_urls`
+    - `replace_emails`
+    - `replace_numbers`
+    - `replace_currency_symbols`
+    - `remove_punct`
+    - `remove_accents`
+    - `replace_phone_numbers` *(with some modifications of our own)*
+

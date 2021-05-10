@@ -15,6 +15,7 @@
 # limitations under the License
 """
 Collection of regular expressions and other (small, generally useful) constants.
+Credits to textacy for some of them: https://github.com/chartbeat-labs/textacy
 """
 from __future__ import unicode_literals
 
