@@ -190,7 +190,7 @@ def test_get_stopwords():
 @pytest.mark.parametrize(
     "input_tokens, lang, expected_output",
     [
-        (['I', 'like', 'when', 'you', 'move', 'your', 'body', '!'], "en", ['I', 'move', 'body', '!'])
+        (['I', 'like', 'this', 'song', 'very', 'much', '!'], "en", ['I', 'song', '!'])
     ],
 )
 def test_remove_stopwords_tokens(input_tokens, lang, expected_output):
@@ -201,7 +201,7 @@ def test_remove_stopwords_tokens(input_tokens, lang, expected_output):
 @pytest.mark.parametrize(
     "input_text, lang, expected_output",
     [
-        ('I like when you move your body !', 'en', 'I move body !'),
+        ('I like this song very much !', 'en', 'I song !'),
         ('Can I get a beer?', 'en', 'Can I beer ?'),
         ('Je vous recommande ce film !', 'fr', 'Je recommande film !'),
         ('je vous recommande ce film !', 'fr', 'recommande film !'),
@@ -216,7 +216,7 @@ def test_remove_stopwords_text(input_text, lang, expected_output):
 @pytest.mark.parametrize(
     "input_text, lang, custom_stopwords, expected_output",
     [
-        ('I like when you move your body !', 'en', ['body'], 'I move !'),
+        ('I like this song very much !', 'en', ['song'], 'I !'),
         ('Je vous recommande ce film la scène de fin est géniale !', 'fr',
          ['film', 'scène'], 'Je recommande fin géniale !'),
     ],
@@ -291,8 +291,8 @@ def test_unpack_english_contractions(input_str, expected_str):
         "Wan't to contribute to NLPretext? read *URL* first"),
      ("If you go to http://internet.org, you will find a website hosted by FB.",
       "If you go to *URL*, you will find a website hosted by FB."),
-     ("Ishttps://waaaou.com/ available?", 'Is*URL* available?'),
-     ("mailto:hugo.dupont@artefact.com", '*URL*')])
+     ("Ishttps://internet.org/ available?", 'Is*URL* available?'),
+     ("mailto:john.doe@artefact.com", '*URL*')])
 def test_replace_urls(input_str, expected_str):
     result = replace_urls(input_str)
     np.testing.assert_equal(result, expected_str)
@@ -301,7 +301,7 @@ def test_replace_urls(input_str, expected_str):
 @pytest.mark.parametrize(
     "input_str, expected_str",
     [
-        ("my email:hugo.dupont@artefact.com", "my email:*EMAIL*"),
+        ("my email:john.doe@artefact.com", "my email:*EMAIL*"),
         ("v543143@nwytg.net is a temporary email", "*EMAIL* is a temporary email"),
         ("our emails used to be name.surname@artefact.is", "our emails used to be *EMAIL*")
     ]
@@ -319,8 +319,8 @@ def test_replace_emails(input_str, expected_str):
         ("call me at +33601020304", "call me at *PHONE*"),
         ("call me at +33 6 01 02 03 04", "call me at *PHONE*"),
         ("call me at +33 601 020 304", "call me at *PHONE*"),
-        ("if this unit test doesn't work, call 3615 and says 'ROBIN'",
-         "if this unit test doesn't work, call *PHONE* and says 'ROBIN'"),
+        ("if this unit test doesn't work, call 3615 and says 'HELP'",
+         "if this unit test doesn't work, call *PHONE* and says 'HELP'"),
         ('(541) 754-0000 is a US. Phone', '*PHONE* is a US. Phone'),
         ('+1-541-754-0000 is an international Phone', '*PHONE* is an international Phone'),
         ('+1-541-754-0000 Dialed in the US', '*PHONE* Dialed in the US'),
@@ -380,9 +380,9 @@ def test_replace_currency_symbols(input_str, param, expected_str):
         ("Seriously.,.", '.,;', "Seriously "),
         ("Seriously...", '.,;', "Seriously "),
         ("Seriously.!.", '.,;', "Seriously ! "),
-        ("hugo.dupont@artefact.com", '.,;', "hugo dupont@artefact com"),
-        ("hugo.dupont@artefact.com", None, "hugo dupont artefact com"),
-        ("hugo-dupont@artefact.com", None, "hugo dupont artefact com")
+        ("john.doe@artefact.com", '.,;', "john doe@artefact com"),
+        ("john.doe@artefact.com", None, "john doe artefact com"),
+        ("john-doe@artefact.com", None, "john doe artefact com")
     ]
 )
 def test_remove_punct(input_str, param, expected_str):
@@ -393,14 +393,12 @@ def test_remove_punct(input_str, param, expected_str):
 @pytest.mark.parametrize(
     "input_str, expected_str",
     [
-        ("👉👌", ""),
+        ("⚽️👌", ""),
         ("🎅🏿⌚", ""),
-        ("🥖✊💦", ""),
+        ("🥖🍷🇫🇷", ""),
         ("✊", ""),
-        ("J'espère que les 🚓 vont bien",
-         "J'espère que les  vont bien"),
-        ("J'espère que les vont bien🚓",
-         "J'espère que les vont bien")
+        ("Save 🐼 and 🐟",
+         "Save  and "),
     ]
 )
 def test_remove_emoji(input_str, expected_str):
@@ -411,9 +409,9 @@ def test_remove_emoji(input_str, expected_str):
 @pytest.mark.parametrize(
     "input_str, expected_str",
     [
-        ("👉👌", ":backhand_index_pointing_right::OK_hand:"),
+        ("⚽️👌", ":soccer_ball::OK_hand:"),
         ("🎅🏿⌚", ":Santa_Claus_dark_skin_tone::watch:"),
-        ("🥖✊💦", ":baguette_bread::raised_fist::sweat_droplets:"),
+        ("🥖🍷🇫🇷", ":baguette_bread::wine_glass::France:"),
         ("✊", ":raised_fist:")
     ]
 )
