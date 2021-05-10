@@ -393,7 +393,7 @@ def test_remove_punct(input_str, param, expected_str):
 @pytest.mark.parametrize(
     "input_str, expected_str",
     [
-        ("⚽️👌", ""),
+        ("⚽👌", ""),
         ("🎅🏿⌚", ""),
         ("🥖🍷🇫🇷", ""),
         ("✊", ""),
@@ -403,7 +403,8 @@ def test_remove_punct(input_str, param, expected_str):
 )
 def test_remove_emoji(input_str, expected_str):
     result = remove_emoji(input_str)
-    np.testing.assert_equal(result, expected_str)
+    assert len(result) == len(expected_str)
+    assert result == expected_str
 
 
 @pytest.mark.parametrize(
