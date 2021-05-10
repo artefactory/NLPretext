@@ -289,7 +289,6 @@ def test_unpack_english_contractions(input_str, expected_str):
         "Wan't to contribute to NLPretext? read https://github.com/artefactory/NLPretext/blob/master/CONTRIBUTING.md"\
             " first",
         "Wan't to contribute to NLPretext? read *URL* first"),
-     ("The ip address of my VM is http://00.00.000.0:8888", "The ip address of my VM is *URL*"),
      ("If you go to http://internet.org, you will find a website hosted by FB.",
       "If you go to *URL*, you will find a website hosted by FB."),
      ("Ishttps://waaaou.com/ available?", 'Is*URL* available?'),
