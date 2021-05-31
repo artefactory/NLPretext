@@ -14,3 +14,4 @@ sacremoses==0.0.13
 scikit_learn==0.23.2
 spacy==2.3.4
 stop_words==2018.7.23
+dask==2021.4.1

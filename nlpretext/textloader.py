@@ -1,13 +1,15 @@
 import json
+import re
 
 import dask.bag as db
 import dask.dataframe as dd
+
+from nlpretext._utils.file_loader import check_text_file_format
 
 
 class TextLoader():
     def __init__(
             self,
-            file_format="txt",
             text_column="text"):
         """
         Initialize DataLoader object to retrieve text data
@@ -20,7 +22,8 @@ class TextLoader():
             name of the column containing texts in json / csv
         """
         self.text_column = text_column
-        self.file_format = file_format
+        self.file_format = ""
+
 
     def _read_text_txt(self, files_path):
         """
@@ -84,6 +87,8 @@ class TextLoader():
         -------
         dask.dataframe
         """
+        self.file_format = check_text_file_format(files_path)
+
         reader_mapping = {"csv": self._read_text_csv,
                           "txt": self._read_text_txt,
                           "json": self._read_text_json}

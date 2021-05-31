@@ -234,3 +234,36 @@ def convert_encoding(filepath: str, input_encoding: str, output_encoding: str):
     with codecs.open(filepath, encoding=input_encoding) as input_file:
         with codecs.open("encoded_" + filepath, "w", encoding=output_encoding) as output_file:
             shutil.copyfileobj(input_file, output_file)
+
+
+
+## File format detection
+
+def check_text_file_format(filepath):
+    """
+    Retrieve format of a file path or list of files path, among .csv, .json and .txt
+
+    Parameters
+    ----------
+    filepath : str | list(str)
+        A filepath with wildcard (eg. *.txt), or a list of filepaths.
+
+    Returns
+    -------
+    str
+        Format of the specified file path, among .json, .csv or .txt
+    """
+    pattern = "^.*\.(json|csv|txt)$"
+    if not isinstance(filepath, list):
+        filepath = [filepath]
+
+    format_re_list = [re.match(pattern, path) for path in filepath]
+    if None in format_re_list:
+        raise ValueError("Unrecognized format among specified files, only .csv, .json and .txt accepted")
+
+    format_set = set([format_re.group(1) for format_re in format_re_list])
+    if len(format_set) > 1:
+        raise ValueError(f"Multiple file formats found in file path list: {list(format_set)}")
+
+    file_format = list(format_set)[0]
+    return file_format
