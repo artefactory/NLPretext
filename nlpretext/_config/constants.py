@@ -227,3 +227,6 @@ EMOJI_PATTERN = _emoji.get_emoji_regexp()
 HASHTAG_PATTERN = re.compile(r'#\w*')
 AT_PATTERN = re.compile(r'@\w*')
 HTML_TAG_PATTERN = re.compile(r'<.*?>')
+
+# TEXT LOADER
+TEXT_FILE_FORMAT_PATTERN = re.compile(r"^.*\.(json|csv|txt)$")

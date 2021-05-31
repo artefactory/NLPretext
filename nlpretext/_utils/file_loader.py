@@ -27,6 +27,8 @@ from typing import Optional, Union, List
 
 import chardet
 
+from nlpretext._config import constants
+
 
 def open_textfile(filepath: str, encoding="utf-8"):
     with io.open(filepath, "r", encoding=encoding) as f:
@@ -253,11 +255,11 @@ def check_text_file_format(filepath):
     str
         Format of the specified file path, among .json, .csv or .txt
     """
-    pattern = "^.*\.(json|csv|txt)$"
+    pattern = constants.TEXT_FILE_FORMAT_PATTERN
     if not isinstance(filepath, list):
         filepath = [filepath]
 
-    format_re_list = [re.match(pattern, path) for path in filepath]
+    format_re_list = [pattern.match(path) for path in filepath]
     if None in format_re_list:
         raise ValueError("Unrecognized format among specified files, only .csv, .json and .txt accepted")
 

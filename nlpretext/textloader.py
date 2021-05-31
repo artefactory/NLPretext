@@ -16,14 +16,11 @@ class TextLoader():
 
         Parameters
         ----------
-        file_format : string
-            file format to be read
         text_column : string
             name of the column containing texts in json / csv
         """
         self.text_column = text_column
         self.file_format = ""
-
 
     def _read_text_txt(self, files_path):
         """
@@ -74,18 +71,19 @@ class TextLoader():
         text_ddf = dd.read_csv(files_path)
         return text_ddf[[self.text_column]]
 
-    def read_text(self, files_path):
+    def read_text(self, files_path, compute_df=True):
         """
         Read the text files stored in files_path
 
         Parameters
         ----------
-        files_path : string | list[string]
+        files_path: string | list[string]
             single or multiple files path
-
+        compute_df: bool
+            True if user wants Dask Dataframe to be computed as pandas DF, False otherwise
         Returns
         -------
-        dask.dataframe
+        dask.dataframe | pandas.DataFrame
         """
         self.file_format = check_text_file_format(files_path)
 
@@ -97,4 +95,7 @@ class TextLoader():
             text = reader(files_path)
         else:
             raise ValueError("Format not handled")
-        return text.compute()
+
+        if compute_df:
+            return text.compute()
+        return text
