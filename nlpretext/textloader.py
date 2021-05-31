@@ -1,5 +1,4 @@
 import json
-import re
 
 import dask.bag as db
 import dask.dataframe as dd
