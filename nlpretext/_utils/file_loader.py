@@ -263,9 +263,9 @@ def check_text_file_format(filepath):
     if None in format_re_list:
         raise ValueError("Unrecognized format among specified files, only .csv, .json and .txt accepted")
 
-    format_set = set([format_re.group(1) for format_re in format_re_list])
-    if len(format_set) > 1:
-        raise ValueError(f"Multiple file formats found in file path list: {list(format_set)}")
+    format_list = [format_re.group(1) for format_re in format_re_list]
+    if len(set(format_list)) > 1:
+        raise ValueError(f"Multiple file formats found in file path list: {format_list}")
 
-    file_format = list(format_set)[0]
+    file_format = format_list[0]
     return file_format
