@@ -105,30 +105,6 @@ def text_loader(
         )
 
 
-def get_subfolders_path(folder: str) -> list:
-    """
-    Get a list of all the subfolder for a folder path
-    """
-    if not folder.endswith("/"):
-        folder = folder + "/"
-    return [
-        folder + f + "/"
-        for f in os.listdir(folder)
-        if os.path.isdir(os.path.join(folder, f)) and f != ".DS_Store"
-    ]
-
-
-def list_files_in_subdir(filepath: str) -> list:
-    """
-    Get a list of all the filepath of files in directory and subdirectory.
-    """
-    res = []
-    for path, _, files in os.walk(filepath):
-        for name in files:
-            res.append(os.path.join(path, name))
-    return res
-
-
 def list_files(filepath: str) -> List[str]:
     """
     List files within a given filepath.
@@ -207,41 +183,10 @@ def documents_loader(
     raise IOError("No files detected in {}".format(filepath))
 
 
-## CSV Loader
-
-
-def encode_columns(df, columns_to_encode: str):
-    """
-    apply json.dumps on columns
-    """
-    for col in columns_to_encode:
-        df[col] = df[col].apply(json.dumps)
-
-
-def decode_columns(df, columns_to_encode: str):
-    """
-    apply json.loads on columns
-    """
-    for col in columns_to_encode:
-        df[col] = df[col].apply(json.loads)
-
-
-## Encoding functions
-
-
-def convert_encoding(filepath: str, input_encoding: str, output_encoding: str):
-    """
-    Encode a file according to a specified encoding.
-    """
-    with codecs.open(filepath, encoding=input_encoding) as input_file:
-        with codecs.open("encoded_" + filepath, "w", encoding=output_encoding) as output_file:
-            shutil.copyfileobj(input_file, output_file)
-
-
 
 ## File format detection
 
-def check_text_file_format(filepath):
+def check_text_file_format(filepath) -> str:
     """
     Retrieve format of a file path or list of files path, among .csv, .json and .txt
 

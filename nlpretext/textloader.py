@@ -9,7 +9,8 @@ from nlpretext._utils.file_loader import check_text_file_format
 class TextLoader():
     def __init__(
             self,
-            text_column="text"):
+            text_column="text",
+            encoding="utf-8"):
         """
         Initialize DataLoader object to retrieve text data
 
@@ -20,6 +21,7 @@ class TextLoader():
         """
         self.text_column = text_column
         self.file_format = ""
+        self.encoding = encoding
 
     def _read_text_txt(self, files_path):
         """
@@ -34,7 +36,7 @@ class TextLoader():
         -------
         dask.dataframe
         """
-        text_ddf = db.read_text(files_path).str.strip().to_dataframe()
+        text_ddf = db.read_text(files_path, encoding=self.encoding).str.strip().to_dataframe()
         text_ddf.columns = [self.text_column]
         return text_ddf
 
@@ -51,7 +53,7 @@ class TextLoader():
         -------
         dask.dataframe
         """
-        text_ddf = db.read_text(files_path).map((json.loads)).to_dataframe()
+        text_ddf = db.read_text(files_path, encoding=self.encoding).map((json.loads)).to_dataframe()
         try:
             return text_ddf[[self.text_column]]
         except KeyError:
