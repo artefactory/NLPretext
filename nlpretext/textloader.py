@@ -57,7 +57,6 @@ class TextLoader():
         except KeyError:
             raise KeyError(f"Specified text_column '{self.text_column}' not in file keys")
 
-
     def _read_text_csv(self, files_path):
         """
         Read csv text files stored in files_path
@@ -77,7 +76,7 @@ class TextLoader():
         except KeyError:
             raise KeyError(f"Specified text_column '{self.text_column}' not in file keys")
 
-    def read_text(self, files_path, is_computed=True):
+    def read_text(self, files_path, is_computed=True, preprocessor=None):
         """
         Read the text files stored in files_path
 
@@ -87,6 +86,9 @@ class TextLoader():
             single or multiple files path
         is_computed: bool
             True if user wants Dask Dataframe to be computed as pandas DF, False otherwise
+        preprocessor: nlpretext.preprocessor.Preprocessor
+            NLPretext preprocessor can be specified to pre-process text after loading
+
         Returns
         -------
         dask.dataframe | pandas.DataFrame
@@ -100,6 +102,9 @@ class TextLoader():
         if reader is None:
             raise ValueError("Format not handled")
         text = reader(files_path)
+
+        if preprocessor is not None:
+            text[self.text_column] = text[self.text_column].map(preprocessor.run)
 
         if is_computed:
             return text.compute()
