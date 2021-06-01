@@ -15,10 +15,12 @@
 # limitations under the License
 
 import os
-import pytest
+import re
 
 import numpy as np
-from nlpretext._utils.file_loader import (detect_encoding, documents_loader, check_text_file_format)
+import pytest
+from nlpretext._utils.file_loader import (check_text_file_format,
+                                          detect_encoding, documents_loader)
 
 TESTDOC_LATIN1 = "J'aime les frites bien grasse étalon châpeau!"
 TESTDOC_UTF8 = "Un deuxième exemple de texte en utf-8 cette fois!"
@@ -99,22 +101,30 @@ def remove_files():
 
 
 @pytest.mark.parametrize(
-    "input_filepath, expected_str",
+    "input_filepath, raising, expected_str",
     [
-        ("hello.csv", "csv"),
-        ("folder/hello.csv", "csv"),
-        ("gs://folder/hello.csv", "csv"),
-        (["hello.csv"], "csv"),
-        ("hello.json", "json"),
-        ("folder/hello.json", "json"),
-        ("gs://folder/hello.json", "json"),
-        (["hello.json", "folder/hello.json"], "json"),
-        ("hello.txt", "txt"),
-        ("folder/hello.txt", "txt"),
-        ("gs://folder/hello.txt", "txt"),
-        (["hello.txt", "gs://folder/hello.txt"], "txt"),
+        ("hello.csv", False, "csv"),
+        ("folder/hello.csv", False, "csv"),
+        ("gs://folder/hello.csv", False, "csv"),
+        (["hello.csv"], False, "csv"),
+        ("hello.json", False, "json"),
+        ("folder/hello.json", False, "json"),
+        ("gs://folder/hello.json", False, "json"),
+        (["hello.json", "folder/hello.json"], False, "json"),
+        ("hello.txt", False, "txt"),
+        ("folder/hello.txt", False, "txt"),
+        ("gs://folder/hello.txt", False, "txt"),
+        (["hello.txt", "gs://folder/hello.txt"], False, "txt"),
+        ("gs://folder/hello.notaformat", True,
+         "Unrecognized format among specified files, only .csv, .json and .txt accepted"),
+        (["hello.txt", "gs://folder/hello.csv"], True,
+         re.escape("Multiple file formats found in file path list: ['txt', 'csv']")),
     ]
 )
-def test_check_text_file_format(input_filepath, expected_str):
-    result = check_text_file_format(input_filepath)
-    assert result == expected_str
+def test_check_text_file_format(input_filepath, raising, expected_str):
+    if raising:
+        with pytest.raises(ValueError, match=expected_str):
+            check_text_file_format(input_filepath)
+    else:
+        result = check_text_file_format(input_filepath)
+        assert result == expected_str
