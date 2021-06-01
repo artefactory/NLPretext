@@ -229,4 +229,4 @@ AT_PATTERN = re.compile(r'@\w*')
 HTML_TAG_PATTERN = re.compile(r'<.*?>')
 
 # TEXT LOADER
-TEXT_FILE_FORMATS_PATTERN = re.compile(r"^.*\.(json|csv|txt)$")
+TEXT_FILE_FORMATS_PATTERN = re.compile(r"^.*\.(json|csv|txt)(\.gz|\.zip)*$")

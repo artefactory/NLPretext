@@ -1,5 +1,3 @@
-import json
-
 import dask.bag as db
 import dask.dataframe as dd
 
@@ -10,7 +8,8 @@ class TextLoader():
     def __init__(
             self,
             text_column="text",
-            encoding="utf-8"):
+            encoding="utf-8",
+            file_format=None):
         """
         Initialize DataLoader object to retrieve text data
 
@@ -21,7 +20,7 @@ class TextLoader():
         """
         self.text_column = text_column
         self.encoding = encoding
-        self.file_format = ""
+        self.file_format = file_format
 
     def _read_text_txt(self, files_path):
         """
@@ -53,7 +52,8 @@ class TextLoader():
         -------
         dask.dataframe
         """
-        text_ddf = db.read_text(files_path, encoding=self.encoding).map((json.loads)).to_dataframe()
+        #text_ddf = db.read_text(files_path, encoding=self.encoding).map((json.loads)).to_dataframe()
+        text_ddf = dd.read_json(files_path, encoding=self.encoding)
         try:
             return text_ddf[[self.text_column]]
         except KeyError:
@@ -78,7 +78,7 @@ class TextLoader():
         except KeyError:
             raise KeyError(f"Specified text_column '{self.text_column}' not in file keys")
 
-    def read_text(self, files_path, is_computed=True, preprocessor=None):
+    def read_text(self, files_path, file_format=None, encoding=None, is_computed=True, preprocessor=None):
         """
         Read the text files stored in files_path
 
@@ -86,6 +86,8 @@ class TextLoader():
         ----------
         files_path: string | list[string]
             single or multiple files path
+        file_format: string
+            Format of the files to be loaded, to be selected among csv, json or txt
         is_computed: bool
             True if user wants Dask Dataframe to be computed as pandas DF, False otherwise
         preprocessor: nlpretext.preprocessor.Preprocessor
@@ -95,7 +97,13 @@ class TextLoader():
         -------
         dask.dataframe | pandas.DataFrame
         """
-        self.file_format = check_text_file_format(files_path)
+        if encoding is not None:
+            self.encoding = encoding
+
+        if file_format is not None:
+            self.file_format = file_format
+        else:
+            self.file_format = check_text_file_format(files_path)
 
         reader_mapping = {"csv": self._read_text_csv,
                           "txt": self._read_text_txt,
