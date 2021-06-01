@@ -52,7 +52,11 @@ class TextLoader():
         dask.dataframe
         """
         text_ddf = db.read_text(files_path).map((json.loads)).to_dataframe()
-        return text_ddf[[self.text_column]]
+        try:
+            return text_ddf[[self.text_column]]
+        except KeyError:
+            raise KeyError(f"Specified text_column '{self.text_column}' not in file keys")
+
 
     def _read_text_csv(self, files_path):
         """
@@ -68,9 +72,12 @@ class TextLoader():
         dask.dataframe
         """
         text_ddf = dd.read_csv(files_path)
-        return text_ddf[[self.text_column]]
+        try:
+            return text_ddf[[self.text_column]]
+        except KeyError:
+            raise KeyError(f"Specified text_column '{self.text_column}' not in file keys")
 
-    def read_text(self, files_path, compute_df=True):
+    def read_text(self, files_path, is_computed=True):
         """
         Read the text files stored in files_path
 
@@ -78,7 +85,7 @@ class TextLoader():
         ----------
         files_path: string | list[string]
             single or multiple files path
-        compute_df: bool
+        is_computed: bool
             True if user wants Dask Dataframe to be computed as pandas DF, False otherwise
         Returns
         -------
@@ -90,11 +97,10 @@ class TextLoader():
                           "txt": self._read_text_txt,
                           "json": self._read_text_json}
         reader = reader_mapping.get(self.file_format)
-        if reader is not None:
-            text = reader(files_path)
-        else:
+        if reader is None:
             raise ValueError("Format not handled")
+        text = reader(files_path)
 
-        if compute_df:
+        if is_computed:
             return text.compute()
         return text

@@ -255,7 +255,7 @@ def check_text_file_format(filepath):
     str
         Format of the specified file path, among .json, .csv or .txt
     """
-    pattern = constants.TEXT_FILE_FORMAT_PATTERN
+    pattern = constants.TEXT_FILE_FORMATS_PATTERN
     if not isinstance(filepath, list):
         filepath = [filepath]
 
