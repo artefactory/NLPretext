@@ -20,8 +20,8 @@ class TextLoader():
             name of the column containing texts in json / csv
         """
         self.text_column = text_column
-        self.file_format = ""
         self.encoding = encoding
+        self.file_format = ""
 
     def _read_text_txt(self, files_path):
         """
