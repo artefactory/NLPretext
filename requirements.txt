@@ -8,7 +8,6 @@ nlpaug==1.0.1
 nltk>=3.4.5
 numpy>1.15.4
 phonenumbers==8.10.12
-pylint==2.4.4
 regex==2019.8.19
 sacremoses==0.0.13
 scikit_learn==0.23.2
