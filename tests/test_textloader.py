@@ -16,16 +16,16 @@
 # along with this program; if not, write to the Free Software Foundation,
 # Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
-import pytest
-from unittest.mock import MagicMock, call, patch
-import pandas as pd
-from pandas.testing import assert_frame_equal
+from unittest.mock import MagicMock, patch
 
 import dask.bag as db
 import dask.dataframe as dd
+import pandas as pd
+from pandas.testing import assert_frame_equal
+import pytest
 
-from nlpretext.textloader import TextLoader
 from nlpretext.preprocessor import Preprocessor
+from nlpretext.textloader import TextLoader
 
 
 # pylint: disable=protected-access
