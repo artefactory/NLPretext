@@ -15,8 +15,12 @@ class TextLoader():
 
         Parameters
         ----------
-        text_column : string
+        text_column: string
             name of the column containing texts in json / csv
+        encoding: string
+            encoding of the text to be loaded, can be utf-8 or latin-1 for example
+        file_format: string | None
+            format of the files to be loaded
         """
         self.text_column = text_column
         self.encoding = encoding
@@ -87,6 +91,8 @@ class TextLoader():
             single or multiple files path
         file_format: string
             Format of the files to be loaded, to be selected among csv, json or txt
+        encoding:
+            encoding of the text to be loaded, can be utf-8 or latin-1 for example
         is_computed: bool
             True if user wants Dask Dataframe to be computed as pandas DF, False otherwise
         preprocessor: nlpretext.preprocessor.Preprocessor
