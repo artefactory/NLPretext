@@ -2,7 +2,7 @@ import dask.bag as db
 import dask.dataframe as dd
 
 from nlpretext._utils.file_loader import check_text_file_format
-
+from nlpretext.preprocessor import Preprocessor
 
 class TextLoader():
     def __init__(
@@ -52,7 +52,6 @@ class TextLoader():
         -------
         dask.dataframe
         """
-        #text_ddf = db.read_text(files_path, encoding=self.encoding).map((json.loads)).to_dataframe()
         text_ddf = dd.read_json(files_path, encoding=self.encoding)
         try:
             return text_ddf[[self.text_column]]
@@ -114,7 +113,10 @@ class TextLoader():
         text = reader(files_path)
 
         if preprocessor is not None:
-            text[self.text_column] = text[self.text_column].map(preprocessor.run)
+            if isinstance(preprocessor, Preprocessor):
+                text[self.text_column] = text[self.text_column].apply(preprocessor.run)
+            else:
+                raise ValueError("Only NLPretext preprocessors can be specified")
 
         if is_computed:
             return text.compute()

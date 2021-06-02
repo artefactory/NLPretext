@@ -58,6 +58,8 @@ def remove_files():
         ("compressed/gz/text.csv.gz", False, "csv"),
         ("compressed/zip/text.csv.zip", False, "csv"),
         (["hello.csv"], False, "csv"),
+        (["hello.csv", "compressed.csv.gz"], False, "csv"),
+        (["hello.csv", "other/folder/hello.csv"], False, "csv"),
         ("hello.json", False, "json"),
         ("folder/hello.json", False, "json"),
         ("gs://folder/hello.json", False, "json"),
