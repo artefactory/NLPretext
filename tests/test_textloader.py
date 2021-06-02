@@ -104,9 +104,7 @@ def test__read_text_csv(mock_read_csv):
     ("text_file4.csv", None, None, False, None, "csv", None),
     ("text_file5.pdf", "pdf", None, False, None, "csv", "Format not handled"),
     ("text_file6.txt", None, None, False, Preprocessor(), "txt", None),
-    ("text_file7.txt", None, None, True, Preprocessor(), "txt", None),
     ("text_file8.txt", None, None, False, MagicMock(), "txt", "Only NLPretext preprocessors can be specified"),
-    ("text_file9.txt", None, None, True, MagicMock(), "txt", "Only NLPretext preprocessors can be specified"),
 ])
 @patch("nlpretext.preprocessor.Preprocessor.run")
 @patch("nlpretext.textloader.TextLoader._read_text_json")

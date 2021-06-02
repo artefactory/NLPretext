@@ -114,7 +114,9 @@ class TextLoader():
 
         if preprocessor is not None:
             if isinstance(preprocessor, Preprocessor):
+                print(f"before: {text.head()}")
                 text[self.text_column] = text[self.text_column].apply(preprocessor.run)
+                print(f"after: {text.head()}")
             else:
                 raise ValueError("Only NLPretext preprocessors can be specified")
 
