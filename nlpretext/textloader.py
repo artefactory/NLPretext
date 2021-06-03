@@ -1,5 +1,8 @@
-import dask.bag as db
-import dask.dataframe as dd
+try:
+    import dask.bag as db
+    import dask.dataframe as dd
+except ImportError:
+    raise ImportError('please install dask: pip install dask[complete]')
 
 from nlpretext._utils.file_loader import check_text_file_format
 from nlpretext.preprocessor import Preprocessor

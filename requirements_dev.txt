@@ -7,4 +7,5 @@ Sphinx==3.2.1
 sphinx_rtd_theme==0.5.0
 setuptools==40.8.0
 pandas==1.1.5
+dask[complete]==2021.3.0
 -r requirements.txt

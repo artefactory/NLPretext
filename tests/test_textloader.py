@@ -17,9 +17,12 @@
 # Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 from unittest.mock import MagicMock, patch
+try:
+    import dask.bag as db
+    import dask.dataframe as dd
+except ImportError:
+    raise ImportError('please install dask: pip install dask[complete]')
 
-import dask.bag as db
-import dask.dataframe as dd
 try:
     import pandas as pd
 except ImportError:
