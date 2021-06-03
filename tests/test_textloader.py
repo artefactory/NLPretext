@@ -100,15 +100,17 @@ def test__read_text_csv(mock_read_csv):
     assert_frame_equal(expected_result.compute(), actual_result.compute())
 
 
-@pytest.mark.parametrize("files_path, file_format, encoding, compute_to_pandas, preprocessor, expected_format, raised", [
-    ("text_file1.json", None, None, True, None, "json", None),
-    ("text_file2.json", "json", None, True, None, "json", None),
-    ("text_file3.csv", None, "utf-8", True, None, "csv", None),
-    ("text_file4.csv", None, None, False, None, "csv", None),
-    ("text_file5.pdf", "pdf", None, False, None, "csv", "Format not handled"),
-    ("text_file6.txt", None, None, False, Preprocessor(), "txt", None),
-    ("text_file8.txt", None, None, False, MagicMock(), "txt", "Only NLPretext preprocessors can be specified"),
-])
+@pytest.mark.parametrize(
+    "files_path, file_format, encoding, compute_to_pandas, preprocessor, expected_format, raised",
+    [
+        ("text_file1.json", None, None, True, None, "json", None),
+        ("text_file2.json", "json", None, True, None, "json", None),
+        ("text_file3.csv", None, "utf-8", True, None, "csv", None),
+        ("text_file4.csv", None, None, False, None, "csv", None),
+        ("text_file5.pdf", "pdf", None, False, None, "csv", "Format not handled"),
+        ("text_file6.txt", None, None, False, Preprocessor(), "txt", None),
+        ("text_file8.txt", None, None, False, MagicMock(), "txt", "Only NLPretext preprocessors can be specified"),
+    ])
 @patch("nlpretext.preprocessor.Preprocessor.run")
 @patch("nlpretext.textloader.TextLoader._read_text_json")
 @patch("nlpretext.textloader.TextLoader._read_text_txt")
