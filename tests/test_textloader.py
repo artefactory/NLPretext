@@ -20,7 +20,10 @@ from unittest.mock import MagicMock, patch
 
 import dask.bag as db
 import dask.dataframe as dd
-import pandas as pd
+try:
+    import pandas as pd
+except ImportError:
+    raise ImportError('please install pandas: pip install pandas')
 from pandas.testing import assert_frame_equal
 import pytest
 
@@ -97,7 +100,7 @@ def test__read_text_csv(mock_read_csv):
     assert_frame_equal(expected_result.compute(), actual_result.compute())
 
 
-@pytest.mark.parametrize("files_path, file_format, encoding, is_computed, preprocessor, expected_format, raised", [
+@pytest.mark.parametrize("files_path, file_format, encoding, compute_to_pandas, preprocessor, expected_format, raised", [
     ("text_file1.json", None, None, True, None, "json", None),
     ("text_file2.json", "json", None, True, None, "json", None),
     ("text_file3.csv", None, "utf-8", True, None, "csv", None),
@@ -119,7 +122,7 @@ def test_read_text(mock_check_text_file_format,
                    files_path,
                    file_format,
                    encoding,
-                   is_computed,
+                   compute_to_pandas,
                    preprocessor,
                    expected_format,
                    raised):
@@ -147,7 +150,7 @@ def test_read_text(mock_check_text_file_format,
                                   file_format=file_format)
 
     if raised is None:
-        actual_result = dummy_textloader.read_text(files_path, file_format, encoding, is_computed, preprocessor)
+        actual_result = dummy_textloader.read_text(files_path, file_format, encoding, compute_to_pandas, preprocessor)
 
         # Then
         if file_format is None:
@@ -162,10 +165,10 @@ def test_read_text(mock_check_text_file_format,
                 mock_run.side_effect = preprocessed_texts
                 expected_result = dd.from_pandas(pd.DataFrame({text_column: preprocessed_texts}), npartitions=2)
 
-        if not is_computed:
+        if not compute_to_pandas:
             actual_result = actual_result.compute()
         assert_frame_equal(expected_result.compute(), actual_result)
 
     else:
         with pytest.raises(ValueError, match=raised):
-            dummy_textloader.read_text(files_path, file_format, encoding, is_computed, preprocessor)
+            dummy_textloader.read_text(files_path, file_format, encoding, compute_to_pandas, preprocessor)

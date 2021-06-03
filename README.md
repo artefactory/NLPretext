@@ -64,7 +64,7 @@ text = "I just got the best dinner in my life @latourdargent !!! I  recommend ðŸ
 preprocessor = Preprocessor()
 text = preprocessor.run(text)
 print(text)
-# "I just got the best dinner in my life !!! I recommend"
+# "I just got the best dinner in my life!!! I recommend"
 ```
 
 ## Create your custom pipeline <a name="custom_pipeline"></a>
@@ -96,7 +96,7 @@ Take a look at all the functions that are available [here](https://github.com/ar
 
 # Load text data
 
-Pre-processing text data is useful only if you have loaded data to process ! Importing text data as strings in your code can be really simple if you have short texts contained in a local .txt, but it can quickly become difficult if you want to load a lot of texts, stored in multiple formats and divided in multiple files. Hopefully, you can use NLPretext's TextLoader class to easily import text data.
+Pre-processing text data is useful only if you have loaded data to process! Importing text data as strings in your code can be really simple if you have short texts contained in a local .txt, but it can quickly become difficult if you want to load a lot of texts, stored in multiple formats and divided in multiple files. Hopefully, you can use NLPretext's TextLoader class to easily import text data.
 
 ```python
 from nlpretext.textloader import TextLoader
@@ -104,7 +104,7 @@ files_path = "local_folder/texts/text.txt"
 text_loader = TextLoader()
 text_dataframe = text_loader.read_text(files_path)
 print(text_dataframe.text.values.tolist())
-# ["I just got the best dinner in my life !!!",  "I recommend", "It was awesome"]
+# ["I just got the best dinner in my life!!!",  "I recommend", "It was awesome"]
 ```
 
 As TextLoader uses dask to load data, file path can be provided as string, list of strings, with or without wildcards. It also supports imports from GCS, if your machine is authentified on a project.
@@ -116,6 +116,10 @@ local_file_path = "local_folder/texts/text.csv" # File from local folder
 local_corpus_path = ["local_folder/texts/text_1.csv", "local_folder/texts/text_2.csv", "local_folder/texts/text_3.csv"] # Multiple files from local folder
 
 gcs_file_path = "gs://my-bucket/texts/text.json" # File from GCS
+s3_file_path = "s3://my-bucket/texts/text.json" # File from S3
+hdfs_file_path = "hdfs://folder/texts/text.json" # File from HDFS
+azure_file_path = "az://my-bucket/texts/text.json" # File from Azure
+
 gcs_corpus_path = "gs://my-bucket/texts/text_*.json" # Multiple files from GCS with wildcard
 
 text_dataframe_1 = text_loader.read_text(local_file_path)

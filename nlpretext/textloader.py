@@ -26,6 +26,9 @@ class TextLoader():
         self.encoding = encoding
         self.file_format = file_format
 
+    #def __repr__(self):
+    #    return 'representation'
+
     def _read_text_txt(self, files_path):
         """
         Read txt text files stored in files_path
@@ -81,7 +84,7 @@ class TextLoader():
         except KeyError:
             raise KeyError(f"Specified text_column '{self.text_column}' not in file keys")
 
-    def read_text(self, files_path, file_format=None, encoding=None, is_computed=True, preprocessor=None):
+    def read_text(self, files_path, file_format=None, encoding=None, compute_to_pandas=True, preprocessor=None):
         """
         Read the text files stored in files_path
 
@@ -93,7 +96,7 @@ class TextLoader():
             Format of the files to be loaded, to be selected among csv, json or txt
         encoding:
             encoding of the text to be loaded, can be utf-8 or latin-1 for example
-        is_computed: bool
+        compute_to_pandas: bool
             True if user wants Dask Dataframe to be computed as pandas DF, False otherwise
         preprocessor: nlpretext.preprocessor.Preprocessor
             NLPretext preprocessor can be specified to pre-process text after loading
@@ -126,6 +129,6 @@ class TextLoader():
             else:
                 raise ValueError("Only NLPretext preprocessors can be specified")
 
-        if is_computed:
+        if compute_to_pandas:
             return text.compute()
         return text
