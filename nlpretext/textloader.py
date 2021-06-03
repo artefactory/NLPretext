@@ -26,8 +26,14 @@ class TextLoader():
         self.encoding = encoding
         self.file_format = file_format
 
-    #def __repr__(self):
-    #    return 'representation'
+    def __repr__(self):
+        """
+        Method to represent class attributes
+        """
+        class_repr_dict = {"text_column": self.text_column,
+                           "encoding": self.encoding,
+                           "file_format": self.file_format}
+        return f"TextLoader({class_repr_dict})"
 
     def _read_text_txt(self, files_path):
         """

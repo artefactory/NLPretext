@@ -107,7 +107,7 @@ print(text_dataframe.text.values.tolist())
 # ["I just got the best dinner in my life!!!",  "I recommend", "It was awesome"]
 ```
 
-As TextLoader uses dask to load data, file path can be provided as string, list of strings, with or without wildcards. It also supports imports from GCS, if your machine is authentified on a project.
+As TextLoader uses dask to load data, file path can be provided as string, list of strings, with or without wildcards. It also supports imports from cloud providers, if your machine is authentified on a project.
 
 ```python
 text_loader = TextLoader(text_column="name_of_text_column_in_your_data")
@@ -125,7 +125,10 @@ gcs_corpus_path = "gs://my-bucket/texts/text_*.json" # Multiple files from GCS w
 text_dataframe_1 = text_loader.read_text(local_file_path)
 text_dataframe_2 = text_loader.read_text(local_corpus_path)
 text_dataframe_3 = text_loader.read_text(gcs_file_path)
-text_dataframe_4 = text_loader.read_text(gcs_corpus_path)
+text_dataframe_4 = text_loader.read_text(s3_file_path)
+text_dataframe_5 = text_loader.read_text(hdfs_file_path)
+text_dataframe_6 = text_loader.read_text(azure_file_path)
+text_dataframe_7 = text_loader.read_text(gcs_corpus_path)
 
 ```
 
