@@ -46,7 +46,7 @@ def detect_encoding(file_path_or_string: str, n_lines: int = 100) -> str:
 
 def check_text_file_format(filepath) -> str:
     """
-    Retrieve format of a file path or list of files path, among .csv, .json and .txt
+    Retrieve format of a file path or list of files path, among .csv, .json, .parquet and .txt
 
     Parameters
     ----------
@@ -56,7 +56,7 @@ def check_text_file_format(filepath) -> str:
     Returns
     -------
     str
-        Format of the specified file path, among .json, .csv or .txt
+        Format of the specified file path, among .json, .csv, .parquet or .txt
     """
     pattern = constants.TEXT_FILE_FORMATS_PATTERN
     if not isinstance(filepath, list):
@@ -64,7 +64,7 @@ def check_text_file_format(filepath) -> str:
 
     format_re_list = [pattern.match(path) for path in filepath]
     if None in format_re_list:
-        raise ValueError("Unrecognized format among specified files, only .csv, .json and .txt accepted")
+        raise ValueError("Unrecognized format among specified files, only .csv, .json, .parquet and .txt accepted")
 
     format_list = [format_re.group(1) for format_re in format_re_list]
     if len(set(format_list)) > 1:

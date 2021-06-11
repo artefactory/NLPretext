@@ -19,7 +19,7 @@ class TextLoader():
         Parameters
         ----------
         text_column: string
-            name of the column containing texts in json / csv
+            name of the column containing texts in json / csv / parquet files
         encoding: string
             encoding of the text to be loaded, can be utf-8 or latin-1 for example
         file_format: string | None
@@ -93,6 +93,25 @@ class TextLoader():
         except KeyError:
             raise KeyError(f"Specified text_column '{self.text_column}' not in file keys")
 
+    def _read_text_parquet(self, files_path):
+        """
+        Read parquet text files stored in files_path
+
+        Parameters
+        ----------
+        files_path : string | list[string]
+            single or multiple files path
+
+        Returns
+        -------
+        dask.dataframe
+        """
+        text_ddf = dd.read_parquet(files_path)
+        try:
+            return text_ddf[[self.text_column]]
+        except KeyError:
+            raise KeyError(f"Specified text_column '{self.text_column}' not in file keys")
+
     def read_text(self, files_path, file_format=None, encoding=None, compute_to_pandas=True, preprocessor=None):
         """
         Read the text files stored in files_path
@@ -102,7 +121,7 @@ class TextLoader():
         files_path: string | list[string]
             single or multiple files path
         file_format: string
-            Format of the files to be loaded, to be selected among csv, json or txt
+            Format of the files to be loaded, to be selected among csv, json, parquet or txt
         encoding:
             encoding of the text to be loaded, can be utf-8 or latin-1 for example
         compute_to_pandas: bool
@@ -124,7 +143,8 @@ class TextLoader():
 
         reader_mapping = {"csv": self._read_text_csv,
                           "txt": self._read_text_txt,
-                          "json": self._read_text_json}
+                          "json": self._read_text_json,
+                          "parquet": self._read_text_parquet}
         reader = reader_mapping.get(self.file_format)
         if reader is None:
             raise ValueError("Format not handled")

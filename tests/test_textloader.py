@@ -103,6 +103,29 @@ def test__read_text_csv(mock_read_csv):
     assert_frame_equal(expected_result.compute(), actual_result.compute())
 
 
+@patch("dask.dataframe.read_parquet")
+def test__read_text_parquet(mock_read_parquet):
+    # Given
+    files_path = "some_path/to_read.parquet"
+    file_format = "parquet"
+    encoding = "utf-8"
+    text_column = "text"
+
+    text_ddf = dd.from_pandas(pd.DataFrame({text_column: ["This is a text", "This is another text"]}),
+                              npartitions=2)
+    mock_read_parquet.return_value = text_ddf
+
+    expected_result = text_ddf[[text_column]]
+
+    # When
+    dummy_instance = TextLoader(file_format=file_format, encoding=encoding, text_column=text_column)
+    actual_result = dummy_instance._read_text_parquet(files_path)
+
+    # Then
+    mock_read_parquet.assert_called_once_with(files_path)
+    assert_frame_equal(expected_result.compute(), actual_result.compute())
+
+
 @pytest.mark.parametrize(
     "files_path, file_format, encoding, compute_to_pandas, preprocessor, expected_format, raised",
     [
@@ -110,6 +133,8 @@ def test__read_text_csv(mock_read_csv):
         ("text_file2.json", "json", None, True, None, "json", None),
         ("text_file3.csv", None, "utf-8", True, None, "csv", None),
         ("text_file4.csv", None, None, False, None, "csv", None),
+        ("text_file3.parquet", None, "utf-8", True, None, "parquet", None),
+        ("text_file4.parquet", None, None, False, None, "parquet", None),
         ("text_file5.pdf", "pdf", None, False, None, "csv", "Format not handled"),
         ("text_file6.txt", None, None, False, Preprocessor(), "txt", None),
         ("text_file8.txt", None, None, False, MagicMock(), "txt", "Only NLPretext preprocessors can be specified"),
@@ -118,8 +143,10 @@ def test__read_text_csv(mock_read_csv):
 @patch("nlpretext.textloader.TextLoader._read_text_json")
 @patch("nlpretext.textloader.TextLoader._read_text_txt")
 @patch("nlpretext.textloader.TextLoader._read_text_csv")
+@patch("nlpretext.textloader.TextLoader._read_text_parquet")
 @patch("nlpretext.textloader.check_text_file_format")
 def test_read_text(mock_check_text_file_format,
+                   mock__read_text_parquet,
                    mock__read_text_csv,
                    mock__read_text_txt,
                    mock__read_text_json,
@@ -142,7 +169,8 @@ def test_read_text(mock_check_text_file_format,
 
     mock_reader_mapping = {"csv": mock__read_text_csv,
                            "txt": mock__read_text_txt,
-                           "json": mock__read_text_json}
+                           "json": mock__read_text_json,
+                           "parquet": mock__read_text_parquet}
 
     expected_result = dd.from_pandas(
         pd.DataFrame({text_column: ["Text with #", "Text with  double  space"]}),

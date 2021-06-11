@@ -117,8 +117,8 @@ local_corpus_path = ["local_folder/texts/text_1.csv", "local_folder/texts/text_2
 
 gcs_file_path = "gs://my-bucket/texts/text.json" # File from GCS
 s3_file_path = "s3://my-bucket/texts/text.json" # File from S3
-hdfs_file_path = "hdfs://folder/texts/text.json" # File from HDFS
-azure_file_path = "az://my-bucket/texts/text.json" # File from Azure
+hdfs_file_path = "hdfs://folder/texts/text.txt" # File from HDFS
+azure_file_path = "az://my-bucket/texts/text.parquet" # File from Azure
 
 gcs_corpus_path = "gs://my-bucket/texts/text_*.json" # Multiple files from GCS with wildcard
 
