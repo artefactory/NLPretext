@@ -52,6 +52,11 @@ pip install https://github.com/explosion/spacy-models/releases/download/en_core_
 pip install https://github.com/explosion/spacy-models/releases/download/fr_core_news_sm-2.3.0/fr_core_news_sm-2.3.0.tar.gz
 ```
 
+To use our TextLoader class, you'll need to install Dask as well:
+```bash
+pip install dask[complete]==2021.3.0
+```
+
 # Preprocessing pipeline
 
 ## Default pipeline <a name="default_pipeline"></a>
@@ -97,6 +102,7 @@ Take a look at all the functions that are available [here](https://github.com/ar
 # Load text data
 
 Pre-processing text data is useful only if you have loaded data to process! Importing text data as strings in your code can be really simple if you have short texts contained in a local .txt, but it can quickly become difficult if you want to load a lot of texts, stored in multiple formats and divided in multiple files. Hopefully, you can use NLPretext's TextLoader class to easily import text data.
+Our TextLoader class makes use of Dask, so be sure to install the library if you want to use it, as mentioned above.
 
 ```python
 from nlpretext.textloader import TextLoader
