@@ -52,7 +52,7 @@ def find_phone_numbers(string: str, region_code: Optional[str] = None) -> List[s
     return [match.raw_string for match in _phonenumbers.PhoneNumberMatcher(string, region_code)]
 
 
-def extract_phone_numbers(text: str, countrylist: List[str]) -> List[str]:
+def extract_phone_numbers(text: str, countrylist: List[Optional[str]]) -> List[str]:
     """
     Find phone numbers in a text, returns a list of phone numbers.
 

@@ -192,7 +192,7 @@ def test_read_text(
     expected_result = dd.from_pandas(
         pd.DataFrame({text_column: ["Text with #", "Text with  double  space"]}), npartitions=2
     )
-    mock_reader_mapping.get(expected_format).return_value = expected_result
+    mock_reader_mapping[expected_format].return_value = expected_result
 
     # When
     dummy_textloader = TextLoader(
@@ -208,7 +208,7 @@ def test_read_text(
         if file_format is None:
             mock_check_text_file_format.assert_called_once_with(files_path)
 
-        mock_reader_mapping.get(expected_format).assert_called_once_with(files_path)
+        mock_reader_mapping[expected_format].assert_called_once_with(files_path)
 
         if preprocessor is not None:
             if isinstance(preprocessor, Preprocessor):

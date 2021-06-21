@@ -15,9 +15,12 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with this program; if not, write to the Free Software Foundation,
 # Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
-import nlpretext._utils.phone_number as phone
+
+from typing import Any, Callable, List
+
 import numpy as np
 import pytest
+from nlpretext._config.config import SUPPORTED_COUNTRY
 from nlpretext._utils.stopwords import get_stopwords
 from nlpretext.basic.preprocess import (
     filter_non_latin_characters,
@@ -376,7 +379,7 @@ def test_replace_phone_numbers(input_str, expected_str):
         input_str,
         replace_with="*PHONE*",
         method="detection",
-        country_to_detect=phone.SUPPORTED_COUNTRY,
+        country_to_detect=SUPPORTED_COUNTRY,
     )
     np.testing.assert_equal(result, expected_str)
 
@@ -489,7 +492,7 @@ def test_custom_preprocess():
 def test_apply_preprocessor():
     # Given
     text = "Some text with @mentions and whitespaces    and #hashtags"
-    operations = (
+    operations: List[Callable[[Any], Any]] = [
         remove_html_tags,
         remove_mentions,
         remove_emoji,
@@ -497,7 +500,7 @@ def test_apply_preprocessor():
         remove_eol_characters,
         fix_bad_unicode,
         normalize_whitespace,
-    )
+    ]
 
     preprocessor = Preprocessor()
 

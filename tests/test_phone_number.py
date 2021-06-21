@@ -16,12 +16,13 @@
 # along with this program; if not, write to the Free Software Foundation,
 # Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 import nlpretext._utils.phone_number as phone
+from nlpretext._config.config import SUPPORTED_COUNTRY
 
 
 def test_extract_phone_number():
     input_str = "(541) 754-3010 is a US. Phone"
     expected = ["(541) 754-3010", "754-3010"]
-    res = phone.extract_phone_numbers(input_str, countrylist=phone.SUPPORTED_COUNTRY)
+    res = phone.extract_phone_numbers(input_str, countrylist=SUPPORTED_COUNTRY)
     assert sorted(res) == sorted(expected)
 
 

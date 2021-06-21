@@ -231,7 +231,10 @@ def replace_emails(text: str, replace_with: str = "*EMAIL*") -> str:
 
 
 def replace_phone_numbers(
-    text: str, country_to_detect: List[str], replace_with: str = "*PHONE*", method: str = "regex"
+    text: str,
+    country_to_detect: List[Optional[str]],
+    replace_with: str = "*PHONE*",
+    method: str = "regex",
 ) -> str:
     """
     ----
