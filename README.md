@@ -2,17 +2,17 @@
 
 <div align="center">
 
-[![CI status](https://github.com/artefactory/nlpretext/actions/workflows/ci.yml/badge.svg?branch%3Amain&event%3Apush)](https://github.com/artefactory/nlpretext/actions/workflows/ci.yml?query=branch%3Amain)
-[![CD status](https://github.com/artefactory/nlpretext/actions/workflows/cd.yml/badge.svg?event%3Arelease)](https://github.com/artefactory/nlpretext/actions/workflows/cd.yml?query=event%3Arelease)
+[![CI status](https://github.com/artefactory/NLPretext/actions/workflows/ci.yml/badge.svg?branch%3Amain&event%3Apush)](https://github.com/artefactory/NLPretext/actions/workflows/ci.yml?query=branch%3Amain)
+[![CD status](https://github.com/artefactory/NLPretext/actions/workflows/cd.yml/badge.svg?event%3Arelease)](https://github.com/artefactory/NLPretext/actions/workflows/cd.yml?query=event%3Arelease)
 [![Python Version](https://img.shields.io/badge/Python-3.7-informational.svg)](#supported-python-versions)
-[![Dependencies Status](https://img.shields.io/badge/dependabots-active-informational.svg)](https://github.com/artefactory/nlpretext}/pulls?utf8=%E2%9C%93&q=is%3Apr%20author%3Aapp%2Fdependabot)
+[![Dependencies Status](https://img.shields.io/badge/dependabots-active-informational.svg)](https://github.com/artefactory/NLPretext}/pulls?utf8=%E2%9C%93&q=is%3Apr%20author%3Aapp%2Fdependabot)
 
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 [![Security: bandit](https://img.shields.io/badge/security-bandit-informational.svg)](https://github.com/PyCQA/bandit)
-[![Pre-commit](https://img.shields.io/badge/pre--commit-enabled-informational?logo=pre-commit&logoColor=white)](https://github.com/artefactory/nlpretext}/blob/main/.pre-commit-config.yaml)
-[![Semantic Versions](https://img.shields.io/badge/%F0%9F%9A%80-semantic%20versions-informational.svg)](https://github.com/artefactory/nlpretext/releases)
-[![Documentation](https://img.shields.io/badge/doc-sphinx-informational.svg)](https://github.com/artefactory/nlpretext}/tree/main/docs)
-[![License](https://img.shields.io/badge/License-Apache%20Software%20License%202.0-informational.svg)](https://github.com/artefactory/nlpretext}/blob/main/LICENSE)
+[![Pre-commit](https://img.shields.io/badge/pre--commit-enabled-informational?logo=pre-commit&logoColor=white)](https://github.com/artefactory/NLPretext}/blob/main/.pre-commit-config.yaml)
+[![Semantic Versions](https://img.shields.io/badge/%F0%9F%9A%80-semantic%20versions-informational.svg)](https://github.com/artefactory/NLPretext/releases)
+[![Documentation](https://img.shields.io/badge/doc-sphinx-informational.svg)](https://github.com/artefactory/NLPretext}/tree/main/docs)
+[![License](https://img.shields.io/badge/License-Apache%20Software%20License%202.0-informational.svg)](https://github.com/artefactory/NLPretext}/blob/main/LICENSE)
 
 All the goto functions you need to handle NLP use-cases, integrated in NLPretext
 
@@ -21,7 +21,7 @@ All the goto functions you need to handle NLP use-cases, integrated in NLPretext
 ## TL;DR
 
 ```bash
-pip install git+ssh://git@github.com/artefactory/nlpretext.git@main
+pip install git+ssh://git@github.com/artefactory/NLPretext.git@main
 ```
 
 ## Supported Python Versions
@@ -52,21 +52,21 @@ poetry add nlpretext
 Install the package from a private Github repository from the main branch:
 
 ```bash
-pip install git+ssh://git@github.com/artefactory/nlpretext.git@main
+pip install git+ssh://git@github.com/artefactory/NLPretext.git@main
 ```
 
 Or from a known tag:
 
 ```bash
-pip install git+ssh://git@github.com/artefactory/nlpretext.git@v0.1.0
+pip install git+ssh://git@github.com/artefactory/NLPretext.git@v0.1.0
 ```
 
 Or from the latest Github Release using [personal access tokens](https://docs.github.com/en/github/authenticating-to-github/creating-a-personal-access-token)
 
 ```bash
 # Set the GITHUB_TOKEN environment variable to your personal access token
-latest_release_tag=$(curl -H "Authorization: token $GITHUB_TOKEN" https://api.github.com/repos/artefactory/nlpretext/releases/latest | jq -r ".tag_name")
-pip install git+ssh://git@github.com/artefactory/nlpretext.git@${latest_release_tag}
+latest_release_tag=$(curl -H "Authorization: token $GITHUB_TOKEN" https://api.github.com/repos/artefactory/NLPretext/releases/latest | jq -r ".tag_name")
+pip install git+ssh://git@github.com/artefactory/NLPretext.git@${latest_release_tag}
 ```
 
 ## Usage
@@ -102,7 +102,7 @@ If you want to contribute to the development of this package,
 1. Clone the repository :
 
 ```bash
-git clone git@github.com:artefactory/nlpretext.git
+git clone git@github.com:artefactory/NLPretext.git
 ```
 
 2. If you don't have `Poetry` installed, run:
@@ -167,7 +167,7 @@ Packages:
 ## 🚀 Features
 
 - Support for `Python 3.7`
-- [`Poetry`](https://python-poetry.org/) as the dependencies manager. See configuration in [`pyproject.toml`](https://github.com/artefactory/nlpretext}/blob/main/pyproject.toml) and [`setup.cfg`](https://github.com/artefactory/nlpretext}/blob/main/setup.cfg).
+- [`Poetry`](https://python-poetry.org/) as the dependencies manager. See configuration in [`pyproject.toml`](https://github.com/artefactory/NLPretext}/blob/main/pyproject.toml) and [`setup.cfg`](https://github.com/artefactory/NLPretext}/blob/main/setup.cfg).
 - Power of [`black`](https://github.com/psf/black), [`isort`](https://github.com/timothycrosley/isort) and [`pyupgrade`](https://github.com/asottile/pyupgrade) formatters.
 - Ready-to-use [`pre-commit`](https://pre-commit.com/) hooks with formatters above.
 - Type checks with [`mypy`](https://mypy.readthedocs.io).
@@ -175,27 +175,27 @@ Packages:
 - Docstring checks with [`darglint`](https://github.com/terrencepreilly/darglint).
 - Security checks with [`safety`](https://github.com/pyupio/safety), [`bandit`](https://github.com/PyCQA/bandit) and [`anchore`](https://github.com/anchore/scan-action).
 - Secrets scanning with [`gitleaks`](https://github.com/zricethezav/gitleaks)
-- Well-made [`.editorconfig`](https://github.com/artefactory/nlpretext}/blob/main/.editorconfig), [`.dockerignore`](https://github.com/artefactory/nlpretext}/blob/main/.dockerignore), and [`.gitignore`](https://github.com/artefactory/nlpretext}/blob/main/.gitignore). You don't have to worry about those things.
+- Well-made [`.editorconfig`](https://github.com/artefactory/NLPretext}/blob/main/.editorconfig), [`.dockerignore`](https://github.com/artefactory/NLPretext}/blob/main/.dockerignore), and [`.gitignore`](https://github.com/artefactory/NLPretext}/blob/main/.gitignore). You don't have to worry about those things.
 
 For building and deployment:
 
 - `GitHub` integration.
-- [`Makefile`](https://github.com/artefactory/nlpretext}/blob/main/Makefile#L89) for building routines. Everything is already set up for security checks, codestyle checks, code formatting, testing, linting, docker builds, etc. More details at [Makefile summary](#makefile-usage)).
-- [Dockerfile](https://github.com/artefactory/nlpretext}/blob/main/docker/Dockerfile) for your package.
-- `Github Actions` with predefined [build workflow](https://github.com/artefactory/nlpretext}/blob/main/.github/workflows/build.yml) as the default CI/CD.- `Github Pages` documentation built with Sphinx updated automatically when [releasing the package](https://github.com/artefactory/nlpretext}/blob/main/.github/workflows/cd.yml).
+- [`Makefile`](https://github.com/artefactory/NLPretext}/blob/main/Makefile#L89) for building routines. Everything is already set up for security checks, codestyle checks, code formatting, testing, linting, docker builds, etc. More details at [Makefile summary](#makefile-usage)).
+- [Dockerfile](https://github.com/artefactory/NLPretext}/blob/main/docker/Dockerfile) for your package.
+- `Github Actions` with predefined [build workflow](https://github.com/artefactory/NLPretext}/blob/main/.github/workflows/build.yml) as the default CI/CD.- `Github Pages` documentation built with Sphinx updated automatically when [releasing the package](https://github.com/artefactory/NLPretext}/blob/main/.github/workflows/cd.yml).
 - `Github Packages` with Github Container Registry updated automatically when [releasing the package](https://github.com/artefactory/ppt/blob/main/%7B%7B%20cookiecutter.project_name.lower().replace('%20'%2C%20'_')%20%7D%7D/.github/workflows/cd.yml).- `Github Code Scanning` using [CodeQL]()- Always up-to-date dependencies with [`@dependabot`](https://dependabot.com/) (You will only need to [enable it](https://docs.github.com/en/github/administering-a-repository/enabling-and-disabling-version-updates#enabling-github-dependabot-version-updates)).
-- Automatic drafts of new releases with [`Release Drafter`](https://github.com/marketplace/actions/release-drafter). It creates a list of changes based on labels in merged `Pull Requests`. You can see labels (aka `categories`) in [`release-drafter.yml`](https://github.com/artefactory/nlpretext}/blob/main/.github/release-drafter.yml). Works perfectly with [Semantic Versions](https://semver.org/) specification.
+- Automatic drafts of new releases with [`Release Drafter`](https://github.com/marketplace/actions/release-drafter). It creates a list of changes based on labels in merged `Pull Requests`. You can see labels (aka `categories`) in [`release-drafter.yml`](https://github.com/artefactory/NLPretext}/blob/main/.github/release-drafter.yml). Works perfectly with [Semantic Versions](https://semver.org/) specification.
 
 For creating your open source community:
 
-- Ready-to-use [Pull Requests templates](https://github.com/artefactory/nlpretext}/blob/main/.github/PULL_REQUEST_TEMPLATE.md) and several [Issue templates](https://github.com/artefactory/nlpretext}/tree/main/.github/ISSUE_TEMPLATE).
+- Ready-to-use [Pull Requests templates](https://github.com/artefactory/NLPretext}/blob/main/.github/PULL_REQUEST_TEMPLATE.md) and several [Issue templates](https://github.com/artefactory/NLPretext}/tree/main/.github/ISSUE_TEMPLATE).
 - Files such as: `LICENSE`, `CONTRIBUTING.md`, `CODE_OF_CONDUCT.md`, and `SECURITY.md` are generated automatically.
-- [`Stale bot`](https://github.com/apps/stale) that closes abandoned issues after a period of inactivity. (You will only [need to setup free plan](https://github.com/marketplace/stale)). Configuration is [here](https://github.com/artefactory/nlpretext}/blob/main/.github/.stale.yml).
+- [`Stale bot`](https://github.com/apps/stale) that closes abandoned issues after a period of inactivity. (You will only [need to setup free plan](https://github.com/marketplace/stale)). Configuration is [here](https://github.com/artefactory/NLPretext}/blob/main/.github/.stale.yml).
 - [Semantic Versions](https://semver.org/) specification with [`Release Drafter`](https://github.com/marketplace/actions/release-drafter).
 
 ### Makefile usage
 
-[`Makefile`](https://github.com/artefactory/nlpretext}/blob/main/Makefile) contains many functions for fast assembling and convenient work.
+[`Makefile`](https://github.com/artefactory/NLPretext}/blob/main/Makefile) contains many functions for fast assembling and convenient work.
 
 <details>
 <summary>1. Download Poetry</summary>
@@ -334,7 +334,7 @@ which is equivalent to:
 make docker VERSION=latest
 ```
 
-More information [here](https://github.com/artefactory/nlpretext}/tree/main/docker).
+More information [here](https://github.com/artefactory/NLPretext}/tree/main/docker).
 
 </p>
 </details>
@@ -353,7 +353,7 @@ or to remove all build
 make clean
 ```
 
-More information [here](https://github.com/artefactory/nlpretext}/tree/main/docker).
+More information [here](https://github.com/artefactory/NLPretext}/tree/main/docker).
 
 </p>
 </details>
@@ -378,7 +378,7 @@ deactivate
 
 ## 📈 Releases
 
-You can see the list of available releases on the [GitHub Releases](https://github.com/artefactory/nlpretext}/releases) page.
+You can see the list of available releases on the [GitHub Releases](https://github.com/artefactory/NLPretext}/releases) page.
 
 We follow [Semantic Versions](https://semver.org/) specification.
 
@@ -398,9 +398,9 @@ For Pull Requests, these labels are configured, by default:
 
 GitHub creates the `bug`, `enhancement`, and `documentation` labels automatically. Dependabot creates the `dependencies` label. Create the remaining labels on the Issues tab of the GitHub repository, when needed.## 🛡 License
 
-[![License](https://img.shields.io/github/license/artefactory/nlpretext)](https://github.com/artefactory/nlpretext}/blob/main/LICENSE)
+[![License](https://img.shields.io/github/license/artefactory/NLPretext)](https://github.com/artefactory/NLPretext}/blob/main/LICENSE)
 
-This project is licensed under the terms of the `Apache Software License 2.0` license. See [LICENSE](https://github.com/artefactory/nlpretext}/blob/main/LICENSE) for more details.## 📃 Citation
+This project is licensed under the terms of the `Apache Software License 2.0` license. See [LICENSE](https://github.com/artefactory/NLPretext}/blob/main/LICENSE) for more details.## 📃 Citation
 
 ```
 @misc{nlpretext,
@@ -409,7 +409,7 @@ This project is licensed under the terms of the `Apache Software License 2.0` li
   year = {2021},
   publisher = {GitHub},
   journal = {GitHub repository},
-  howpublished = {\url{https://github.com/artefactory/nlpretext}}}
+  howpublished = {\url{https://github.com/artefactory/NLPretext}}}
 }
 ```
 

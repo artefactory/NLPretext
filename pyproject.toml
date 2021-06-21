@@ -13,8 +13,8 @@ authors = [
   "artefactory <rafaelle.aygalenq@artefact.com>"
 ]
 license = "Apache Software License 2.0"
-repository = "https://github.com/artefactory/nlpretext}"
-homepage = "https://github.com/artefactory/nlpretext}"
+repository = "https://github.com/artefactory/NLPretext}"
+homepage = "https://github.com/artefactory/NLPretext}"
 
 # Keywords description https://python-poetry.org/docs/pyproject/#keywords
 keywords = []  # Update me

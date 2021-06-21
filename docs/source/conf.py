@@ -71,7 +71,7 @@ autodoc_member_order = "bysource"
 
 html_theme = "sphinx_rtd_theme"
 
-github_url = "https://www.github.com/artefactory/nlpretext}"
+github_url = "https://www.github.com/artefactory/NLPretext}"
 
 
 # Add any paths that contain custom static files (such as style sheets) here,

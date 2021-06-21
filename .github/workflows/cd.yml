@@ -37,16 +37,16 @@ jobs:
         file: ./docker/Dockerfile
         push: true
         tags: |
-          ghcr.io/artefactory/nlpretext:${{ steps.tag.outputs.tag_name }}
-          ghcr.io/artefactory/nlpretext:latest
-        cache-from: type=registry,ref=ghcr.io/artefactory/nlpretext:latest
+          ghcr.io/artefactory/NLPretext:${{ steps.tag.outputs.tag_name }}
+          ghcr.io/artefactory/NLPretext:latest
+        cache-from: type=registry,ref=ghcr.io/artefactory/NLPretext:latest
         cache-to: type=inline
 
     - name: Scan image
       uses: anchore/scan-action@v2
       id: scan
       with:
-        image: "ghcr.io/artefactory/nlpretext:${{ steps.tag.outputs.tag_name }}"
+        image: "ghcr.io/artefactory/NLPretext:${{ steps.tag.outputs.tag_name }}"
         acs-report-enable: true
     - name: upload Anchore scan SARIF report
       uses: github/codeql-action/upload-sarif@v1
