@@ -14,12 +14,14 @@
 # limitations under the License
 
 
+from typing import List, Tuple
+
 import emoji as _emoji
 from nlpretext._config import constants
 from nlpretext.basic.preprocess import normalize_whitespace
 
 
-def remove_mentions(text) -> str:
+def remove_mentions(text: str) -> str:
     """
     Function that removes words preceded with a '@'
 
@@ -35,7 +37,7 @@ def remove_mentions(text) -> str:
     return text
 
 
-def extract_mentions(text) -> list:
+def extract_mentions(text: str) -> List[str]:
     """
     Function that extracts words preceded with a '@'
     eg. "I take care of my skin with @thisproduct" --> ["@thisproduct"]
@@ -51,7 +53,7 @@ def extract_mentions(text) -> list:
     return constants.AT_PATTERN.findall(text)
 
 
-def remove_html_tags(text) -> str:
+def remove_html_tags(text: str) -> str:
     """
     Function that removes words between < and >
 
@@ -67,7 +69,7 @@ def remove_html_tags(text) -> str:
     return text
 
 
-def remove_emoji(text) -> str:
+def remove_emoji(text: str) -> str:
     """
     Remove emoji from any str by stripping any unicode in the range of Emoji unicode
     as defined in the unicode convention:
@@ -85,7 +87,9 @@ def remove_emoji(text) -> str:
     return text
 
 
-def convert_emoji_to_text(text, code_delimiters=(":", ":")) -> str:
+# TODO: replace mutable default value :
+#  https://docs.quantifiedcode.com/python-anti-patterns/correctness/mutable_default_value_as_argument.html
+def convert_emoji_to_text(text: str, code_delimiters: Tuple[str, str] = (":", ":")) -> str:
     """
     Convert emoji to their CLDR Short Name, according to the unicode convention
     http://www.unicode.org/emoji/charts/full-emoji-list.html
@@ -105,7 +109,7 @@ def convert_emoji_to_text(text, code_delimiters=(":", ":")) -> str:
     return _emoji.demojize(text, delimiters=code_delimiters)
 
 
-def extract_emojis(text) -> list:
+def extract_emojis(text: str) -> List[str]:
     """
     Function that extracts emojis from a text and translates them into words
     eg. "I take care of my skin 😀 :(" --> [":grinning_face:"]
@@ -124,7 +128,7 @@ def extract_emojis(text) -> list:
     return emojis_converted
 
 
-def extract_hashtags(text) -> list:
+def extract_hashtags(text: str) -> List[str]:
     """
     Function that extracts words preceded with a '#'
     eg. "I take care of my skin #selfcare#selfestim" --> ["skincare", "selfestim"]
@@ -141,7 +145,7 @@ def extract_hashtags(text) -> list:
     return constants.HASHTAG_PATTERN.findall(text)
 
 
-def remove_hashtag(text) -> str:
+def remove_hashtag(text: str) -> str:
     """
     Function that removes words preceded with a '#'
     eg. "I take care of my skin #selfcare#selfestim" --> "I take care of my skin"

@@ -1,4 +1,4 @@
-from typing import Callable, List
+from typing import Any, Callable, Dict, List, Optional
 
 from nlpretext.basic.preprocess import fix_bad_unicode, normalize_whitespace, remove_eol_characters
 from nlpretext.social.preprocess import (
@@ -19,7 +19,7 @@ class Preprocessor:
         self.__operations = []
         self.pipeline = None
 
-    def pipe(self, operation: Callable, args: dict = None):
+    def pipe(self, operation: Callable[[Any], Any], args: Optional[Dict[str, Any]] = None) -> None:
         """
         Add an operation and its arguments to pipe in the preprocessor
 
@@ -32,7 +32,7 @@ class Preprocessor:
         self.__operations.append({"operation": operation, "args": args})
 
     @staticmethod
-    def build_pipeline(operation_list: List[dict]) -> Pipeline:
+    def build_pipeline(operation_list: List[Dict[Any, Any]]) -> Pipeline:
         """
         Build sklearn pipeline from a operation list
 

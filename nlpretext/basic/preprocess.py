@@ -14,6 +14,8 @@
 # limitations under the License
 
 
+from typing import List, Optional
+
 import re
 import unicodedata
 
@@ -24,7 +26,7 @@ from nlpretext._utils.stopwords import get_stopwords
 from nlpretext.token.tokenizer import tokenize
 
 
-def normalize_whitespace(text) -> str:
+def normalize_whitespace(text: str) -> str:
     """
     ----
     Copyright 2016 Chartbeat, Inc.
@@ -50,7 +52,7 @@ def normalize_whitespace(text) -> str:
     return text
 
 
-def lower_text(text: str):
+def lower_text(text: str) -> str:
     """
     Given ``text`` str, transform it into lowercase
 
@@ -65,7 +67,7 @@ def lower_text(text: str):
     return text.lower()
 
 
-def remove_stopwords(text: str, lang: str, custom_stopwords: list = None) -> str:
+def remove_stopwords(text: str, lang: str, custom_stopwords: Optional[List[str]] = None) -> str:
     """
     Given ``text`` str, remove classic stopwords for a given language and
     custom stopwords given as a list.
@@ -89,7 +91,7 @@ def remove_stopwords(text: str, lang: str, custom_stopwords: list = None) -> str
     return " ".join([x for x in text.split() if x not in stopwords])
 
 
-def remove_eol_characters(text) -> str:
+def remove_eol_characters(text: str) -> str:
     """
     Remove end of line (\n) char.
 
@@ -105,7 +107,7 @@ def remove_eol_characters(text) -> str:
     return text
 
 
-def fix_bad_unicode(text, normalization: str = "NFC") -> str:
+def fix_bad_unicode(text: str, normalization: str = "NFC") -> str:
     """
     ----
     Copyright 2016 Chartbeat, Inc.
@@ -137,7 +139,7 @@ def fix_bad_unicode(text, normalization: str = "NFC") -> str:
     return text
 
 
-def unpack_english_contractions(text) -> str:
+def unpack_english_contractions(text: str) -> str:
     """
     ----
     Copyright 2016 Chartbeat, Inc.
@@ -182,7 +184,7 @@ def unpack_english_contractions(text) -> str:
     return text
 
 
-def replace_urls(text, replace_with: str = "*URL*") -> str:
+def replace_urls(text: str, replace_with: str = "*URL*") -> str:
     """
     ----
     Copyright 2016 Chartbeat, Inc.
@@ -205,7 +207,7 @@ def replace_urls(text, replace_with: str = "*URL*") -> str:
     return text
 
 
-def replace_emails(text, replace_with="*EMAIL*") -> str:
+def replace_emails(text: str, replace_with: str = "*EMAIL*") -> str:
     """
     ----
     Copyright 2016 Chartbeat, Inc.
@@ -229,7 +231,7 @@ def replace_emails(text, replace_with="*EMAIL*") -> str:
 
 
 def replace_phone_numbers(
-    text, country_to_detect: list, replace_with: str = "*PHONE*", method: str = "regex"
+    text: str, country_to_detect: List[str], replace_with: str = "*PHONE*", method: str = "regex"
 ) -> str:
     """
     ----
@@ -272,7 +274,7 @@ def replace_phone_numbers(
     return text
 
 
-def replace_numbers(text, replace_with="*NUMBER*") -> str:
+def replace_numbers(text: str, replace_with: str = "*NUMBER*") -> str:
     """
     ----
     Copyright 2016 Chartbeat, Inc.
@@ -295,7 +297,7 @@ def replace_numbers(text, replace_with="*NUMBER*") -> str:
     return text
 
 
-def replace_currency_symbols(text, replace_with=None) -> str:
+def replace_currency_symbols(text: str, replace_with: Optional[str] = None) -> str:
     """
     ----
     Copyright 2016 Chartbeat, Inc.
@@ -327,7 +329,7 @@ def replace_currency_symbols(text, replace_with=None) -> str:
     return text
 
 
-def remove_punct(text, marks=None) -> str:
+def remove_punct(text: str, marks: Optional[str] = None) -> str:
     """
     ----
     Copyright 2016 Chartbeat, Inc.
@@ -364,7 +366,7 @@ def remove_punct(text, marks=None) -> str:
     return text
 
 
-def remove_accents(text, method: str = "unicode") -> str:
+def remove_accents(text: str, method: str = "unicode") -> str:
     """
     ----
     Copyright 2016 Chartbeat, Inc.
@@ -408,7 +410,7 @@ def remove_accents(text, method: str = "unicode") -> str:
     return text
 
 
-def remove_multiple_spaces_and_strip_text(text) -> str:
+def remove_multiple_spaces_and_strip_text(text: str) -> str:
     """
     Remove multiple spaces, strip text, and remove '-', '*' characters.
 
@@ -429,7 +431,7 @@ def remove_multiple_spaces_and_strip_text(text) -> str:
     return text
 
 
-def filter_non_latin_characters(text) -> str:
+def filter_non_latin_characters(text: str) -> str:
     """
     Function that filters non latin characters of a text
 

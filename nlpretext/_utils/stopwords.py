@@ -14,12 +14,14 @@
 # limitations under the License
 
 
+from typing import List
+
 from nlpretext._config.stopwords import STOPWORDS
 from stop_words import LANGUAGE_MAPPING as _LANGUAGE_MAPPING
 from stop_words import get_stop_words as _get_stop_words
 
 
-def get_stopwords(lang: str = "en") -> list:
+def get_stopwords(lang: str = "en") -> List[str]:
     """
     Inputs a language code, returns a list of stopwords for the specified language
 

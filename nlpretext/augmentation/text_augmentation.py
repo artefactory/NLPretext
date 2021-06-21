@@ -1,4 +1,4 @@
-from typing import List, Optional, Tuple
+from typing import Any, Dict, List, Optional, Tuple
 
 import logging
 import re
@@ -16,8 +16,11 @@ class UnavailableAugmenter(ValueError):
 
 
 def augment_text(
-    text: str, method: str, stopwords: Optional[List[str]] = None, entities: Optional[list] = None
-) -> Tuple[str, list]:
+    text: str,
+    method: str,
+    stopwords: Optional[List[str]] = None,
+    entities: Optional[List[Dict[str, Any]]] = None,
+) -> Tuple[str, List[Dict[str, Any]]]:
     """
     Given a text with or without associated entities, generate a new text by
     modifying some words in the initial one, modifications depend on the chosen
@@ -54,10 +57,12 @@ def augment_text(
     augmented_text = augmenter.augment(text)
     if entities is not None:
         return process_entities_and_text(entities, text, augmented_text)
-    return augmented_text
+    return augmented_text, []
 
 
-def process_entities_and_text(entities: list, text: str, augmented_text: str):
+def process_entities_and_text(
+    entities: List[Dict[str, Any]], text: str, augmented_text: str
+) -> Tuple[str, List[Dict[str, Any]]]:
     """
     Given a list of initial entities, verify that they have not been altered by
     the data augmentation operation and are still in the augmented text.
@@ -98,7 +103,7 @@ def process_entities_and_text(entities: list, text: str, augmented_text: str):
     raise CouldNotAugment("Text was not correctly augmented because entities were altered")
 
 
-def are_entities_in_augmented_text(entities: list, augmented_text: str) -> bool:
+def are_entities_in_augmented_text(entities: List[Dict[str, Any]], augmented_text: str) -> bool:
     """
     Given a list of entities, check if all the words associated to each entity
     are still present in augmented text.
@@ -132,7 +137,7 @@ def are_entities_in_augmented_text(entities: list, augmented_text: str) -> bool:
     return check
 
 
-def get_augmenter(method: str, stopwords: List[str] = None) -> naw.SynonymAug:
+def get_augmenter(method: str, stopwords: Optional[List[str]] = None) -> naw.SynonymAug:
     """
     Initialize an augmenter depending on the given method.
 
@@ -158,7 +163,9 @@ def get_augmenter(method: str, stopwords: List[str] = None) -> naw.SynonymAug:
     )
 
 
-def get_augmented_entities(sentence_augmented: str, entities: list) -> list:
+def get_augmented_entities(
+    sentence_augmented: str, entities: List[Tuple[str, Any]]
+) -> List[Dict[str, Any]]:
     """
     Get entities with updated positions (start and end) in augmented text
 
@@ -200,7 +207,7 @@ def get_augmented_entities(sentence_augmented: str, entities: list) -> list:
     return entities_augmented
 
 
-def clean_sentence_entities(text: str, entities: list) -> list:
+def clean_sentence_entities(text: str, entities: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
     """
     Paired entities check to remove nested entities, the longest entity is kept
 
@@ -242,7 +249,9 @@ def clean_sentence_entities(text: str, entities: list) -> list:
     return entities_to_clean
 
 
-def check_interval_included(element1: dict, element2: dict) -> Optional[Tuple[dict, dict]]:
+def check_interval_included(
+    element1: Dict[str, Any], element2: Dict[str, Any]
+) -> Optional[Tuple[Dict[str, Any], Dict[str, Any]]]:
     """
     Comparison of two entities on start and end positions to find if they are nested
 
