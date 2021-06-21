@@ -1,0 +1,50 @@
+
+{%- macro automodule(modname, options) -%}
+.. automodule:: {{ modname }}
+{%- for option in options %}
+   :{{ option }}:
+{%- endfor %}
+{%- endmacro %}
+
+{%- macro toctree(docnames) -%}
+.. toctree::
+   :maxdepth: {{ maxdepth }}
+{% for docname in docnames %}
+   {{ docname }}
+{%- endfor %}
+{%- endmacro %}
+
+{%- if is_namespace %}
+{{- ["**", pkgname, "**"] | join("") | heading }}
+{% else %}
+{% set pkg_list = pkgname.split('.') %}
+{{- ["**", pkg_list[-1], "**"] | join("") | heading }}
+{% endif %}
+
+{%- if modulefirst and not is_namespace %}
+{{ automodule(pkgname, automodule_options) }}
+{% endif %}
+
+{%- if subpackages %}
+
+{{ toctree(subpackages) }}
+{% endif %}
+
+{%- if submodules %}
+{% if separatemodules %}
+{{ toctree(submodules) }}
+{% else %}
+{%- for submodule in submodules %}
+{% if show_headings %}
+{% set submodule_list = submodule.split('.') %}
+{{- [submodule_list[-1]] | join(" ") | e | heading(2) }}
+{% endif %}
+{{ automodule(submodule, automodule_options) }}
+{% endfor %}
+{%- endif %}
+{%- endif %}
+
+{%- if not modulefirst and not is_namespace %}
+
+{{ automodule(pkgname, automodule_options) }}
+{% endif %}
