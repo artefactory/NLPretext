@@ -52,6 +52,11 @@ pip install https://github.com/explosion/spacy-models/releases/download/en_core_
 pip install https://github.com/explosion/spacy-models/releases/download/fr_core_news_sm-2.3.0/fr_core_news_sm-2.3.0.tar.gz
 ```
 
+To use our TextLoader class, you'll need to install Dask as well:
+```bash
+pip install dask[complete]==2021.3.0
+```
+
 # Preprocessing pipeline
 
 ## Default pipeline <a name="default_pipeline"></a>
@@ -64,7 +69,7 @@ text = "I just got the best dinner in my life @latourdargent !!! I  recommend ðŸ
 preprocessor = Preprocessor()
 text = preprocessor.run(text)
 print(text)
-# "I just got the best dinner in my life !!! I recommend"
+# "I just got the best dinner in my life!!! I recommend"
 ```
 
 ## Create your custom pipeline <a name="custom_pipeline"></a>
@@ -92,6 +97,64 @@ print(text)
 ```
 
 Take a look at all the functions that are available [here](https://github.com/artefactory/NLPretext/tree/master/nlpretext) in the ```preprocess.py``` scripts in the different folders: basic, social, token.
+
+
+# Load text data
+
+Pre-processing text data is useful only if you have loaded data to process! Importing text data as strings in your code can be really simple if you have short texts contained in a local .txt, but it can quickly become difficult if you want to load a lot of texts, stored in multiple formats and divided in multiple files. Hopefully, you can use NLPretext's TextLoader class to easily import text data.
+Our TextLoader class makes use of Dask, so be sure to install the library if you want to use it, as mentioned above.
+
+```python
+from nlpretext.textloader import TextLoader
+files_path = "local_folder/texts/text.txt"
+text_loader = TextLoader()
+text_dataframe = text_loader.read_text(files_path)
+print(text_dataframe.text.values.tolist())
+# ["I just got the best dinner in my life!!!",  "I recommend", "It was awesome"]
+```
+
+As TextLoader uses dask to load data, file path can be provided as string, list of strings, with or without wildcards. It also supports imports from cloud providers, if your machine is authentified on a project.
+
+```python
+text_loader = TextLoader(text_column="name_of_text_column_in_your_data")
+
+local_file_path = "local_folder/texts/text.csv" # File from local folder
+local_corpus_path = ["local_folder/texts/text_1.csv", "local_folder/texts/text_2.csv", "local_folder/texts/text_3.csv"] # Multiple files from local folder
+
+gcs_file_path = "gs://my-bucket/texts/text.json" # File from GCS
+s3_file_path = "s3://my-bucket/texts/text.json" # File from S3
+hdfs_file_path = "hdfs://folder/texts/text.txt" # File from HDFS
+azure_file_path = "az://my-bucket/texts/text.parquet" # File from Azure
+
+gcs_corpus_path = "gs://my-bucket/texts/text_*.json" # Multiple files from GCS with wildcard
+
+text_dataframe_1 = text_loader.read_text(local_file_path)
+text_dataframe_2 = text_loader.read_text(local_corpus_path)
+text_dataframe_3 = text_loader.read_text(gcs_file_path)
+text_dataframe_4 = text_loader.read_text(s3_file_path)
+text_dataframe_5 = text_loader.read_text(hdfs_file_path)
+text_dataframe_6 = text_loader.read_text(azure_file_path)
+text_dataframe_7 = text_loader.read_text(gcs_corpus_path)
+
+```
+
+You can also specify a Preprocessor if you want your data to be directly pre-processed when loaded.
+```python
+text_loader = TextLoader(text_column="text_col")
+preprocessor = Preprocessor()
+
+file_path = "local_folder/texts/text.csv" # File from local folder
+
+raw_text_dataframe = text_loader.read_text(local_file_path)
+preprocessed_text_dataframe = text_loader.read_text(local_file_path, preprocessor=preprocessor)
+
+print(raw_text_dataframe.text_col.values.tolist())
+# ["These   texts are not preprocessed",  "This is bad ## "]
+
+print(preprocessed_text_dataframe.text_col.values.tolist())
+# ["These texts are not preprocessed",  "This is bad"]
+```
+
 
 
 # Individual Functions
