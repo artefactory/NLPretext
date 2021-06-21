@@ -15,23 +15,6 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with this program; if not, write to the Free Software Foundation,
 # Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
-
-# type: ignore[attr-defined]
-"""All the goto functions you need to handle NLP use-cases, integrated in NLPretext"""
-
-
-from nlpretext.preprocessor import Preprocessor
-
-try:
-    from importlib.metadata import PackageNotFoundError, version
-except ImportError:  # pragma: no cover
-    from importlib_metadata import PackageNotFoundError, version
-
-
-try:
-    __version__ = version(__name__)
-except PackageNotFoundError:  # pragma: no cover
-    __version__ = "unknown"
-
-
-__all__ = ["Preprocessor"]
+#!/bin/bash 
+wget -O trainingandtestdata.zip http://cs.stanford.edu/people/alecmgo/trainingandtestdata.zip trainingandtestdata.zip
+mkdir -p  tweets_sentiment && cp trainingandtestdata.zip tweets_sentiment && cd tweets_sentiment && unzip trainingandtestdata.zip

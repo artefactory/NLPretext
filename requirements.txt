@@ -1,0 +1,15 @@
+#library requirements
+chardet==3.0.4
+emoji>=0.5.2
+flashtext==2.7
+ftfy<5.0.0,>=4.2.0
+mosestokenizer==1.1.0
+nlpaug==1.0.1
+nltk>=3.4.5
+numpy>1.15.4
+phonenumbers==8.10.12
+regex==2019.8.19
+sacremoses==0.0.13
+scikit_learn==0.23.2
+spacy==2.3.4
+stop_words==2018.7.23

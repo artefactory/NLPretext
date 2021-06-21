@@ -1,3 +1,6 @@
+NLPretext
+==============================
+
 # How to contribute
 
 ## Dependencies
@@ -49,3 +52,35 @@ You can contribute by spreading a word about this library.
 It would also be a huge contribution to write
 a short article on how you are using this project.
 You can also share your best practices with us.
+
+# Docstring format
+
+We chose to use **Numpydoc** over the several [standards](https://stackoverflow.com/questions/3898572/what-is-the-standard-python-docstring-format)
+
+```
+"""
+My numpydoc description of a kind
+of very exhautive numpydoc format docstring.
+
+Parameters
+----------
+first : array_like
+    the 1st param name `first`
+second :
+    the 2nd param
+third : {'value', 'other'}, optional
+    the 3rd param, by default 'value'
+
+Returns
+-------
+string
+    a value in a string
+
+Raises
+------
+KeyError
+    when a key error
+OtherError
+    when an other error
+"""
+```
