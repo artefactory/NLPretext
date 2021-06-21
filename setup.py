@@ -15,34 +15,34 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with this program; if not, write to the Free Software Foundation,
 # Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
-import setuptools
 from pathlib import Path
 
+import setuptools
 
-with open(Path(__file__).resolve().parent.joinpath('VERSION'), 'r') as fh:
+with open(Path(__file__).resolve().parent.joinpath("VERSION")) as fh:
     version = fh.read()
 
-with open("requirements.txt", "r") as fr:
+with open("requirements.txt") as fr:
     requirements = [req for req in fr.read().splitlines() if not req.startswith("#")]
 
-with open("README.md", "r") as fr:
+with open("README.md") as fr:
     long_description = fr.read()
 
 setuptools.setup(
-    name='nlpretext',
+    name="nlpretext",
     packages=setuptools.find_packages(),
     scripts=["VERSION", "requirements.txt", "README.md"],
     version=version,
-    description='All the goto functions you need to handle NLP use-cases',
+    description="All the goto functions you need to handle NLP use-cases",
     long_description=long_description,
-    long_description_content_type='text/markdown',
-    author='Artefact',
-    license='Apache',
-    url='https://github.com/artefactory/NLPretext',
+    long_description_content_type="text/markdown",
+    author="Artefact",
+    license="Apache",
+    url="https://github.com/artefactory/NLPretext",
     install_requires=requirements,
     classifiers=[
-        'Programming Language :: Python :: 3.7',
-        'License :: OSI Approved :: Apache Software License',
-        'Operating System :: OS Independent',
+        "Programming Language :: Python :: 3.7",
+        "License :: OSI Approved :: Apache Software License",
+        "Operating System :: OS Independent",
     ],
 )

@@ -1,4 +1,3 @@
-# coding=utf-8
 # Copyright (C) 2020 Artefact
 # licence-information@artefact.com
 #
@@ -14,13 +13,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License
 
-from __future__ import absolute_import, division, print_function, unicode_literals
 
 import re
+
 from nlpretext._utils.stopwords import get_stopwords
 
 
-def remove_stopwords(tokens: list, lang: str, custom_stopwords: list = None)  -> str:
+def remove_stopwords(tokens: list, lang: str, custom_stopwords: list = None) -> str:
     """
     Remove stopwords from a text.
     eg. 'I like when you move your body !' -> 'I move body !'

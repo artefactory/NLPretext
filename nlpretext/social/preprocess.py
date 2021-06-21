@@ -1,4 +1,3 @@
-# coding=utf-8
 # Copyright (C) 2020 Artefact
 # licence-information@artefact.com
 #
@@ -14,7 +13,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License
 
-from __future__ import absolute_import, division, print_function, unicode_literals
 
 import emoji as _emoji
 from nlpretext._config import constants
@@ -33,7 +31,7 @@ def remove_mentions(text) -> str:
     -------
     string
     """
-    text = normalize_whitespace(constants.AT_PATTERN.sub('', text))
+    text = normalize_whitespace(constants.AT_PATTERN.sub("", text))
     return text
 
 
@@ -65,7 +63,7 @@ def remove_html_tags(text) -> str:
     -------
     string
     """
-    text = normalize_whitespace(constants.HTML_TAG_PATTERN.sub('', text))
+    text = normalize_whitespace(constants.HTML_TAG_PATTERN.sub("", text))
     return text
 
 
@@ -87,7 +85,7 @@ def remove_emoji(text) -> str:
     return text
 
 
-def convert_emoji_to_text(text, code_delimiters=(':', ':')) -> str:
+def convert_emoji_to_text(text, code_delimiters=(":", ":")) -> str:
     """
     Convert emoji to their CLDR Short Name, according to the unicode convention
     http://www.unicode.org/emoji/charts/full-emoji-list.html
@@ -157,5 +155,5 @@ def remove_hashtag(text) -> str:
     str
         text of a post without hashtags
     """
-    text = normalize_whitespace(constants.HASHTAG_PATTERN.sub('', text))
+    text = normalize_whitespace(constants.HASHTAG_PATTERN.sub("", text))
     return text

@@ -16,7 +16,6 @@
 # along with this program; if not, write to the Free Software Foundation,
 # Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 import chardet
-
 from nlpretext._config import constants
 
 
@@ -64,7 +63,9 @@ def check_text_file_format(filepath) -> str:
 
     format_re_list = [pattern.match(path) for path in filepath]
     if None in format_re_list:
-        raise ValueError("Unrecognized format among specified files, only .csv, .json, .parquet and .txt accepted")
+        raise ValueError(
+            "Unrecognized format among specified files, only .csv, .json, .parquet and .txt accepted"
+        )
 
     format_list = [format_re.group(1) for format_re in format_re_list]
     if len(set(format_list)) > 1:

@@ -1,4 +1,3 @@
-# coding=utf-8
 # Copyright (C) 2020 Artefact
 # licence-information@artefact.com
 #
@@ -17,15 +16,13 @@
 Collection of regular expressions and other (small, generally useful) constants.
 Credits to textacy for some of them: https://github.com/chartbeat-labs/textacy
 """
-from __future__ import unicode_literals
 
 import re
 import sys
 import unicodedata
 
-import regex
-
 import emoji as _emoji
+import regex
 
 NUMERIC_NE_TYPES = {
     "ORDINAL",
@@ -125,11 +122,7 @@ POS_REGEX_PATTERNS = {
 }
 
 PUNCT_TRANSLATE_UNICODE = dict.fromkeys(
-    (
-        i
-        for i in range(sys.maxunicode)
-        if unicodedata.category(chr(i)).startswith("P")
-    ),
+    (i for i in range(sys.maxunicode) if unicodedata.category(chr(i)).startswith("P")),
     " ",
 )
 
@@ -149,9 +142,7 @@ NUMBERS_REGEX = re.compile(
     r"(?:^|(?<=[^\w,.]))[+–-]?(([1-9]\d{0,2}(,\d{3})+(\.\d*)?)|([1-9]\d{0,2}([ .]\d{3})+(,\d*)?)|"
     r"(\d*?[.,]\d+)|\d+)(?:|(?=\b))"
 )
-CURRENCY_REGEX = re.compile(
-    "({})+".format("|".join(re.escape(c) for c in CURRENCIES))
-)
+CURRENCY_REGEX = re.compile("({})+".format("|".join(re.escape(c) for c in CURRENCIES)))
 LINEBREAK_REGEX = re.compile(r"((\r\n)|[\n\v])+")
 NONBREAKING_SPACE_REGEX = re.compile(r"(?!\n)\s+")
 URL_REGEX = re.compile(
@@ -207,11 +198,12 @@ LEAD_HYPHEN_TERM_RE = re.compile(r"^-([^\W\d_])", flags=re.UNICODE)
 NEG_DIGIT_TERM_RE = re.compile(r"(-) (\d)", flags=re.UNICODE)
 WEIRD_HYPHEN_SPACE_TERM_RE = re.compile(r"(?<=[^\W\d]) (-[^\W\d])", flags=re.UNICODE)
 WEIRD_APOSTR_SPACE_TERM_RE = re.compile(r"([^\W\d]+) ('[a-z]{1,2}\b)", flags=re.UNICODE)
-LATIN_CHARACTERS_RE = regex.compile(r'[^\p{Latin}1-9]')
+LATIN_CHARACTERS_RE = regex.compile(r"[^\p{Latin}1-9]")
 
 # ENGLISH CONTRACTIONS
 CONTRACTION_NT_NOT = re.compile(
-    r"(\b)(are|could|did|does|do|had|has|have|is|might|must|should|were|would)n't", re.IGNORECASE)
+    r"(\b)(are|could|did|does|do|had|has|have|is|might|must|should|were|would)n't", re.IGNORECASE
+)
 CONTRACTION_LL_WILL = re.compile(r"(\b)(he|i|she|they|we|what|who|you)'ll", re.IGNORECASE)
 CONTRACTION_RE_ARE = re.compile(r"(\b)(they|we|what|who|you)'re", re.IGNORECASE)
 CONTRACTION_VE_HAVE = re.compile(r"(\b)(i|should|they|we|what|who|would|you)'ve", re.IGNORECASE)
@@ -224,9 +216,9 @@ CONTRACTION_YALL_YOUALL = re.compile(r"(\b)(y)(?:'all|a'll)", re.IGNORECASE)
 
 # SOCIAL DATA
 EMOJI_PATTERN = _emoji.get_emoji_regexp()
-HASHTAG_PATTERN = re.compile(r'#\w*')
-AT_PATTERN = re.compile(r'@\w*')
-HTML_TAG_PATTERN = re.compile(r'<.*?>')
+HASHTAG_PATTERN = re.compile(r"#\w*")
+AT_PATTERN = re.compile(r"@\w*")
+HTML_TAG_PATTERN = re.compile(r"<.*?>")
 
 # TEXT LOADER
 TEXT_FILE_FORMATS_PATTERN = re.compile(r"^.*\.(json|csv|txt|parquet)(\.gz|\.zip)*$")
