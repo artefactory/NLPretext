@@ -68,9 +68,9 @@ def check_text_file_format(filepath: Union[str, List[str]]) -> str:
     format_list = [format_re.group(1) for format_re in format_re_list if format_re]
     if len(set(format_list)) > 1:
         raise ValueError(f"Multiple file formats found in file path list: {format_list}")
-    file_format = format_list[0]
     if None in format_re_list:
         raise ValueError(
             "Unrecognized format among specified files, only .csv, .json, .parquet and .txt accepted"
         )
+    file_format = format_list[0]
     return file_format

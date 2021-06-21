@@ -50,6 +50,9 @@ sacremoses = ">=0.0.13"
 scikit-learn = ">=0.23.2"
 spacy = "^2.3.7"
 stop-words = ">=2018.7.23"
+fr-core-news-sm = {url = "https://github.com/explosion/spacy-models/releases/download/fr_core_news_sm-2.3.0/fr_core_news_sm-2.3.0.tar.gz"}
+en-core-web-sm = {url = "https://github.com/explosion/spacy-models/releases/download/en_core_web_sm-2.3.1/en_core_web_sm-2.3.1.tar.gz"}
+torch = "^1.9.0"
 
 [tool.poetry.dev-dependencies]
 darglint = ">=1.8.0"
