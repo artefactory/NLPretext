@@ -78,11 +78,7 @@ nlpretext --help
 ```
 
 ```bash
-nlpretext dialogs hello --name Roman
-```
-
-```bash
-nlpretext dialogs clock --color blue
+nlpretext preprocess run --input input.txt --output output.parquet
 ```
 
 or if installed with `Poetry`:
@@ -92,7 +88,7 @@ poetry run nlpretext --help
 ```
 
 ```bash
-poetry run nlpretext dialogs hello --name Roman
+poetry run nlpretext preprocess run --input input.txt --output output.parquet
 ```
 
 ## Local setup

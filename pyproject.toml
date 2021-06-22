@@ -13,8 +13,8 @@ authors = [
   "artefactory <rafaelle.aygalenq@artefact.com>"
 ]
 license = "Apache Software License 2.0"
-repository = "https://github.com/artefactory/NLPretext}"
-homepage = "https://github.com/artefactory/NLPretext}"
+repository = "https://github.com/artefactory/NLPretext"
+homepage = "https://github.com/artefactory/NLPretext"
 
 # Keywords description https://python-poetry.org/docs/pyproject/#keywords
 keywords = []  # Update me
@@ -87,6 +87,8 @@ coverage = ">=5.3"
 python-dotenv = ">=0.5.1"
 setuptools = ">=40.8.0"
 pandas = ">=1.1.5"
+pyarrow = ">=4.0.0"
+fastparquet = ">=0.4.1"
 dask = {version = ">=2021.3.0", extras = ["complete"]}
 types-emoji = ">=1.2.2"
 types-chardet = ">=0.1.3"

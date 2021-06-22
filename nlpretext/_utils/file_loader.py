@@ -61,9 +61,8 @@ def check_text_file_format(filepath: Union[str, List[str]]) -> str:
         Format of the specified file path, among .json, .csv, .parquet or .txt
     """
     pattern = constants.TEXT_FILE_FORMATS_PATTERN
-    if not isinstance(filepath, list):
+    if not isinstance(filepath, (list, tuple)):
         filepath = [filepath]
-
     format_re_list = [pattern.match(path) for path in filepath]
     format_list = [format_re.group(1) for format_re in format_re_list if format_re]
     if len(set(format_list)) > 1:

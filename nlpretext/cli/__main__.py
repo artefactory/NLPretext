@@ -2,7 +2,7 @@
 
 import typer
 from nlpretext import __version__
-from nlpretext.cli import dialogs
+from nlpretext.cli import preprocess
 from rich.console import Console
 
 app = typer.Typer(
@@ -10,7 +10,7 @@ app = typer.Typer(
     help="All the goto functions you need to handle NLP use-cases, integrated in NLPretext",
     add_completion=True,
 )
-app.add_typer(dialogs.app, name="dialogs")
+app.add_typer(preprocess.app, name="preprocess")
 console = Console()
 
 
