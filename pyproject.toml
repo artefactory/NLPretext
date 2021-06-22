@@ -92,6 +92,7 @@ fastparquet = ">=0.4.1"
 dask = {version = ">=2021.3.0", extras = ["complete"]}
 types-emoji = ">=1.2.2"
 types-chardet = ">=0.1.3"
+types-click = ">=7.1.2"
 
 [tool.poetry.extras]
 spacy-tokenizer = ["torch", "fr-core-news-sm", "en-core-web-sm"]

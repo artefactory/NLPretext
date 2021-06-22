@@ -2067,6 +2067,14 @@ optional = false
 python-versions = "*"
 
 [[package]]
+name = "types-click"
+version = "7.1.2"
+description = "Typing stubs for click"
+category = "dev"
+optional = false
+python-versions = "*"
+
+[[package]]
 name = "types-emoji"
 version = "1.2.2"
 description = "Typing stubs for emoji"
@@ -2183,7 +2191,7 @@ spacy-tokenizer = ["torch", "fr-core-news-sm", "en-core-web-sm"]
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.7"
-content-hash = "8f374bc6929d76b315b070d549119785e53a40aaffb3ce26c5213ab8e5f7e98e"
+content-hash = "5ad89032de7c0a78daed9d6580e2ff41f9623d6293e423d3d53e93acd5e39a06"
 
 [metadata.files]
 alabaster = [
@@ -3542,6 +3550,10 @@ typer = [
 types-chardet = [
     {file = "types-chardet-0.1.3.tar.gz", hash = "sha256:f9e6dfa655a2a7228e8128ef0f70a8b77f1176514ec2c055ca414ee883af1246"},
     {file = "types_chardet-0.1.3-py2.py3-none-any.whl", hash = "sha256:6927c7ed3d477f51fbea5c708d79f9b13183b2fc229ca837ca1cdc1f4c43d699"},
+]
+types-click = [
+    {file = "types-click-7.1.2.tar.gz", hash = "sha256:040897284e4f9466825c3865f708a985a8e7ba4d8e22cb9198ffb7b522160850"},
+    {file = "types_click-7.1.2-py2.py3-none-any.whl", hash = "sha256:4722746f1ec9fd3fc8b1d7fb8c840604dc22f9e32bcc7a31a36d6d85cc2bce24"},
 ]
 types-emoji = [
     {file = "types-emoji-1.2.2.tar.gz", hash = "sha256:6d8f26809f41dbbbd3c7604415eba29a06edbc665784fd63fe2fd706729aacec"},

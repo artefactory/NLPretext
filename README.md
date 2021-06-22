@@ -86,7 +86,7 @@ or if installed with `Poetry`:
 ```bash
 poetry run nlpretext --help
 ```
-
+  
 ```bash
 poetry run nlpretext preprocess run --input input.txt --output output.parquet
 ```
