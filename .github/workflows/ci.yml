@@ -61,7 +61,7 @@ jobs:
     - name: Install dependencies
       run: |
         poetry run pip install --upgrade pip
-        poetry install
+        poetry install -E spacy_tokenizer
 
     - name: Run safety checks
       run: |
