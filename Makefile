@@ -111,7 +111,7 @@ check-style:
 	poetry run black --config pyproject.toml --diff --check ./$(BLACK_COMMAND_FLAG) && \
 	poetry run darglint -v 2 **/*.py$(DARGLINT_COMMAND_FLAG) && \
 	poetry run isort --settings-path pyproject.toml --check-only **/*.py$(ISORT_COMMAND_FLAG) && \
-	poetry run mypy --config-file setup.cfg nlpretext tests/**/*.py$(MYPY_COMMAND_FLAG)
+	poetry run mypy --config-file setup.cfg nlpretext tests/**.py$(MYPY_COMMAND_FLAG)
 
 .PHONY: format-code
 format-code:
