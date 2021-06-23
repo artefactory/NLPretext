@@ -1,18 +1,24 @@
-try:
-    import dask.bag as db
-    import dask.dataframe as dd
-except ImportError:
-    raise ImportError('please install dask: pip install dask[complete]')
+import warning
+import sys
 
+try:
+    import nlpretext.textloader.daskloader as daskloader
+except ImportError:
+    warning.warn("Dask not found, switching to pandas. To be able to use Dask, run : pip install dask[complete]")
+
+import nlpretext.textloader.pandasloader as pandasloader
 from nlpretext._utils.file_loader import check_text_file_format
 from nlpretext.preprocessor import Preprocessor
+
 
 class TextLoader():
     def __init__(
             self,
             text_column="text",
             encoding="utf-8",
-            file_format=None):
+            file_format=None,
+            use_dask=True
+    ):
         """
         Initialize DataLoader object to retrieve text data
 
@@ -24,10 +30,17 @@ class TextLoader():
             encoding of the text to be loaded, can be utf-8 or latin-1 for example
         file_format: string | None
             format of the files to be loaded
+        use_dask: bool
+            use dask to load text
         """
         self.text_column = text_column
         self.encoding = encoding
         self.file_format = file_format
+        
+        if 'dask' in sys.modules and use_dask:
+            self.loader = daskloader
+        else:
+            self.loader = pandasloader
 
     def __repr__(self):
         """
@@ -51,7 +64,7 @@ class TextLoader():
         -------
         dask.dataframe
         """
-        text_ddf = db.read_text(files_path, encoding=self.encoding).str.strip().to_dataframe()
+        text_ddf = self.loader.read_text(files_path, encoding=self.encoding).str.strip().to_dataframe()
         text_ddf.columns = [self.text_column]
         return text_ddf
 
@@ -68,7 +81,7 @@ class TextLoader():
         -------
         dask.dataframe
         """
-        text_ddf = dd.read_json(files_path, encoding=self.encoding)
+        text_ddf = self.loader.read_json(files_path, encoding=self.encoding)
         try:
             return text_ddf[[self.text_column]]
         except KeyError:
@@ -87,7 +100,7 @@ class TextLoader():
         -------
         dask.dataframe
         """
-        text_ddf = dd.read_csv(files_path)
+        text_ddf = self.loader.read_csv(files_path)
         try:
             return text_ddf[[self.text_column]]
         except KeyError:
@@ -106,7 +119,7 @@ class TextLoader():
         -------
         dask.dataframe
         """
-        text_ddf = dd.read_parquet(files_path)
+        text_ddf = self.loader.read_parquet(files_path)
         try:
             return text_ddf[[self.text_column]]
         except KeyError:
