@@ -36,7 +36,7 @@ class TextLoader():
         self.text_column = text_column
         self.encoding = encoding
         self.file_format = file_format
-        
+
         if 'dask' in sys.modules and use_dask:
             self.loader = daskloader
             self.use_dask = True
