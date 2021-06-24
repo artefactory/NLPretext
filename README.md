@@ -1,5 +1,8 @@
 # NLPretext
 
+<p align="center">
+    <img src="/references/logo_nlpretext.png" />
+</p>
 
 <div align="center">
 
@@ -21,9 +24,6 @@ All the goto functions you need to handle NLP use-cases, integrated in NLPretext
 
 # TL;DR
 
-<p align="center">
-    <img src="/references/logo_nlpretext.png" />
-</p>
 
 > *Working on an NLP project and tired of always looking for the same silly preprocessing functions on the web?*  :tired_face: 
 
@@ -279,7 +279,6 @@ This project is licensed under the terms of the `Apache Software License 2.0` li
   howpublished = {\url{https://github.com/artefactory/NLPretext}}}
 }
 ```
-
 
 
 # Project Organization
