@@ -1,12 +1,12 @@
-import warning
+import warnings
 import sys
 
 try:
-    import nlpretext.textloader.daskloader as daskloader
+    from nlpretext.textloader import daskloader
 except ImportError:
-    warning.warn("Dask not found, switching to pandas. To be able to use Dask, run : pip install dask[complete]")
+    warnings.warn("Dask not found, switching to pandas. To be able to use Dask, run : pip install dask[complete]")
 
-import nlpretext.textloader.pandasloader as pandasloader
+from nlpretext.textloader import pandasloader
 from nlpretext._utils.file_loader import check_text_file_format
 from nlpretext.preprocessor import Preprocessor
 
@@ -39,8 +39,10 @@ class TextLoader():
         
         if 'dask' in sys.modules and use_dask:
             self.loader = daskloader
+            self.use_dask = True
         else:
             self.loader = pandasloader
+            self.use_dask = False
 
     def __repr__(self):
         """
@@ -62,7 +64,7 @@ class TextLoader():
 
         Returns
         -------
-        dask.dataframe
+        dask.dataframe | pandas.DataFrame
         """
         text_ddf = self.loader.read_text(files_path, encoding=self.encoding).str.strip().to_dataframe()
         text_ddf.columns = [self.text_column]
@@ -79,7 +81,7 @@ class TextLoader():
 
         Returns
         -------
-        dask.dataframe
+        dask.dataframe | pandas.DataFrame
         """
         text_ddf = self.loader.read_json(files_path, encoding=self.encoding)
         try:
@@ -98,9 +100,9 @@ class TextLoader():
 
         Returns
         -------
-        dask.dataframe
+        dask.dataframe | pandas.DataFrame
         """
-        text_ddf = self.loader.read_csv(files_path)
+        text_ddf = self.loader.read_csv(files_path, encoding=self.encoding)
         try:
             return text_ddf[[self.text_column]]
         except KeyError:
@@ -117,7 +119,7 @@ class TextLoader():
 
         Returns
         -------
-        dask.dataframe
+        dask.dataframe | pandas.DataFrame
         """
         text_ddf = self.loader.read_parquet(files_path)
         try:
@@ -171,6 +173,6 @@ class TextLoader():
             else:
                 raise ValueError("Only NLPretext preprocessors can be specified")
 
-        if compute_to_pandas:
+        if compute_to_pandas and self.use_dask:
             return text.compute()
         return text

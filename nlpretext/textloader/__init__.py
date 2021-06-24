@@ -1,1 +1,1 @@
-from .textloader import *
+from .textloader import TextLoader
