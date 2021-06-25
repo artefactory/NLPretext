@@ -79,7 +79,7 @@ class TextLoader():
         -------
         dask.dataframe | pandas.DataFrame
         """
-        text_ddf = self.loader.read_text(files_path, encoding=self.encoding).str.strip().to_dataframe()
+        text_ddf = self.loader.read_text(files_path, encoding=self.encoding)
         text_ddf.columns = [self.text_column]
         return text_ddf
 

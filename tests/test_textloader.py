@@ -99,7 +99,7 @@ def test__read_text_csv(mock_read_csv):
     actual_result = dummy_instance._read_text_csv(files_path)
 
     # Then
-    mock_read_csv.assert_called_once_with(files_path)
+    mock_read_csv.assert_called_once_with(files_path, encoding=encoding)
     assert_frame_equal(expected_result.compute(), actual_result.compute())
 
 
@@ -122,7 +122,7 @@ def test__read_text_parquet(mock_read_parquet):
     actual_result = dummy_instance._read_text_parquet(files_path)
 
     # Then
-    mock_read_parquet.assert_called_once_with(files_path)
+    mock_read_parquet.assert_called_once_with(files_path, encoding=encoding)
     assert_frame_equal(expected_result.compute(), actual_result.compute())
 
 
@@ -140,11 +140,11 @@ def test__read_text_parquet(mock_read_parquet):
         ("text_file8.txt", None, None, False, MagicMock(), "txt", "Only NLPretext preprocessors can be specified"),
     ])
 @patch("nlpretext.preprocessor.Preprocessor.run")
-@patch("nlpretext.textloader.TextLoader._read_text_json")
-@patch("nlpretext.textloader.TextLoader._read_text_txt")
-@patch("nlpretext.textloader.TextLoader._read_text_csv")
-@patch("nlpretext.textloader.TextLoader._read_text_parquet")
-@patch("nlpretext.textloader.check_text_file_format")
+@patch("nlpretext.textloader.textloader.TextLoader._read_text_json")
+@patch("nlpretext.textloader.textloader.TextLoader._read_text_txt")
+@patch("nlpretext.textloader.textloader.TextLoader._read_text_csv")
+@patch("nlpretext.textloader.textloader.TextLoader._read_text_parquet")
+@patch("nlpretext.textloader.textloader.check_text_file_format")
 def test_read_text(mock_check_text_file_format,
                    mock__read_text_parquet,
                    mock__read_text_csv,
