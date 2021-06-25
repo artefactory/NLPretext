@@ -1,1 +1,3 @@
-from .textloader import TextLoader
+from nlpretext.textloader.textloader import TextLoader
+
+__all__ = ["TextLoader"]

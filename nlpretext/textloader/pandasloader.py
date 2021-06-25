@@ -6,7 +6,7 @@ def _list_handler(func):
     def wrapper_list_handler(file_path, *args, **kwargs):
         list_files = open_files(file_path)
         list_df = [func(file, *args, **kwargs) for file in list_files]
-        df = pd.concat(list_df)
+        df = list_df[0]
         return df
     return wrapper_list_handler
 
