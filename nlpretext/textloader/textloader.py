@@ -14,6 +14,8 @@
 # limitations under the License
 import warnings
 import sys
+
+import dask
 try:
     from nlpretext.textloader import daskloader
 except ImportError:
@@ -50,12 +52,19 @@ class TextLoader():
         self.encoding = encoding
         self.file_format = file_format
 
-        if 'dask' in sys.modules and use_dask:
-            self.loader = daskloader
-            self.use_dask = True
-        else:
+        self.use_dask = use_dask
+
+        if self.use_dask:
+            if 'dask' in sys.modules:
+                self.loader = daskloader
+            else: 
+                warnings.warn("Dask is not intalled, switching to pandas. Run pip install dask to use dask")
+                self.use_dask = False
+                self.loader = pandasloader
+        else: 
             self.loader = pandasloader
-            self.use_dask = False
+
+        
 
     def __repr__(self):
         """
@@ -63,7 +72,8 @@ class TextLoader():
         """
         class_repr_dict = {"text_column": self.text_column,
                            "encoding": self.encoding,
-                           "file_format": self.file_format}
+                           "file_format": self.file_format,
+                           "use_dask": self.use_dask}
         return f"TextLoader({class_repr_dict})"
 
     def _read_text_txt(self, files_path):
