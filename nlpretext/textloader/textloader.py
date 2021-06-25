@@ -134,7 +134,7 @@ class TextLoader():
         -------
         dask.dataframe | pandas.DataFrame
         """
-        text_ddf = self.loader.read_parquet(files_path, self.encoding)
+        text_ddf = self.loader.read_parquet(files_path, encoding=self.encoding)
         try:
             return text_ddf[[self.text_column]]
         except KeyError:
