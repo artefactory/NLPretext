@@ -64,8 +64,8 @@ def test__read_text_txt_pandas(mock_read):
     file_format = "txt"
     encoding = "utf-8"
     text_column = "text"
-    
-    dummy_instance = TextLoader(file_format=file_format,use_dask=False, encoding=encoding, text_column=text_column)
+
+    dummy_instance = TextLoader(file_format=file_format, use_dask=False, encoding=encoding, text_column=text_column)
     dummy_instance._read_text_txt(files_path)
 
     # Then
@@ -101,8 +101,8 @@ def test__read_text_json_pandas(mock_read):
     file_format = "txt"
     encoding = "utf-8"
     text_column = "text"
-    
-    dummy_instance = TextLoader(file_format=file_format,use_dask=False, encoding=encoding, text_column=text_column)
+
+    dummy_instance = TextLoader(file_format=file_format, use_dask=False, encoding=encoding, text_column=text_column)
     dummy_instance._read_text_json(files_path)
 
     # Then
@@ -138,8 +138,8 @@ def test__read_text_csv_pandas(mock_read):
     file_format = "txt"
     encoding = "utf-8"
     text_column = "text"
-    
-    dummy_instance = TextLoader(file_format=file_format,use_dask=False, encoding=encoding, text_column=text_column)
+
+    dummy_instance = TextLoader(file_format=file_format, use_dask=False, encoding=encoding, text_column=text_column)
     dummy_instance._read_text_csv(files_path)
 
     # Then
@@ -174,8 +174,8 @@ def test__read_text_parquet_pandas(mock_read):
     file_format = "txt"
     encoding = "utf-8"
     text_column = "text"
-    
-    dummy_instance = TextLoader(file_format=file_format,use_dask=False, encoding=encoding, text_column=text_column)
+
+    dummy_instance = TextLoader(file_format=file_format, use_dask=False, encoding=encoding, text_column=text_column)
     dummy_instance._read_text_parquet(files_path)
 
     # Then
