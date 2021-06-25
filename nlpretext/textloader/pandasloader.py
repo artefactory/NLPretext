@@ -25,7 +25,6 @@ def read_json(file_path, encoding):
 
 @_list_handler
 def read_csv(file_path, encoding):
-    print("ok")
     df = pd.read_csv(file_path, encoding=encoding)
     return df
 
