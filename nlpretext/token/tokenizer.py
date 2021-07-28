@@ -15,7 +15,7 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with this program; if not, write to the Free Software Foundation,
 # Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
-from typing import List, Union
+from typing import Any, List, Union
 import nltk
 from sacremoses import MosesTokenizer, MosesDetokenizer
 import spacy
@@ -23,14 +23,19 @@ import spacy
 class LanguageNotHandled(Exception):
     pass
 
+
+class LanguageNotInstalledError(Exception):
+    pass
+
+
 class SpacyModel:
     class SingletonSpacyModel:
-        def __init__(self, lang):
+        def __init__(self, lang: str) -> None:
             self.lang = lang
             if lang == 'en':
-                self.model = spacy.load('en_core_web_sm')
+                self.model = _load_spacy_model('en_core_web_sm')
             elif lang == 'fr':
-                self.model = spacy.load('fr_core_news_sm')
+                self.model = _load_spacy_model('fr_core_news_sm')
             elif lang == 'ko':
                 self.model = spacy.blank('ko')
             elif lang == 'ja':
@@ -46,6 +51,18 @@ class SpacyModel:
 
     def get_lang_model(self):
         return self.model.lang
+
+
+def _load_spacy_model(model: str) -> Any:
+    try:
+        return spacy.load(model)
+    except OSError:
+        raise LanguageNotInstalledError(
+            (
+                f'Model {model} is not installed. '
+                f'To install, run: python -m spacy download {model}'
+            )
+        )
 
 
 def _get_spacy_tokenizer(lang: str):
