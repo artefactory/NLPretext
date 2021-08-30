@@ -19,6 +19,7 @@ from __future__ import (absolute_import, division, print_function,
 
 import re
 import unicodedata
+from flashtext import KeywordProcessor
 from ftfy import fix_text as _fix_text
 from nlpretext._config import constants
 from nlpretext.token.tokenizer import tokenize
@@ -28,11 +29,6 @@ from nlpretext._utils.stopwords import get_stopwords
 
 def normalize_whitespace(text) -> str:
     """
-    ----
-    Copyright 2016 Chartbeat, Inc.
-    Code from textacy: https://github.com/chartbeat-labs/textacy
-    ----
-
     Given ``text`` str, replace one or more spacings with a single space, and
     one or more linebreaks with a single newline. Also strip leading/trailing
     whitespace.
@@ -51,6 +47,7 @@ def normalize_whitespace(text) -> str:
     ).strip()
     return text
 
+
 def lower_text(text: str):
     """
     Given ``text`` str, transform it into lowercase
@@ -65,7 +62,23 @@ def lower_text(text: str):
     """
     return text.lower()
 
-def remove_stopwords(text: str, lang: str, custom_stopwords: list = None) -> str:
+
+def filter_groups(token, excluded_stopwords):
+    for group in excluded_stopwords:
+        if token == ''.join(group.split()):
+            token = group
+    return token
+
+
+def ungroup_excluded_stopwords(tokens, excluded_stopwords):
+    """
+        Function merging user specified groups of tokens to avoid them being
+        considered as stopwords. 
+    """
+    return [filter_groups(token, excluded_stopwords) for token in tokens]
+
+
+def remove_stopwords(text: str, lang: str, custom_stopwords: list = None, excluded_stopwords: list = None) -> str:
     """
     Given ``text`` str, remove classic stopwords for a given language and
     custom stopwords given as a list.
@@ -81,6 +94,11 @@ def remove_stopwords(text: str, lang: str, custom_stopwords: list = None) -> str
     string
     """
     stopwords = get_stopwords(lang)
+    keyword_processor = KeywordProcessor()
+    singletons_to_keep = [x for x in excluded_stopwords if len(x.split()) == 1]
+    for group_of_words in excluded_stopwords:
+        keyword_processor.add_keyword(group_of_words, ''.join(group_of_words.split()))
+    text = keyword_processor.replace_keywords(text)
     if custom_stopwords:
         stopwords += custom_stopwords
     if lang in ["fr", "en"]:
@@ -88,9 +106,12 @@ def remove_stopwords(text: str, lang: str, custom_stopwords: list = None) -> str
             "fr" : "fr_spacy",
             "en" : "en_spacy"
         }[lang]
-        return ' '.join(
-            [x for x in tokenize(text, lang_module) if x not in stopwords])
-    return ' '.join([x for x in text.split() if x not in stopwords])
+        tokens = tokenize(text, lang_module)
+    else:
+        tokens = text.split()
+    tokens = [t for t in tokens if (t not in stopwords or t in singletons_to_keep)]
+    tokens = ungroup_excluded_stopwords(tokens, excluded_stopwords)
+    return ' '.join(tokens)
 
 
 def remove_eol_characters(text) -> str:
@@ -111,11 +132,6 @@ def remove_eol_characters(text) -> str:
 
 def fix_bad_unicode(text, normalization: str = "NFC") -> str:
     """
-    ----
-    Copyright 2016 Chartbeat, Inc.
-    Code from textacy: https://github.com/chartbeat-labs/textacy
-    ----
-
     Fix unicode text that's "broken" using `ftfy
     <http://ftfy.readthedocs.org/>`_;
     this includes mojibake, HTML entities and other code cruft,
@@ -143,11 +159,6 @@ def fix_bad_unicode(text, normalization: str = "NFC") -> str:
 
 def unpack_english_contractions(text) -> str:
     """
-    ----
-    Copyright 2016 Chartbeat, Inc.
-    Code from textacy: https://github.com/chartbeat-labs/textacy
-    ----
-
     Replace *English* contractions in ``text`` str with their unshortened
     forms.
     N.B. The "'d" and "'s" forms are ambiguous (had/would, is/has/possessive),
@@ -188,11 +199,6 @@ def unpack_english_contractions(text) -> str:
 
 def replace_urls(text, replace_with: str = "*URL*") -> str:
     """
-    ----
-    Copyright 2016 Chartbeat, Inc.
-    Code from textacy: https://github.com/chartbeat-labs/textacy
-    ----
-
     Replace all URLs in ``text`` str with ``replace_with`` str.
 
     Parameters
@@ -213,11 +219,6 @@ def replace_urls(text, replace_with: str = "*URL*") -> str:
 
 def replace_emails(text, replace_with="*EMAIL*") -> str:
     """
-    ----
-    Copyright 2016 Chartbeat, Inc.
-    Code from textacy: https://github.com/chartbeat-labs/textacy
-    ----
-
     Replace all emails in ``text`` str with ``replace_with`` str
 
     Parameters
@@ -238,11 +239,6 @@ def replace_phone_numbers(text, country_to_detect: list,
                           replace_with: str = "*PHONE*",
                           method: str = "regex") -> str:
     """
-    ----
-    Copyright 2016 Chartbeat, Inc.
-    Inspired code from textacy: https://github.com/chartbeat-labs/textacy
-    ----
-
     Replace all phone numbers in ``text`` str with ``replace_with`` str
 
     Parameters
@@ -279,11 +275,6 @@ def replace_phone_numbers(text, country_to_detect: list,
 
 def replace_numbers(text, replace_with="*NUMBER*") -> str:
     """
-    ----
-    Copyright 2016 Chartbeat, Inc.
-    Code from textacy: https://github.com/chartbeat-labs/textacy
-    ----
-
     Replace all numbers in ``text`` str with ``replace_with`` str.
 
     Parameters
@@ -302,11 +293,6 @@ def replace_numbers(text, replace_with="*NUMBER*") -> str:
 
 def replace_currency_symbols(text, replace_with=None) -> str:
     """
-    ----
-    Copyright 2016 Chartbeat, Inc.
-    Code from textacy: https://github.com/chartbeat-labs/textacy
-    ----
-
     Replace all currency symbols in ``text`` str with string specified by
     ``replace_with`` str.
 
@@ -334,11 +320,6 @@ def replace_currency_symbols(text, replace_with=None) -> str:
 
 def remove_punct(text, marks=None) -> str:
     """
-    ----
-    Copyright 2016 Chartbeat, Inc.
-    Code from textacy: https://github.com/chartbeat-labs/textacy
-    ----
-
     Remove punctuation from ``text`` by replacing all instances of ``marks``
     with whitespace.
 
@@ -372,11 +353,6 @@ def remove_punct(text, marks=None) -> str:
 
 def remove_accents(text, method: str = "unicode") -> str:
     """
-    ----
-    Copyright 2016 Chartbeat, Inc.
-    Code from textacy: https://github.com/chartbeat-labs/textacy
-    ----
-
     Remove accents from any accented unicode characters in ``text`` str,
     either by transforming them into ascii equivalents or removing them
     entirely.
