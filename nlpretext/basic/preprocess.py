@@ -129,6 +129,8 @@ def remove_stopwords(text: str, lang: str, custom_stopwords: list = None, exclud
         for group_of_words in excluded_stopwords:
             keyword_processor.add_keyword(group_of_words, ''.join(group_of_words.split()))
         text = keyword_processor.replace_keywords(text)
+    else:
+        singletons_to_keep = []
     if custom_stopwords:
         stopwords += custom_stopwords
     if lang in ["fr", "en"]:
