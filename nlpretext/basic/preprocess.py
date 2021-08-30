@@ -63,7 +63,7 @@ def lower_text(text: str):
     return text.lower()
 
 
-def filter_groups(token: str, excluded_stopwords: list = []) -> str:
+def filter_groups(token: str, excluded_stopwords: list = None) -> str:
     """
     Given ``token`` str and a list of groups of words
     that were concatenated into tokens, reverses the tokens
@@ -78,13 +78,15 @@ def filter_groups(token: str, excluded_stopwords: list = []) -> str:
     -------
     string
     """
-    for group in excluded_stopwords:
-        if token == ''.join(group.split()):
-            token = group
+    if excluded_stopwords:
+        for group in excluded_stopwords:
+            if token == ''.join(group.split()):
+                token = group
+
     return token
 
 
-def ungroup_excluded_stopwords(tokens: list, excluded_stopwords: list = []) -> list:
+def ungroup_excluded_stopwords(tokens: list, excluded_stopwords: list = None) -> list:
     """
     Given ``tokens`` list of str and a list of groups of words
     that are concatenated in tokens, reverses the tokens to
@@ -103,7 +105,7 @@ def ungroup_excluded_stopwords(tokens: list, excluded_stopwords: list = []) -> l
     return [filter_groups(token, excluded_stopwords) for token in tokens]
 
 
-def remove_stopwords(text: str, lang: str, custom_stopwords: list = None, excluded_stopwords: list = []) -> str:
+def remove_stopwords(text: str, lang: str, custom_stopwords: list = None, excluded_stopwords: list = None) -> str:
     """
     Given ``text`` str, remove classic stopwords for a given language and
     custom stopwords given as a list. Words and groups of words from
@@ -121,11 +123,12 @@ def remove_stopwords(text: str, lang: str, custom_stopwords: list = None, exclud
     string
     """
     stopwords = get_stopwords(lang)
-    keyword_processor = KeywordProcessor()
-    singletons_to_keep = [x for x in excluded_stopwords if len(x.split()) == 1]
-    for group_of_words in excluded_stopwords:
-        keyword_processor.add_keyword(group_of_words, ''.join(group_of_words.split()))
-    text = keyword_processor.replace_keywords(text)
+    if excluded_stopwords:
+        keyword_processor = KeywordProcessor()
+        singletons_to_keep = [x for x in excluded_stopwords if len(x.split()) == 1]
+        for group_of_words in excluded_stopwords:
+            keyword_processor.add_keyword(group_of_words, ''.join(group_of_words.split()))
+        text = keyword_processor.replace_keywords(text)
     if custom_stopwords:
         stopwords += custom_stopwords
     if lang in ["fr", "en"]:
