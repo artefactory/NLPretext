@@ -63,31 +63,58 @@ def lower_text(text: str):
     return text.lower()
 
 
-def filter_groups(token, excluded_stopwords):
+def filter_groups(token: str, excluded_stopwords: list = []) -> str:
+    """
+    Given ``token`` str and a list of groups of words
+    that were concatenated into tokens, reverses the tokens
+    to their ungrouped state.
+
+    Parameters
+    ----------
+    token : string
+    excluded_stopwords : list of strings
+
+    Returns
+    -------
+    string
+    """
     for group in excluded_stopwords:
         if token == ''.join(group.split()):
             token = group
     return token
 
 
-def ungroup_excluded_stopwords(tokens, excluded_stopwords):
+def ungroup_excluded_stopwords(tokens: list, excluded_stopwords: list = []) -> list:
     """
-        Function merging user specified groups of tokens to avoid them being
-        considered as stopwords. 
+    Given ``tokens`` list of str and a list of groups of words
+    that are concatenated in tokens, reverses the tokens to
+    their ungrouped state.
+
+    Parameters
+    ----------
+    tokens : list of strings
+    excluded_stopwords : list of strings
+
+    Returns
+    -------
+    list of strings
     """
+
     return [filter_groups(token, excluded_stopwords) for token in tokens]
 
 
-def remove_stopwords(text: str, lang: str, custom_stopwords: list = None, excluded_stopwords: list = None) -> str:
+def remove_stopwords(text: str, lang: str, custom_stopwords: list = None, excluded_stopwords: list = []) -> str:
     """
     Given ``text`` str, remove classic stopwords for a given language and
-    custom stopwords given as a list.
+    custom stopwords given as a list. Words and groups of words from
+    excluded_stopwords list are ignored during stopwords removal.
 
     Parameters
     ----------
     text : string
     lang : string
     custom_stopwords : list of strings
+    excluded_stopwords : list of strings
 
     Returns
     -------
