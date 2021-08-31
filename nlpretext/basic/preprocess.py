@@ -48,6 +48,26 @@ def normalize_whitespace(text) -> str:
     return text
 
 
+def remove_whitespace(text) -> str:
+    """
+    Given ``text`` str, remove one or more spacings and linebreaks.
+    Also strip leading/trailing whitespace.
+    eg. "   foo  bar  " -> "foobar"
+
+    Parameters
+    ----------
+    text : string
+
+    Returns
+    -------
+    string
+    """
+    text = constants.NONBREAKING_SPACE_REGEX.sub(
+        "", constants.LINEBREAK_REGEX.sub("", text)
+    ).strip()
+    return text
+
+
 def lower_text(text: str):
     """
     Given ``text`` str, transform it into lowercase
@@ -80,7 +100,7 @@ def filter_groups(token: str, ignored_stopwords: list = None) -> str:
     """
     if ignored_stopwords:
         for group in ignored_stopwords:
-            if token == group.replace(" ", ""):
+            if token == remove_whitespace(group):
                 token = group
     return token
 
@@ -134,7 +154,7 @@ def remove_stopwords(text: str, lang: str, custom_stopwords: list = None, ignore
         keyword_processor = KeywordProcessor()
         singletons_to_keep = [x for x in ignored_stopwords if len(x.split()) == 1]
         for group_of_words in ignored_stopwords:
-            keyword_processor.add_keyword(group_of_words, ''.join(group_of_words.split()))
+            keyword_processor.add_keyword(group_of_words, remove_whitespace(group_of_words))
         text = keyword_processor.replace_keywords(text)
     else:
         singletons_to_keep = []
