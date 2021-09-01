@@ -19,6 +19,7 @@ from __future__ import (absolute_import, division, print_function,
 
 import re
 import unicodedata
+from flashtext import KeywordProcessor
 from ftfy import fix_text as _fix_text
 from nlpretext._config import constants
 from nlpretext.token.tokenizer import tokenize
@@ -51,6 +52,27 @@ def normalize_whitespace(text) -> str:
     ).strip()
     return text
 
+
+def remove_whitespace(text) -> str:
+    """
+    Given ``text`` str, remove one or more spacings and linebreaks.
+    Also strip leading/trailing whitespace.
+    eg. "   foo  bar  " -> "foobar"
+
+    Parameters
+    ----------
+    text : string
+
+    Returns
+    -------
+    string
+    """
+    text = constants.NONBREAKING_SPACE_REGEX.sub(
+        "", constants.LINEBREAK_REGEX.sub("", text)
+    ).strip()
+    return text
+
+
 def lower_text(text: str):
     """
     Given ``text`` str, transform it into lowercase
@@ -65,22 +87,84 @@ def lower_text(text: str):
     """
     return text.lower()
 
-def remove_stopwords(text: str, lang: str, custom_stopwords: list = None) -> str:
+
+def filter_groups(token: str, ignored_stopwords: list = None) -> str:
+    """
+    Given ``token`` str and a list of groups of words
+    that were concatenated into tokens, reverses the tokens
+    to their ungrouped state.
+
+    Parameters
+    ----------
+    token : string
+    ignored_stopwords : list of strings
+
+    Returns
+    -------
+    string
+    """
+    if ignored_stopwords:
+        for group in ignored_stopwords:
+            if token == remove_whitespace(group):
+                token = group
+    return token
+
+
+def ungroup_ignored_stopwords(tokens: list, ignored_stopwords: list = None) -> list:
+    """
+    Given ``tokens`` list of str and a list of groups of words
+    that are concatenated in tokens, reverses the tokens to
+    their ungrouped state.
+
+    Parameters
+    ----------
+    tokens : list of strings
+    ignored_stopwords : list of strings
+
+    Returns
+    -------
+    list of strings
+    """
+
+    return [filter_groups(token, ignored_stopwords) for token in tokens]
+
+
+def remove_stopwords(text: str, lang: str, custom_stopwords: list = None, ignored_stopwords: list = None) -> str:
     """
     Given ``text`` str, remove classic stopwords for a given language and
-    custom stopwords given as a list.
+    custom stopwords given as a list. Words and groups of words from
+    ignored_stopwords list are ignored during stopwords removal.
 
     Parameters
     ----------
     text : string
     lang : string
     custom_stopwords : list of strings
+    ignored_stopwords : list of strings
 
     Returns
     -------
     string
+
+    Raises
+    -------
+    ValueError
+        if ``custom_stopwords``  and ``ignored_stopwords`` have common elements.
     """
+    if custom_stopwords and ignored_stopwords:
+        common_elements = set(custom_stopwords).intersection(set(ignored_stopwords))
+        if common_elements != set():
+            raise ValueError(f"Found common words in custom_stopwords and ignored_stopwords: \
+                {common_elements}. Please remove duplicated values.")
     stopwords = get_stopwords(lang)
+    if ignored_stopwords:
+        keyword_processor = KeywordProcessor()
+        singletons_to_keep = [x for x in ignored_stopwords if len(x.split()) == 1]
+        for group_of_words in ignored_stopwords:
+            keyword_processor.add_keyword(group_of_words, remove_whitespace(group_of_words))
+        text = keyword_processor.replace_keywords(text)
+    else:
+        singletons_to_keep = []
     if custom_stopwords:
         stopwords += custom_stopwords
     if lang in ["fr", "en"]:
@@ -88,9 +172,12 @@ def remove_stopwords(text: str, lang: str, custom_stopwords: list = None) -> str
             "fr" : "fr_spacy",
             "en" : "en_spacy"
         }[lang]
-        return ' '.join(
-            [x for x in tokenize(text, lang_module) if x not in stopwords])
-    return ' '.join([x for x in text.split() if x not in stopwords])
+        tokens = tokenize(text, lang_module)
+    else:
+        tokens = text.split()
+    tokens = [t for t in tokens if (t not in stopwords or t in singletons_to_keep)]
+    tokens = ungroup_ignored_stopwords(tokens, ignored_stopwords)
+    return ' '.join(tokens)
 
 
 def remove_eol_characters(text) -> str:
@@ -334,11 +421,6 @@ def replace_currency_symbols(text, replace_with=None) -> str:
 
 def remove_punct(text, marks=None) -> str:
     """
-    ----
-    Copyright 2016 Chartbeat, Inc.
-    Code from textacy: https://github.com/chartbeat-labs/textacy
-    ----
-
     Remove punctuation from ``text`` by replacing all instances of ``marks``
     with whitespace.
 
@@ -372,11 +454,6 @@ def remove_punct(text, marks=None) -> str:
 
 def remove_accents(text, method: str = "unicode") -> str:
     """
-    ----
-    Copyright 2016 Chartbeat, Inc.
-    Code from textacy: https://github.com/chartbeat-labs/textacy
-    ----
-
     Remove accents from any accented unicode characters in ``text`` str,
     either by transforming them into ascii equivalents or removing them
     entirely.
