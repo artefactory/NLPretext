@@ -29,6 +29,11 @@ from nlpretext._utils.stopwords import get_stopwords
 
 def normalize_whitespace(text) -> str:
     """
+    ----
+    Copyright 2016 Chartbeat, Inc.
+    Code from textacy: https://github.com/chartbeat-labs/textacy
+    ----
+
     Given ``text`` str, replace one or more spacings with a single space, and
     one or more linebreaks with a single newline. Also strip leading/trailing
     whitespace.
@@ -193,6 +198,11 @@ def remove_eol_characters(text) -> str:
 
 def fix_bad_unicode(text, normalization: str = "NFC") -> str:
     """
+    ----
+    Copyright 2016 Chartbeat, Inc.
+    Code from textacy: https://github.com/chartbeat-labs/textacy
+    ----
+
     Fix unicode text that's "broken" using `ftfy
     <http://ftfy.readthedocs.org/>`_;
     this includes mojibake, HTML entities and other code cruft,
@@ -220,6 +230,11 @@ def fix_bad_unicode(text, normalization: str = "NFC") -> str:
 
 def unpack_english_contractions(text) -> str:
     """
+    ----
+    Copyright 2016 Chartbeat, Inc.
+    Code from textacy: https://github.com/chartbeat-labs/textacy
+    ----
+
     Replace *English* contractions in ``text`` str with their unshortened
     forms.
     N.B. The "'d" and "'s" forms are ambiguous (had/would, is/has/possessive),
@@ -260,6 +275,11 @@ def unpack_english_contractions(text) -> str:
 
 def replace_urls(text, replace_with: str = "*URL*") -> str:
     """
+    ----
+    Copyright 2016 Chartbeat, Inc.
+    Code from textacy: https://github.com/chartbeat-labs/textacy
+    ----
+
     Replace all URLs in ``text`` str with ``replace_with`` str.
 
     Parameters
@@ -280,6 +300,11 @@ def replace_urls(text, replace_with: str = "*URL*") -> str:
 
 def replace_emails(text, replace_with="*EMAIL*") -> str:
     """
+    ----
+    Copyright 2016 Chartbeat, Inc.
+    Code from textacy: https://github.com/chartbeat-labs/textacy
+    ----
+
     Replace all emails in ``text`` str with ``replace_with`` str
 
     Parameters
@@ -300,6 +325,11 @@ def replace_phone_numbers(text, country_to_detect: list,
                           replace_with: str = "*PHONE*",
                           method: str = "regex") -> str:
     """
+    ----
+    Copyright 2016 Chartbeat, Inc.
+    Inspired code from textacy: https://github.com/chartbeat-labs/textacy
+    ----
+
     Replace all phone numbers in ``text`` str with ``replace_with`` str
 
     Parameters
@@ -336,6 +366,11 @@ def replace_phone_numbers(text, country_to_detect: list,
 
 def replace_numbers(text, replace_with="*NUMBER*") -> str:
     """
+    ----
+    Copyright 2016 Chartbeat, Inc.
+    Code from textacy: https://github.com/chartbeat-labs/textacy
+    ----
+
     Replace all numbers in ``text`` str with ``replace_with`` str.
 
     Parameters
@@ -354,6 +389,11 @@ def replace_numbers(text, replace_with="*NUMBER*") -> str:
 
 def replace_currency_symbols(text, replace_with=None) -> str:
     """
+    ----
+    Copyright 2016 Chartbeat, Inc.
+    Code from textacy: https://github.com/chartbeat-labs/textacy
+    ----
+
     Replace all currency symbols in ``text`` str with string specified by
     ``replace_with`` str.
 
