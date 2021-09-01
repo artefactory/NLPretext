@@ -147,8 +147,10 @@ def remove_stopwords(text: str, lang: str, custom_stopwords: list = None, ignore
         if ``custom_stopwords``  and ``ignored_stopwords`` have common elements.
     """
     if custom_stopwords and ignored_stopwords:
-        if len(set(custom_stopwords) & set(ignored_stopwords)) > 0:
-            raise ValueError("You are trying to add and remove a stopword at the same time !")
+        common_elements = set(custom_stopwords).intersection(set(ignored_stopwords))
+        if common_elements != set():
+            raise ValueError(f"Found common words in custom_stopwords and ignored_stopwords: \
+                {common_elements}. Please remove duplicated values.")
     stopwords = get_stopwords(lang)
     if ignored_stopwords:
         keyword_processor = KeywordProcessor()
