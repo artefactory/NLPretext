@@ -327,4 +327,3 @@ def test_read_text(
             dummy_textloader.read_text(
                 files_path, file_format, encoding, compute_to_pandas, preprocessor
             )
-
