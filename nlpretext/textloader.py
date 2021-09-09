@@ -28,9 +28,7 @@ from nlpretext.preprocessor import Preprocessor
 
 
 class TextLoader:
-    def __init__(
-        self, text_column="text", encoding="utf-8", file_format=None, use_dask=True
-    ):
+    def __init__(self, text_column="text", encoding="utf-8", file_format=None, use_dask=True):
         """
         Initialize DataLoader object to retrieve text data
 
@@ -156,12 +154,12 @@ class TextLoader:
             )
 
     def read_text(
-        self,
-        files_path,
-        file_format=None,
-        encoding=None,
-        compute_to_pandas=True,
-        preprocessor=None,
+            self,
+            files_path,
+            file_format=None,
+            encoding=None,
+            compute_to_pandas=True,
+            preprocessor=None,
     ):
         """
         Read the text files stored in files_path

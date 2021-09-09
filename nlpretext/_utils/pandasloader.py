@@ -1,5 +1,6 @@
-from fsspec import open_files
 import pandas as pd
+from fsspec import open_files
+
 
 
 def _list_handler(func):

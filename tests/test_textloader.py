@@ -257,19 +257,19 @@ def test__read_text_parquet_pandas(mock_read):
 @patch("nlpretext.textloader.TextLoader._read_text_parquet")
 @patch("nlpretext.textloader.check_text_file_format")
 def test_read_text(
-    mock_check_text_file_format,
-    mock__read_text_parquet,
-    mock__read_text_csv,
-    mock__read_text_txt,
-    mock__read_text_json,
-    mock_run,
-    files_path,
-    file_format,
-    encoding,
-    compute_to_pandas,
-    preprocessor,
-    expected_format,
-    raised,
+        mock_check_text_file_format,
+        mock__read_text_parquet,
+        mock__read_text_csv,
+        mock__read_text_txt,
+        mock__read_text_json,
+        mock_run,
+        files_path,
+        file_format,
+        encoding,
+        compute_to_pandas,
+        preprocessor,
+        expected_format,
+        raised,
 ):
 
     # Given
