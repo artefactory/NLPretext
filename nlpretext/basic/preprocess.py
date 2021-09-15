@@ -53,7 +53,7 @@ def normalize_whitespace(text: str) -> str:
     return text
 
 
-def remove_whitespace(text) -> str:
+def remove_whitespace(text: str) -> str:
     """
     Given ``text`` str, remove one or more spacings and linebreaks.
     Also strip leading/trailing whitespace.
@@ -67,10 +67,9 @@ def remove_whitespace(text) -> str:
     -------
     string
     """
-    text = constants.NONBREAKING_SPACE_REGEX.sub(
+    return constants.NONBREAKING_SPACE_REGEX.sub(
         "", constants.LINEBREAK_REGEX.sub("", text)
     ).strip()
-    return text
 
 
 def lower_text(text: str) -> str:
@@ -88,7 +87,7 @@ def lower_text(text: str) -> str:
     return text.lower()
 
 
-def filter_groups(token: str, ignored_stopwords: list = None) -> str:
+def filter_groups(token: str, ignored_stopwords: Optional[List[str]] = None) -> str:
     """
     Given ``token`` str and a list of groups of words
     that were concatenated into tokens, reverses the tokens
@@ -110,7 +109,9 @@ def filter_groups(token: str, ignored_stopwords: list = None) -> str:
     return token
 
 
-def ungroup_ignored_stopwords(tokens: list, ignored_stopwords: list = None) -> list:
+def ungroup_ignored_stopwords(
+    tokens: List[str], ignored_stopwords: Optional[List[str]] = None
+) -> List[str]:
     """
     Given ``tokens`` list of str and a list of groups of words
     that are concatenated in tokens, reverses the tokens to
@@ -130,7 +131,10 @@ def ungroup_ignored_stopwords(tokens: list, ignored_stopwords: list = None) -> l
 
 
 def remove_stopwords(
-    text: str, lang: str, custom_stopwords: list = None, ignored_stopwords: list = None
+    text: str,
+    lang: str,
+    custom_stopwords: Optional[List[str]] = None,
+    ignored_stopwords: Optional[List[str]] = None,
 ) -> str:
     """
     Given ``text`` str, remove classic stopwords for a given language and
