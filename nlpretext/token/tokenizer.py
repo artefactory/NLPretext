@@ -34,14 +34,14 @@ class SpacyModel:
     class SingletonSpacyModel:
         def __init__(self, lang: str) -> None:
             self.lang = lang
-            if lang == 'en':
-                self.model = _load_spacy_model('en_core_web_sm')
-            elif lang == 'fr':
-                self.model = _load_spacy_model('fr_core_news_sm')
-            elif lang == 'ko':
-                self.model = spacy.blank('ko')
-            elif lang == 'ja':
-                self.model = spacy.blank('ja')
+            if lang == "en":
+                self.model = _load_spacy_model("en_core_web_sm")
+            elif lang == "fr":
+                self.model = _load_spacy_model("fr_core_news_sm")
+            elif lang == "ko":
+                self.model = spacy.blank("ko")
+            elif lang == "ja":
+                self.model = spacy.blank("ja")
             else:
                 raise (LanguageNotHandled("This spacy model is not available"))
 
@@ -63,10 +63,7 @@ def _load_spacy_model(model: str) -> Any:
         return spacy.load(model)
     except OSError:
         raise LanguageNotInstalledError(
-            (
-                f'Model {model} is not installed. '
-                f'To install, run: python -m spacy download {model}'
-            )
+            f"Model {model} is not installed. " f"To install, run: python -m spacy download {model}"
         )
 
 

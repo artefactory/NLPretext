@@ -129,7 +129,9 @@ def ungroup_ignored_stopwords(tokens: list, ignored_stopwords: list = None) -> l
     return [filter_groups(token, ignored_stopwords) for token in tokens]
 
 
-def remove_stopwords(text: str, lang: str, custom_stopwords: list = None, ignored_stopwords: list = None) -> str:
+def remove_stopwords(
+    text: str, lang: str, custom_stopwords: list = None, ignored_stopwords: list = None
+) -> str:
     """
     Given ``text`` str, remove classic stopwords for a given language and
     custom stopwords given as a list. Words and groups of words from
@@ -154,8 +156,10 @@ def remove_stopwords(text: str, lang: str, custom_stopwords: list = None, ignore
     if custom_stopwords and ignored_stopwords:
         common_elements = set(custom_stopwords).intersection(set(ignored_stopwords))
         if common_elements != set():
-            raise ValueError(f"Found common words in custom_stopwords and ignored_stopwords: \
-                {common_elements}. Please remove duplicated values.")
+            raise ValueError(
+                f"Found common words in custom_stopwords and ignored_stopwords: \
+                {common_elements}. Please remove duplicated values."
+            )
     stopwords = get_stopwords(lang)
     if ignored_stopwords:
         keyword_processor = KeywordProcessor()
@@ -168,16 +172,13 @@ def remove_stopwords(text: str, lang: str, custom_stopwords: list = None, ignore
     if custom_stopwords:
         stopwords += custom_stopwords
     if lang in ["fr", "en"]:
-        lang_module = {
-            "fr" : "fr_spacy",
-            "en" : "en_spacy"
-        }[lang]
+        lang_module = {"fr": "fr_spacy", "en": "en_spacy"}[lang]
         tokens = tokenize(text, lang_module)
     else:
         tokens = text.split()
     tokens = [t for t in tokens if (t not in stopwords or t in singletons_to_keep)]
     tokens = ungroup_ignored_stopwords(tokens, ignored_stopwords)
-    return ' '.join(tokens)
+    return " ".join(tokens)
 
 
 def remove_eol_characters(text: str) -> str:
