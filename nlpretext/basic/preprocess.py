@@ -1,4 +1,3 @@
-# coding=utf-8
 # Copyright (C) 2020 Artefact
 # licence-information@artefact.com
 #
@@ -14,20 +13,21 @@
 # See the License for the specific language governing permissions and
 # limitations under the License
 
-from __future__ import (absolute_import, division, print_function,
-                        unicode_literals)
+
+from typing import List, Optional
 
 import re
 import unicodedata
+
 from flashtext import KeywordProcessor
 from ftfy import fix_text as _fix_text
 from nlpretext._config import constants
-from nlpretext.token.tokenizer import tokenize
 from nlpretext._utils.phone_number import extract_phone_numbers as _extract_phone_numbers
 from nlpretext._utils.stopwords import get_stopwords
+from nlpretext.token.tokenizer import tokenize
 
 
-def normalize_whitespace(text) -> str:
+def normalize_whitespace(text: str) -> str:
     """
     ----
     Copyright 2016 Chartbeat, Inc.
@@ -73,7 +73,7 @@ def remove_whitespace(text) -> str:
     return text
 
 
-def lower_text(text: str):
+def lower_text(text: str) -> str:
     """
     Given ``text`` str, transform it into lowercase
 
@@ -180,7 +180,7 @@ def remove_stopwords(text: str, lang: str, custom_stopwords: list = None, ignore
     return ' '.join(tokens)
 
 
-def remove_eol_characters(text) -> str:
+def remove_eol_characters(text: str) -> str:
     """
     Remove end of line (\n) char.
 
@@ -196,7 +196,7 @@ def remove_eol_characters(text) -> str:
     return text
 
 
-def fix_bad_unicode(text, normalization: str = "NFC") -> str:
+def fix_bad_unicode(text: str, normalization: str = "NFC") -> str:
     """
     ----
     Copyright 2016 Chartbeat, Inc.
@@ -228,7 +228,7 @@ def fix_bad_unicode(text, normalization: str = "NFC") -> str:
     return text
 
 
-def unpack_english_contractions(text) -> str:
+def unpack_english_contractions(text: str) -> str:
     """
     ----
     Copyright 2016 Chartbeat, Inc.
@@ -273,7 +273,7 @@ def unpack_english_contractions(text) -> str:
     return text
 
 
-def replace_urls(text, replace_with: str = "*URL*") -> str:
+def replace_urls(text: str, replace_with: str = "*URL*") -> str:
     """
     ----
     Copyright 2016 Chartbeat, Inc.
@@ -292,13 +292,11 @@ def replace_urls(text, replace_with: str = "*URL*") -> str:
     -------
     string
     """
-    text = constants.URL_REGEX.sub(
-        replace_with, constants.SHORT_URL_REGEX.sub(replace_with, text)
-    )
+    text = constants.URL_REGEX.sub(replace_with, constants.SHORT_URL_REGEX.sub(replace_with, text))
     return text
 
 
-def replace_emails(text, replace_with="*EMAIL*") -> str:
+def replace_emails(text: str, replace_with: str = "*EMAIL*") -> str:
     """
     ----
     Copyright 2016 Chartbeat, Inc.
@@ -321,9 +319,12 @@ def replace_emails(text, replace_with="*EMAIL*") -> str:
     return text
 
 
-def replace_phone_numbers(text, country_to_detect: list,
-                          replace_with: str = "*PHONE*",
-                          method: str = "regex") -> str:
+def replace_phone_numbers(
+    text: str,
+    country_to_detect: List[Optional[str]],
+    replace_with: str = "*PHONE*",
+    method: str = "regex",
+) -> str:
     """
     ----
     Copyright 2016 Chartbeat, Inc.
@@ -348,23 +349,24 @@ def replace_phone_numbers(text, country_to_detect: list,
     -------
     string
     """
-    if method == 'regex':
+    if method == "regex":
         text = constants.PHONE_REGEX.sub(replace_with, text)
-    elif method == 'detection':
-        found_nums = _extract_phone_numbers(text,
-                                            countrylist=country_to_detect)
+    elif method == "detection":
+        found_nums = _extract_phone_numbers(text, countrylist=country_to_detect)
 
         # order by lenght to avoid truncated numbers to be removed first.
         found_nums.sort(key=len, reverse=True)
         for phone_number in found_nums:
             text = text.replace(phone_number, replace_with)
     else:
-        raise ValueError('Please input a valid method between "regex" or \
-            "detection"')
+        raise ValueError(
+            'Please input a valid method between "regex" or \
+            "detection"'
+        )
     return text
 
 
-def replace_numbers(text, replace_with="*NUMBER*") -> str:
+def replace_numbers(text: str, replace_with: str = "*NUMBER*") -> str:
     """
     ----
     Copyright 2016 Chartbeat, Inc.
@@ -387,7 +389,7 @@ def replace_numbers(text, replace_with="*NUMBER*") -> str:
     return text
 
 
-def replace_currency_symbols(text, replace_with=None) -> str:
+def replace_currency_symbols(text: str, replace_with: Optional[str] = None) -> str:
     """
     ----
     Copyright 2016 Chartbeat, Inc.
@@ -419,7 +421,7 @@ def replace_currency_symbols(text, replace_with=None) -> str:
     return text
 
 
-def remove_punct(text, marks=None) -> str:
+def remove_punct(text: str, marks: Optional[str] = None) -> str:
     """
     Remove punctuation from ``text`` by replacing all instances of ``marks``
     with whitespace.
@@ -445,14 +447,13 @@ def remove_punct(text, marks=None) -> str:
     instead. The former's performance is about 5-10x faster.
     """
     if marks:
-        text = re.sub("[{}]+".format(re.escape(marks)), " ", text,
-                      flags=re.UNICODE)
+        text = re.sub(f"[{re.escape(marks)}]+", " ", text, flags=re.UNICODE)
     else:
         text = text.translate(constants.PUNCT_TRANSLATE_UNICODE)
     return text
 
 
-def remove_accents(text, method: str = "unicode") -> str:
+def remove_accents(text: str, method: str = "unicode") -> str:
     """
     Remove accents from any accented unicode characters in ``text`` str,
     either by transforming them into ascii equivalents or removing them
@@ -481,24 +482,17 @@ def remove_accents(text, method: str = "unicode") -> str:
     """
     if method == "unicode":
         text = "".join(
-            c
-            for c in unicodedata.normalize("NFKD", text)
-            if not unicodedata.combining(c)
+            c for c in unicodedata.normalize("NFKD", text) if not unicodedata.combining(c)
         )
     elif method == "ascii":
-        text = (
-            unicodedata.normalize("NFKD", text)
-            .encode("ascii", errors="ignore")
-            .decode("ascii")
-        )
+        text = unicodedata.normalize("NFKD", text).encode("ascii", errors="ignore").decode("ascii")
     else:
-        msg = '`method` must be either "unicode" and "ascii", not {}' \
-               .format(method)
+        msg = f'`method` must be either "unicode" and "ascii", not {method}'
         raise ValueError(msg)
     return text
 
 
-def remove_multiple_spaces_and_strip_text(text) -> str:
+def remove_multiple_spaces_and_strip_text(text: str) -> str:
     """
     Remove multiple spaces, strip text, and remove '-', '*' characters.
 
@@ -519,7 +513,7 @@ def remove_multiple_spaces_and_strip_text(text) -> str:
     return text
 
 
-def filter_non_latin_characters(text) -> str:
+def filter_non_latin_characters(text: str) -> str:
     """
     Function that filters non latin characters of a text
 
@@ -531,6 +525,6 @@ def filter_non_latin_characters(text) -> str:
     -------
     string
     """
-    text = constants.LATIN_CHARACTERS_RE.sub(' ', text)
+    text = constants.LATIN_CHARACTERS_RE.sub(" ", text)
     text = normalize_whitespace(text)
     return text

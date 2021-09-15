@@ -2,17 +2,14 @@ try:
     import dask.bag as db
     import dask.dataframe as dd
 except ImportError:
-    raise ImportError('please install dask: pip install dask[complete]')
+    raise ImportError("please install dask: pip install dask[complete]")
 
 from nlpretext._utils.file_loader import check_text_file_format
 from nlpretext.preprocessor import Preprocessor
 
-class TextLoader():
-    def __init__(
-            self,
-            text_column="text",
-            encoding="utf-8",
-            file_format=None):
+
+class TextLoader:
+    def __init__(self, text_column="text", encoding="utf-8", file_format=None):
         """
         Initialize DataLoader object to retrieve text data
 
@@ -33,9 +30,11 @@ class TextLoader():
         """
         Method to represent class attributes
         """
-        class_repr_dict = {"text_column": self.text_column,
-                           "encoding": self.encoding,
-                           "file_format": self.file_format}
+        class_repr_dict = {
+            "text_column": self.text_column,
+            "encoding": self.encoding,
+            "file_format": self.file_format,
+        }
         return f"TextLoader({class_repr_dict})"
 
     def _read_text_txt(self, files_path):
@@ -112,7 +111,9 @@ class TextLoader():
         except KeyError:
             raise KeyError(f"Specified text_column '{self.text_column}' not in file keys")
 
-    def read_text(self, files_path, file_format=None, encoding=None, compute_to_pandas=True, preprocessor=None):
+    def read_text(
+        self, files_path, file_format=None, encoding=None, compute_to_pandas=True, preprocessor=None
+    ):
         """
         Read the text files stored in files_path
 
@@ -141,10 +142,12 @@ class TextLoader():
         else:
             self.file_format = check_text_file_format(files_path)
 
-        reader_mapping = {"csv": self._read_text_csv,
-                          "txt": self._read_text_txt,
-                          "json": self._read_text_json,
-                          "parquet": self._read_text_parquet}
+        reader_mapping = {
+            "csv": self._read_text_csv,
+            "txt": self._read_text_txt,
+            "json": self._read_text_json,
+            "parquet": self._read_text_parquet,
+        }
         reader = reader_mapping.get(self.file_format)
         if reader is None:
             raise ValueError("Format not handled")

@@ -1,4 +1,3 @@
-# coding=utf-8
 # Copyright (C) 2020 Artefact
 # licence-information@artefact.com
 #
@@ -19,33 +18,34 @@ import re
 
 import numpy as np
 import pytest
-from nlpretext._utils.file_loader import (check_text_file_format,
-                                          detect_encoding)
+from nlpretext._utils.file_loader import check_text_file_format, detect_encoding
 
 TESTDOC_LATIN1 = "J'aime les frites bien grasse étalon châpeau!"
 TESTDOC_UTF8 = "Un deuxième exemple de texte en utf-8 cette fois!"
 
+
 def create_files():
-    encoded_s = TESTDOC_LATIN1.encode('latin-1')
-    with open('testdoc_latin1.txt', 'wb') as f:
+    encoded_s = TESTDOC_LATIN1.encode("latin-1")
+    with open("testdoc_latin1.txt", "wb") as f:
         f.write(encoded_s)
 
-
-    encoded_s = TESTDOC_UTF8.encode('utf-8')
-    with open('testdoc_utf8.txt', 'wb') as f:
+    encoded_s = TESTDOC_UTF8.encode("utf-8")
+    with open("testdoc_utf8.txt", "wb") as f:
         f.write(encoded_s)
     return True
 
+
 def test_detect_encoding():
     create_files()
-    expected = {'encoding': 'ISO-8859-1', 'confidence': 0.73, 'language': ''}
-    result = detect_encoding('testdoc_latin1.txt')
+    expected = {"encoding": "ISO-8859-1", "confidence": 0.73, "language": ""}
+    result = detect_encoding("testdoc_latin1.txt")
     np.testing.assert_equal(result, expected)
     remove_files()
 
+
 def remove_files():
-    os.remove('testdoc_latin1.txt')
-    os.remove('testdoc_utf8.txt')
+    os.remove("testdoc_latin1.txt")
+    os.remove("testdoc_utf8.txt")
 
 
 @pytest.mark.parametrize(
@@ -75,17 +75,32 @@ def remove_files():
         ("folder/hello.parquet", False, "parquet"),
         ("gs://folder/hello.parquet", False, "parquet"),
         (["hello.parquet", "gs://folder/hello.parquet"], False, "parquet"),
-        ("gs://folder/hello.notaformat", True,
-         "Unrecognized format among specified files, only .csv, .json, .parquet and .txt accepted"),
-        ("gs://folder/hello.gz", True,
-         "Unrecognized format among specified files, only .csv, .json, .parquet and .txt accepted"),
-        ("gs://folder/hello.zip", True,
-         "Unrecognized format among specified files, only .csv, .json, .parquet and .txt accepted"),
-        ("folder/*", True,
-         "Unrecognized format among specified files, only .csv, .json, .parquet and .txt accepted"),
-        (["hello.txt", "gs://folder/hello.csv"], True,
-         re.escape("Multiple file formats found in file path list: ['txt', 'csv']")),
-    ]
+        (
+            "gs://folder/hello.notaformat",
+            True,
+            "Unrecognized format among specified files, only .csv, .json, .parquet and .txt accepted",
+        ),
+        (
+            "gs://folder/hello.gz",
+            True,
+            "Unrecognized format among specified files, only .csv, .json, .parquet and .txt accepted",
+        ),
+        (
+            "gs://folder/hello.zip",
+            True,
+            "Unrecognized format among specified files, only .csv, .json, .parquet and .txt accepted",
+        ),
+        (
+            "folder/*",
+            True,
+            "Unrecognized format among specified files, only .csv, .json, .parquet and .txt accepted",
+        ),
+        (
+            ["hello.txt", "gs://folder/hello.csv"],
+            True,
+            re.escape("Multiple file formats found in file path list: ['txt', 'csv']"),
+        ),
+    ],
 )
 def test_check_text_file_format(input_filepath, raising, expected_str):
     if raising:

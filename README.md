@@ -1,9 +1,29 @@
-NLPretext
-==============================
+# NLPretext
 
 <p align="center">
     <img src="/references/logo_nlpretext.png" />
 </p>
+
+<div align="center">
+
+[![CI status](https://github.com/artefactory/NLPretext/actions/workflows/ci.yml/badge.svg?branch%3Amain&event%3Apush)](https://github.com/artefactory/NLPretext/actions/workflows/ci.yml?query=branch%3Amain)
+[![CD status](https://github.com/artefactory/NLPretext/actions/workflows/cd.yml/badge.svg?event%3Arelease)](https://github.com/artefactory/NLPretext/actions/workflows/cd.yml?query=event%3Arelease)
+[![Python Version](https://img.shields.io/badge/Python-3.7-informational.svg)](#supported-python-versions)
+[![Dependencies Status](https://img.shields.io/badge/dependabots-active-informational.svg)](https://github.com/artefactory/NLPretext}/pulls?utf8=%E2%9C%93&q=is%3Apr%20author%3Aapp%2Fdependabot)
+
+[![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
+[![Security: bandit](https://img.shields.io/badge/security-bandit-informational.svg)](https://github.com/PyCQA/bandit)
+[![Pre-commit](https://img.shields.io/badge/pre--commit-enabled-informational?logo=pre-commit&logoColor=white)](https://github.com/artefactory/NLPretext}/blob/main/.pre-commit-config.yaml)
+[![Semantic Versions](https://img.shields.io/badge/%F0%9F%9A%80-semantic%20versions-informational.svg)](https://github.com/artefactory/NLPretext/releases)
+[![Documentation](https://img.shields.io/badge/doc-sphinx-informational.svg)](https://github.com/artefactory/NLPretext}/tree/main/docs)
+[![License](https://img.shields.io/badge/License-Apache%20Software%20License%202.0-informational.svg)](https://github.com/artefactory/NLPretext}/blob/main/LICENSE)
+
+All the goto functions you need to handle NLP use-cases, integrated in NLPretext
+
+</div>
+
+# TL;DR
+
 
 > *Working on an NLP project and tired of always looking for the same silly preprocessing functions on the web?*  :tired_face: 
 
@@ -31,17 +51,25 @@ Cannot find what you were looking for? Feel free to open an [issue]((https://git
 
 # Installation
 
-This package has been tested on Python **3.6**, **3.7** and **3.8**.
+### Supported Python Versions
+
+- Main version supported : `3.7`
+- Other supported versions : `3.8`
+
 
 We strongly advise you to do the remaining steps in a virtual environnement.
 
-To install this library you just have to run the following command:
+To install this library from PyPi, run the following command:
 
 ```bash
 pip install nlpretext
 ```
 
+or with `Poetry`
 
+```bash
+poetry add nlpretext
+```
 
 This library uses Spacy as tokenizer. Current models supported are `en_core_web_sm` and `fr_core_news_sm`. If not installed, run the following commands:
 ```bash
@@ -57,7 +85,8 @@ To use our TextLoader class, you'll need to install Dask as well:
 pip install dask[complete]==2021.3.0
 ```
 
-# Preprocessing pipeline
+
+# Usage
 
 ## Default pipeline <a name="default_pipeline"></a>
 
@@ -99,7 +128,7 @@ print(text)
 Take a look at all the functions that are available [here](https://github.com/artefactory/NLPretext/tree/master/nlpretext) in the ```preprocess.py``` scripts in the different folders: basic, social, token.
 
 
-# Load text data
+## Load text data
 
 Pre-processing text data is useful only if you have loaded data to process! Importing text data as strings in your code can be really simple if you have short texts contained in a local .txt, but it can quickly become difficult if you want to load a lot of texts, stored in multiple formats and divided in multiple files. Hopefully, you can use NLPretext's TextLoader class to easily import text data.
 Our TextLoader class makes use of Dask, so be sure to install the library if you want to use it, as mentioned above.
@@ -156,10 +185,9 @@ print(preprocessed_text_dataframe.text_col.values.tolist())
 ```
 
 
+## Individual Functions
 
-# Individual Functions
-
-## Replacing emails <a name="replace_emails"></a>
+### Replacing emails <a name="replace_emails"></a>
 
 ```python
 from nlpretext.basic.preprocess import replace_emails
@@ -169,7 +197,7 @@ print(example)
 # "I have forwarded this email to *EMAIL*"
 ```
 
-## Replacing phone numbers <a name="replace_phone_numbers"></a>
+### Replacing phone numbers <a name="replace_phone_numbers"></a>
 
 ```python
 from nlpretext.basic.preprocess import replace_phone_numbers
@@ -179,7 +207,7 @@ print(example)
 # "My phone number is *PHONE*"
 ```
 
-## Removing Hashtags <a name="remove_hashtags"></a>
+### Removing Hashtags <a name="remove_hashtags"></a>
 
 ```python
 from nlpretext.social.preprocess import remove_hashtag
@@ -189,7 +217,7 @@ print(example)
 # "This restaurant was amazing"
 ```
 
-## Extracting emojis <a name="extract_emojis"></a>
+### Extracting emojis <a name="extract_emojis"></a>
 
 ```python
 from nlpretext.social.preprocess import extract_emojis
@@ -199,7 +227,7 @@ print(example)
 # [':grinning_face:']
 ```
 
-# Data augmentation <a name="data_augmentation"></a>
+## Data augmentation <a name="data_augmentation"></a>
 
 The augmentation module helps you to **generate new texts** based on your given examples by modifying some words in the initial ones and to **keep associated entities unchanged**, if any, in the case of **NER tasks**. If you want words other than entities to remain unchanged, you can specify it within the `stopwords` argument. Modifications depend on the chosen method, the ones currently supported by the module are **substitutions with synonyms** using Wordnet or BERT from the [`nlpaug`](https://github.com/makcedward/nlpaug) library. 
 
@@ -213,42 +241,76 @@ print(example)
 ```
 
 
-# Make HTML documentation
 
-In order to make the html Sphinx documentation, you need to run at the nlpretext root path:
-`sphinx-apidoc -f nlpretext -o docs/`
-This will generate the .rst files.
-You can generate the doc with
-`cd docs && make html`
 
-You can now open the file index.html located in the build folder.
+# 📈 Releases
+
+You can see the list of available releases on the [GitHub Releases](https://github.com/artefactory/NLPretext}/releases) page.
+
+We follow [Semantic Versions](https://semver.org/) specification.
+
+We use [`Release Drafter`](https://github.com/marketplace/actions/release-drafter). As pull requests are merged, a draft release is kept up-to-date listing the changes, ready to publish when you’re ready. With the categories option, you can categorize pull requests in release notes using labels.
+
+For Pull Requests, these labels are configured, by default:
+
+|               **Label**               |  **Title in Releases**  |
+| :-----------------------------------: | :---------------------: |
+|       `enhancement`, `feature`        |       🚀 Features       |
+| `bug`, `refactoring`, `bugfix`, `fix` | 🔧 Fixes & Refactoring  |
+|       `build`, `ci`, `testing`        | 📦 Build System & CI/CD |
+|              `breaking`               |   💥 Breaking Changes   |
+|            `documentation`            |    📝 Documentation     |
+|            `dependencies`             | ⬆️ Dependencies updates |
+
+
+GitHub creates the `bug`, `enhancement`, and `documentation` labels automatically. Dependabot creates the `dependencies` label. Create the remaining labels on the Issues tab of the GitHub repository, when needed.## 🛡 License
+
+[![License](https://img.shields.io/github/license/artefactory/NLPretext)](https://github.com/artefactory/NLPretext}/blob/main/LICENSE)
+
+This project is licensed under the terms of the `Apache Software License 2.0` license. See [LICENSE](https://github.com/artefactory/NLPretext}/blob/main/LICENSE) for more details.## 📃 Citation
+
+```
+@misc{nlpretext,
+  author = {artefactory},
+  title = {All the goto functions you need to handle NLP use-cases, integrated in NLPretext},
+  year = {2021},
+  publisher = {GitHub},
+  journal = {GitHub repository},
+  howpublished = {\url{https://github.com/artefactory/NLPretext}}}
+}
+```
+
 
 # Project Organization
 ------------
 
     ├── LICENSE
-    ├── VERSION
     ├── CONTRIBUTING.md     <- Contribution guidelines
+    ├── CODE_OF_CONDUCT.md  <- Code of conduct guidelines
+    ├── Makefile
     ├── README.md           <- The top-level README for developers using this project.
-    ├── .github/workflows   <- Where the CI lives
+    ├── .github/workflows   <- Where the CI and CD lives
     ├── datasets/external   <- Bash scripts to download external datasets
+    ├── docker              <- All you need to build a Docker image from that package
     ├── docs                <- Sphinx HTML documentation
     ├── nlpretext           <- Main Package. This is where the code lives
     │   ├── preprocessor.py <- Main preprocessing script
+    │   ├── text_loader.py  <- Main loading script
     │   ├── augmentation    <- Text augmentation script
-    │   ├── basic           <- Basic text preprocessing 
+    │   ├── basic           <- Basic text preprocessing
+    │   ├── cli             <- Command lines that can be used
     │   ├── social          <- Social text preprocessing
     │   ├── token           <- Token text preprocessing
     │   ├── _config         <- Where the configuration and constants live
     │   └── _utils          <- Where preprocessing utils scripts lives
     ├── tests               <- Where the tests lives
-    ├── setup.py            <- makes project pip installable (pip install -e .) so the package can be imported
-    ├── requirements.txt    <- The requirements file for reproducing the analysis environment, e.g.
-    │                          generated with `pip freeze > requirements.txt`
-    └── pylintrc            <- The linting configuration file
-
+    ├── pyproject.toml      <- Package configuration
+    ├── poetry.lock         
+    └── setup.cfg           <- Configuration for plugins and other utils
 
 # Credits
+
+- This project was generated with [`ppt`](https://github.com/artefactory/ppt).
 
 - [textacy](https://github.com/chartbeat-labs/textacy) for the following basic preprocessing functions:
     - `fix_bad_unicode`
@@ -261,4 +323,3 @@ You can now open the file index.html located in the build folder.
     - `remove_punct`
     - `remove_accents`
     - `replace_phone_numbers` *(with some modifications of our own)*
-

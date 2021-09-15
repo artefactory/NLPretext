@@ -50,7 +50,7 @@ STOPWORDS = {
         "vir",
         "was",
         "wat",
-        "ŉ"
+        "ŉ",
     ],
     "ha": [
         "a",
@@ -91,7 +91,7 @@ STOPWORDS = {
         "yake",
         "yana",
         "yi",
-        "za"
+        "za",
     ],
     "so": [
         "aad",
@@ -123,7 +123,7 @@ STOPWORDS = {
         "uu",
         "waa",
         "waxa",
-        "waxuu"
+        "waxuu",
     ],
     "st": [
         "a",
@@ -156,7 +156,7 @@ STOPWORDS = {
         "se",
         "tloha",
         "tsa",
-        "tse"
+        "tse",
     ],
     "sw": [
         "akasema",
@@ -232,7 +232,7 @@ STOPWORDS = {
         "yule",
         "za",
         "zaidi",
-        "zake"
+        "zake",
     ],
     "yo": [
         "a",
@@ -294,7 +294,7 @@ STOPWORDS = {
         "ṣùgbọ́n",
         "ẹmọ́",
         "ọjọ́",
-        "ọ̀pọ̀lọpọ̀"
+        "ọ̀pọ̀lọpọ̀",
     ],
     "zu": [
         "futhi",
@@ -325,7 +325,7 @@ STOPWORDS = {
         "wathi",
         "yakhe",
         "zakhe",
-        "zonke"
+        "zonke",
     ],
     "da": [
         "af",
@@ -428,7 +428,7 @@ STOPWORDS = {
         "to",
         "tre",
         "ud",
-        "var"
+        "var",
     ],
     "de": [
         "Ernst",
@@ -1026,7 +1026,7 @@ STOPWORDS = {
         "zwölf",
         "über",
         "überhaupt",
-        "übrigens"
+        "übrigens",
     ],
     "es": [
         "a",
@@ -1605,7 +1605,7 @@ STOPWORDS = {
         "última",
         "últimas",
         "último",
-        "últimos"
+        "últimos",
     ],
     "et": [
         "aga",
@@ -1642,7 +1642,7 @@ STOPWORDS = {
         "siis",
         "ta",
         "te",
-        "ära"
+        "ära",
     ],
     "fi": [
         "aiemmin",
@@ -2416,7 +2416,7 @@ STOPWORDS = {
         "ylös",
         "ympäri",
         "älköön",
-        "älä"
+        "älä",
     ],
     "fr": [
         "a",
@@ -3024,7 +3024,7 @@ STOPWORDS = {
         "étant",
         "été",
         "être",
-        "ô"
+        "ô",
     ],
     "hr": [
         "a",
@@ -3205,7 +3205,7 @@ STOPWORDS = {
         "ćete",
         "ćeš",
         "ću",
-        "što"
+        "što",
     ],
     "hu": [
         "a",
@@ -3988,7 +3988,7 @@ STOPWORDS = {
         "ő",
         "ők",
         "őket",
-        "őt"
+        "őt",
     ],
     "it": [
         "IE",
@@ -4609,11 +4609,11 @@ STOPWORDS = {
         "vostre",
         "vostri",
         "vostro",
-        "è"
+        "è",
     ],
     "ko": [
         "!",
-        "\"",
+        '"',
         "$",
         "%",
         "&",
@@ -5290,7 +5290,7 @@ STOPWORDS = {
         "｜",
         "｝",
         "～",
-        "￥"
+        "￥",
     ],
     "nl": [
         "aan",
@@ -5567,7 +5567,7 @@ STOPWORDS = {
         "zou",
         "zouden",
         "zulk",
-        "zullen"
+        "zullen",
     ],
     "no": [
         "alle",
@@ -5741,7 +5741,7 @@ STOPWORDS = {
         "vår",
         "være",
         "vært",
-        "å"
+        "å",
     ],
     "pl": [
         "aby",
@@ -6003,7 +6003,7 @@ STOPWORDS = {
         "zł",
         "żaden",
         "że",
-        "żeby"
+        "żeby",
     ],
     "pt": [
         "a",
@@ -6413,7 +6413,7 @@ STOPWORDS = {
         "área",
         "é",
         "és",
-        "último"
+        "último",
     ],
     "ru": [
         "а",
@@ -6954,7 +6954,7 @@ STOPWORDS = {
         "этому",
         "этот",
         "эту",
-        "я"
+        "я",
     ],
     "sv": [
         "aderton",
@@ -7357,7 +7357,7 @@ STOPWORDS = {
         "över",
         "övermorgon",
         "överst",
-        "övre"
+        "övre",
     ],
     "tr": [
         "acaba",
@@ -7638,7 +7638,7 @@ STOPWORDS = {
         "ţayet",
         "ţimdi",
         "ţu",
-        "ţöyle"
+        "ţöyle",
     ],
     "zh": [
         "、",
@@ -8182,7 +8182,7 @@ STOPWORDS = {
         "｜",
         "｝",
         "～",
-        "￥"
+        "￥",
     ],
     "eo": [
         "adiaŭ",
@@ -8357,7 +8357,7 @@ STOPWORDS = {
         "ĵus",
         "ŝi",
         "ŝia",
-        "ŝin"
+        "ŝin",
     ],
     "he": [
         "אבל",
@@ -8553,7 +8553,7 @@ STOPWORDS = {
         "שלנו",
         "שם",
         "תהיה",
-        "תחת"
+        "תחת",
     ],
     "la": [
         "a",
@@ -8604,7 +8604,7 @@ STOPWORDS = {
         "tandem",
         "te",
         "ut",
-        "vel"
+        "vel",
     ],
     "sk": [
         "a",
@@ -8716,7 +8716,7 @@ STOPWORDS = {
         "òom",
         "òou",
         "òu",
-        "že"
+        "že",
     ],
     "sl": [
         "a",
@@ -9164,7 +9164,7 @@ STOPWORDS = {
         "šesto",
         "štiri",
         "ž",
-        "že"
+        "že",
     ],
     "br": [
         "a",
@@ -9292,7 +9292,7 @@ STOPWORDS = {
         "um",
         "uma",
         "umas",
-        "uns"
+        "uns",
     ],
     "ca": [
         "a",
@@ -9512,7 +9512,7 @@ STOPWORDS = {
         "vostres",
         "érem",
         "éreu",
-        "és"
+        "és",
     ],
     "cs": [
         "a",
@@ -9860,7 +9860,7 @@ STOPWORDS = {
         "čtyři",
         "šest",
         "šestnáct",
-        "že"
+        "že",
     ],
     "el": [
         "αλλα",
@@ -9937,7 +9937,7 @@ STOPWORDS = {
         "τοτε",
         "του",
         "των",
-        "ωσ"
+        "ωσ",
     ],
     "eu": [
         "al",
@@ -10037,7 +10037,7 @@ STOPWORDS = {
         "zu",
         "zuek",
         "zuen",
-        "zuten"
+        "zuten",
     ],
     "ga": [
         "a",
@@ -10148,7 +10148,7 @@ STOPWORDS = {
         "ó",
         "ón",
         "óna",
-        "ónár"
+        "ónár",
     ],
     "gl": [
         "a",
@@ -10310,7 +10310,7 @@ STOPWORDS = {
         "á",
         "é",
         "ó",
-        "ós"
+        "ós",
     ],
     "hy": [
         "այդ",
@@ -10357,7 +10357,7 @@ STOPWORDS = {
         "ում",
         "պիտի",
         "վրա",
-        "և"
+        "և",
     ],
     "id": [
         "ada",
@@ -10714,7 +10714,7 @@ STOPWORDS = {
         "wong",
         "yaitu",
         "yakni",
-        "yang"
+        "yang",
     ],
     "ja": [
         "あっ",
@@ -10825,7 +10825,7 @@ STOPWORDS = {
         "を",
         "ん",
         "及び",
-        "特に"
+        "特に",
     ],
     "lv": [
         "aiz",
@@ -10988,7 +10988,7 @@ STOPWORDS = {
         "viņpus",
         "zem",
         "ārpus",
-        "šaipus"
+        "šaipus",
     ],
     "th": [
         "กล่าว",
@@ -11105,7 +11105,7 @@ STOPWORDS = {
         "ได้",
         "ไป",
         "ไม่",
-        "ไว้"
+        "ไว้",
     ],
     "ar": [
         "،",
@@ -11269,7 +11269,7 @@ STOPWORDS = {
         "وهي",
         "يكون",
         "يمكن",
-        "يوم"
+        "يوم",
     ],
     "bg": [
         "а",
@@ -11530,7 +11530,7 @@ STOPWORDS = {
         "щом",
         "юмрук",
         "я",
-        "як"
+        "як",
     ],
     "bn": [
         "অনেক",
@@ -11648,7 +11648,7 @@ STOPWORDS = {
         "সেই",
         "হতে",
         "হাজার",
-        "হয়"
+        "হয়",
     ],
     "fa": [
         "آباد",
@@ -11982,7 +11982,7 @@ STOPWORDS = {
         "گيرد",
         "گيري",
         "یا",
-        "یک"
+        "یک",
     ],
     "hi": [
         "अंदर",
@@ -12209,7 +12209,7 @@ STOPWORDS = {
         "होती",
         "होते",
         "होना",
-        "होने"
+        "होने",
     ],
     "mr": [
         "अधिक",
@@ -12310,7 +12310,7 @@ STOPWORDS = {
         "होत",
         "होता",
         "होती",
-        "होते"
+        "होते",
     ],
     "ro": [
         "acea",
@@ -12594,7 +12594,7 @@ STOPWORDS = {
         "şi",
         "ştiu",
         "ţi",
-        "ţie"
+        "ţie",
     ],
     "en": [
         "a",
@@ -13166,6 +13166,6 @@ STOPWORDS = {
         "yourself",
         "yourselves",
         "z",
-        "zero"
-    ]
+        "zero",
+    ],
 }

@@ -15,12 +15,13 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with this program; if not, write to the Free Software Foundation,
 # Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
-import chardet
+from typing import List, Union
 
+import chardet
 from nlpretext._config import constants
 
 
-def detect_encoding(file_path_or_string: str, n_lines: int = 100) -> str:
+def detect_encoding(file_path_or_string: Union[str, bytes], n_lines: int = 100) -> str:
     """
     Predict a file's encoding using chardet
 
@@ -41,10 +42,11 @@ def detect_encoding(file_path_or_string: str, n_lines: int = 100) -> str:
     else:
         with open(file_path_or_string, "rb") as f:
             rawdata = b"".join([f.readline() for _ in range(n_lines)])
-    return chardet.detect(rawdata)
+    chardet_value: str = chardet.detect(rawdata)
+    return chardet_value
 
 
-def check_text_file_format(filepath) -> str:
+def check_text_file_format(filepath: Union[str, List[str]]) -> str:
     """
     Retrieve format of a file path or list of files path, among .csv, .json, .parquet and .txt
 
@@ -59,16 +61,15 @@ def check_text_file_format(filepath) -> str:
         Format of the specified file path, among .json, .csv, .parquet or .txt
     """
     pattern = constants.TEXT_FILE_FORMATS_PATTERN
-    if not isinstance(filepath, list):
+    if not isinstance(filepath, (list, tuple)):
         filepath = [filepath]
-
     format_re_list = [pattern.match(path) for path in filepath]
-    if None in format_re_list:
-        raise ValueError("Unrecognized format among specified files, only .csv, .json, .parquet and .txt accepted")
-
-    format_list = [format_re.group(1) for format_re in format_re_list]
+    format_list = [format_re.group(1) for format_re in format_re_list if format_re]
     if len(set(format_list)) > 1:
         raise ValueError(f"Multiple file formats found in file path list: {format_list}")
-
+    if None in format_re_list:
+        raise ValueError(
+            "Unrecognized format among specified files, only .csv, .json, .parquet and .txt accepted"
+        )
     file_format = format_list[0]
     return file_format

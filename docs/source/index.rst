@@ -1,3 +1,6 @@
+=========
+NLPretext
+=========
 
 
 Welcome to NLPretext's documentation!
@@ -8,7 +11,7 @@ The NLPretext library aimed to be a meta-library to be used to help you get star
 
 # Installation
 
-Beware, this package has been tested on Python **3.6** & **3.7** & **3.8**, and will probably not be working under python **2.7** as **Python2.7** EOL is scheduled for December 2019. 
+Beware, this package has been tested on Python **3.6** & **3.7** & **3.8**, and will probably not be working under python **2.7** as **Python2.7** EOL is scheduled for December 2019.
 
 To install this library you should first clone the repository:
 
@@ -19,8 +22,6 @@ This library uses Spacy as tokenizer. Current models supported are `en_core_web_
 pip install https://github.com/explosion/spacy-models/releases/download/en_core_web_sm-2.3.1/en_core_web_sm-2.3.1.tar.gz
 
 pip install https://github.com/explosion/spacy-models/releases/download/fr_core_news_sm-2.3.0/fr_core_news_sm-2.3.0.tar.gz
-
-
 
 .. toctree::
    :maxdepth: 2
@@ -53,10 +54,15 @@ pip install https://github.com/explosion/spacy-models/releases/download/fr_core_
 
    nlpretext.augmentation
 
+.. toctree::
+    :maxdepth: 4
+
+    tutorials/index
+    Reference <apidoc/modules>
+
 Indices and tables
 ==================
 
 * :ref:`genindex`
 * :ref:`modindex`
 * :ref:`search`
-
