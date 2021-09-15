@@ -310,8 +310,6 @@ This project is licensed under the terms of the `Apache Software License 2.0` li
 
 # Credits
 
-- This project was generated with [`ppt`](https://github.com/artefactory/ppt).
-
 - [textacy](https://github.com/chartbeat-labs/textacy) for the following basic preprocessing functions:
     - `fix_bad_unicode`
     - `normalize_whitespace`
