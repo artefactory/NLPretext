@@ -49,13 +49,13 @@ jobs:
       run: make download-poetry
 
     - name: Set up pip cache
-      uses: actions/cache@v2.1.5
+      uses: actions/cache@v2.1.6
       with:
         path: ~/.cache/pypoetry/virtualenvs
         key: venv-${{ matrix.python-version }}-${{ hashFiles('pyproject.toml') }}-${{ hashFiles('poetry.lock') }}
 
     - name: Set up mypy cache
-      uses: actions/cache@v2.1.5
+      uses: actions/cache@v2.1.6
       with:
         path: ${{ github.workspace }}/.mypy_cache
         key: mypy-${{ matrix.python-version }}
@@ -67,7 +67,7 @@ jobs:
     - name: Install dependencies
       run: |
         poetry run pip install --upgrade pip
-        poetry install -E spacy-tokenizer -E torch
+        poetry install -E torch
 
     - name: Run safety checks
       run: |
