@@ -17,6 +17,8 @@
 # Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 from typing import Any, List, Optional, Union
 
+import os
+
 import nltk
 import spacy
 from sacremoses import MosesDetokenizer, MosesTokenizer
@@ -62,9 +64,8 @@ def _load_spacy_model(model: str) -> Any:
     try:
         return spacy.load(model)
     except OSError:
-        raise LanguageNotInstalledError(
-            f"Model {model} is not installed. " f"To install, run: python -m spacy download {model}"
-        )
+        os.system(f"python -m spacy download {model}")
+        return spacy.load(model)
 
 
 def _get_spacy_tokenizer(lang: str) -> Optional[spacy.tokenizer.Tokenizer]:

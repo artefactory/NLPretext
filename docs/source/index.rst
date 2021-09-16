@@ -17,9 +17,6 @@ To install this library you should first clone the repository:
 
 pip install nlpretext
 
-This library uses Spacy as tokenizer. Current models supported are `en_core_web_sm` and `fr_core_news_sm`. If not installed, run the following commands:
-
-pip install nlpretext[spacy-tokenizer]
 
 .. toctree::
     :maxdepth: 4
