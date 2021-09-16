@@ -43,7 +43,7 @@ jobs:
         cache-to: type=inline
 
     - name: Scan image
-      uses: anchore/scan-action@v2
+      uses: anchore/scan-action@v3
       id: scan
       with:
         image: "ghcr.io/artefactory/nlpretext:${{ steps.tag.outputs.tag_name }}"
