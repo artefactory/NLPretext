@@ -4,9 +4,9 @@
 # You can set these variables from the command line, and also
 # from the environment for the first two.
 SPHINXOPTS           ?=
-SPHINXBUILD          ?= sphinx-build
-SPHINXAPIBUILD       ?= sphinx-apidoc
-SPHINXMULTIVERSION   ?= sphinx-multiversion
+SPHINXBUILD          ?= poetry run sphinx-build
+SPHINXAPIBUILD       ?= poetry run sphinx-apidoc
+SPHINXMULTIVERSION   ?= poetry run sphinx-multiversion
 SOURCEDIR            = source
 BUILDDIR             = build
 
