@@ -18,10 +18,13 @@
 from typing import Any, List, Optional, Union
 
 import os
+import re
 
 import nltk
 import spacy
 from sacremoses import MosesDetokenizer, MosesTokenizer
+
+MODEL_REGEX = re.compile(r"^[a-z]{2}_(?:core|dep|ent|sent)_(?:web|news|wiki|ud)_(?:sm|md|lg|trf)$")
 
 
 class LanguageNotHandled(Exception):
@@ -64,8 +67,14 @@ def _load_spacy_model(model: str) -> Any:
     try:
         return spacy.load(model)
     except OSError:
-        os.system(f"python -m spacy download {model}")
-        return spacy.load(model)
+        if MODEL_REGEX.match(model):
+            os.system(f"python -m spacy download {model}")  # nosec
+            return spacy.load(model)
+        else:
+            raise LanguageNotInstalledError(
+                f"Model {model} is not installed. "
+                f"To install, run: python -m spacy download {model}"
+            )
 
 
 def _get_spacy_tokenizer(lang: str) -> Optional[spacy.tokenizer.Tokenizer]:
