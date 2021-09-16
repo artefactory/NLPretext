@@ -26,7 +26,8 @@ def run(
         help="File that will store the result of the preprocessing",
     ),
 ) -> None:
-    """Prints a greeting for a giving name.
+    """Runs NLPretext on a list of files and outputs the result in parquet format
+    or shows the result if no output is provided.
 
     Args:
 
@@ -37,4 +38,7 @@ def run(
     text_loader = TextLoader()
     preprocessor = Preprocessor()
     preprocessed_text_dataframe = text_loader.read_text(input, preprocessor=preprocessor)
-    preprocessed_text_dataframe.to_parquet(output)
+    if output:
+        preprocessed_text_dataframe.to_parquet(output)
+    else:
+        console.print(preprocessed_text_dataframe)
