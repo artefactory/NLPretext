@@ -53,7 +53,7 @@ jobs:
       with:
         sarif_file: ${{ steps.scan.outputs.sarif }}
 
-  documentation:
+  documentation_and_package:
 
     runs-on: ubuntu-latest
 
@@ -88,6 +88,13 @@ jobs:
     - name: Install dependencies
       run: |
         poetry install
+
+    - name: Publish to PyPI
+      env:
+        PYPI_TOKEN: ${{ secrets.PYPI_TOKEN }}
+      run: |
+        poetry config pypi-token.pypi $PYPI_TOKEN
+        poetry publish --build
 
     - name: Run build script for Sphinx pages
       run: |
