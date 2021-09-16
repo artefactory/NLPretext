@@ -25,13 +25,13 @@ pip install nlpretext[spacy-tokenizer]
     :maxdepth: 4
     :caption: Tutorials:
 
-    tutorials/index
+    ./tutorials/index
 
 .. toctree::
-   :maxdepth: 2
-   :caption: API Reference:
+    :maxdepth: 2
+    :caption: API Reference:
 
-   apidoc/modules
+    ./apidoc/modules
 
 Indices and tables
 ==================
