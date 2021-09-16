@@ -58,8 +58,6 @@ fastparquet = ">=0.4.1"
 dask = {version = ">=2021.5.0", extras = ["complete"]}
 distributed = ">=2021.5.0"
 tornado = ">=6.0.3"
-fr-core-news-sm = {url = "https://github.com/explosion/spacy-models/releases/download/fr_core_news_sm-3.1.0/fr_core_news_sm-3.1.0.tar.gz", optional = true}
-en-core-web-sm = {url = "https://github.com/explosion/spacy-models/releases/download/en_core_web_sm-3.1.0/en_core_web_sm-3.1.0.tar.gz", optional = true}
 torch = {version = "^1.9.0", optional = true}
 
 [tool.poetry.dev-dependencies]
@@ -99,7 +97,6 @@ types-chardet = ">=0.1.3"
 types-click = ">=7.1.2"
 
 [tool.poetry.extras]
-spacy-tokenizer = ["fr-core-news-sm", "en-core-web-sm"]
 torch = ["torch"]
 
 [tool.black]
