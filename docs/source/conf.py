@@ -55,6 +55,11 @@ github_url = "https://github.com/artefactory/NLPretext"
 
 smv_prefer_remote_refs = False
 smv_remote_whitelist = None
+smv_prebuild_command = (
+    "poetry run sphinx-apidoc -f -o source/apidoc/ "
+    "../nlpretext/ "
+    "--implicit-namespaces -M -t source/_templates"
+)
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ["_templates"]
