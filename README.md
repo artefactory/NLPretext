@@ -73,16 +73,11 @@ poetry add nlpretext
 
 This library uses Spacy as tokenizer. Current models supported are `en_core_web_sm` and `fr_core_news_sm`. If not installed, run the following commands:
 ```bash
-pip install https://github.com/explosion/spacy-models/releases/download/en_core_web_sm-2.3.1/en_core_web_sm-2.3.1.tar.gz
+pip install nlpretext[spacy-tokenizer]
 ```
 
 ```bash
-pip install https://github.com/explosion/spacy-models/releases/download/fr_core_news_sm-2.3.0/fr_core_news_sm-2.3.0.tar.gz
-```
-
-To use our TextLoader class, you'll need to install Dask as well:
-```bash
-pip install dask[complete]==2021.3.0
+poetry add nlpretext -E spacy-tokenizer
 ```
 
 
