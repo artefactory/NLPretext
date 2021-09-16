@@ -84,17 +84,19 @@ class PhoneParser:
     def __init__(self):
         self.region_code = None
         self.text = None
-        self.parsed_num: Optional[str] = None
+        self.parsed_num: Optional[_phonenumbers.PhoneNumber] = None
 
     @property
-    def parsed_num(self) -> Optional[str]:
+    def parsed_num(self) -> Optional[_phonenumbers.PhoneNumber]:
         return self.__parsed_num
 
     @parsed_num.setter
-    def parsed_num(self, value: Optional[str]) -> None:
+    def parsed_num(self, value: Optional[_phonenumbers.PhoneNumber]) -> None:
         self.__parsed_num = value
 
-    def parse_number(self, text: str, region_code: Optional[str] = None) -> Optional[str]:
+    def parse_number(
+        self, text: str, region_code: Optional[str] = None
+    ) -> Optional[_phonenumbers.PhoneNumber]:
         """
         Extract phone number from text
 
@@ -121,7 +123,9 @@ class PhoneParser:
         """
         self.region_code = region_code
         self.text = text
-        self.parsed_num: Optional[str] = _phonenumbers.parse(self.text, self.region_code)
+        self.parsed_num: Optional[_phonenumbers.PhoneNumber] = _phonenumbers.parse(
+            self.text, self.region_code
+        )
         return self.parsed_num
 
     def format_number(self, num_format: str) -> str:
@@ -140,5 +144,11 @@ class PhoneParser:
         standard_format = FORMAT_NUMBERS.get(num_format)
         if standard_format is None:
             raise ValueError(f"Please choose a num_format in {list(FORMAT_NUMBERS.keys())}")
-        formatted_number: str = _phonenumbers.format_number(self.parsed_num, standard_format)
+        if self.parsed_num is None:
+            raise ValueError(f"Could not parse phone number {self.parsed_num}")
+        formatted_number: Optional[str] = _phonenumbers.format_number(
+            self.parsed_num, standard_format
+        )
+        if formatted_number is None:
+            raise ValueError(f"Could not format phone number {formatted_number}")
         return formatted_number

@@ -229,17 +229,29 @@ def test_remove_stopwords_tokens(input_tokens, lang, expected_output):
 
 
 @pytest.mark.parametrize(
-    "input_text, lang, expected_output",
+    "input_text, lang, custom_stopwords, ignored_stopwords, expected_output",
     [
-        ("I like this song very much !", "en", "I song !"),
-        ("Can I get a beer?", "en", "Can I beer ?"),
-        ("Je vous recommande ce film !", "fr", "Je recommande film !"),
-        ("je vous recommande ce film !", "fr", "recommande film !"),
-        ("Quiero una cerveza, por favor.", "es", "Quiero cerveza, favor."),
+        ("I like this song very much !", "en", None, None, "I song !"),
+        ("Can I get a beer?", "en", None, None, "Can I beer ?"),
+        ("Je vous recommande ce film !", "fr", None, None, "Je recommande film !"),
+        ("je vous recommande ce film !", "fr", None, None, "recommande film !"),
+        ("Quiero una cerveza, por favor.", "es", None, None, "Quiero cerveza, favor."),
+        ("je vous recommande ce film !", "fr", ["recommande"], None, "film !"),
+        ("Quiero una cerveza, por favor.", "es", None, ["una"], "Quiero una cerveza, favor."),
+        ("je vous recommande ce film !", "fr", ["recommande"], ["je vous"], "je vous film !"),
+        (
+            "je vous recommande ce film !",
+            "fr",
+            ["recommande"],
+            ["recommande ce film"],
+            "recommande ce film !",
+        ),
     ],
 )
-def test_remove_stopwords_text(input_text, lang, expected_output):
-    result = remove_stopwords_text(input_text, lang)
+def test_remove_stopwords_text(
+    input_text, lang, custom_stopwords, ignored_stopwords, expected_output
+):
+    result = remove_stopwords_text(input_text, lang, custom_stopwords, ignored_stopwords)
     np.testing.assert_array_equal(result, expected_output)
 
 
