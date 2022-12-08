@@ -37,7 +37,7 @@ importlib_metadata = {version = ">=1.6.0", python = "<3.8"}
 typer = {extras = ["all"], version = ">=0.3.2"}
 rich = ">=10.1.0"
 chardet = ">=3.0.4"
-emoji = ">=0.5.2"
+emoji = ">=0.5.2,<1.7.0"
 flashtext = ">=2.7"
 ftfy = ">=4.2.0"
 mosestokenizer = ">=1.1.0"
