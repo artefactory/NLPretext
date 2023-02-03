@@ -176,9 +176,7 @@ def remove_stopwords(
     if custom_stopwords:
         stopwords += custom_stopwords
     if not text:
-        raise ValueError(
-                f"Found empty text. Please fix it before using this function."
-            )
+        raise ValueError("Found empty text. Please fix it before using this function.")
     if lang in ["fr", "en"]:
         lang_module = {"fr": "fr_spacy", "en": "en_spacy"}[lang]
         tokens = tokenize(text, lang_module)
