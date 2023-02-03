@@ -15,6 +15,7 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with this program; if not, write to the Free Software Foundation,
 # Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+# mypy: disable-error-code="attr-defined"
 
 from unittest.mock import MagicMock, patch
 
@@ -152,7 +153,7 @@ def test__read_text_parquet(mock_read_parquet):
         ),
     ],
 )
-@patch("nlpretext.preprocessor.Preprocessor.run")
+@patch("nlpretext.preprocessor.Preprocessor.run", return_value="This is a text", autospec=True)
 @patch("nlpretext.textloader.TextLoader._read_text_json")
 @patch("nlpretext.textloader.TextLoader._read_text_txt")
 @patch("nlpretext.textloader.TextLoader._read_text_csv")

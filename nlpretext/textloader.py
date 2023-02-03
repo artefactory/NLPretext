@@ -1,3 +1,4 @@
+# mypy: disable-error-code="attr-defined"
 try:
     import dask.bag as db
     import dask.dataframe as dd
