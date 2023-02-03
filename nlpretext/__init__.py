@@ -21,13 +21,9 @@
 
 """All the goto functions you need to handle NLP use-cases, integrated in NLPretext"""
 
+from importlib.metadata import PackageNotFoundError, version
+
 from nlpretext.preprocessor import Preprocessor
-
-try:
-    from importlib.metadata import PackageNotFoundError, version
-except ImportError:  # pragma: no cover
-    from importlib_metadata import PackageNotFoundError, version
-
 
 try:
     __version__ = version(__name__)
