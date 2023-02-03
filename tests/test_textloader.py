@@ -153,7 +153,7 @@ def test__read_text_parquet(mock_read_parquet):
         ),
     ],
 )
-@patch("nlpretext.preprocessor.Preprocessor.run")
+@patch("nlpretext.preprocessor.Preprocessor.run", return_value="This is a text", autospec=True)
 @patch("nlpretext.textloader.TextLoader._read_text_json")
 @patch("nlpretext.textloader.TextLoader._read_text_txt")
 @patch("nlpretext.textloader.TextLoader._read_text_csv")
