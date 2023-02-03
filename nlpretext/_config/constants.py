@@ -22,7 +22,6 @@ import re
 import sys
 import unicodedata
 
-import emoji as _emoji
 import regex
 
 NUMERIC_NE_TYPES = {
@@ -216,7 +215,6 @@ CONTRACTION_SHANT_SHALLNOT = re.compile(r"(\b)(s)han't", re.IGNORECASE)
 CONTRACTION_YALL_YOUALL = re.compile(r"(\b)(y)(?:'all|a'll)", re.IGNORECASE)
 
 # SOCIAL DATA
-EMOJI_PATTERN = _emoji.get_emoji_regexp()
 HASHTAG_PATTERN = re.compile(r"#\w*")
 AT_PATTERN = re.compile(r"@\w*")
 HTML_TAG_PATTERN = re.compile(r"<.*?>")

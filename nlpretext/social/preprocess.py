@@ -83,7 +83,7 @@ def remove_emoji(text: str) -> str:
     -------
     str
     """
-    text = constants.EMOJI_PATTERN.sub("", text)
+    text = _emoji.replace_emoji(text, "")
     return text
 
 
@@ -123,8 +123,10 @@ def extract_emojis(text: str) -> List[str]:
     list
         list of all emojis converted with their unicode conventions
     """
-    emojis_in_text = constants.EMOJI_PATTERN.findall(text)
-    emojis_converted = [convert_emoji_to_text(emoji_text) for emoji_text in emojis_in_text]
+    emojis_in_text = _emoji.emoji_list(text)
+    emojis_converted = [
+        convert_emoji_to_text(emoji_text.get("emoji")) for emoji_text in emojis_in_text
+    ]
     return emojis_converted
 
 
