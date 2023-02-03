@@ -16,9 +16,10 @@
 # along with this program; if not, write to the Free Software Foundation,
 # Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
-# type: ignore[attr-defined]
-"""All the goto functions you need to handle NLP use-cases, integrated in NLPretext"""
+# mypy: disable-error-code="attr-defined"
+# mypy: disable-error-code="assignment"
 
+"""All the goto functions you need to handle NLP use-cases, integrated in NLPretext"""
 
 from nlpretext.preprocessor import Preprocessor
 

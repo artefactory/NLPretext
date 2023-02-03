@@ -1,4 +1,4 @@
-# type: ignore[attr-defined]
+# mypy: disable-error-code="attr-defined"
 
 import typer
 from nlpretext import __version__
@@ -14,7 +14,7 @@ app.add_typer(preprocess.app, name="preprocess")
 console = Console()
 
 
-def version_callback(value: bool):
+def version_callback(value: bool) -> None:
     """Prints the version of the package."""
     if value:
         console.print(f"[yellow]nlpretext[/] version: [bold blue]{__version__}[/]")
