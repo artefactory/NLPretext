@@ -8,7 +8,7 @@
 
 [![CI status](https://github.com/artefactory/NLPretext/actions/workflows/ci.yml/badge.svg?branch%3Amain&event%3Apush)](https://github.com/artefactory/NLPretext/actions/workflows/ci.yml?query=branch%3Amain)
 [![CD status](https://github.com/artefactory/NLPretext/actions/workflows/cd.yml/badge.svg?event%3Arelease)](https://github.com/artefactory/NLPretext/actions/workflows/cd.yml?query=event%3Arelease)
-[![Python Version](https://img.shields.io/badge/Python-3.7-informational.svg)](#supported-python-versions)
+[![Python Version](https://img.shields.io/badge/Python-3.8-informational.svg)](#supported-python-versions)
 [![Dependencies Status](https://img.shields.io/badge/dependabots-active-informational.svg)](https://github.com/artefactory/NLPretext}/pulls?utf8=%E2%9C%93&q=is%3Apr%20author%3Aapp%2Fdependabot)
 
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
@@ -54,7 +54,7 @@ Cannot find what you were looking for? Feel free to open an [issue]((https://git
 ### Supported Python Versions
 
 - Main version supported : `3.8`
-- Other supported versions : `3.9`
+- Other supported versions : `3.9`, `3.10`
 
 
 We strongly advise you to do the remaining steps in a virtual environnement.
