@@ -83,5 +83,5 @@ class Preprocessor:
                 {"operation": operation, "args": None} for operation in operations_to_pipe
             ]
         self.pipeline = self.build_pipeline(operations)
-        text = self.pipeline.fit_transform(text)
+        text = self.pipeline.transform(text)
         return text
