@@ -509,6 +509,7 @@ def test_custom_preprocess():
             "Some text with and whitespaces and",
         ),
         ("@twitteruser ✊", ""),
+        ("", ""),
     ],
 )
 def test_apply_preprocessor(input_str, expected_str):
