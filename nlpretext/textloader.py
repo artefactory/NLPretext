@@ -13,9 +13,12 @@
 # See the License for the specific language governing permissions and
 # limitations under the License
 from types import ModuleType
+from typing import Any, List, Optional, Union
 
 import sys
 import warnings
+
+import pandas as pd
 
 try:
     from nlpretext._utils import daskloader
@@ -152,12 +155,12 @@ class TextLoader:
 
     def read_text(
         self,
-        files_path,
-        file_format=None,
-        encoding=None,
-        compute_to_pandas=True,
-        preprocessor=None,
-    ):
+        files_path: Union[str, List[str]],
+        file_format: Optional[str] = None,
+        encoding: Optional[str] = None,
+        compute_to_pandas: bool = True,
+        preprocessor: Optional[Preprocessor] = None,
+    ) -> Union[pd.DataFrame, Any]:
         """
         Read the text files stored in files_path
 
