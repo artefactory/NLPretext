@@ -1,4 +1,3 @@
-
 # Copyright (C) 2020 Artefact
 # licence-information@artefact.com
 #
