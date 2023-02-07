@@ -15,40 +15,71 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with this program; if not, write to the Free Software Foundation,
 # Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
-from typing import List, Union
+# mypy: disable-error-code="assignment"
+
+from typing import Any, List, Optional, Union
+
+import os
+import re
+
 import nltk
-from sacremoses import MosesTokenizer, MosesDetokenizer
 import spacy
+from sacremoses import MosesDetokenizer, MosesTokenizer
+
+MODEL_REGEX = re.compile(r"^[a-z]{2}_(?:core|dep|ent|sent)_(?:web|news|wiki|ud)_(?:sm|md|lg|trf)$")
+
 
 class LanguageNotHandled(Exception):
     pass
 
+
+class LanguageNotInstalledError(Exception):
+    pass
+
+
 class SpacyModel:
     class SingletonSpacyModel:
-        def __init__(self, lang):
+        def __init__(self, lang: str) -> None:
             self.lang = lang
-            if lang == 'en':
-                self.model = spacy.load('en_core_web_sm')
-            elif lang == 'fr':
-                self.model = spacy.load('fr_core_news_sm')
-            elif lang == 'ko':
-                self.model = spacy.blank('ko')
-            elif lang == 'ja':
-                self.model = spacy.blank('ja')
+            if lang == "en":
+                self.model = _load_spacy_model("en_core_web_sm")
+            elif lang == "fr":
+                self.model = _load_spacy_model("fr_core_news_sm")
+            elif lang == "ko":
+                self.model = spacy.blank("ko")
+            elif lang == "ja":
+                self.model = spacy.blank("ja")
             else:
-                raise(LanguageNotHandled('This spacy model is not available'))
+                raise (LanguageNotHandled("This spacy model is not available"))
 
-    model = None
+    model: Optional[spacy.language.Language] = None
 
     def __init__(self, lang):
         if not SpacyModel.model:
             SpacyModel.model = SpacyModel.SingletonSpacyModel(lang).model
 
-    def get_lang_model(self):
-        return self.model.lang
+    def get_lang_model(self) -> Optional[str]:
+        if self.model:
+            lang: str = self.model.lang
+            return lang
+        return None
 
 
-def _get_spacy_tokenizer(lang: str):
+def _load_spacy_model(model: str) -> Any:
+    try:
+        return spacy.load(model)
+    except OSError:
+        if MODEL_REGEX.match(model):
+            os.system(f"python -m spacy download {model}")  # nosec
+            return spacy.load(model)
+        else:
+            raise LanguageNotInstalledError(
+                f"Model {model} is not installed. "
+                f"To install, run: python -m spacy download {model}"
+            )
+
+
+def _get_spacy_tokenizer(lang: str) -> Optional[spacy.tokenizer.Tokenizer]:
     """
     Function that gets the right tokenizer given the language
 
@@ -63,10 +94,12 @@ def _get_spacy_tokenizer(lang: str):
         spacy tokenizer
     """
     model = SpacyModel(lang).model
-    return model.tokenizer
+    if model:
+        return model.tokenizer
+    return None
 
 
-def tokenize(text: str, lang_module: str = 'en_spacy') -> List[str]:
+def tokenize(text: str, lang_module: str = "en_spacy") -> List[str]:
     """
     Convert text to a list of tokens.
 
@@ -87,21 +120,27 @@ def tokenize(text: str, lang_module: str = 'en_spacy') -> List[str]:
     ValueError
         If lang_module is not a valid module name
     """
+    tokenized_words: List[str] = []
     if "spacy" in lang_module:
         lang = lang_module.split("_")[0]
         spacymodel = _get_spacy_tokenizer(lang)
-        spacydoc = spacymodel(text)
-        return [spacy_token.text for spacy_token in spacydoc]
-    if lang_module == 'en_nltk':
-        return nltk.word_tokenize(text)
-    if lang_module == 'fr_moses':
-        return MosesTokenizer(lang='fr').tokenize(text, escape=False)
-    raise ValueError("Please pass a lang_module in list of values "\
-                     "{'en_spacy', 'en_nltk', 'fr_spacy', 'fr_moses', 'ko_spacy', 'ja_spacy'}")
+        if spacymodel:
+            spacydoc = spacymodel(text)
+            tokenized_words = [spacy_token.text for spacy_token in spacydoc]
+    if lang_module == "en_nltk":
+        tokenized_words = nltk.word_tokenize(text)
+    if lang_module == "fr_moses":
+        tokenized_words = MosesTokenizer(lang="fr").tokenize(text, escape=False)
+    if tokenized_words:
+        return tokenized_words
+    raise ValueError(
+        "Please pass a lang_module in list of values "
+        "{'en_spacy', 'en_nltk', 'fr_spacy', 'fr_moses', 'ko_spacy', 'ja_spacy'}"
+    )
 
 
-def untokenize(tokens: List[str], lang: str = 'fr') -> str:
-    '''
+def untokenize(tokens: List[str], lang: str = "fr") -> str:
+    """
     Inputs a list of tokens output string.
     ["J'", 'ai'] >>> "J' ai"
 
@@ -114,28 +153,29 @@ def untokenize(tokens: List[str], lang: str = 'fr') -> str:
     -------
     string
         text
-    '''
+    """
     d = MosesDetokenizer(lang=lang)
-    text = d.detokenize(tokens, unescape=False)
+    text: str = d.detokenize(tokens, unescape=False)
     return text
 
 
-def convert_tokens_to_string(tokens_or_str: Union[str, List[str]]) -> str:
+def convert_tokens_to_string(tokens_or_str: Optional[Union[str, List[str]]]) -> str:
     if isinstance(tokens_or_str, str):
         return tokens_or_str
     if isinstance(tokens_or_str, list):
         return untokenize(tokens_or_str)
     if tokens_or_str is None:
-        return ''
-    raise TypeError('Please input string or tokens')
+        return ""
+    raise TypeError("Please input string or tokens")
 
 
 def convert_string_to_tokens(
-        tokens_or_str: Union[str, List[str]], lang_module: str = 'en_spacy') -> List[str]:
+    tokens_or_str: Optional[Union[str, List[str]]], lang_module: str = "en_spacy"
+) -> List[str]:
     if isinstance(tokens_or_str, str):
         return tokenize(tokens_or_str, lang_module=lang_module)
     if isinstance(tokens_or_str, list):
         return tokens_or_str
     if tokens_or_str is None:
         return []
-    raise TypeError('Please input string or tokens')
+    raise TypeError("Please input string or tokens")

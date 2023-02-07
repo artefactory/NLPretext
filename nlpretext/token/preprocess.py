@@ -1,4 +1,3 @@
-# coding=utf-8
 # Copyright (C) 2020 Artefact
 # licence-information@artefact.com
 #
@@ -14,13 +13,17 @@
 # See the License for the specific language governing permissions and
 # limitations under the License
 
-from __future__ import absolute_import, division, print_function, unicode_literals
+
+from typing import List, Optional
 
 import re
+
 from nlpretext._utils.stopwords import get_stopwords
 
 
-def remove_stopwords(tokens: list, lang: str, custom_stopwords: list = None)  -> str:
+def remove_stopwords(
+    tokens: List[str], lang: str, custom_stopwords: Optional[List[str]] = None
+) -> List[str]:
     """
     Remove stopwords from a text.
     eg. 'I like when you move your body !' -> 'I move body !'
@@ -51,7 +54,7 @@ def remove_stopwords(tokens: list, lang: str, custom_stopwords: list = None)  ->
     return tokens
 
 
-def remove_tokens_with_nonletters(tokens) -> list:
+def remove_tokens_with_nonletters(tokens: List[str]) -> List[str]:
     """
     Inputs a list of tokens, outputs a list of tokens without tokens that
     includes numbers of special caracters.
@@ -71,7 +74,7 @@ def remove_tokens_with_nonletters(tokens) -> list:
     return tokens
 
 
-def remove_special_caracters_from_tokenslist(tokens) -> list:
+def remove_special_caracters_from_tokenslist(tokens: List[str]) -> List[str]:
     """
     Remove tokens that doesn't contains any number or letter.
     eg. ['foo','bar','---',"'s",'#'] -> ['foo','bar',"'s"]
@@ -91,7 +94,7 @@ def remove_special_caracters_from_tokenslist(tokens) -> list:
     return tokens
 
 
-def remove_smallwords(tokens, smallwords_threshold: int) -> list:
+def remove_smallwords(tokens: List[str], smallwords_threshold: int) -> List[str]:
     """
     Function that removes words which length is below a threshold
     ["hello", "my", "name", "is", "John", "Doe"] --> ["hello","name","John","Doe"]

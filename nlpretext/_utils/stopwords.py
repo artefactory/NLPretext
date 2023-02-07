@@ -1,4 +1,3 @@
-# coding=utf-8
 # Copyright (C) 2020 Artefact
 # licence-information@artefact.com
 #
@@ -14,16 +13,15 @@
 # See the License for the specific language governing permissions and
 # limitations under the License
 
-from __future__ import (absolute_import, division, print_function,
-                        unicode_literals)
 
+from typing import List
+
+from nlpretext._config.stopwords import STOPWORDS
 from stop_words import LANGUAGE_MAPPING as _LANGUAGE_MAPPING
 from stop_words import get_stop_words as _get_stop_words
-from nlpretext._config.stopwords import STOPWORDS
 
 
-
-def get_stopwords(lang: str = "en") -> list:
+def get_stopwords(lang: str = "en") -> List[str]:
     """
     Inputs a language code, returns a list of stopwords for the specified language
 
@@ -68,7 +66,5 @@ def get_stopwords(lang: str = "en") -> list:
                 )
             )
     else:
-        raise ValueError(
-            'Please input a valid country code, in 2 letters. Eg. "us" for USA. '
-        )
+        raise ValueError('Please input a valid country code, in 2 letters. Eg. "us" for USA. ')
     return list(set(stopwords))

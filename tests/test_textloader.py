@@ -15,6 +15,7 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with this program; if not, write to the Free Software Foundation,
 # Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+# mypy: disable-error-code="attr-defined"
 
 from unittest.mock import MagicMock, patch
 
@@ -28,12 +29,11 @@ try:
     import pandas as pd
 except ImportError:
     raise ImportError("please install pandas: pip install pandas")
-from pandas.testing import assert_frame_equal
-import pytest
 
+import pytest
 from nlpretext.preprocessor import Preprocessor
 from nlpretext.textloader import TextLoader
-
+from pandas.testing import assert_frame_equal
 
 # pylint: disable=protected-access
 
@@ -45,9 +45,7 @@ def test__read_text_txt_dask(mock_read_text):
     file_format = "txt"
     encoding = "utf-8"
     text_column = "text"
-    mock_read_text.return_value = db.from_sequence(
-        ["This is a text \n", "This is another text \n"]
-    )
+    mock_read_text.return_value = db.from_sequence(["This is a text \n", "This is another text \n"])
 
     expected_result = dd.from_pandas(
         pd.DataFrame({text_column: ["This is a text", "This is another text"]}),
@@ -55,16 +53,12 @@ def test__read_text_txt_dask(mock_read_text):
     )
 
     # When
-    dummy_instance = TextLoader(
-        file_format=file_format, encoding=encoding, text_column=text_column
-    )
+    dummy_instance = TextLoader(file_format=file_format, encoding=encoding, text_column=text_column)
     actual_result = dummy_instance._read_text_txt(files_path)
 
     # Then
     mock_read_text.assert_called_once_with(files_path, encoding=encoding)
-    assert_frame_equal(
-        expected_result.compute(), actual_result.compute().reset_index(drop=True)
-    )
+    assert_frame_equal(expected_result.compute(), actual_result.compute().reset_index(drop=True))
 
 
 @patch("nlpretext._utils.pandasloader.read_text")
@@ -104,9 +98,7 @@ def test__read_text_json_dask(mock_read):
     expected_result = text_ddf[[text_column]]
 
     # When
-    dummy_instance = TextLoader(
-        file_format=file_format, encoding=encoding, text_column=text_column
-    )
+    dummy_instance = TextLoader(file_format=file_format, encoding=encoding, text_column=text_column)
     actual_result = dummy_instance._read_text_json(files_path)
 
     # Then
@@ -151,9 +143,7 @@ def test__read_text_csv_dask(mock_read_csv):
     expected_result = text_ddf[[text_column]]
 
     # When
-    dummy_instance = TextLoader(
-        file_format=file_format, encoding=encoding, text_column=text_column
-    )
+    dummy_instance = TextLoader(file_format=file_format, encoding=encoding, text_column=text_column)
     actual_result = dummy_instance._read_text_csv(files_path)
 
     # Then
@@ -198,9 +188,7 @@ def test__read_text_parquet_dask(mock_read_parquet):
     expected_result = text_ddf[[text_column]]
 
     # When
-    dummy_instance = TextLoader(
-        file_format=file_format, encoding=encoding, text_column=text_column
-    )
+    dummy_instance = TextLoader(file_format=file_format, encoding=encoding, text_column=text_column)
     actual_result = dummy_instance._read_text_parquet(files_path)
 
     # Then
@@ -250,26 +238,26 @@ def test__read_text_parquet_pandas(mock_read):
         ),
     ],
 )
-@patch("nlpretext.preprocessor.Preprocessor.run")
+@patch("nlpretext.preprocessor.Preprocessor.run", return_value="This is a text", autospec=True)
 @patch("nlpretext.textloader.TextLoader._read_text_json")
 @patch("nlpretext.textloader.TextLoader._read_text_txt")
 @patch("nlpretext.textloader.TextLoader._read_text_csv")
 @patch("nlpretext.textloader.TextLoader._read_text_parquet")
 @patch("nlpretext.textloader.check_text_file_format")
 def test_read_text(
-        mock_check_text_file_format,
-        mock__read_text_parquet,
-        mock__read_text_csv,
-        mock__read_text_txt,
-        mock__read_text_json,
-        mock_run,
-        files_path,
-        file_format,
-        encoding,
-        compute_to_pandas,
-        preprocessor,
-        expected_format,
-        raised,
+    mock_check_text_file_format,
+    mock__read_text_parquet,
+    mock__read_text_csv,
+    mock__read_text_txt,
+    mock__read_text_json,
+    mock_run,
+    files_path,
+    file_format,
+    encoding,
+    compute_to_pandas,
+    preprocessor,
+    expected_format,
+    raised,
 ):
 
     # Given
@@ -291,7 +279,7 @@ def test_read_text(
         pd.DataFrame({text_column: ["Text with #", "Text with  double  space"]}),
         npartitions=2,
     )
-    mock_reader_mapping.get(expected_format).return_value = expected_result
+    mock_reader_mapping.get(expected_format).return_value = expected_result  # type: ignore
 
     # When
     dummy_textloader = TextLoader(
@@ -307,7 +295,7 @@ def test_read_text(
         if file_format is None:
             mock_check_text_file_format.assert_called_once_with(files_path)
 
-        mock_reader_mapping.get(expected_format).assert_called_once_with(files_path)
+        mock_reader_mapping[expected_format].assert_called_once_with(files_path)
 
         if preprocessor is not None:
             if isinstance(preprocessor, Preprocessor):

@@ -15,37 +15,68 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with this program; if not, write to the Free Software Foundation,
 # Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
-name: CI
+name: Continuous Integration
 
-on: [push, pull_request]
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    types:
+      - opened
+      - reopened
+      - edited
+      - labeled
+      - unlabeled
+      - synchronize
 
 jobs:
-  CI:
-    name: Launching CI
+  ci:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        python-version: [3.6, 3.7, 3.8]
+        python-version: ["3.8", "3.9", "3.10"]
+    if: ${{ !contains(github.event.pull_request.labels.*.name, 'draft') }}
 
     steps:
-      - uses: actions/checkout@v2
+    - uses: actions/checkout@v2
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v2.2.2
+      with:
+        python-version: ${{ matrix.python-version }}
 
-      - name: Set up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v2
-        with:
-          python-version: ${{ matrix.python-version }}
+    - name: Install poetry
+      run: make download-poetry
 
-      - name: Install requirements
-        run: |
-          python -m pip install --upgrade pip
-          pip install -r requirements_dev.txt
-          pip install https://github.com/explosion/spacy-models/releases/download/en_core_web_sm-2.3.1/en_core_web_sm-2.3.1.tar.gz
-          pip install https://github.com/explosion/spacy-models/releases/download/fr_core_news_sm-2.3.0/fr_core_news_sm-2.3.0.tar.gz
+    - name: Set up pip cache
+      uses: actions/cache@v3.2.4
+      with:
+        path: ~/.cache/pypoetry/virtualenvs
+        key: venv-${{ matrix.python-version }}-${{ hashFiles('pyproject.toml') }}-${{ hashFiles('poetry.lock') }}
 
-      - name: Run pylint
-        run: |
-          pylint nlpretext tests
+    - name: Set up mypy cache
+      uses: actions/cache@v3.2.4
+      with:
+        path: ${{ github.workspace }}/.mypy_cache
+        key: mypy-${{ matrix.python-version }}
 
-      - name: Run pytest
-        run: |
-          pytest --cov=nlpretext tests
+    - name: Set Poetry Path
+      run: |
+        echo "$HOME/.poetry/bin" >> $GITHUB_PATH
+
+    - name: Install dependencies
+      run: |
+        poetry run pip install --upgrade pip
+        poetry install -E torch
+
+    - name: Run safety checks
+      run: |
+        STRICT=1 make check-safety
+
+    - name: Run style checks
+      run: |
+        STRICT=1 make check-style
+
+    - name: Run tests
+      run: |
+        make test

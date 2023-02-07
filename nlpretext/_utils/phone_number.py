@@ -15,12 +15,13 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with this program; if not, write to the Free Software Foundation,
 # Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
-from typing import Optional
+from typing import List, Optional
+
 import phonenumbers as _phonenumbers
-from nlpretext._config.config import SUPPORTED_COUNTRY, FORMAT_NUMBERS
+from nlpretext._config.config import FORMAT_NUMBERS, SUPPORTED_COUNTRY
 
 
-def find_phone_numbers(string: str, region_code: Optional[str] = None) -> str:
+def find_phone_numbers(string: str, region_code: Optional[str] = None) -> List[str]:
     """
     Python port of Google's libphonenumber.
     https://github.com/daviddrysdale/python-phonenumbers
@@ -47,12 +48,12 @@ def find_phone_numbers(string: str, region_code: Optional[str] = None) -> str:
         if country code is not supported.
     """
     if region_code not in SUPPORTED_COUNTRY:
-        raise ValueError('Please enter a valid contry code. See SUPPORTED_COUNTRY list.')
+        raise ValueError("Please enter a valid contry code. See SUPPORTED_COUNTRY list.")
     return [match.raw_string for match in _phonenumbers.PhoneNumberMatcher(string, region_code)]
 
 
-def extract_phone_numbers(text: str, countrylist: list) -> list:
-    '''
+def extract_phone_numbers(text: str, countrylist: List[Optional[str]]) -> List[str]:
+    """
     Find phone numbers in a text, returns a list of phone numbers.
 
     Parameters
@@ -66,8 +67,8 @@ def extract_phone_numbers(text: str, countrylist: list) -> list:
     -------
     list
         List of unique phone numbers found.
-    '''
-    all_phone_numbers = []
+    """
+    all_phone_numbers: List[str] = []
     for country in countrylist:
         new_numbers_founds = find_phone_numbers(text, region_code=country)
         all_phone_numbers.extend(new_numbers_founds)
@@ -83,14 +84,25 @@ class PhoneParser:
     def __init__(self):
         self.region_code = None
         self.text = None
-        self.parsed_num = None
+        self.parsed_num: Optional[_phonenumbers.PhoneNumber] = None
 
-    def parse_number(self, text: str, region_code: Optional[str] = None) -> str:
-        '''
+    @property
+    def parsed_num(self) -> Optional[_phonenumbers.PhoneNumber]:
+        return self.__parsed_num
+
+    @parsed_num.setter
+    def parsed_num(self, value: Optional[_phonenumbers.PhoneNumber]) -> None:
+        self.__parsed_num = value
+
+    def parse_number(
+        self, text: str, region_code: Optional[str] = None
+    ) -> Optional[_phonenumbers.PhoneNumber]:
+        """
         Extract phone number from text
 
         Parameters
         ----------
+        text: str
         region_code : str, optional
             If specified, will find the number of the specified country.
         eg. 06.00.00.00.00 if "FR" is specified.
@@ -108,15 +120,16 @@ class PhoneParser:
         ------
         NumberParseException
             If the string doesn't contains phone number of is the parser fails.
-        '''
+        """
         self.region_code = region_code
         self.text = text
-        self.parsed_num = _phonenumbers.parse(self.text, self.region_code)
+        self.parsed_num: Optional[_phonenumbers.PhoneNumber] = _phonenumbers.parse(
+            self.text, self.region_code
+        )
         return self.parsed_num
 
-
     def format_number(self, num_format: str) -> str:
-        '''
+        """
         Convert a phone number to another standard format.
 
         Parameters
@@ -127,8 +140,15 @@ class PhoneParser:
         -------
         str
             Number formatted
-        '''
+        """
         standard_format = FORMAT_NUMBERS.get(num_format)
         if standard_format is None:
             raise ValueError(f"Please choose a num_format in {list(FORMAT_NUMBERS.keys())}")
-        return _phonenumbers.format_number(self.parsed_num, standard_format)
+        if self.parsed_num is None:
+            raise ValueError(f"Could not parse phone number {self.parsed_num}")
+        formatted_number: Optional[str] = _phonenumbers.format_number(
+            self.parsed_num, standard_format
+        )
+        if formatted_number is None:
+            raise ValueError(f"Could not format phone number {formatted_number}")
+        return formatted_number

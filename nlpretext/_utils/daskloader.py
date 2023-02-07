@@ -1,5 +1,6 @@
-import dask.bag as db  # pylint: disable=import-error
-import dask.dataframe as dd  # pylint: disable=import-error
+# mypy: disable-error-code="attr-defined"
+import dask.bag as db
+import dask.dataframe as dd
 
 
 def read_text(files_path, encoding):

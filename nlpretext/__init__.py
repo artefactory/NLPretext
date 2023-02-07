@@ -15,4 +15,20 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with this program; if not, write to the Free Software Foundation,
 # Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+
+# mypy: disable-error-code="attr-defined"
+# mypy: disable-error-code="assignment"
+
+"""All the goto functions you need to handle NLP use-cases, integrated in NLPretext"""
+
+from importlib.metadata import PackageNotFoundError, version
+
 from nlpretext.preprocessor import Preprocessor
+
+try:
+    __version__ = version(__name__)
+except PackageNotFoundError:  # pragma: no cover
+    __version__ = "unknown"
+
+
+__all__ = ["Preprocessor"]

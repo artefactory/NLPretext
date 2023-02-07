@@ -12,8 +12,10 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License
-import warnings
+from types import ModuleType
+
 import sys
+import warnings
 
 try:
     from nlpretext._utils import daskloader
@@ -49,6 +51,7 @@ class TextLoader:
 
         self.use_dask = use_dask
 
+        self.loader: ModuleType
         if self.use_dask:
             if "dask" in sys.modules:
                 self.loader = daskloader
@@ -107,9 +110,7 @@ class TextLoader:
         try:
             return text_ddf[[self.text_column]]
         except KeyError:
-            raise KeyError(
-                f"Specified text_column '{self.text_column}' not in file keys"
-            )
+            raise KeyError(f"Specified text_column '{self.text_column}' not in file keys")
 
     def _read_text_csv(self, files_path):
         """
@@ -128,9 +129,7 @@ class TextLoader:
         try:
             return text_ddf[[self.text_column]]
         except KeyError:
-            raise KeyError(
-                f"Specified text_column '{self.text_column}' not in file keys"
-            )
+            raise KeyError(f"Specified text_column '{self.text_column}' not in file keys")
 
     def _read_text_parquet(self, files_path):
         """
@@ -149,17 +148,15 @@ class TextLoader:
         try:
             return text_ddf[[self.text_column]]
         except KeyError:
-            raise KeyError(
-                f"Specified text_column '{self.text_column}' not in file keys"
-            )
+            raise KeyError(f"Specified text_column '{self.text_column}' not in file keys")
 
     def read_text(
-            self,
-            files_path,
-            file_format=None,
-            encoding=None,
-            compute_to_pandas=True,
-            preprocessor=None,
+        self,
+        files_path,
+        file_format=None,
+        encoding=None,
+        compute_to_pandas=True,
+        preprocessor=None,
     ):
         """
         Read the text files stored in files_path
