@@ -501,27 +501,23 @@ def test_custom_preprocess():
     assert expected_result == result
 
 
-def test_apply_preprocessor():
+@pytest.mark.parametrize(
+    "input_str, expected_str",
+    [
+        (
+            "Some text with @mentions and whitespaces    and #hashtags",
+            "Some text with and whitespaces and",
+        ),
+        ("@twitteruser ✊", ""),
+        ("", ""),
+    ],
+)
+def test_apply_preprocessor(input_str, expected_str):
     # Given
-    text = "Some text with @mentions and whitespaces    and #hashtags"
-    operations: List[Callable[[Any], Any]] = [
-        remove_html_tags,
-        remove_mentions,
-        remove_emoji,
-        remove_hashtag,
-        remove_eol_characters,
-        fix_bad_unicode,
-        normalize_whitespace,
-    ]
-
     preprocessor = Preprocessor()
 
-    expected_result = text
-    for function in operations:
-        expected_result = function(expected_result)
-
     # When
-    result = preprocessor.run(text)
+    result = preprocessor.run(input_str)
 
     # Then
-    assert expected_result == result
+    assert expected_str == result
