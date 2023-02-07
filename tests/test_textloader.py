@@ -17,6 +17,7 @@
 # Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 # mypy: disable-error-code="attr-defined"
 
+from pathlib import Path
 from unittest.mock import MagicMock, patch
 
 try:
@@ -61,24 +62,33 @@ def test__read_text_txt_dask(mock_read_text):
     assert_frame_equal(expected_result.compute(), actual_result.compute().reset_index(drop=True))
 
 
-@patch("nlpretext._utils.pandasloader.read_text")
-def test__read_text_txt_pandas(mock_read):
+@patch("pandas.read_fwf")
+def test__read_text_txt_pandas(mock_read_text):
     # Given
     files_path = "some_path/to_read.txt"
     file_format = "txt"
     encoding = "utf-8"
     text_column = "text"
+    mock_read_text.return_value = pd.DataFrame(
+        {text_column: ["This is a text", "This is another text"]}
+    )
 
+    expected_result = pd.DataFrame({text_column: ["This is a text", "This is another text"]})
+
+    # When
     dummy_instance = TextLoader(
         file_format=file_format,
         use_dask=False,
         encoding=encoding,
         text_column=text_column,
     )
-    dummy_instance._read_text_txt(files_path)
+    actual_result = dummy_instance._read_text_txt(files_path)
 
     # Then
-    mock_read.assert_called_once_with(files_path, encoding=encoding)
+    mock_read_text.assert_called_once_with(
+        str(Path(files_path).absolute()), encoding=encoding, colspecs=[(None, None)]
+    )
+    assert_frame_equal(expected_result, actual_result.reset_index(drop=True))
 
 
 @patch("nlpretext._utils.daskloader.dd")

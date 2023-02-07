@@ -5,7 +5,7 @@ from fsspec import open_files
 def _list_handler(func):
     def wrapper_list_handler(file_path, *args, **kwargs):
         list_files = open_files(file_path)
-        list_df = [func(file, *args, **kwargs) for file in list_files]
+        list_df = [func(file.path, *args, **kwargs) for file in list_files]
         df = pd.concat(list_df)
         return df
 
