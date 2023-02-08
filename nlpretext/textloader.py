@@ -1,16 +1,39 @@
-# mypy: disable-error-code="attr-defined"
-try:
-    import dask.bag as db
-    import dask.dataframe as dd
-except ImportError:
-    raise ImportError("please install dask: pip install dask[complete]")
+# Copyright (C) 2020 Artefact
+# licence-information@artefact.com
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License
+from types import ModuleType
+from typing import Any, List, Optional, Union
 
+import sys
+import warnings
+
+import pandas as pd
+
+try:
+    from nlpretext._utils import daskloader
+except ImportError:
+    warnings.warn(
+        "Dask not found, switching to pandas. To be able to use Dask, run : pip install dask[complete]"
+    )
+
+from nlpretext._utils import pandasloader
 from nlpretext._utils.file_loader import check_text_file_format
 from nlpretext.preprocessor import Preprocessor
 
 
 class TextLoader:
-    def __init__(self, text_column="text", encoding="utf-8", file_format=None):
+    def __init__(self, text_column="text", encoding="utf-8", file_format=None, use_dask=True):
         """
         Initialize DataLoader object to retrieve text data
 
@@ -22,10 +45,27 @@ class TextLoader:
             encoding of the text to be loaded, can be utf-8 or latin-1 for example
         file_format: string | None
             format of the files to be loaded
+        use_dask: bool
+            use dask to load text
         """
         self.text_column = text_column
         self.encoding = encoding
         self.file_format = file_format
+
+        self.use_dask = use_dask
+
+        self.loader: ModuleType
+        if self.use_dask:
+            if "dask" in sys.modules:
+                self.loader = daskloader
+            else:
+                warnings.warn(
+                    "Dask is not intalled, switching to pandas. Run pip install dask to use dask"
+                )
+                self.use_dask = False
+                self.loader = pandasloader
+        else:
+            self.loader = pandasloader
 
     def __repr__(self):
         """
@@ -35,6 +75,7 @@ class TextLoader:
             "text_column": self.text_column,
             "encoding": self.encoding,
             "file_format": self.file_format,
+            "use_dask": self.use_dask,
         }
         return f"TextLoader({class_repr_dict})"
 
@@ -49,9 +90,9 @@ class TextLoader:
 
         Returns
         -------
-        dask.dataframe
+        dask.dataframe | pandas.DataFrame
         """
-        text_ddf = db.read_text(files_path, encoding=self.encoding).str.strip().to_dataframe()
+        text_ddf = self.loader.read_text(files_path, encoding=self.encoding)
         text_ddf.columns = [self.text_column]
         return text_ddf
 
@@ -66,9 +107,9 @@ class TextLoader:
 
         Returns
         -------
-        dask.dataframe
+        dask.dataframe | pandas.DataFrame
         """
-        text_ddf = dd.read_json(files_path, encoding=self.encoding)
+        text_ddf = self.loader.read_json(files_path, encoding=self.encoding)
         try:
             return text_ddf[[self.text_column]]
         except KeyError:
@@ -85,9 +126,9 @@ class TextLoader:
 
         Returns
         -------
-        dask.dataframe
+        dask.dataframe | pandas.DataFrame
         """
-        text_ddf = dd.read_csv(files_path)
+        text_ddf = self.loader.read_csv(files_path, encoding=self.encoding)
         try:
             return text_ddf[[self.text_column]]
         except KeyError:
@@ -104,17 +145,22 @@ class TextLoader:
 
         Returns
         -------
-        dask.dataframe
+        dask.dataframe | pandas.DataFrame
         """
-        text_ddf = dd.read_parquet(files_path)
+        text_ddf = self.loader.read_parquet(files_path, encoding=self.encoding)
         try:
             return text_ddf[[self.text_column]]
         except KeyError:
             raise KeyError(f"Specified text_column '{self.text_column}' not in file keys")
 
     def read_text(
-        self, files_path, file_format=None, encoding=None, compute_to_pandas=True, preprocessor=None
-    ):
+        self,
+        files_path: Union[str, List[str]],
+        file_format: Optional[str] = None,
+        encoding: Optional[str] = None,
+        compute_to_pandas: bool = True,
+        preprocessor: Optional[Preprocessor] = None,
+    ) -> Union[pd.DataFrame, Any]:
         """
         Read the text files stored in files_path
 
@@ -162,6 +208,6 @@ class TextLoader:
             else:
                 raise ValueError("Only NLPretext preprocessors can be specified")
 
-        if compute_to_pandas:
+        if compute_to_pandas and self.use_dask:
             return text.compute()
         return text

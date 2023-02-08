@@ -117,18 +117,18 @@ Take a look at all the functions that are available [here](https://github.com/ar
 ## Load text data
 
 Pre-processing text data is useful only if you have loaded data to process! Importing text data as strings in your code can be really simple if you have short texts contained in a local .txt, but it can quickly become difficult if you want to load a lot of texts, stored in multiple formats and divided in multiple files. Hopefully, you can use NLPretext's TextLoader class to easily import text data.
-Our TextLoader class makes use of Dask, so be sure to install the library if you want to use it, as mentioned above.
+while it is not mandatory our textLoader work best with dask, make sure to have the librairy installed if you want the best performances.
 
 ```python
 from nlpretext.textloader import TextLoader
 files_path = "local_folder/texts/text.txt"
-text_loader = TextLoader()
+text_loader = TextLoader(use_dask=True)
 text_dataframe = text_loader.read_text(files_path)
 print(text_dataframe.text.values.tolist())
 # ["I just got the best dinner in my life!!!",  "I recommend", "It was awesome"]
 ```
 
-As TextLoader uses dask to load data, file path can be provided as string, list of strings, with or without wildcards. It also supports imports from cloud providers, if your machine is authentified on a project.
+File path can be provided as string, list of strings, with or without wildcards. It also supports imports from cloud providers, if your machine is authentified on a project.
 
 ```python
 text_loader = TextLoader(text_column="name_of_text_column_in_your_data")
@@ -287,6 +287,7 @@ This project is licensed under the terms of the `Apache Software License 2.0` li
     │   ├── cli             <- Command lines that can be used
     │   ├── social          <- Social text preprocessing
     │   ├── token           <- Token text preprocessing
+    │   ├── textloader      <- File loading
     │   ├── _config         <- Where the configuration and constants live
     │   └── _utils          <- Where preprocessing utils scripts lives
     ├── tests               <- Where the tests lives
