@@ -6,7 +6,7 @@ build-backend = "poetry.core.masonry.api"
 
 [tool.poetry]
 name = "nlpretext"
-version = "1.2.0"
+version = "1.2.1"
 description = "All the goto functions you need to handle NLP use-cases, integrated in NLPretext"
 readme = "README.md"
 authors = [
