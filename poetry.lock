@@ -1245,14 +1245,14 @@ wcwidth = ">=0.2.5"
 
 [[package]]
 name = "gdown"
-version = "4.6.0"
+version = "4.6.4"
 description = "Google Drive direct download of big files."
 category = "main"
 optional = false
 python-versions = "*"
 files = [
-    {file = "gdown-4.6.0-py3-none-any.whl", hash = "sha256:e75c5aa8be8ea1cac642d4793f884339d887ab5e07aaa57fafa16c8a56a0cde5"},
-    {file = "gdown-4.6.0.tar.gz", hash = "sha256:5ce3db0aeda54f46caacb2df86f31c3e3ecd17c355689e6456d85fb528ba9749"},
+    {file = "gdown-4.6.4-py3-none-any.whl", hash = "sha256:03eb456d43611d7f8531a68662cae0d5c65cb74c7159365f2d1fbe882b39ce6b"},
+    {file = "gdown-4.6.4.tar.gz", hash = "sha256:d33210b1b3d7b12fef05d6b9ea7f22a513739909ca511d5d9d236dc676667f79"},
 ]
 
 [package.dependencies]
