@@ -76,7 +76,7 @@ jobs:
         make download-poetry
 
     - name: Set up cache
-      uses: actions/cache@v3.2.4
+      uses: actions/cache@v3.3.1
       with:
         path: ~/.cache/pypoetry/virtualenvs
         key: venv-${{ matrix.python-version }}-${{ hashFiles('pyproject.toml') }}-${{ hashFiles('poetry.lock') }}
