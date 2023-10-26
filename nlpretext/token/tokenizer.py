@@ -27,6 +27,7 @@ import spacy
 from sacremoses import MosesDetokenizer, MosesTokenizer
 
 MODEL_REGEX = re.compile(r"^[a-z]{2}_(?:core|dep|ent|sent)_(?:web|news|wiki|ud)_(?:sm|md|lg|trf)$")
+SUPPORTED_LANG_MODULES = {"en_spacy", "en_nltk", "fr_spacy", "fr_moses", "ko_spacy", "ja_spacy"}
 
 
 class LanguageNotHandled(Exception):
@@ -120,6 +121,12 @@ def tokenize(text: str, lang_module: str = "en_spacy") -> List[str]:
     ValueError
         If lang_module is not a valid module name
     """
+    if lang_module not in SUPPORTED_LANG_MODULES:
+        raise ValueError(
+            f"Invalid lang_module: {lang_module}. "
+            f"lang_module must be one of {SUPPORTED_LANG_MODULES}."
+        )
+
     tokenized_words: List[str] = []
     if "spacy" in lang_module:
         lang = lang_module.split("_")[0]
@@ -131,12 +138,8 @@ def tokenize(text: str, lang_module: str = "en_spacy") -> List[str]:
         tokenized_words = nltk.word_tokenize(text)
     if lang_module == "fr_moses":
         tokenized_words = MosesTokenizer(lang="fr").tokenize(text, escape=False)
-    if tokenized_words:
-        return tokenized_words
-    raise ValueError(
-        "Please pass a lang_module in list of values "
-        "{'en_spacy', 'en_nltk', 'fr_spacy', 'fr_moses', 'ko_spacy', 'ja_spacy'}"
-    )
+
+    return tokenized_words
 
 
 def untokenize(tokens: List[str], lang: str = "fr") -> str:
