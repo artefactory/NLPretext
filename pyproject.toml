@@ -6,7 +6,7 @@ build-backend = "poetry.core.masonry.api"
 
 [tool.poetry]
 name = "nlpretext"
-version = "1.2.1"
+version = "1.2.2"
 description = "All the goto functions you need to handle NLP use-cases, integrated in NLPretext"
 readme = "README.md"
 authors = [
@@ -32,7 +32,7 @@ classifiers = [  # Update me
 "nlpretext" = "nlpretext.cli.__main__:app"
 
 [tool.poetry.dependencies]
-python = ">=3.8,<4.0"
+python = ">=3.8,<3.11"
 importlib_metadata = {version = ">=1.6.0", python = "<3.8"}
 typer = {extras = ["all"], version = ">=0.3.2"}
 rich = ">=10.1.0"
@@ -52,7 +52,7 @@ spacy = ">=3.0.5"
 pillow = ">=8.2.1"
 thinc = ">=8.0.4"
 stop-words = ">=2018.7.23"
-pandas = ">=1.3.0"
+pandas = "^1.3"
 pyarrow = ">=4.0.0"
 fastparquet = ">=0.4.1"
 dask = {version = ">=2021.5.0", extras = ["complete"]}

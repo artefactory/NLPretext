@@ -83,7 +83,7 @@ endif
 
 .PHONY: download-poetry
 download-poetry:
-	curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/install-poetry.py | python
+	curl -sSL https://install.python-poetry.org | python3 -
 
 .PHONY: install
 install:
