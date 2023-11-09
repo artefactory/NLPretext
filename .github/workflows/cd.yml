@@ -47,7 +47,7 @@ jobs:
       id: scan
       with:
         image: "ghcr.io/artefactory/nlpretext:${{ steps.tag.outputs.tag_name }}"
-        acs-report-enable: true
+        output-format: table
 
     - name: upload Anchore scan SARIF report
       uses: github/codeql-action/upload-sarif@v1
