@@ -270,30 +270,33 @@ This project is licensed under the terms of the `Apache Software License 2.0` li
 # Project Organization
 ------------
 
+    .
+    ├── .github/workflows           <- Where the CI and CD lives
+    ├── datasets/external           <- Bash scripts to download external datasets
+    ├── docker                      <- All you need to build a Docker image from that package
+    ├── docs                        <- Sphinx HTML documentation
+    ├── nlpretext                   <- Main Package. This is where the code lives
+    │   ├── preprocessor.py         <- Main preprocessing script
+    │   ├── text_loader.py          <- Main loading script
+    │   ├── augmentation            <- Text augmentation script
+    │   ├── basic                   <- Basic text preprocessing
+    │   ├── cli                     <- Command lines that can be used
+    │   ├── social                  <- Social text preprocessing
+    │   ├── token                   <- Token text preprocessing
+    │   ├── textloader              <- File loading
+    │   ├── _config                 <- Where the configuration and constants live
+    │   └── _utils                  <- Where preprocessing utils scripts lives
+    ├── references                  <- assets
+    ├── tests                       <- Where the tests lives
+    ├── .gitignore
+    ├── .pre-commit-config.yaml     <- Pre-commit configuration
+    ├── CODE_OF_CONDUCT.md          <- Code of conduct guidelines
+    ├── CONTRIBUTING.md             <- Contribution guidelines
     ├── LICENSE
-    ├── CONTRIBUTING.md     <- Contribution guidelines
-    ├── CODE_OF_CONDUCT.md  <- Code of conduct guidelines
     ├── Makefile
-    ├── README.md           <- The top-level README for developers using this project.
-    ├── .github/workflows   <- Where the CI and CD lives
-    ├── datasets/external   <- Bash scripts to download external datasets
-    ├── docker              <- All you need to build a Docker image from that package
-    ├── docs                <- Sphinx HTML documentation
-    ├── nlpretext           <- Main Package. This is where the code lives
-    │   ├── preprocessor.py <- Main preprocessing script
-    │   ├── text_loader.py  <- Main loading script
-    │   ├── augmentation    <- Text augmentation script
-    │   ├── basic           <- Basic text preprocessing
-    │   ├── cli             <- Command lines that can be used
-    │   ├── social          <- Social text preprocessing
-    │   ├── token           <- Token text preprocessing
-    │   ├── textloader      <- File loading
-    │   ├── _config         <- Where the configuration and constants live
-    │   └── _utils          <- Where preprocessing utils scripts lives
-    ├── tests               <- Where the tests lives
-    ├── pyproject.toml      <- Package configuration
-    ├── poetry.lock
-    └── setup.cfg           <- Configuration for plugins and other utils
+    ├── pyproject.toml              <- Package build configuration
+    ├── README.md                   <- The top-level README for developers using this project.
+    └── SECURITY.md
 
 # Credits
 

@@ -7,7 +7,7 @@
 
 Vulnerabilities can be reported by emailing core members:
 
-- artefactory [rafaelle.aygalenq@artefact.com](mailto:rafaelle.aygalenq@artefact.com)
+- artefactory [jules.bertrand@artefact.com](mailto:jules.bertrand@artefact.com)
 
 Please include the requested information listed below (as much as you can provide) to help us better understand the nature and scope of the possible issue:
 
