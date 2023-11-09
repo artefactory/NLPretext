@@ -23,13 +23,13 @@ from unittest.mock import MagicMock, patch
 try:
     import dask.bag as db
     import dask.dataframe as dd
-except ImportError:
-    raise ImportError("please install dask: pip install dask[complete]")
+except ImportError as e:
+    raise ImportError("please install dask: pip install dask[complete]") from e
 
 try:
     import pandas as pd
-except ImportError:
-    raise ImportError("please install pandas: pip install pandas")
+except ImportError as e:
+    raise ImportError("please install pandas: pip install pandas") from e
 
 import pytest
 from nlpretext.preprocessor import Preprocessor
@@ -269,7 +269,6 @@ def test_read_text(
     expected_format,
     raised,
 ):
-
     # Given
     text_column = "text"
     if encoding is None:

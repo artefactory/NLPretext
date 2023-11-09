@@ -1,5 +1,5 @@
 # mypy: disable-error-code="attr-defined"
-from typing import Any, List, Union
+from typing import List, Union
 
 import dask.bag as db
 import dask.dataframe as dd

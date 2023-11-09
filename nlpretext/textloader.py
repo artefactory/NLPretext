@@ -24,7 +24,8 @@ try:
     from nlpretext._utils import daskloader
 except ImportError:
     warnings.warn(
-        "Dask not found, switching to pandas. To be able to use Dask, run : pip install dask[complete]"
+        "Dask not found, switching to pandas. To be able to use Dask, run : pip install dask[complete]",  # noqa: E501
+        stacklevel=2,
     )
 
 from nlpretext._utils import pandasloader
@@ -35,7 +36,7 @@ from nlpretext.preprocessor import Preprocessor
 class TextLoader:
     def __init__(self, text_column="text", encoding="utf-8", file_format=None, use_dask=True):
         """
-        Initialize DataLoader object to retrieve text data
+        Initialize DataLoader object to retrieve text data.
 
         Parameters
         ----------
@@ -60,7 +61,8 @@ class TextLoader:
                 self.loader = daskloader
             else:
                 warnings.warn(
-                    "Dask is not intalled, switching to pandas. Run pip install dask to use dask"
+                    "Dask is not intalled, switching to pandas. Run pip install dask to use dask",
+                    stacklevel=2,
                 )
                 self.use_dask = False
                 self.loader = pandasloader
@@ -68,9 +70,7 @@ class TextLoader:
             self.loader = pandasloader
 
     def __repr__(self):
-        """
-        Method to represent class attributes
-        """
+        """Method to represent class attributes."""
         class_repr_dict = {
             "text_column": self.text_column,
             "encoding": self.encoding,
@@ -81,7 +81,7 @@ class TextLoader:
 
     def _read_text_txt(self, files_path):
         """
-        Read txt text files stored in files_path
+        Read txt text files stored in files_path.
 
         Parameters
         ----------
@@ -98,7 +98,7 @@ class TextLoader:
 
     def _read_text_json(self, files_path):
         """
-        Read json text files stored in files_path
+        Read json text files stored in files_path.
 
         Parameters
         ----------
@@ -112,12 +112,12 @@ class TextLoader:
         text_ddf = self.loader.read_json(files_path, encoding=self.encoding)
         try:
             return text_ddf[[self.text_column]]
-        except KeyError:
-            raise KeyError(f"Specified text_column '{self.text_column}' not in file keys")
+        except KeyError as e:
+            raise KeyError(f"Specified text_column '{self.text_column}' not in file keys") from e
 
     def _read_text_csv(self, files_path):
         """
-        Read csv text files stored in files_path
+        Read csv text files stored in files_path.
 
         Parameters
         ----------
@@ -131,12 +131,12 @@ class TextLoader:
         text_ddf = self.loader.read_csv(files_path, encoding=self.encoding)
         try:
             return text_ddf[[self.text_column]]
-        except KeyError:
-            raise KeyError(f"Specified text_column '{self.text_column}' not in file keys")
+        except KeyError as e:
+            raise KeyError(f"Specified text_column '{self.text_column}' not in file keys") from e
 
     def _read_text_parquet(self, files_path):
         """
-        Read parquet text files stored in files_path
+        Read parquet text files stored in files_path.
 
         Parameters
         ----------
@@ -150,8 +150,8 @@ class TextLoader:
         text_ddf = self.loader.read_parquet(files_path, encoding=self.encoding)
         try:
             return text_ddf[[self.text_column]]
-        except KeyError:
-            raise KeyError(f"Specified text_column '{self.text_column}' not in file keys")
+        except KeyError as e:
+            raise KeyError(f"Specified text_column '{self.text_column}' not in file keys") from e
 
     def read_text(
         self,
@@ -162,7 +162,7 @@ class TextLoader:
         preprocessor: Optional[Preprocessor] = None,
     ) -> Union[pd.DataFrame, Any]:
         """
-        Read the text files stored in files_path
+        Read the text files stored in files_path.
 
         Parameters
         ----------

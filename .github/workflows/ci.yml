@@ -40,7 +40,7 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
-  
+
     - name: Set up Python ${{ matrix.python-version }}
       uses: actions/setup-python@v4
       with:
@@ -75,9 +75,9 @@ jobs:
       run: |
         STRICT=1 make check-safety
 
-    - name: Run style checks
+    - name: Lint and format
       run: |
-        STRICT=1 make check-style
+        make format-code
 
     - name: Run tests
       run: |

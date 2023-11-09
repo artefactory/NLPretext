@@ -7,11 +7,11 @@ from itertools import combinations
 import nlpaug.augmenter.word as naw
 
 
-class CouldNotAugment(ValueError):
+class CouldNotAugment(ValueError):  # noqa: D101
     pass
 
 
-class UnavailableAugmenter(ValueError):
+class UnavailableAugmenter(ValueError):  # noqa: D101
     pass
 
 
@@ -66,6 +66,7 @@ def process_entities_and_text(
     """
     Given a list of initial entities, verify that they have not been altered by
     the data augmentation operation and are still in the augmented text.
+
     Parameters
     ----------
     entities: list
@@ -85,6 +86,7 @@ def process_entities_and_text(
         initial text
     augmented_text: str
         new text resulting of data augmentation operation
+
     Returns
     -------
     Augmented text and entities with their updated position in augmented text
@@ -167,7 +169,7 @@ def get_augmented_entities(
     sentence_augmented: str, entities: List[Tuple[str, Any]]
 ) -> List[Dict[str, Any]]:
     """
-    Get entities with updated positions (start and end) in augmented text
+    Get entities with updated positions (start and end) in augmented text.
 
     Parameters
     ----------
@@ -209,7 +211,7 @@ def get_augmented_entities(
 
 def clean_sentence_entities(text: str, entities: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
     """
-    Paired entities check to remove nested entities, the longest entity is kept
+    Paired entities check to remove nested entities, the longest entity is kept.
 
     Parameters
     ----------
@@ -253,7 +255,7 @@ def check_interval_included(
     element1: Dict[str, Any], element2: Dict[str, Any]
 ) -> Optional[Tuple[Dict[str, Any], Dict[str, Any]]]:
     """
-    Comparison of two entities on start and end positions to find if they are nested
+    Comparison of two entities on start and end positions to find if they are nested.
 
     Parameters
     ----------
@@ -269,7 +271,8 @@ def check_interval_included(
 
     Returns
     -------
-    If there is an entity to remove among the two returns a tuple (element to remove, element to keep)
+    If there is an entity to remove among the two returns a tuple
+    (element to remove, element to keep).
     If not, returns None
     """
     if (

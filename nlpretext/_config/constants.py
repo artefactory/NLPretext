@@ -16,7 +16,7 @@
 
 """
 Collection of regular expressions and other (small, generally useful) constants.
-Credits to textacy for some of them: https://github.com/chartbeat-labs/textacy
+Credits to textacy for some of them: https://github.com/chartbeat-labs/textacy.
 """
 import re
 import sys
@@ -136,7 +136,7 @@ EMAIL_REGEX = re.compile(
     flags=re.IGNORECASE | re.UNICODE,
 )
 PHONE_REGEX = re.compile(
-    r"(?:^|(?<=[^\w)]))(\+?1[ .-]?)?(\(?\d{3}\)?[ .-]?)?(\d{3}[ .-]?\d{4})(\s?(?:ext\.?|[#x-])\s?\d{2,6})?(?:$|(?=\W))"
+    r"(?:^|(?<=[^\w)]))(\+?1[ .-]?)?(\(?\d{3}\)?[ .-]?)?(\d{3}[ .-]?\d{4})(\s?(?:ext\.?|[#x-])\s?\d{2,6})?(?:$|(?=\W))"  # noqa: E501
 )
 NUMBERS_REGEX = re.compile(
     r"(?:^|(?<=[^\w,.]))[+–-]?(([1-9]\d{0,2}(,\d{3})+(\.\d*)?)|([1-9]\d{0,2}([ .]\d{3})+(,\d*)?)|"

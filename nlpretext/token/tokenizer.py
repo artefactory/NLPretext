@@ -59,7 +59,7 @@ class SpacyModel:
         if not SpacyModel.model:
             SpacyModel.model = SpacyModel.SingletonSpacyModel(lang).model
 
-    def get_lang_model(self) -> Optional[str]:
+    def get_lang_model(self) -> Optional[str]:  # noqa: D102
         if self.model:
             lang: str = self.model.lang
             return lang
@@ -69,7 +69,7 @@ class SpacyModel:
 def _load_spacy_model(model: str) -> Any:
     try:
         return spacy.load(model)
-    except OSError:
+    except OSError as e:
         if MODEL_REGEX.match(model):
             os.system(f"python -m spacy download {model}")  # nosec
             return spacy.load(model)
@@ -77,12 +77,12 @@ def _load_spacy_model(model: str) -> Any:
             raise LanguageNotInstalledError(
                 f"Model {model} is not installed. "
                 f"To install, run: python -m spacy download {model}"
-            )
+            ) from e
 
 
 def _get_spacy_tokenizer(lang: str) -> Optional[spacy.tokenizer.Tokenizer]:
     """
-    Function that gets the right tokenizer given the language
+    Function that gets the right tokenizer given the language.
 
     Parameters
     ----------
@@ -145,7 +145,7 @@ def tokenize(text: str, lang_module: str = "en_spacy") -> List[str]:
 def untokenize(tokens: List[str], lang: str = "fr") -> str:
     """
     Inputs a list of tokens output string.
-    ["J'", 'ai'] >>> "J' ai"
+    ["J'", 'ai'] >>> "J' ai".
 
     Parameters
     ----------
@@ -162,7 +162,7 @@ def untokenize(tokens: List[str], lang: str = "fr") -> str:
     return text
 
 
-def convert_tokens_to_string(tokens_or_str: Optional[Union[str, List[str]]]) -> str:
+def convert_tokens_to_string(tokens_or_str: Optional[Union[str, List[str]]]) -> str:  # noqa: D103
     if isinstance(tokens_or_str, str):
         return tokens_or_str
     if isinstance(tokens_or_str, list):
@@ -172,7 +172,7 @@ def convert_tokens_to_string(tokens_or_str: Optional[Union[str, List[str]]]) -> 
     raise TypeError("Please input string or tokens")
 
 
-def convert_string_to_tokens(
+def convert_string_to_tokens(  # noqa: D103
     tokens_or_str: Optional[Union[str, List[str]]], lang_module: str = "en_spacy"
 ) -> List[str]:
     if isinstance(tokens_or_str, str):

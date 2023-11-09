@@ -87,7 +87,7 @@ download-poetry:
 
 .PHONY: install
 install:
-	poetry env use python3.8
+	poetry env use python3.10
 	poetry lock -n
 	poetry install -n
 ifneq ($(NO_PRE_COMMIT), 1)
@@ -96,7 +96,7 @@ endif
 
 .PHONY: check-safety
 check-safety:
-	poetry check$(POETRY_COMMAND_FLAG) && \
+	@poetry check$(POETRY_COMMAND_FLAG) && \
 	poetry run pip check$(PIP_COMMAND_FLAG) && \
 	poetry run safety check --full-report$(SAFETY_COMMAND_FLAG) && \
 	poetry run bandit -r nlpretext/$(BANDIT_COMMAND_FLAG)
@@ -106,23 +106,16 @@ gitleaks:
 	commits="$$(git rev-list --ancestry-path $$(git rev-parse $$(git branch -r --sort=committerdate | tail -1))..$$(git rev-parse HEAD))"; \
 	if [ "$${commits}" != "" ]; then docker run --rm -v $$(pwd):/code/ zricethezav/gitleaks --path=/code/ -v --commits=$$(echo $${commits} | paste -s -d, -)$(SECRETS_COMMAND_FLAG); fi;
 
-.PHONY: check-style
-check-style:
-	poetry run black --config pyproject.toml --diff --check ./$(BLACK_COMMAND_FLAG) && \
-	poetry run darglint -v 2 **/*.py$(DARGLINT_COMMAND_FLAG) && \
-	poetry run isort --settings-path pyproject.toml --check-only **/*.py$(ISORT_COMMAND_FLAG) && \
-	poetry run mypy --config-file setup.cfg nlpretext tests/**.py$(MYPY_COMMAND_FLAG)
-
 .PHONY: format-code
 format-code:
-	poetry run pre-commit run
+	@poetry run pre-commit run --all
 
 .PHONY: test
 test:
-	poetry run pytest
+	@poetry run pytest
 
 .PHONY: lint
-lint: test check-safety check-style
+lint: check-safety format-code test
 
 # Example: make docker VERSION=latest
 # Example: make docker IMAGE=some_name VERSION=1.0.4

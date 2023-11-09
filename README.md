@@ -25,14 +25,14 @@ All the goto functions you need to handle NLP use-cases, integrated in NLPretext
 # TL;DR
 
 
-> *Working on an NLP project and tired of always looking for the same silly preprocessing functions on the web?*  :tired_face: 
+> *Working on an NLP project and tired of always looking for the same silly preprocessing functions on the web?*  :tired_face:
 
 > *Need to efficiently extract email adresses from a document? Hashtags from tweets? Remove accents from a French post?* :disappointed_relieved:
 
 
 **NLPretext got you covered!** :rocket:
 
-NLPretext packages in a **unique** library all the text **preprocessing** functions you need to **ease** your NLP project. 
+NLPretext packages in a **unique** library all the text **preprocessing** functions you need to **ease** your NLP project.
 
 
 :mag: Quickly explore below our preprocessing pipelines and individual functions referential.
@@ -215,7 +215,7 @@ print(example)
 
 ## Data augmentation <a name="data_augmentation"></a>
 
-The augmentation module helps you to **generate new texts** based on your given examples by modifying some words in the initial ones and to **keep associated entities unchanged**, if any, in the case of **NER tasks**. If you want words other than entities to remain unchanged, you can specify it within the `stopwords` argument. Modifications depend on the chosen method, the ones currently supported by the module are **substitutions with synonyms** using Wordnet or BERT from the [`nlpaug`](https://github.com/makcedward/nlpaug) library. 
+The augmentation module helps you to **generate new texts** based on your given examples by modifying some words in the initial ones and to **keep associated entities unchanged**, if any, in the case of **NER tasks**. If you want words other than entities to remain unchanged, you can specify it within the `stopwords` argument. Modifications depend on the chosen method, the ones currently supported by the module are **substitutions with synonyms** using Wordnet or BERT from the [`nlpaug`](https://github.com/makcedward/nlpaug) library.
 
 ```python
 from nlpretext.augmentation.text_augmentation import augment_text
@@ -292,7 +292,7 @@ This project is licensed under the terms of the `Apache Software License 2.0` li
     │   └── _utils          <- Where preprocessing utils scripts lives
     ├── tests               <- Where the tests lives
     ├── pyproject.toml      <- Package configuration
-    ├── poetry.lock         
+    ├── poetry.lock
     └── setup.cfg           <- Configuration for plugins and other utils
 
 # Credits

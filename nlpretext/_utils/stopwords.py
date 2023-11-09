@@ -22,8 +22,7 @@ from stop_words import get_stop_words as _get_stop_words
 
 
 def get_stopwords(lang: str = "en") -> List[str]:
-    """
-    Inputs a language code, returns a list of stopwords for the specified language
+    """Input a language code, returns a list of stopwords for the specified language.
 
     Parameters
     ----------
@@ -61,9 +60,8 @@ def get_stopwords(lang: str = "en") -> List[str]:
                 stopwords += custom_stopwords[lang]
         else:
             raise ValueError(
-                "Language not available yet or incorrect country code. Supported languages: {}".format(
-                    supported_lang
-                )
+                "Language not available yet or incorrect country code."
+                f" Supported languages: {supported_lang}"
             )
     else:
         raise ValueError('Please input a valid country code, in 2 letters. Eg. "us" for USA. ')

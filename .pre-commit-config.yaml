@@ -4,13 +4,14 @@ default_language_version:
 
 repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v2.5.0
+    rev: v4.5.0
     hooks:
-      - id: check-yaml
-        stages: [commit, push]
-      - id: end-of-file-fixer
-        stages: [commit, push]
-        exclude: ".ipynb"
+    - id: trailing-whitespace
+    - id: end-of-file-fixer
+    - id: check-yaml
+    - id: check-toml
+    - id: check-json
+    - id: check-added-large-files
 
   - repo: local
     hooks:
@@ -22,7 +23,7 @@ repos:
         stages: [commit, push]
       - id: pyupgrade
         name: pyupgrade
-        entry: poetry run pyupgrade --py37-plus
+        entry: poetry run pyupgrade --py38-plus
         types: [python]
         language: system
         stages: [commit, push]
@@ -32,16 +33,16 @@ repos:
         types: [python]
         language: system
         stages: [commit, push]
+      - id: ruff
+        name: ruf
+        entry: poetry run ruff check --config pyproject.toml
+        types: [python]
+        language: system
+        stages: [commit, push]
       - id: mypy
         name: mypy
         entry: poetry run mypy
         require_serial: true
-        types: [python]
-        language: system
-        stages: [push]
-      - id: darglint
-        name: darglint
-        entry: poetry run darglint -v 2
         types: [python]
         language: system
         stages: [push]
