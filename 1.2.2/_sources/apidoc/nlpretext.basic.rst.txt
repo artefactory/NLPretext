@@ -1,0 +1,18 @@
+
+**basic**
+=========
+
+.. automodule:: nlpretext.basic
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+
+
+preprocess
+----------
+
+.. automodule:: nlpretext.basic.preprocess
+   :members:
+   :undoc-members:
+   :show-inheritance:

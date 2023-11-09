@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>nlpretext.augmentation.text_augmentation &mdash; nlpretext  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=19f00094" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js?v=b3ba4146"></script>
+        <script src="../../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../../_static/sphinx_highlight.js?v=4825356b"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            nlpretext
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Tutorials:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../tutorials/index.html">Tutorials</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API Reference:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../apidoc/modules.html">nlpretext</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">nlpretext</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">nlpretext.augmentation.text_augmentation</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for nlpretext.augmentation.text_augmentation</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Tuple</span>
+
+<span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">import</span> <span class="nn">re</span>
+<span class="kn">from</span> <span class="nn">itertools</span> <span class="kn">import</span> <span class="n">combinations</span>
+
+<span class="kn">import</span> <span class="nn">nlpaug.augmenter.word</span> <span class="k">as</span> <span class="nn">naw</span>
+
+
+<div class="viewcode-block" id="CouldNotAugment"><a class="viewcode-back" href="../../../apidoc/nlpretext.augmentation.html#nlpretext.augmentation.text_augmentation.CouldNotAugment">[docs]</a><span class="k">class</span> <span class="nc">CouldNotAugment</span><span class="p">(</span><span class="ne">ValueError</span><span class="p">):</span>  <span class="c1"># noqa: D101</span>
+    <span class="k">pass</span></div>
+
+
+<div class="viewcode-block" id="UnavailableAugmenter"><a class="viewcode-back" href="../../../apidoc/nlpretext.augmentation.html#nlpretext.augmentation.text_augmentation.UnavailableAugmenter">[docs]</a><span class="k">class</span> <span class="nc">UnavailableAugmenter</span><span class="p">(</span><span class="ne">ValueError</span><span class="p">):</span>  <span class="c1"># noqa: D101</span>
+    <span class="k">pass</span></div>
+
+
+<div class="viewcode-block" id="augment_text"><a class="viewcode-back" href="../../../apidoc/nlpretext.augmentation.html#nlpretext.augmentation.text_augmentation.augment_text">[docs]</a><span class="k">def</span> <span class="nf">augment_text</span><span class="p">(</span>
+    <span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">method</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">stopwords</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">entities</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Given a text with or without associated entities, generate a new text by</span>
+<span class="sd">    modifying some words in the initial one, modifications depend on the chosen</span>
+<span class="sd">    method (substitution with synonym, addition, deletion). If entities are</span>
+<span class="sd">    given as input, they will remain unchanged. If you want some words other</span>
+<span class="sd">    than entities to remain unchanged, specify it within the stopwords argument.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    text : string</span>
+<span class="sd">    method : {&#39;wordnet_synonym&#39;, &#39;aug_sub_bert&#39;}</span>
+<span class="sd">        augmenter to use (&#39;wordnet_synonym&#39; or &#39;aug_sub_bert&#39;)</span>
+<span class="sd">    stopwords : list, optional</span>
+<span class="sd">        list of words to freeze throughout the augmentation</span>
+<span class="sd">    entities : list, optional</span>
+<span class="sd">        entities associated to text if any, must be in the following format:</span>
+<span class="sd">        [</span>
+<span class="sd">            {</span>
+<span class="sd">                &#39;entity&#39;: str,</span>
+<span class="sd">                &#39;word&#39;: str,</span>
+<span class="sd">                &#39;startCharIndex&#39;: int,</span>
+<span class="sd">                &#39;endCharIndex&#39;: int</span>
+<span class="sd">            },</span>
+<span class="sd">            {</span>
+<span class="sd">                ...</span>
+<span class="sd">            }</span>
+<span class="sd">        ]</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    Augmented text and optional augmented entities</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">augmenter</span> <span class="o">=</span> <span class="n">get_augmenter</span><span class="p">(</span><span class="n">method</span><span class="p">,</span> <span class="n">stopwords</span><span class="p">)</span>
+    <span class="n">augmented_text</span> <span class="o">=</span> <span class="n">augmenter</span><span class="o">.</span><span class="n">augment</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">entities</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">process_entities_and_text</span><span class="p">(</span><span class="n">entities</span><span class="p">,</span> <span class="n">text</span><span class="p">,</span> <span class="n">augmented_text</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">augmented_text</span><span class="p">,</span> <span class="p">[]</span></div>
+
+
+<div class="viewcode-block" id="process_entities_and_text"><a class="viewcode-back" href="../../../apidoc/nlpretext.augmentation.html#nlpretext.augmentation.text_augmentation.process_entities_and_text">[docs]</a><span class="k">def</span> <span class="nf">process_entities_and_text</span><span class="p">(</span>
+    <span class="n">entities</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]],</span> <span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">augmented_text</span><span class="p">:</span> <span class="nb">str</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Given a list of initial entities, verify that they have not been altered by</span>
+<span class="sd">    the data augmentation operation and are still in the augmented text.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    entities: list</span>
+<span class="sd">        entities associated to text, must be in the following format:</span>
+<span class="sd">        [</span>
+<span class="sd">            {</span>
+<span class="sd">                &#39;entity&#39;: str,</span>
+<span class="sd">                &#39;word&#39;: str,</span>
+<span class="sd">                &#39;startCharIndex&#39;: int,</span>
+<span class="sd">                &#39;endCharIndex&#39;: int</span>
+<span class="sd">            },</span>
+<span class="sd">            {</span>
+<span class="sd">                ...</span>
+<span class="sd">            }</span>
+<span class="sd">        ]</span>
+<span class="sd">    text: str</span>
+<span class="sd">        initial text</span>
+<span class="sd">    augmented_text: str</span>
+<span class="sd">        new text resulting of data augmentation operation</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    Augmented text and entities with their updated position in augmented text</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">formatted_entities</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="p">(</span>
+            <span class="n">text</span><span class="p">[</span><span class="n">entities</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="s2">&quot;startCharIndex&quot;</span><span class="p">]</span> <span class="p">:</span> <span class="n">entities</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="s2">&quot;endCharIndex&quot;</span><span class="p">]]</span><span class="o">.</span><span class="n">strip</span><span class="p">(),</span>
+            <span class="n">entities</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="s2">&quot;entity&quot;</span><span class="p">],</span>
+        <span class="p">)</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">entities</span><span class="p">))</span>
+    <span class="p">]</span>
+    <span class="k">if</span> <span class="n">are_entities_in_augmented_text</span><span class="p">(</span><span class="n">entities</span><span class="p">,</span> <span class="n">augmented_text</span><span class="p">):</span>
+        <span class="n">augmented_entities</span> <span class="o">=</span> <span class="n">get_augmented_entities</span><span class="p">(</span><span class="n">augmented_text</span><span class="p">,</span> <span class="n">formatted_entities</span><span class="p">)</span>
+        <span class="n">clean_entities</span> <span class="o">=</span> <span class="n">clean_sentence_entities</span><span class="p">(</span><span class="n">augmented_text</span><span class="p">,</span> <span class="n">augmented_entities</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">augmented_text</span><span class="p">,</span> <span class="n">clean_entities</span>
+    <span class="k">raise</span> <span class="n">CouldNotAugment</span><span class="p">(</span><span class="s2">&quot;Text was not correctly augmented because entities were altered&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="are_entities_in_augmented_text"><a class="viewcode-back" href="../../../apidoc/nlpretext.augmentation.html#nlpretext.augmentation.text_augmentation.are_entities_in_augmented_text">[docs]</a><span class="k">def</span> <span class="nf">are_entities_in_augmented_text</span><span class="p">(</span><span class="n">entities</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]],</span> <span class="n">augmented_text</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Given a list of entities, check if all the words associated to each entity</span>
+<span class="sd">    are still present in augmented text.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    entities : list</span>
+<span class="sd">        entities associated to initial text, must be in the following format:</span>
+<span class="sd">        [</span>
+<span class="sd">            {</span>
+<span class="sd">                &#39;entity&#39;: str,</span>
+<span class="sd">                &#39;word&#39;: str,</span>
+<span class="sd">                &#39;startCharIndex&#39;: int,</span>
+<span class="sd">                &#39;endCharIndex&#39;: int</span>
+<span class="sd">            },</span>
+<span class="sd">            {</span>
+<span class="sd">                ...</span>
+<span class="sd">            }</span>
+<span class="sd">        ]</span>
+<span class="sd">    augmented_text : str</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    True if all entities are present in augmented text, False otherwise</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">check</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="k">for</span> <span class="n">ent</span> <span class="ow">in</span> <span class="n">entities</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">ent</span><span class="p">[</span><span class="s2">&quot;word&quot;</span><span class="p">]</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">augmented_text</span><span class="p">:</span>
+            <span class="n">check</span> <span class="o">=</span> <span class="kc">False</span>
+            <span class="k">return</span> <span class="n">check</span>
+    <span class="k">return</span> <span class="n">check</span></div>
+
+
+<div class="viewcode-block" id="get_augmenter"><a class="viewcode-back" href="../../../apidoc/nlpretext.augmentation.html#nlpretext.augmentation.text_augmentation.get_augmenter">[docs]</a><span class="k">def</span> <span class="nf">get_augmenter</span><span class="p">(</span><span class="n">method</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">stopwords</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">naw</span><span class="o">.</span><span class="n">SynonymAug</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Initialize an augmenter depending on the given method.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    method : str (supported methods: wordnet_synonym and aug_sub_bert)</span>
+<span class="sd">    stopwords : list</span>
+<span class="sd">        list of words to freeze throughout the augmentation</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    Initialized nlpaug augmenter</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">method</span> <span class="o">==</span> <span class="s2">&quot;wordnet_synonym&quot;</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">naw</span><span class="o">.</span><span class="n">SynonymAug</span><span class="p">(</span><span class="n">aug_src</span><span class="o">=</span><span class="s2">&quot;wordnet&quot;</span><span class="p">,</span> <span class="n">stopwords</span><span class="o">=</span><span class="n">stopwords</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">method</span> <span class="o">==</span> <span class="s2">&quot;aug_sub_bert&quot;</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">naw</span><span class="o">.</span><span class="n">ContextualWordEmbsAug</span><span class="p">(</span>
+            <span class="n">model_path</span><span class="o">=</span><span class="s2">&quot;bert-base-uncased&quot;</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="s2">&quot;substitute&quot;</span><span class="p">,</span> <span class="n">stopwords</span><span class="o">=</span><span class="n">stopwords</span>
+        <span class="p">)</span>
+    <span class="k">raise</span> <span class="n">UnavailableAugmenter</span><span class="p">(</span>
+        <span class="s2">&quot;The given augmenter is not supported. You must choose one </span><span class="se">\</span>
+<span class="s2">        of the following: wordnet_synonym or aug_sub_bert&quot;</span>
+    <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="get_augmented_entities"><a class="viewcode-back" href="../../../apidoc/nlpretext.augmentation.html#nlpretext.augmentation.text_augmentation.get_augmented_entities">[docs]</a><span class="k">def</span> <span class="nf">get_augmented_entities</span><span class="p">(</span>
+    <span class="n">sentence_augmented</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">entities</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Get entities with updated positions (start and end) in augmented text.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    sentence_augmented : str</span>
+<span class="sd">        augmented text</span>
+<span class="sd">    entities : list</span>
+<span class="sd">        entities associated to initial text, must be in the following format:</span>
+<span class="sd">        [</span>
+<span class="sd">            {</span>
+<span class="sd">                &#39;entity&#39;: str,</span>
+<span class="sd">                &#39;word&#39;: str,</span>
+<span class="sd">                &#39;startCharIndex&#39;: int,</span>
+<span class="sd">                &#39;endCharIndex&#39;: int</span>
+<span class="sd">            },</span>
+<span class="sd">            {</span>
+<span class="sd">                ...</span>
+<span class="sd">            }</span>
+<span class="sd">        ]</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    Entities with updated positions related to augmented text</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">entities_augmented</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">entity</span> <span class="ow">in</span> <span class="n">entities</span><span class="p">:</span>
+        <span class="n">search</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">entity</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">(),</span> <span class="n">sentence_augmented</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">search</span><span class="p">:</span>
+            <span class="n">start_index</span> <span class="o">=</span> <span class="n">search</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+            <span class="n">end_index</span> <span class="o">=</span> <span class="n">search</span><span class="o">.</span><span class="n">end</span><span class="p">()</span>
+            <span class="n">new_entity</span> <span class="o">=</span> <span class="p">{</span>
+                <span class="s2">&quot;entity&quot;</span><span class="p">:</span> <span class="n">entity</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+                <span class="s2">&quot;word&quot;</span><span class="p">:</span> <span class="n">sentence_augmented</span><span class="p">[</span><span class="n">start_index</span><span class="p">:</span><span class="n">end_index</span><span class="p">],</span>
+                <span class="s2">&quot;startCharIndex&quot;</span><span class="p">:</span> <span class="n">start_index</span><span class="p">,</span>
+                <span class="s2">&quot;endCharIndex&quot;</span><span class="p">:</span> <span class="n">end_index</span><span class="p">,</span>
+            <span class="p">}</span>
+            <span class="n">entities_augmented</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">new_entity</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">entities_augmented</span></div>
+
+
+<div class="viewcode-block" id="clean_sentence_entities"><a class="viewcode-back" href="../../../apidoc/nlpretext.augmentation.html#nlpretext.augmentation.text_augmentation.clean_sentence_entities">[docs]</a><span class="k">def</span> <span class="nf">clean_sentence_entities</span><span class="p">(</span><span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">entities</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]])</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Paired entities check to remove nested entities, the longest entity is kept.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    text : str</span>
+<span class="sd">        augmented text</span>
+<span class="sd">    entities : list</span>
+<span class="sd">        entities associated to augmented text, must be in the following format:</span>
+<span class="sd">        [</span>
+<span class="sd">            {</span>
+<span class="sd">                &#39;entity&#39;: str,</span>
+<span class="sd">                &#39;word&#39;: str,</span>
+<span class="sd">                &#39;startCharIndex&#39;: int,</span>
+<span class="sd">                &#39;endCharIndex&#39;: int</span>
+<span class="sd">            },</span>
+<span class="sd">            {</span>
+<span class="sd">                ...</span>
+<span class="sd">            }</span>
+<span class="sd">        ]</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    Cleaned entities</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">entities_to_clean</span> <span class="o">=</span> <span class="p">[</span><span class="nb">dict</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="p">{</span><span class="nb">frozenset</span><span class="p">(</span><span class="n">d</span><span class="o">.</span><span class="n">items</span><span class="p">())</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">entities</span><span class="p">}]</span>
+    <span class="k">for</span> <span class="n">element1</span><span class="p">,</span> <span class="n">element2</span> <span class="ow">in</span> <span class="n">combinations</span><span class="p">(</span><span class="n">entities_to_clean</span><span class="p">,</span> <span class="mi">2</span><span class="p">):</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">check_interval_included</span><span class="p">(</span><span class="n">element1</span><span class="p">,</span> <span class="n">element2</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">result</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">entities_to_clean</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">result</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+            <span class="k">except</span> <span class="ne">IndexError</span><span class="p">:</span>
+                <span class="n">logging</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span>
+                    <span class="s2">&quot;Cant remove entity : </span><span class="si">{}</span><span class="s2"> </span><span class="se">\n</span><span class="s2"> entities are now :</span><span class="si">{}</span><span class="s2"> </span><span class="se">\n</span><span class="s2"> for sentence : </span><span class="si">{}</span><span class="s2"> &quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                        <span class="n">result</span><span class="p">,</span> <span class="n">entities_to_clean</span><span class="p">,</span> <span class="n">text</span>
+                    <span class="p">)</span>
+                <span class="p">)</span>
+                <span class="k">continue</span>
+    <span class="k">return</span> <span class="n">entities_to_clean</span></div>
+
+
+<div class="viewcode-block" id="check_interval_included"><a class="viewcode-back" href="../../../apidoc/nlpretext.augmentation.html#nlpretext.augmentation.text_augmentation.check_interval_included">[docs]</a><span class="k">def</span> <span class="nf">check_interval_included</span><span class="p">(</span>
+    <span class="n">element1</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span> <span class="n">element2</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Comparison of two entities on start and end positions to find if they are nested.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    element1 : dict</span>
+<span class="sd">    element2 : dict</span>
+<span class="sd">        both of them in the following format</span>
+<span class="sd">        {</span>
+<span class="sd">            &#39;entity&#39;: str,</span>
+<span class="sd">            &#39;word&#39;: str,</span>
+<span class="sd">            &#39;startCharIndex&#39;: int,</span>
+<span class="sd">            &#39;endCharIndex&#39;: int</span>
+<span class="sd">        }</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    If there is an entity to remove among the two returns a tuple</span>
+<span class="sd">    (element to remove, element to keep).</span>
+<span class="sd">    If not, returns None</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="p">(</span>
+        <span class="p">(</span><span class="n">element1</span> <span class="o">!=</span> <span class="n">element2</span><span class="p">)</span>
+        <span class="ow">and</span> <span class="p">(</span><span class="n">element1</span><span class="p">[</span><span class="s2">&quot;startCharIndex&quot;</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="n">element2</span><span class="p">[</span><span class="s2">&quot;startCharIndex&quot;</span><span class="p">])</span>
+        <span class="ow">and</span> <span class="p">(</span><span class="n">element1</span><span class="p">[</span><span class="s2">&quot;endCharIndex&quot;</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="n">element2</span><span class="p">[</span><span class="s2">&quot;endCharIndex&quot;</span><span class="p">])</span>
+    <span class="p">):</span>
+        <span class="k">return</span> <span class="n">element1</span><span class="p">,</span> <span class="n">element2</span>
+    <span class="k">if</span> <span class="p">(</span>
+        <span class="p">(</span><span class="n">element1</span> <span class="o">!=</span> <span class="n">element2</span><span class="p">)</span>
+        <span class="ow">and</span> <span class="p">(</span><span class="n">element2</span><span class="p">[</span><span class="s2">&quot;startCharIndex&quot;</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="n">element1</span><span class="p">[</span><span class="s2">&quot;startCharIndex&quot;</span><span class="p">])</span>
+        <span class="ow">and</span> <span class="p">(</span><span class="n">element2</span><span class="p">[</span><span class="s2">&quot;endCharIndex&quot;</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="n">element1</span><span class="p">[</span><span class="s2">&quot;endCharIndex&quot;</span><span class="p">])</span>
+    <span class="p">):</span>
+        <span class="k">return</span> <span class="n">element2</span><span class="p">,</span> <span class="n">element1</span>
+    <span class="k">if</span> <span class="p">(</span>
+        <span class="p">(</span><span class="n">element1</span> <span class="o">!=</span> <span class="n">element2</span><span class="p">)</span>
+        <span class="ow">and</span> <span class="p">(</span><span class="n">element1</span><span class="p">[</span><span class="s2">&quot;startCharIndex&quot;</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="n">element2</span><span class="p">[</span><span class="s2">&quot;startCharIndex&quot;</span><span class="p">])</span>
+        <span class="ow">and</span> <span class="p">(</span><span class="n">element1</span><span class="p">[</span><span class="s2">&quot;endCharIndex&quot;</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="n">element2</span><span class="p">[</span><span class="s2">&quot;endCharIndex&quot;</span><span class="p">])</span>
+        <span class="ow">and</span> <span class="p">(</span><span class="n">element1</span><span class="p">[</span><span class="s2">&quot;startCharIndex&quot;</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="n">element2</span><span class="p">[</span><span class="s2">&quot;endCharIndex&quot;</span><span class="p">]</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="p">):</span>
+        <span class="k">return</span> <span class="n">element1</span><span class="p">,</span> <span class="n">element2</span>
+    <span class="k">if</span> <span class="p">(</span>
+        <span class="p">(</span><span class="n">element1</span> <span class="o">!=</span> <span class="n">element2</span><span class="p">)</span>
+        <span class="ow">and</span> <span class="p">(</span><span class="n">element2</span><span class="p">[</span><span class="s2">&quot;startCharIndex&quot;</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="n">element1</span><span class="p">[</span><span class="s2">&quot;startCharIndex&quot;</span><span class="p">])</span>
+        <span class="ow">and</span> <span class="p">(</span><span class="n">element2</span><span class="p">[</span><span class="s2">&quot;endCharIndex&quot;</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="n">element1</span><span class="p">[</span><span class="s2">&quot;endCharIndex&quot;</span><span class="p">])</span>
+        <span class="ow">and</span> <span class="p">(</span><span class="n">element2</span><span class="p">[</span><span class="s2">&quot;startCharIndex&quot;</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">element1</span><span class="p">[</span><span class="s2">&quot;endCharIndex&quot;</span><span class="p">]</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="p">):</span>
+        <span class="k">return</span> <span class="n">element2</span><span class="p">,</span> <span class="n">element1</span>
+    <span class="k">return</span> <span class="kc">None</span></div>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright .</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  
+<div class="rst-versions" data-toggle="rst-versions" role="note" aria-label="versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    <span class="fa fa-book"> Other Versions</span>
+    v: ci/update-ci-cd
+    <span class="fa fa-caret-down"></span>
+  </span>
+  <div class="rst-other-versions">
+    <dl>
+      <dt>Tags</dt>
+      <dd><a href="../../../../../1.1.0/index.html">1.1.0</a></dd>
+      <dd><a href="../../../../../1.2.0/index.html">1.2.0</a></dd>
+      <dd><a href="../../../../../1.2.1/index.html">1.2.1</a></dd>
+      <dd><a href="../../../../../1.2.2/index.html">1.2.2</a></dd>
+      <dd><a href="../../../../../latest/index.html">latest</a></dd>
+    </dl>
+    <dl>
+      <dt>Branches</dt>
+      <dd><a href="text_augmentation.html">ci/update-ci-cd</a></dd>
+    </dl>
+  </div>
+</div><script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

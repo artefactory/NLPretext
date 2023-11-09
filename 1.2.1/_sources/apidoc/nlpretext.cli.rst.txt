@@ -1,0 +1,18 @@
+
+**cli**
+=======
+
+.. automodule:: nlpretext.cli
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+
+
+preprocess
+----------
+
+.. automodule:: nlpretext.cli.preprocess
+   :members:
+   :undoc-members:
+   :show-inheritance:

@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>basic &mdash; nlpretext  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=19f00094" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js?v=b3ba4146"></script>
+        <script src="../_static/doctools.js?v=888ff710"></script>
+        <script src="../_static/sphinx_highlight.js?v=4825356b"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="cli" href="nlpretext.cli.html" />
+    <link rel="prev" title="augmentation" href="nlpretext.augmentation.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            nlpretext
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Tutorials:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials/index.html">Tutorials</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API Reference:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">nlpretext</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="nlpretext.html"><strong>nlpretext</strong></a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="nlpretext.html#nlpretext.Preprocessor"><code class="docutils literal notranslate"><span class="pre">Preprocessor</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="nlpretext.augmentation.html"><strong>augmentation</strong></a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#"><strong>basic</strong></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#module-nlpretext.basic.preprocess">preprocess</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="nlpretext.cli.html"><strong>cli</strong></a></li>
+<li class="toctree-l3"><a class="reference internal" href="nlpretext.social.html"><strong>social</strong></a></li>
+<li class="toctree-l3"><a class="reference internal" href="nlpretext.token.html"><strong>token</strong></a></li>
+<li class="toctree-l3"><a class="reference internal" href="nlpretext.html#module-nlpretext.preprocessor">preprocessor</a></li>
+<li class="toctree-l3"><a class="reference internal" href="nlpretext.html#module-nlpretext.textloader">textloader</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">nlpretext</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="modules.html">nlpretext</a></li>
+          <li class="breadcrumb-item"><a href="nlpretext.html"><strong>nlpretext</strong></a></li>
+      <li class="breadcrumb-item active"><strong>basic</strong></li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/apidoc/nlpretext.basic.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-nlpretext.basic">
+<span id="basic"></span><h1><strong>basic</strong><a class="headerlink" href="#module-nlpretext.basic" title="Permalink to this heading"></a></h1>
+<section id="module-nlpretext.basic.preprocess">
+<span id="preprocess"></span><h2>preprocess<a class="headerlink" href="#module-nlpretext.basic.preprocess" title="Permalink to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="nlpretext.basic.preprocess.normalize_whitespace">
+<span class="sig-name descname"><span class="pre">normalize_whitespace</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">text</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nlpretext/basic/preprocess.html#normalize_whitespace"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#nlpretext.basic.preprocess.normalize_whitespace" title="Permalink to this definition"></a></dt>
+<dd><hr class="docutils" />
+<p>Given <code class="docutils literal notranslate"><span class="pre">text</span></code> str, replace one or more spacings with a single space, and
+one or more linebreaks with a single newline. Also strip leading/trailing
+whitespace.
+eg. “   foo  bar  “ -&gt; “foo bar”</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>text</strong> (<em>string</em>) – </p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>string</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="nlpretext.basic.preprocess.remove_whitespace">
+<span class="sig-name descname"><span class="pre">remove_whitespace</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">text</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nlpretext/basic/preprocess.html#remove_whitespace"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#nlpretext.basic.preprocess.remove_whitespace" title="Permalink to this definition"></a></dt>
+<dd><p>Given <code class="docutils literal notranslate"><span class="pre">text</span></code> str, remove one or more spacings and linebreaks.
+Also strip leading/trailing whitespace.
+eg. “   foo  bar  “ -&gt; “foobar”.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>text</strong> (<em>string</em>) – </p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>string</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="nlpretext.basic.preprocess.lower_text">
+<span class="sig-name descname"><span class="pre">lower_text</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">text</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nlpretext/basic/preprocess.html#lower_text"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#nlpretext.basic.preprocess.lower_text" title="Permalink to this definition"></a></dt>
+<dd><p>Given <code class="docutils literal notranslate"><span class="pre">text</span></code> str, transform it into lowercase.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>text</strong> (<em>string</em>) – </p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>string</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="nlpretext.basic.preprocess.filter_groups">
+<span class="sig-name descname"><span class="pre">filter_groups</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">token</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ignored_stopwords</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nlpretext/basic/preprocess.html#filter_groups"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#nlpretext.basic.preprocess.filter_groups" title="Permalink to this definition"></a></dt>
+<dd><p>Given <code class="docutils literal notranslate"><span class="pre">token</span></code> str and a list of groups of words
+that were concatenated into tokens, reverses the tokens
+to their ungrouped state.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>token</strong> (<em>string</em>) – </p></li>
+<li><p><strong>ignored_stopwords</strong> (<em>list</em><em> of </em><em>strings</em>) – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>string</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="nlpretext.basic.preprocess.ungroup_ignored_stopwords">
+<span class="sig-name descname"><span class="pre">ungroup_ignored_stopwords</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tokens</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ignored_stopwords</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nlpretext/basic/preprocess.html#ungroup_ignored_stopwords"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#nlpretext.basic.preprocess.ungroup_ignored_stopwords" title="Permalink to this definition"></a></dt>
+<dd><p>Given <code class="docutils literal notranslate"><span class="pre">tokens</span></code> list of str and a list of groups of words
+that are concatenated in tokens, reverses the tokens to
+their ungrouped state.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>tokens</strong> (<em>list</em><em> of </em><em>strings</em>) – </p></li>
+<li><p><strong>ignored_stopwords</strong> (<em>list</em><em> of </em><em>strings</em>) – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>list of strings</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="nlpretext.basic.preprocess.remove_stopwords">
+<span class="sig-name descname"><span class="pre">remove_stopwords</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">text</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lang</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">custom_stopwords</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ignored_stopwords</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nlpretext/basic/preprocess.html#remove_stopwords"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#nlpretext.basic.preprocess.remove_stopwords" title="Permalink to this definition"></a></dt>
+<dd><p>Given <code class="docutils literal notranslate"><span class="pre">text</span></code> str, remove classic stopwords for a given language and
+custom stopwords given as a list. Words and groups of words from
+ignored_stopwords list are ignored during stopwords removal.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>text</strong> (<em>string</em>) – </p></li>
+<li><p><strong>lang</strong> (<em>string</em>) – </p></li>
+<li><p><strong>custom_stopwords</strong> (<em>list</em><em> of </em><em>strings</em>) – </p></li>
+<li><p><strong>ignored_stopwords</strong> (<em>list</em><em> of </em><em>strings</em>) – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>string</p>
+</dd>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>ValueError</strong> – if <code class="docutils literal notranslate"><span class="pre">custom_stopwords</span></code>  and <code class="docutils literal notranslate"><span class="pre">ignored_stopwords</span></code> have common elements.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="nlpretext.basic.preprocess.remove_eol_characters">
+<span class="sig-name descname"><span class="pre">remove_eol_characters</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">text</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nlpretext/basic/preprocess.html#remove_eol_characters"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#nlpretext.basic.preprocess.remove_eol_characters" title="Permalink to this definition"></a></dt>
+<dd><p>Remove end of line (n) char.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>text</strong> (<em>str</em>) – </p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="nlpretext.basic.preprocess.fix_bad_unicode">
+<span class="sig-name descname"><span class="pre">fix_bad_unicode</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">text</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">normalization</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'NFC'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nlpretext/basic/preprocess.html#fix_bad_unicode"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#nlpretext.basic.preprocess.fix_bad_unicode" title="Permalink to this definition"></a></dt>
+<dd><hr class="docutils" />
+<p>Fix unicode text that’s “broken” using <a class="reference external" href="http://ftfy.readthedocs.org/">ftfy</a>;
+this includes mojibake, HTML entities and other code cruft,
+and non-standard forms for display purposes.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>text</strong> (<em>string</em>) – </p></li>
+<li><p><strong>(</strong><strong>{'NFC'</strong> (<em>normalization</em>) – if ‘NFC’, combines characters and diacritics written using separate
+code points, e.g. converting “e” plus an acute accent modifier into
+“é”; unicode
+can be converted to NFC form without any change in its meaning!
+if ‘NFKC’, additional normalizations are applied that can change
+the meanings of characters, e.g. ellipsis characters will be replaced
+with three periods</p></li>
+<li><p><strong>'NFKC'</strong> – if ‘NFC’, combines characters and diacritics written using separate
+code points, e.g. converting “e” plus an acute accent modifier into
+“é”; unicode
+can be converted to NFC form without any change in its meaning!
+if ‘NFKC’, additional normalizations are applied that can change
+the meanings of characters, e.g. ellipsis characters will be replaced
+with three periods</p></li>
+<li><p><strong>'NFD'</strong> – if ‘NFC’, combines characters and diacritics written using separate
+code points, e.g. converting “e” plus an acute accent modifier into
+“é”; unicode
+can be converted to NFC form without any change in its meaning!
+if ‘NFKC’, additional normalizations are applied that can change
+the meanings of characters, e.g. ellipsis characters will be replaced
+with three periods</p></li>
+<li><p><strong>'NFKD'}</strong><strong>)</strong> – if ‘NFC’, combines characters and diacritics written using separate
+code points, e.g. converting “e” plus an acute accent modifier into
+“é”; unicode
+can be converted to NFC form without any change in its meaning!
+if ‘NFKC’, additional normalizations are applied that can change
+the meanings of characters, e.g. ellipsis characters will be replaced
+with three periods</p></li>
+<li><p><strong>normalization</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>string</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="nlpretext.basic.preprocess.unpack_english_contractions">
+<span class="sig-name descname"><span class="pre">unpack_english_contractions</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">text</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nlpretext/basic/preprocess.html#unpack_english_contractions"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#nlpretext.basic.preprocess.unpack_english_contractions" title="Permalink to this definition"></a></dt>
+<dd><hr class="docutils" />
+<p>Replace <em>English</em> contractions in <code class="docutils literal notranslate"><span class="pre">text</span></code> str with their unshortened
+forms.
+N.B. The “‘d” and “‘s” forms are ambiguous (had/would, is/has/possessive),
+so are left as-is.
+eg. “You’re fired. She’s nice.” -&gt; “You are fired. She’s nice.”</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>text</strong> (<em>string</em>) – </p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>string</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="nlpretext.basic.preprocess.replace_urls">
+<span class="sig-name descname"><span class="pre">replace_urls</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">text</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">replace_with</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'*URL*'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nlpretext/basic/preprocess.html#replace_urls"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#nlpretext.basic.preprocess.replace_urls" title="Permalink to this definition"></a></dt>
+<dd><hr class="docutils" />
+<p>Replace all URLs in <code class="docutils literal notranslate"><span class="pre">text</span></code> str with <code class="docutils literal notranslate"><span class="pre">replace_with</span></code> str.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>text</strong> (<em>string</em>) – </p></li>
+<li><p><strong>replace_with</strong> (<em>string</em>) – the string you want the URL to be replaced with.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>string</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="nlpretext.basic.preprocess.replace_emails">
+<span class="sig-name descname"><span class="pre">replace_emails</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">text</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">replace_with</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'*EMAIL*'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nlpretext/basic/preprocess.html#replace_emails"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#nlpretext.basic.preprocess.replace_emails" title="Permalink to this definition"></a></dt>
+<dd><hr class="docutils" />
+<p>Replace all emails in <code class="docutils literal notranslate"><span class="pre">text</span></code> str with <code class="docutils literal notranslate"><span class="pre">replace_with</span></code> str</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>text</strong> (<em>string</em>) – </p></li>
+<li><p><strong>replace_with</strong> (<em>string</em>) – the string you want the email address to be replaced with.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>string</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="nlpretext.basic.preprocess.replace_phone_numbers">
+<span class="sig-name descname"><span class="pre">replace_phone_numbers</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">text</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">country_to_detect</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">replace_with</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'*PHONE*'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'regex'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nlpretext/basic/preprocess.html#replace_phone_numbers"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#nlpretext.basic.preprocess.replace_phone_numbers" title="Permalink to this definition"></a></dt>
+<dd><hr class="docutils" />
+<p>Replace all phone numbers in <code class="docutils literal notranslate"><span class="pre">text</span></code> str with <code class="docutils literal notranslate"><span class="pre">replace_with</span></code> str</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>text</strong> (<em>string</em>) – </p></li>
+<li><p><strong>replace_with</strong> (<em>string</em>) – the string you want the phone number to be replaced with.</p></li>
+<li><p><strong>method</strong> (<em>[</em><em>'regex'</em><em>,</em><em>'detection'</em><em>]</em>) – regex is faster but will omit a lot of numbers, while detection will
+catch every numbers, but takes a while.</p></li>
+<li><p><strong>country_to_detect</strong> (<em>list</em>) – If a list of country code is specified, will catch every number
+formatted.
+Only when method = ‘detection’.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>string</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="nlpretext.basic.preprocess.replace_numbers">
+<span class="sig-name descname"><span class="pre">replace_numbers</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">text</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">replace_with</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'*NUMBER*'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nlpretext/basic/preprocess.html#replace_numbers"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#nlpretext.basic.preprocess.replace_numbers" title="Permalink to this definition"></a></dt>
+<dd><hr class="docutils" />
+<p>Replace all numbers in <code class="docutils literal notranslate"><span class="pre">text</span></code> str with <code class="docutils literal notranslate"><span class="pre">replace_with</span></code> str.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>text</strong> (<em>string</em>) – </p></li>
+<li><p><strong>replace_with</strong> (<em>string</em>) – the string you want the number to be replaced with.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>string</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="nlpretext.basic.preprocess.replace_currency_symbols">
+<span class="sig-name descname"><span class="pre">replace_currency_symbols</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">text</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">replace_with</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nlpretext/basic/preprocess.html#replace_currency_symbols"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#nlpretext.basic.preprocess.replace_currency_symbols" title="Permalink to this definition"></a></dt>
+<dd><hr class="docutils" />
+<p>Replace all currency symbols in <code class="docutils literal notranslate"><span class="pre">text</span></code> str with string specified by
+<code class="docutils literal notranslate"><span class="pre">replace_with</span></code> str.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>text</strong> (<em>str</em>) – raw text</p></li>
+<li><p><strong>replace_with</strong> (<em>None</em><em> or </em><em>string</em>) – <dl class="simple">
+<dt>if None (default), replace symbols with</dt><dd><p>their standard 3-letter abbreviations (e.g. ‘$’ with ‘USD’, ‘£’
+with ‘GBP’); otherwise, pass in a string with which to replace all
+symbols (e.g. “<em>CURRENCY</em>”)</p>
+</dd>
+</dl>
+</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>string</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="nlpretext.basic.preprocess.remove_punct">
+<span class="sig-name descname"><span class="pre">remove_punct</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">text</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">marks</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nlpretext/basic/preprocess.html#remove_punct"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#nlpretext.basic.preprocess.remove_punct" title="Permalink to this definition"></a></dt>
+<dd><p>Remove punctuation from <code class="docutils literal notranslate"><span class="pre">text</span></code> by replacing all instances of <code class="docutils literal notranslate"><span class="pre">marks</span></code>
+with whitespace.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>text</strong> (<em>str</em>) – raw text</p></li>
+<li><p><strong>marks</strong> (<em>str</em><em> or </em><em>None</em>) – If specified, remove only the characters in this string,
+e.g. <code class="docutils literal notranslate"><span class="pre">marks=',;:'</span></code> removes commas, semi-colons, and colons.
+Otherwise, all punctuation marks are removed.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>string</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>When <code class="docutils literal notranslate"><span class="pre">marks=None</span></code>, Python’s built-in <code class="xref py py-meth docutils literal notranslate"><span class="pre">str.translate()</span></code> is
+used to remove punctuation; otherwise, a regular expression is used
+instead. The former’s performance is about 5-10x faster.</p>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="nlpretext.basic.preprocess.remove_accents">
+<span class="sig-name descname"><span class="pre">remove_accents</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">text</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'unicode'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nlpretext/basic/preprocess.html#remove_accents"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#nlpretext.basic.preprocess.remove_accents" title="Permalink to this definition"></a></dt>
+<dd><p>Remove accents from any accented unicode characters in <code class="docutils literal notranslate"><span class="pre">text</span></code> str,
+either by transforming them into ascii equivalents or removing them
+entirely.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>text</strong> (<em>str</em>) – raw text</p></li>
+<li><p><strong>method</strong> (<em>(</em><em>{'unicode'</em><em>, </em><em>'ascii'}</em><em>)</em>) – <p>if ‘unicode’, remove accented
+char for any unicode symbol with a direct ASCII equivalent; if ‘ascii’,
+remove accented char for any unicode symbol</p>
+<p>NB: the ‘ascii’ method is notably faster than ‘unicode’, but less good</p>
+</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>string</p>
+</dd>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>ValueError</strong> – if <code class="docutils literal notranslate"><span class="pre">method</span></code> is not in {‘unicode’, ‘ascii’}</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="nlpretext.basic.preprocess.remove_multiple_spaces_and_strip_text">
+<span class="sig-name descname"><span class="pre">remove_multiple_spaces_and_strip_text</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">text</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nlpretext/basic/preprocess.html#remove_multiple_spaces_and_strip_text"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#nlpretext.basic.preprocess.remove_multiple_spaces_and_strip_text" title="Permalink to this definition"></a></dt>
+<dd><p>Remove multiple spaces, strip text, and remove ‘-’, ‘*’ characters.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>text</strong> (<em>str</em>) – the text to be processed</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>the text with removed multiple spaces and strip text</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>string</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="nlpretext.basic.preprocess.filter_non_latin_characters">
+<span class="sig-name descname"><span class="pre">filter_non_latin_characters</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">text</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nlpretext/basic/preprocess.html#filter_non_latin_characters"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#nlpretext.basic.preprocess.filter_non_latin_characters" title="Permalink to this definition"></a></dt>
+<dd><p>Function that filters non latin characters of a text.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>text</strong> (<em>string</em>) – </p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>string</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="nlpretext.augmentation.html" class="btn btn-neutral float-left" title="augmentation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="nlpretext.cli.html" class="btn btn-neutral float-right" title="cli" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright .</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  
+<div class="rst-versions" data-toggle="rst-versions" role="note" aria-label="versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    <span class="fa fa-book"> Other Versions</span>
+    v: 1.2.2
+    <span class="fa fa-caret-down"></span>
+  </span>
+  <div class="rst-other-versions">
+    <dl>
+      <dt>Tags</dt>
+      <dd><a href="../../1.1.0/index.html">1.1.0</a></dd>
+      <dd><a href="../../1.2.0/index.html">1.2.0</a></dd>
+      <dd><a href="../../1.2.1/index.html">1.2.1</a></dd>
+      <dd><a href="nlpretext.basic.html">1.2.2</a></dd>
+      <dd><a href="../../latest/apidoc/nlpretext.basic.html">latest</a></dd>
+    </dl>
+    <dl>
+      <dt>Branches</dt>
+      <dd><a href="../../ci/update-ci-cd/apidoc/nlpretext.basic.html">ci/update-ci-cd</a></dd>
+    </dl>
+  </div>
+</div><script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

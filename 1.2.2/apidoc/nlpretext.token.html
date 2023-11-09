@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>token &mdash; nlpretext  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=19f00094" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js?v=b3ba4146"></script>
+        <script src="../_static/doctools.js?v=888ff710"></script>
+        <script src="../_static/sphinx_highlight.js?v=4825356b"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="prev" title="social" href="nlpretext.social.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            nlpretext
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Tutorials:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials/index.html">Tutorials</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API Reference:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">nlpretext</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="nlpretext.html"><strong>nlpretext</strong></a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="nlpretext.html#nlpretext.Preprocessor"><code class="docutils literal notranslate"><span class="pre">Preprocessor</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="nlpretext.augmentation.html"><strong>augmentation</strong></a></li>
+<li class="toctree-l3"><a class="reference internal" href="nlpretext.basic.html"><strong>basic</strong></a></li>
+<li class="toctree-l3"><a class="reference internal" href="nlpretext.cli.html"><strong>cli</strong></a></li>
+<li class="toctree-l3"><a class="reference internal" href="nlpretext.social.html"><strong>social</strong></a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#"><strong>token</strong></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#module-nlpretext.token.preprocess">preprocess</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-nlpretext.token.tokenizer">tokenizer</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="nlpretext.html#module-nlpretext.preprocessor">preprocessor</a></li>
+<li class="toctree-l3"><a class="reference internal" href="nlpretext.html#module-nlpretext.textloader">textloader</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">nlpretext</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="modules.html">nlpretext</a></li>
+          <li class="breadcrumb-item"><a href="nlpretext.html"><strong>nlpretext</strong></a></li>
+      <li class="breadcrumb-item active"><strong>token</strong></li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/apidoc/nlpretext.token.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-nlpretext.token">
+<span id="token"></span><h1><strong>token</strong><a class="headerlink" href="#module-nlpretext.token" title="Permalink to this heading"></a></h1>
+<section id="module-nlpretext.token.preprocess">
+<span id="preprocess"></span><h2>preprocess<a class="headerlink" href="#module-nlpretext.token.preprocess" title="Permalink to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="nlpretext.token.preprocess.remove_stopwords">
+<span class="sig-name descname"><span class="pre">remove_stopwords</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tokens</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lang</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">custom_stopwords</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nlpretext/token/preprocess.html#remove_stopwords"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#nlpretext.token.preprocess.remove_stopwords" title="Permalink to this definition"></a></dt>
+<dd><p>Remove stopwords from a text.
+eg. ‘I like when you move your body !’ -&gt; ‘I move body !’.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>tokens</strong> (<em>list</em><em>(</em><em>str</em><em>)</em>) – list of tokens</p></li>
+<li><p><strong>lang</strong> (<em>str</em>) – language iso code (e.g : “en”)</p></li>
+<li><p><strong>custom_stopwords</strong> (<em>list</em><em>(</em><em>str</em><em>)</em><em>|</em><em>None</em>) – list of custom stopwords to add. None by default</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>tokens without stopwords</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>list</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>ValueError</strong> – When inputs is not a list</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="nlpretext.token.preprocess.remove_tokens_with_nonletters">
+<span class="sig-name descname"><span class="pre">remove_tokens_with_nonletters</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tokens</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nlpretext/token/preprocess.html#remove_tokens_with_nonletters"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#nlpretext.token.preprocess.remove_tokens_with_nonletters" title="Permalink to this definition"></a></dt>
+<dd><p>Inputs a list of tokens, outputs a list of tokens without tokens that
+includes numbers of special caracters.
+[‘foo’,’bar’,’124’,’34euros’] -&gt; [‘foo’,’bar’].</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>tokens</strong> (<em>list</em>) – list of tokens to be cleaned</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>list of tokens without tokens with numbers</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>list</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="nlpretext.token.preprocess.remove_special_caracters_from_tokenslist">
+<span class="sig-name descname"><span class="pre">remove_special_caracters_from_tokenslist</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tokens</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nlpretext/token/preprocess.html#remove_special_caracters_from_tokenslist"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#nlpretext.token.preprocess.remove_special_caracters_from_tokenslist" title="Permalink to this definition"></a></dt>
+<dd><p>Remove tokens that doesn’t contains any number or letter.
+eg. [‘foo’,’bar’,’—‘,“‘s”,’#’] -&gt; [‘foo’,’bar’,“‘s”].</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>tokens</strong> (<em>list</em>) – list of tokens to be cleaned</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>list of tokens without tokens that contains only special caracters</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>list</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="nlpretext.token.preprocess.remove_smallwords">
+<span class="sig-name descname"><span class="pre">remove_smallwords</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tokens</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">smallwords_threshold</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nlpretext/token/preprocess.html#remove_smallwords"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#nlpretext.token.preprocess.remove_smallwords" title="Permalink to this definition"></a></dt>
+<dd><p>Function that removes words which length is below a threshold
+[“hello”, “my”, “name”, “is”, “John”, “Doe”] –&gt; [“hello”,”name”,”John”,”Doe”].</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>text</strong> (<em>list</em>) – list of strings</p></li>
+<li><p><strong>smallwords_threshold</strong> (<em>int</em>) – threshold of small word</p></li>
+<li><p><strong>tokens</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]) – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>list</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="module-nlpretext.token.tokenizer">
+<span id="tokenizer"></span><h2>tokenizer<a class="headerlink" href="#module-nlpretext.token.tokenizer" title="Permalink to this heading"></a></h2>
+<dl class="py exception">
+<dt class="sig sig-object py" id="nlpretext.token.tokenizer.LanguageNotHandled">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">LanguageNotHandled</span></span><a class="reference internal" href="../_modules/nlpretext/token/tokenizer.html#LanguageNotHandled"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#nlpretext.token.tokenizer.LanguageNotHandled" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Exception</span></code></p>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="nlpretext.token.tokenizer.LanguageNotInstalledError">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">LanguageNotInstalledError</span></span><a class="reference internal" href="../_modules/nlpretext/token/tokenizer.html#LanguageNotInstalledError"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#nlpretext.token.tokenizer.LanguageNotInstalledError" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Exception</span></code></p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="nlpretext.token.tokenizer.SpacyModel">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">SpacyModel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">lang</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nlpretext/token/tokenizer.html#SpacyModel"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#nlpretext.token.tokenizer.SpacyModel" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py class">
+<dt class="sig sig-object py" id="nlpretext.token.tokenizer.SpacyModel.SingletonSpacyModel">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">SingletonSpacyModel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">lang</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nlpretext/token/tokenizer.html#SpacyModel.SingletonSpacyModel"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#nlpretext.token.tokenizer.SpacyModel.SingletonSpacyModel" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>lang</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="nlpretext.token.tokenizer.SpacyModel.model">
+<span class="sig-name descname"><span class="pre">model</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code><span class="pre">[</span><code class="xref py py-class docutils literal notranslate"><span class="pre">Language</span></code><span class="pre">]</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#nlpretext.token.tokenizer.SpacyModel.model" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="nlpretext.token.tokenizer.SpacyModel.get_lang_model">
+<span class="sig-name descname"><span class="pre">get_lang_model</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nlpretext/token/tokenizer.html#SpacyModel.get_lang_model"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#nlpretext.token.tokenizer.SpacyModel.get_lang_model" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="nlpretext.token.tokenizer.tokenize">
+<span class="sig-name descname"><span class="pre">tokenize</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">text</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lang_module</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'en_spacy'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nlpretext/token/tokenizer.html#tokenize"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#nlpretext.token.tokenizer.tokenize" title="Permalink to this definition"></a></dt>
+<dd><p>Convert text to a list of tokens.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>lang_module</strong> (<em>str {'en_spacy'</em><em>, </em><em>'en_nltk'</em><em>, </em><em>'fr_spacy'</em><em>, </em><em>'fr_moses'</em><em>, </em><em>'ko_spacy'</em><em>, </em><em>'ja_spacy'}</em>) – choose the tokenization module according to the langage and the implementation.
+Recommanded: Spacy (faster, better results). To process other langages
+import models.Spacy_models</p></li>
+<li><p><strong>text</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>list of string</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>list</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>ValueError</strong> – If lang_module is not a valid module name</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="nlpretext.token.tokenizer.untokenize">
+<span class="sig-name descname"><span class="pre">untokenize</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tokens</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lang</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'fr'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nlpretext/token/tokenizer.html#untokenize"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#nlpretext.token.tokenizer.untokenize" title="Permalink to this definition"></a></dt>
+<dd><p>Inputs a list of tokens output string.
+[“J’”, ‘ai’] &gt;&gt;&gt; “J’ ai”.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>lang</strong> (<em>string</em>) – language code</p></li>
+<li><p><strong>tokens</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]) – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>text</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>string</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="nlpretext.token.tokenizer.convert_tokens_to_string">
+<span class="sig-name descname"><span class="pre">convert_tokens_to_string</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tokens_or_str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nlpretext/token/tokenizer.html#convert_tokens_to_string"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#nlpretext.token.tokenizer.convert_tokens_to_string" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>tokens_or_str</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>], <code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code>]) – </p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="nlpretext.token.tokenizer.convert_string_to_tokens">
+<span class="sig-name descname"><span class="pre">convert_string_to_tokens</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tokens_or_str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lang_module</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'en_spacy'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nlpretext/token/tokenizer.html#convert_string_to_tokens"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#nlpretext.token.tokenizer.convert_string_to_tokens" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>tokens_or_str</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>], <code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code>]) – </p></li>
+<li><p><strong>lang_module</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="nlpretext.social.html" class="btn btn-neutral float-left" title="social" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright .</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  
+<div class="rst-versions" data-toggle="rst-versions" role="note" aria-label="versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    <span class="fa fa-book"> Other Versions</span>
+    v: 1.2.2
+    <span class="fa fa-caret-down"></span>
+  </span>
+  <div class="rst-other-versions">
+    <dl>
+      <dt>Tags</dt>
+      <dd><a href="../../1.1.0/index.html">1.1.0</a></dd>
+      <dd><a href="../../1.2.0/index.html">1.2.0</a></dd>
+      <dd><a href="../../1.2.1/index.html">1.2.1</a></dd>
+      <dd><a href="nlpretext.token.html">1.2.2</a></dd>
+      <dd><a href="../../latest/apidoc/nlpretext.token.html">latest</a></dd>
+    </dl>
+    <dl>
+      <dt>Branches</dt>
+      <dd><a href="../../ci/update-ci-cd/apidoc/nlpretext.token.html">ci/update-ci-cd</a></dd>
+    </dl>
+  </div>
+</div><script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

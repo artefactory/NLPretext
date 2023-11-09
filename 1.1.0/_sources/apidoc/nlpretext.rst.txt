@@ -1,0 +1,37 @@
+
+**nlpretext**
+=============
+
+.. automodule:: nlpretext
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+
+.. toctree::
+   :maxdepth: 4
+
+   nlpretext.augmentation
+   nlpretext.basic
+   nlpretext.cli
+   nlpretext.social
+   nlpretext.token
+
+
+
+preprocessor
+------------
+
+.. automodule:: nlpretext.preprocessor
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+
+textloader
+----------
+
+.. automodule:: nlpretext.textloader
+   :members:
+   :undoc-members:
+   :show-inheritance:

@@ -1,0 +1,27 @@
+
+**token**
+=========
+
+.. automodule:: nlpretext.token
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+
+
+preprocess
+----------
+
+.. automodule:: nlpretext.token.preprocess
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+
+tokenizer
+---------
+
+.. automodule:: nlpretext.token.tokenizer
+   :members:
+   :undoc-members:
+   :show-inheritance:

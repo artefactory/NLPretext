@@ -1,0 +1,666 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>nlpretext.basic.preprocess &mdash; nlpretext  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=19f00094" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js?v=b3ba4146"></script>
+        <script src="../../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../../_static/sphinx_highlight.js?v=4825356b"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            nlpretext
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Tutorials:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../tutorials/index.html">Tutorials</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API Reference:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../apidoc/modules.html">nlpretext</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">nlpretext</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">nlpretext.basic.preprocess</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for nlpretext.basic.preprocess</h1><div class="highlight"><pre>
+<span></span><span class="c1"># Copyright (C) 2020 Artefact</span>
+<span class="c1"># licence-information@artefact.com</span>
+<span class="c1">#</span>
+<span class="c1"># Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);</span>
+<span class="c1"># you may not use this file except in compliance with the License.</span>
+<span class="c1"># You may obtain a copy of the License at</span>
+<span class="c1">#</span>
+<span class="c1">#     http://www.apache.org/licenses/LICENSE-2.0</span>
+<span class="c1">#</span>
+<span class="c1"># Unless required by applicable law or agreed to in writing, software</span>
+<span class="c1"># distributed under the License is distributed on an &quot;AS IS&quot; BASIS,</span>
+<span class="c1"># WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</span>
+<span class="c1"># See the License for the specific language governing permissions and</span>
+<span class="c1"># limitations under the License</span>
+
+
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span>
+
+<span class="kn">import</span> <span class="nn">re</span>
+<span class="kn">import</span> <span class="nn">unicodedata</span>
+
+<span class="kn">from</span> <span class="nn">flashtext</span> <span class="kn">import</span> <span class="n">KeywordProcessor</span>
+<span class="kn">from</span> <span class="nn">ftfy</span> <span class="kn">import</span> <span class="n">fix_text</span> <span class="k">as</span> <span class="n">_fix_text</span>
+<span class="kn">from</span> <span class="nn">nlpretext._config</span> <span class="kn">import</span> <span class="n">constants</span>
+<span class="kn">from</span> <span class="nn">nlpretext._utils.phone_number</span> <span class="kn">import</span> <span class="n">extract_phone_numbers</span> <span class="k">as</span> <span class="n">_extract_phone_numbers</span>
+<span class="kn">from</span> <span class="nn">nlpretext._utils.stopwords</span> <span class="kn">import</span> <span class="n">get_stopwords</span>
+<span class="kn">from</span> <span class="nn">nlpretext.token.tokenizer</span> <span class="kn">import</span> <span class="n">tokenize</span>
+
+
+<div class="viewcode-block" id="normalize_whitespace"><a class="viewcode-back" href="../../../apidoc/nlpretext.basic.html#nlpretext.basic.preprocess.normalize_whitespace">[docs]</a><span class="k">def</span> <span class="nf">normalize_whitespace</span><span class="p">(</span><span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    ----</span>
+<span class="sd">    Copyright 2016 Chartbeat, Inc.</span>
+<span class="sd">    Code from textacy: https://github.com/chartbeat-labs/textacy</span>
+<span class="sd">    ----</span>
+
+<span class="sd">    Given ``text`` str, replace one or more spacings with a single space, and</span>
+<span class="sd">    one or more linebreaks with a single newline. Also strip leading/trailing</span>
+<span class="sd">    whitespace.</span>
+<span class="sd">    eg. &quot;   foo  bar  &quot; -&gt; &quot;foo bar&quot;</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    text : string</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    string</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">text</span> <span class="o">=</span> <span class="n">constants</span><span class="o">.</span><span class="n">NONBREAKING_SPACE_REGEX</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span>
+        <span class="s2">&quot; &quot;</span><span class="p">,</span> <span class="n">constants</span><span class="o">.</span><span class="n">LINEBREAK_REGEX</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;\n&quot;</span><span class="p">,</span> <span class="n">text</span><span class="p">)</span>
+    <span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">text</span></div>
+
+
+<div class="viewcode-block" id="remove_whitespace"><a class="viewcode-back" href="../../../apidoc/nlpretext.basic.html#nlpretext.basic.preprocess.remove_whitespace">[docs]</a><span class="k">def</span> <span class="nf">remove_whitespace</span><span class="p">(</span><span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Given ``text`` str, remove one or more spacings and linebreaks.</span>
+<span class="sd">    Also strip leading/trailing whitespace.</span>
+<span class="sd">    eg. &quot;   foo  bar  &quot; -&gt; &quot;foobar&quot;.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    text : string</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    string</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">constants</span><span class="o">.</span><span class="n">NONBREAKING_SPACE_REGEX</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span>
+        <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">constants</span><span class="o">.</span><span class="n">LINEBREAK_REGEX</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">text</span><span class="p">)</span>
+    <span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="lower_text"><a class="viewcode-back" href="../../../apidoc/nlpretext.basic.html#nlpretext.basic.preprocess.lower_text">[docs]</a><span class="k">def</span> <span class="nf">lower_text</span><span class="p">(</span><span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Given ``text`` str, transform it into lowercase.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    text : string</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    string</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">text</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="filter_groups"><a class="viewcode-back" href="../../../apidoc/nlpretext.basic.html#nlpretext.basic.preprocess.filter_groups">[docs]</a><span class="k">def</span> <span class="nf">filter_groups</span><span class="p">(</span><span class="n">token</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">ignored_stopwords</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Given ``token`` str and a list of groups of words</span>
+<span class="sd">    that were concatenated into tokens, reverses the tokens</span>
+<span class="sd">    to their ungrouped state.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    token : string</span>
+<span class="sd">    ignored_stopwords : list of strings</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    string</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">ignored_stopwords</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">group</span> <span class="ow">in</span> <span class="n">ignored_stopwords</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">token</span> <span class="o">==</span> <span class="n">remove_whitespace</span><span class="p">(</span><span class="n">group</span><span class="p">):</span>
+                <span class="n">token</span> <span class="o">=</span> <span class="n">group</span>
+    <span class="k">return</span> <span class="n">token</span></div>
+
+
+<div class="viewcode-block" id="ungroup_ignored_stopwords"><a class="viewcode-back" href="../../../apidoc/nlpretext.basic.html#nlpretext.basic.preprocess.ungroup_ignored_stopwords">[docs]</a><span class="k">def</span> <span class="nf">ungroup_ignored_stopwords</span><span class="p">(</span>
+    <span class="n">tokens</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">ignored_stopwords</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Given ``tokens`` list of str and a list of groups of words</span>
+<span class="sd">    that are concatenated in tokens, reverses the tokens to</span>
+<span class="sd">    their ungrouped state.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    tokens : list of strings</span>
+<span class="sd">    ignored_stopwords : list of strings</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    list of strings</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="p">[</span><span class="n">filter_groups</span><span class="p">(</span><span class="n">token</span><span class="p">,</span> <span class="n">ignored_stopwords</span><span class="p">)</span> <span class="k">for</span> <span class="n">token</span> <span class="ow">in</span> <span class="n">tokens</span><span class="p">]</span></div>
+
+
+<div class="viewcode-block" id="remove_stopwords"><a class="viewcode-back" href="../../../apidoc/nlpretext.basic.html#nlpretext.basic.preprocess.remove_stopwords">[docs]</a><span class="k">def</span> <span class="nf">remove_stopwords</span><span class="p">(</span>
+    <span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">lang</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">custom_stopwords</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">ignored_stopwords</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Given ``text`` str, remove classic stopwords for a given language and</span>
+<span class="sd">    custom stopwords given as a list. Words and groups of words from</span>
+<span class="sd">    ignored_stopwords list are ignored during stopwords removal.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    text : string</span>
+<span class="sd">    lang : string</span>
+<span class="sd">    custom_stopwords : list of strings</span>
+<span class="sd">    ignored_stopwords : list of strings</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    string</span>
+
+<span class="sd">    Raises</span>
+<span class="sd">    ------</span>
+<span class="sd">    ValueError</span>
+<span class="sd">        if ``custom_stopwords``  and ``ignored_stopwords`` have common elements.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">custom_stopwords</span> <span class="ow">and</span> <span class="n">ignored_stopwords</span><span class="p">:</span>
+        <span class="n">common_elements</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">custom_stopwords</span><span class="p">)</span><span class="o">.</span><span class="n">intersection</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">ignored_stopwords</span><span class="p">))</span>
+        <span class="k">if</span> <span class="n">common_elements</span> <span class="o">!=</span> <span class="nb">set</span><span class="p">():</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;Found common words in custom_stopwords and ignored_stopwords: </span><span class="se">\</span>
+<span class="s2">                </span><span class="si">{</span><span class="n">common_elements</span><span class="si">}</span><span class="s2">. Please remove duplicated values.&quot;</span>
+            <span class="p">)</span>
+    <span class="n">stopwords</span> <span class="o">=</span> <span class="n">get_stopwords</span><span class="p">(</span><span class="n">lang</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">ignored_stopwords</span><span class="p">:</span>
+        <span class="n">keyword_processor</span> <span class="o">=</span> <span class="n">KeywordProcessor</span><span class="p">()</span>
+        <span class="n">singletons_to_keep</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">ignored_stopwords</span> <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">split</span><span class="p">())</span> <span class="o">==</span> <span class="mi">1</span><span class="p">]</span>
+        <span class="k">for</span> <span class="n">group_of_words</span> <span class="ow">in</span> <span class="n">ignored_stopwords</span><span class="p">:</span>
+            <span class="n">keyword_processor</span><span class="o">.</span><span class="n">add_keyword</span><span class="p">(</span><span class="n">group_of_words</span><span class="p">,</span> <span class="n">remove_whitespace</span><span class="p">(</span><span class="n">group_of_words</span><span class="p">))</span>
+        <span class="n">text</span> <span class="o">=</span> <span class="n">keyword_processor</span><span class="o">.</span><span class="n">replace_keywords</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">singletons_to_keep</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">if</span> <span class="n">custom_stopwords</span><span class="p">:</span>
+        <span class="n">stopwords</span> <span class="o">+=</span> <span class="n">custom_stopwords</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">text</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Found empty text. Please fix it before using this function.&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">lang</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;fr&quot;</span><span class="p">,</span> <span class="s2">&quot;en&quot;</span><span class="p">]:</span>
+        <span class="n">lang_module</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;fr&quot;</span><span class="p">:</span> <span class="s2">&quot;fr_spacy&quot;</span><span class="p">,</span> <span class="s2">&quot;en&quot;</span><span class="p">:</span> <span class="s2">&quot;en_spacy&quot;</span><span class="p">}[</span><span class="n">lang</span><span class="p">]</span>
+        <span class="n">tokens</span> <span class="o">=</span> <span class="n">tokenize</span><span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="n">lang_module</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">tokens</span> <span class="o">=</span> <span class="n">text</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
+    <span class="n">tokens</span> <span class="o">=</span> <span class="p">[</span><span class="n">t</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">tokens</span> <span class="k">if</span> <span class="p">(</span><span class="n">t</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">stopwords</span> <span class="ow">or</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">singletons_to_keep</span><span class="p">)]</span>
+    <span class="n">tokens</span> <span class="o">=</span> <span class="n">ungroup_ignored_stopwords</span><span class="p">(</span><span class="n">tokens</span><span class="p">,</span> <span class="n">ignored_stopwords</span><span class="p">)</span>
+    <span class="k">return</span> <span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">tokens</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="remove_eol_characters"><a class="viewcode-back" href="../../../apidoc/nlpretext.basic.html#nlpretext.basic.preprocess.remove_eol_characters">[docs]</a><span class="k">def</span> <span class="nf">remove_eol_characters</span><span class="p">(</span><span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Remove end of line (\n) char.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    text : str</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    str</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">text</span> <span class="o">=</span> <span class="n">text</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span> <span class="s2">&quot; &quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">text</span></div>
+
+
+<div class="viewcode-block" id="fix_bad_unicode"><a class="viewcode-back" href="../../../apidoc/nlpretext.basic.html#nlpretext.basic.preprocess.fix_bad_unicode">[docs]</a><span class="k">def</span> <span class="nf">fix_bad_unicode</span><span class="p">(</span><span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">normalization</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;NFC&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    ----</span>
+<span class="sd">    Copyright 2016 Chartbeat, Inc.</span>
+<span class="sd">    Code from textacy: https://github.com/chartbeat-labs/textacy</span>
+<span class="sd">    ----</span>
+
+<span class="sd">    Fix unicode text that&#39;s &quot;broken&quot; using `ftfy</span>
+<span class="sd">    &lt;http://ftfy.readthedocs.org/&gt;`_;</span>
+<span class="sd">    this includes mojibake, HTML entities and other code cruft,</span>
+<span class="sd">    and non-standard forms for display purposes.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    text : string</span>
+
+<span class="sd">    normalization ({&#39;NFC&#39;, &#39;NFKC&#39;, &#39;NFD&#39;, &#39;NFKD&#39;}):</span>
+<span class="sd">        if &#39;NFC&#39;, combines characters and diacritics written using separate</span>
+<span class="sd">        code points, e.g. converting &quot;e&quot; plus an acute accent modifier into</span>
+<span class="sd">        &quot;é&quot;; unicode</span>
+<span class="sd">        can be converted to NFC form without any change in its meaning!</span>
+<span class="sd">        if &#39;NFKC&#39;, additional normalizations are applied that can change</span>
+<span class="sd">        the meanings of characters, e.g. ellipsis characters will be replaced</span>
+<span class="sd">        with three periods</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    string</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">text</span> <span class="o">=</span> <span class="n">_fix_text</span><span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="n">normalization</span><span class="o">=</span><span class="n">normalization</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">text</span></div>
+
+
+<div class="viewcode-block" id="unpack_english_contractions"><a class="viewcode-back" href="../../../apidoc/nlpretext.basic.html#nlpretext.basic.preprocess.unpack_english_contractions">[docs]</a><span class="k">def</span> <span class="nf">unpack_english_contractions</span><span class="p">(</span><span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    ----</span>
+<span class="sd">    Copyright 2016 Chartbeat, Inc.</span>
+<span class="sd">    Code from textacy: https://github.com/chartbeat-labs/textacy</span>
+<span class="sd">    ----</span>
+
+<span class="sd">    Replace *English* contractions in ``text`` str with their unshortened</span>
+<span class="sd">    forms.</span>
+<span class="sd">    N.B. The &quot;&#39;d&quot; and &quot;&#39;s&quot; forms are ambiguous (had/would, is/has/possessive),</span>
+<span class="sd">    so are left as-is.</span>
+<span class="sd">    eg. &quot;You&#39;re fired. She&#39;s nice.&quot; -&gt; &quot;You are fired. She&#39;s nice.&quot;</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    text : string</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    string</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># standard</span>
+    <span class="n">text</span> <span class="o">=</span> <span class="n">constants</span><span class="o">.</span><span class="n">CONTRACTION_NT_NOT</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span>
+        <span class="sa">r</span><span class="s2">&quot;\1\2 not&quot;</span><span class="p">,</span>
+        <span class="n">text</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">text</span> <span class="o">=</span> <span class="n">constants</span><span class="o">.</span><span class="n">CONTRACTION_LL_WILL</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span>
+        <span class="sa">r</span><span class="s2">&quot;\1\2 will&quot;</span><span class="p">,</span>
+        <span class="n">text</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">text</span> <span class="o">=</span> <span class="n">constants</span><span class="o">.</span><span class="n">CONTRACTION_RE_ARE</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;\1\2 are&quot;</span><span class="p">,</span> <span class="n">text</span><span class="p">)</span>
+    <span class="n">text</span> <span class="o">=</span> <span class="n">constants</span><span class="o">.</span><span class="n">CONTRACTION_VE_HAVE</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span>
+        <span class="sa">r</span><span class="s2">&quot;\1\2 have&quot;</span><span class="p">,</span>
+        <span class="n">text</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">text</span> <span class="o">=</span> <span class="n">constants</span><span class="o">.</span><span class="n">CONTRACTION_CANT_CANNOT</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;\1\2n not&quot;</span><span class="p">,</span> <span class="n">text</span><span class="p">)</span>
+    <span class="n">text</span> <span class="o">=</span> <span class="n">constants</span><span class="o">.</span><span class="n">CONTRACTION_M_AM</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;\1\2 am&quot;</span><span class="p">,</span> <span class="n">text</span><span class="p">)</span>
+    <span class="n">text</span> <span class="o">=</span> <span class="n">constants</span><span class="o">.</span><span class="n">CONTRACTION_LET_LETUS</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;\1\2 us&quot;</span><span class="p">,</span> <span class="n">text</span><span class="p">)</span>
+    <span class="n">text</span> <span class="o">=</span> <span class="n">constants</span><span class="o">.</span><span class="n">CONTRACTION_WONT_WILLNOT</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;\1\2ill not&quot;</span><span class="p">,</span> <span class="n">text</span><span class="p">)</span>
+    <span class="n">text</span> <span class="o">=</span> <span class="n">constants</span><span class="o">.</span><span class="n">CONTRACTION_SHANT_SHALLNOT</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;\1\2hall not&quot;</span><span class="p">,</span> <span class="n">text</span><span class="p">)</span>
+    <span class="n">text</span> <span class="o">=</span> <span class="n">constants</span><span class="o">.</span><span class="n">CONTRACTION_YALL_YOUALL</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;\1\2ou all&quot;</span><span class="p">,</span> <span class="n">text</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">text</span></div>
+
+
+<div class="viewcode-block" id="replace_urls"><a class="viewcode-back" href="../../../apidoc/nlpretext.basic.html#nlpretext.basic.preprocess.replace_urls">[docs]</a><span class="k">def</span> <span class="nf">replace_urls</span><span class="p">(</span><span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">replace_with</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;*URL*&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    ----</span>
+<span class="sd">    Copyright 2016 Chartbeat, Inc.</span>
+<span class="sd">    Code from textacy: https://github.com/chartbeat-labs/textacy</span>
+<span class="sd">    ----</span>
+
+<span class="sd">    Replace all URLs in ``text`` str with ``replace_with`` str.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    text : string</span>
+<span class="sd">    replace_with : string</span>
+<span class="sd">        the string you want the URL to be replaced with.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    string</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">text</span> <span class="o">=</span> <span class="n">constants</span><span class="o">.</span><span class="n">URL_REGEX</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="n">replace_with</span><span class="p">,</span> <span class="n">constants</span><span class="o">.</span><span class="n">SHORT_URL_REGEX</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="n">replace_with</span><span class="p">,</span> <span class="n">text</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">text</span></div>
+
+
+<div class="viewcode-block" id="replace_emails"><a class="viewcode-back" href="../../../apidoc/nlpretext.basic.html#nlpretext.basic.preprocess.replace_emails">[docs]</a><span class="k">def</span> <span class="nf">replace_emails</span><span class="p">(</span><span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">replace_with</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;*EMAIL*&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    ----</span>
+<span class="sd">    Copyright 2016 Chartbeat, Inc.</span>
+<span class="sd">    Code from textacy: https://github.com/chartbeat-labs/textacy</span>
+<span class="sd">    ----</span>
+
+<span class="sd">    Replace all emails in ``text`` str with ``replace_with`` str</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    text : string</span>
+<span class="sd">    replace_with : string</span>
+<span class="sd">        the string you want the email address to be replaced with.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    string</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">text</span> <span class="o">=</span> <span class="n">constants</span><span class="o">.</span><span class="n">EMAIL_REGEX</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="n">replace_with</span><span class="p">,</span> <span class="n">text</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">text</span></div>
+
+
+<div class="viewcode-block" id="replace_phone_numbers"><a class="viewcode-back" href="../../../apidoc/nlpretext.basic.html#nlpretext.basic.preprocess.replace_phone_numbers">[docs]</a><span class="k">def</span> <span class="nf">replace_phone_numbers</span><span class="p">(</span>
+    <span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">country_to_detect</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]],</span>
+    <span class="n">replace_with</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;*PHONE*&quot;</span><span class="p">,</span>
+    <span class="n">method</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;regex&quot;</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    ----</span>
+<span class="sd">    Copyright 2016 Chartbeat, Inc.</span>
+<span class="sd">    Inspired code from textacy: https://github.com/chartbeat-labs/textacy</span>
+<span class="sd">    ----</span>
+
+<span class="sd">    Replace all phone numbers in ``text`` str with ``replace_with`` str</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    text : string</span>
+<span class="sd">    replace_with : string</span>
+<span class="sd">        the string you want the phone number to be replaced with.</span>
+<span class="sd">    method : [&#39;regex&#39;,&#39;detection&#39;]</span>
+<span class="sd">        regex is faster but will omit a lot of numbers, while detection will</span>
+<span class="sd">        catch every numbers, but takes a while.</span>
+<span class="sd">    country_to_detect : list</span>
+<span class="sd">        If a list of country code is specified, will catch every number</span>
+<span class="sd">        formatted.</span>
+<span class="sd">        Only when method = &#39;detection&#39;.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    string</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">method</span> <span class="o">==</span> <span class="s2">&quot;regex&quot;</span><span class="p">:</span>
+        <span class="n">text</span> <span class="o">=</span> <span class="n">constants</span><span class="o">.</span><span class="n">PHONE_REGEX</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="n">replace_with</span><span class="p">,</span> <span class="n">text</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">method</span> <span class="o">==</span> <span class="s2">&quot;detection&quot;</span><span class="p">:</span>
+        <span class="n">found_nums</span> <span class="o">=</span> <span class="n">_extract_phone_numbers</span><span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="n">countrylist</span><span class="o">=</span><span class="n">country_to_detect</span><span class="p">)</span>
+
+        <span class="c1"># order by lenght to avoid truncated numbers to be removed first.</span>
+        <span class="n">found_nums</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="nb">len</span><span class="p">,</span> <span class="n">reverse</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">phone_number</span> <span class="ow">in</span> <span class="n">found_nums</span><span class="p">:</span>
+            <span class="n">text</span> <span class="o">=</span> <span class="n">text</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">phone_number</span><span class="p">,</span> <span class="n">replace_with</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="s1">&#39;Please input a valid method between &quot;regex&quot; or </span><span class="se">\</span>
+<span class="s1">            &quot;detection&quot;&#39;</span>
+        <span class="p">)</span>
+    <span class="k">return</span> <span class="n">text</span></div>
+
+
+<div class="viewcode-block" id="replace_numbers"><a class="viewcode-back" href="../../../apidoc/nlpretext.basic.html#nlpretext.basic.preprocess.replace_numbers">[docs]</a><span class="k">def</span> <span class="nf">replace_numbers</span><span class="p">(</span><span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">replace_with</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;*NUMBER*&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    ----</span>
+<span class="sd">    Copyright 2016 Chartbeat, Inc.</span>
+<span class="sd">    Code from textacy: https://github.com/chartbeat-labs/textacy</span>
+<span class="sd">    ----</span>
+
+<span class="sd">    Replace all numbers in ``text`` str with ``replace_with`` str.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    text : string</span>
+<span class="sd">    replace_with : string</span>
+<span class="sd">        the string you want the number to be replaced with.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    string</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">text</span> <span class="o">=</span> <span class="n">constants</span><span class="o">.</span><span class="n">NUMBERS_REGEX</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="n">replace_with</span><span class="p">,</span> <span class="n">text</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">text</span></div>
+
+
+<div class="viewcode-block" id="replace_currency_symbols"><a class="viewcode-back" href="../../../apidoc/nlpretext.basic.html#nlpretext.basic.preprocess.replace_currency_symbols">[docs]</a><span class="k">def</span> <span class="nf">replace_currency_symbols</span><span class="p">(</span><span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">replace_with</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    ----</span>
+<span class="sd">    Copyright 2016 Chartbeat, Inc.</span>
+<span class="sd">    Code from textacy: https://github.com/chartbeat-labs/textacy</span>
+<span class="sd">    ----</span>
+
+<span class="sd">    Replace all currency symbols in ``text`` str with string specified by</span>
+<span class="sd">    ``replace_with`` str.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    text : str</span>
+<span class="sd">        raw text</span>
+<span class="sd">    replace_with : None or string</span>
+<span class="sd">        if None (default), replace symbols with</span>
+<span class="sd">            their standard 3-letter abbreviations (e.g. &#39;$&#39; with &#39;USD&#39;, &#39;£&#39;</span>
+<span class="sd">            with &#39;GBP&#39;); otherwise, pass in a string with which to replace all</span>
+<span class="sd">            symbols (e.g. &quot;*CURRENCY*&quot;)</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    string</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">replace_with</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">constants</span><span class="o">.</span><span class="n">CURRENCIES</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="n">text</span> <span class="o">=</span> <span class="n">text</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">text</span> <span class="o">=</span> <span class="n">constants</span><span class="o">.</span><span class="n">CURRENCY_REGEX</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="n">replace_with</span><span class="p">,</span> <span class="n">text</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">text</span></div>
+
+
+<div class="viewcode-block" id="remove_punct"><a class="viewcode-back" href="../../../apidoc/nlpretext.basic.html#nlpretext.basic.preprocess.remove_punct">[docs]</a><span class="k">def</span> <span class="nf">remove_punct</span><span class="p">(</span><span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">marks</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Remove punctuation from ``text`` by replacing all instances of ``marks``</span>
+<span class="sd">    with whitespace.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    text : str</span>
+<span class="sd">        raw text</span>
+
+<span class="sd">    marks : str or None</span>
+<span class="sd">        If specified, remove only the characters in this string,</span>
+<span class="sd">        e.g. ``marks=&#39;,;:&#39;`` removes commas, semi-colons, and colons.</span>
+<span class="sd">        Otherwise, all punctuation marks are removed.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    string</span>
+
+<span class="sd">    Note</span>
+<span class="sd">    -------</span>
+<span class="sd">    When ``marks=None``, Python&#39;s built-in :meth:`str.translate()` is</span>
+<span class="sd">    used to remove punctuation; otherwise, a regular expression is used</span>
+<span class="sd">    instead. The former&#39;s performance is about 5-10x faster.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">marks</span><span class="p">:</span>
+        <span class="n">text</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;[</span><span class="si">{</span><span class="n">re</span><span class="o">.</span><span class="n">escape</span><span class="p">(</span><span class="n">marks</span><span class="p">)</span><span class="si">}</span><span class="s2">]+&quot;</span><span class="p">,</span> <span class="s2">&quot; &quot;</span><span class="p">,</span> <span class="n">text</span><span class="p">,</span> <span class="n">flags</span><span class="o">=</span><span class="n">re</span><span class="o">.</span><span class="n">UNICODE</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">text</span> <span class="o">=</span> <span class="n">text</span><span class="o">.</span><span class="n">translate</span><span class="p">(</span><span class="n">constants</span><span class="o">.</span><span class="n">PUNCT_TRANSLATE_UNICODE</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">text</span></div>
+
+
+<div class="viewcode-block" id="remove_accents"><a class="viewcode-back" href="../../../apidoc/nlpretext.basic.html#nlpretext.basic.preprocess.remove_accents">[docs]</a><span class="k">def</span> <span class="nf">remove_accents</span><span class="p">(</span><span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">method</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;unicode&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Remove accents from any accented unicode characters in ``text`` str,</span>
+<span class="sd">    either by transforming them into ascii equivalents or removing them</span>
+<span class="sd">    entirely.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    text : str</span>
+<span class="sd">        raw text</span>
+
+<span class="sd">    method : ({&#39;unicode&#39;, &#39;ascii&#39;})</span>
+<span class="sd">        if &#39;unicode&#39;, remove accented</span>
+<span class="sd">        char for any unicode symbol with a direct ASCII equivalent; if &#39;ascii&#39;,</span>
+<span class="sd">        remove accented char for any unicode symbol</span>
+
+<span class="sd">        NB: the &#39;ascii&#39; method is notably faster than &#39;unicode&#39;, but less good</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    string</span>
+
+<span class="sd">    Raises</span>
+<span class="sd">    ------</span>
+<span class="sd">    ValueError</span>
+<span class="sd">        if ``method`` is not in {&#39;unicode&#39;, &#39;ascii&#39;}</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">method</span> <span class="o">==</span> <span class="s2">&quot;unicode&quot;</span><span class="p">:</span>
+        <span class="n">text</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+            <span class="n">c</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">unicodedata</span><span class="o">.</span><span class="n">normalize</span><span class="p">(</span><span class="s2">&quot;NFKD&quot;</span><span class="p">,</span> <span class="n">text</span><span class="p">)</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">unicodedata</span><span class="o">.</span><span class="n">combining</span><span class="p">(</span><span class="n">c</span><span class="p">)</span>
+        <span class="p">)</span>
+    <span class="k">elif</span> <span class="n">method</span> <span class="o">==</span> <span class="s2">&quot;ascii&quot;</span><span class="p">:</span>
+        <span class="n">text</span> <span class="o">=</span> <span class="n">unicodedata</span><span class="o">.</span><span class="n">normalize</span><span class="p">(</span><span class="s2">&quot;NFKD&quot;</span><span class="p">,</span> <span class="n">text</span><span class="p">)</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s2">&quot;ascii&quot;</span><span class="p">,</span> <span class="n">errors</span><span class="o">=</span><span class="s2">&quot;ignore&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s2">&quot;ascii&quot;</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">msg</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;`method` must be either &quot;unicode&quot; and &quot;ascii&quot;, not </span><span class="si">{</span><span class="n">method</span><span class="si">}</span><span class="s1">&#39;</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">text</span></div>
+
+
+<div class="viewcode-block" id="remove_multiple_spaces_and_strip_text"><a class="viewcode-back" href="../../../apidoc/nlpretext.basic.html#nlpretext.basic.preprocess.remove_multiple_spaces_and_strip_text">[docs]</a><span class="k">def</span> <span class="nf">remove_multiple_spaces_and_strip_text</span><span class="p">(</span><span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Remove multiple spaces, strip text, and remove &#39;-&#39;, &#39;*&#39; characters.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    text : str</span>
+<span class="sd">        the text to be processed</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    string</span>
+<span class="sd">        the text with removed multiple spaces and strip text</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">regex_remove_multiple_spaces_list</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;</span><span class="se">\\</span><span class="s2">t&quot;</span><span class="p">,</span> <span class="s2">&quot;[</span><span class="se">\\</span><span class="s2">s</span><span class="se">\\</span><span class="s2">-</span><span class="se">\\</span><span class="s2">*]{2,}&quot;</span><span class="p">]</span>
+    <span class="k">for</span> <span class="n">regex_remove_multiple_spaces</span> <span class="ow">in</span> <span class="n">regex_remove_multiple_spaces_list</span><span class="p">:</span>
+        <span class="n">text</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="n">regex_remove_multiple_spaces</span><span class="p">,</span> <span class="s2">&quot; &quot;</span><span class="p">,</span> <span class="n">text</span><span class="p">)</span>
+        <span class="n">text</span> <span class="o">=</span> <span class="n">text</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">text</span></div>
+
+
+<div class="viewcode-block" id="filter_non_latin_characters"><a class="viewcode-back" href="../../../apidoc/nlpretext.basic.html#nlpretext.basic.preprocess.filter_non_latin_characters">[docs]</a><span class="k">def</span> <span class="nf">filter_non_latin_characters</span><span class="p">(</span><span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Function that filters non latin characters of a text.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    text : string</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    string</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">text</span> <span class="o">=</span> <span class="n">constants</span><span class="o">.</span><span class="n">LATIN_CHARACTERS_RE</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">,</span> <span class="n">text</span><span class="p">)</span>
+    <span class="n">text</span> <span class="o">=</span> <span class="n">normalize_whitespace</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">text</span></div>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright .</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  
+<div class="rst-versions" data-toggle="rst-versions" role="note" aria-label="versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    <span class="fa fa-book"> Other Versions</span>
+    v: 1.1.0
+    <span class="fa fa-caret-down"></span>
+  </span>
+  <div class="rst-other-versions">
+    <dl>
+      <dt>Tags</dt>
+      <dd><a href="preprocess.html">1.1.0</a></dd>
+      <dd><a href="../../../../1.2.0/index.html">1.2.0</a></dd>
+      <dd><a href="../../../../1.2.1/index.html">1.2.1</a></dd>
+      <dd><a href="../../../../1.2.2/index.html">1.2.2</a></dd>
+      <dd><a href="../../../../latest/index.html">latest</a></dd>
+    </dl>
+    <dl>
+      <dt>Branches</dt>
+      <dd><a href="../../../../ci/update-ci-cd/index.html">ci/update-ci-cd</a></dd>
+    </dl>
+  </div>
+</div><script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

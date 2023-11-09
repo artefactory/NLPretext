@@ -1,0 +1,18 @@
+
+**augmentation**
+================
+
+.. automodule:: nlpretext.augmentation
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+
+
+text\_augmentation
+------------------
+
+.. automodule:: nlpretext.augmentation.text_augmentation
+   :members:
+   :undoc-members:
+   :show-inheritance:
