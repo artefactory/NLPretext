@@ -2,6 +2,7 @@ name: Continuous Deployment
 on:
   release:
     types: [published]
+  workflow_dispatch:
 
 jobs:
 
@@ -10,7 +11,6 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-
     - name: Checkout
       uses: actions/checkout@v4
 
@@ -48,6 +48,7 @@ jobs:
       with:
         image: "ghcr.io/artefactory/nlpretext:${{ steps.tag.outputs.tag_name }}"
         acs-report-enable: true
+
     - name: upload Anchore scan SARIF report
       uses: github/codeql-action/upload-sarif@v1
       with:
@@ -65,6 +66,7 @@ jobs:
 
     - name: Checkout
       uses: actions/checkout@v4
+
     - name: Set up Python ${{ matrix.python-version }}
       uses: actions/setup-python@v4
       with:
@@ -87,19 +89,18 @@ jobs:
 
     - name: Install dependencies
       run: |
-        poetry install -E torch
+        poetry install -E torch -E dask
 
-    - name: Publish to PyPI
-      env:
-        PYPI_TOKEN: ${{ secrets.PYPI_TOKEN }}
-      run: |
-        poetry config pypi-token.pypi $PYPI_TOKEN
-        poetry publish --build
+    # - name: Publish to PyPI
+    #   env:
+    #     PYPI_TOKEN: ${{ secrets.PYPI_TOKEN }}
+    #   run: |
+    #     poetry config pypi-token.pypi $PYPI_TOKEN
+    #     poetry publish --build
 
     - name: Run build script for Sphinx pages
       run: |
-        source $(poetry env info | grep Path | awk '{ print $2 }')/bin/activate
-        git config --global user.name "Github-Pages Bot"
-        git config --global user.email "github-pages@artefactory.com"
-        sh docs/scripts/buildsite.sh
+        poetry run git config --global user.name "Github-Pages Bot"
+        poetry run git config --global user.email "github-pages@artefactory.com"
+        poetry run sh docs/scripts/buildsite.sh
       shell: bash

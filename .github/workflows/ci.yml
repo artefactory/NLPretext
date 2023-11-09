@@ -69,7 +69,7 @@ jobs:
     - name: Install dependencies
       run: |
         poetry run pip install --upgrade pip
-        poetry install -E torch
+        poetry install -E torch dask
 
     - name: Run safety checks
       run: |

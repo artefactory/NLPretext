@@ -15,17 +15,14 @@ RUN mkdir -p /home/docker_user/workspace
 WORKDIR /home/docker_user/workspace
 
 # Install Poetry
-RUN curl -sSL -o install-poetry.py https://raw.githubusercontent.com/python-poetry/poetry/master/install-poetry.py \
-  && echo 'daad01ac0c1636f1c0154575c6b3b37a0867e9cedd67d1224fc4259c07b03a86 install-poetry.py' | sha256sum --check \
-  && POETRY_HOME=/home/docker_user/poetry python install-poetry.py \
-  && rm install-poetry.py
+RUN curl -sSL https://install.python-poetry.org | python3 -
 
 ENV PATH="${PATH}:/home/docker_user/.poetry/bin:/home/docker_user/poetry/bin"
 
 COPY pyproject.toml ./
-COPY poetry.lock ./
 
-RUN poetry install --no-root --no-dev
+RUN poetry lock
+RUN poetry install --no-root --no-dev --no-interaction
 
 COPY . /home/docker_user/workspace/
 

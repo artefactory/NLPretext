@@ -24,7 +24,7 @@ try:
     from nlpretext._utils import daskloader
 except ImportError:
     warnings.warn(
-        "Dask not found, switching to pandas. To be able to use Dask, run : pip install dask[complete]",  # noqa: E501
+        "Dask not found, switching to pandas. To be able to use Dask, run : pip install nlpretext[dask]",  # noqa: E501
         stacklevel=2,
     )
 
