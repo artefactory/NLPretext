@@ -1,4 +1,4 @@
-FROM python:3.9.7-slim-buster
+FROM python:3.10-slim-buster
 
 ENV LANG=C.UTF-8 \
   LC_ALL=C.UTF-8
@@ -8,21 +8,18 @@ RUN apt-get update && \
   curl coreutils \
   && rm -rf /var/lib/apt/lists/*
 
-RUN useradd -d /home/docker_user -m -s /bin/bash docker_user
-USER docker_user
+  # Install Poetry
+ENV POETRY_VERSION=1.5.1
+RUN pip install --upgrade pip
+RUN python3 -m pip install "poetry==$POETRY_VERSION"
 
-RUN mkdir -p /home/docker_user/workspace
-WORKDIR /home/docker_user/workspace
-
-# Install Poetry
-RUN curl -sSL https://install.python-poetry.org | python3 -
-
-ENV PATH="${PATH}:/home/docker_user/.poetry/bin:/home/docker_user/poetry/bin"
+WORKDIR /home/workspace
 
 COPY pyproject.toml ./
 
-RUN poetry lock
-RUN poetry install --no-root --no-dev --no-interaction
+RUN poetry config virtualenvs.create false \
+  && poetry lock \
+  && poetry install --no-root --no-dev --no-interaction
 
 COPY . /home/docker_user/workspace/
 

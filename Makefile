@@ -96,7 +96,7 @@ endif
 
 .PHONY: check-safety
 check-safety:
-	@poetry check$(POETRY_COMMAND_FLAG) && \
+	poetry check$(POETRY_COMMAND_FLAG) && \
 	poetry run pip check$(PIP_COMMAND_FLAG) && \
 	poetry run safety check --full-report$(SAFETY_COMMAND_FLAG) && \
 	poetry run bandit -r nlpretext/$(BANDIT_COMMAND_FLAG)
@@ -108,11 +108,11 @@ gitleaks:
 
 .PHONY: format-code
 format-code:
-	@poetry run pre-commit run --all
+	poetry run pre-commit run --all
 
 .PHONY: test
 test:
-	@poetry run pytest
+	poetry run pytest
 
 .PHONY: lint
 lint: check-safety format-code test
