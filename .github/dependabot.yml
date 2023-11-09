@@ -12,6 +12,9 @@ updates:
       time: "09:00"
     allow:
       - dependency-type: "all"
+    ignore:
+      - dependency-name: "*"
+        update-types: ["version-update:semver-patch"]
     labels:
       - draft
       - dependencies
