@@ -22,13 +22,8 @@ on:
     branches:
       - main
   pull_request:
-    types:
-      - opened
-      - reopened
-      - edited
-      - labeled
-      - unlabeled
-      - synchronize
+    branches:
+      - '*'
 
 jobs:
   ci:

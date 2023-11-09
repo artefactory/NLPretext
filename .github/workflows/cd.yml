@@ -2,7 +2,6 @@ name: Continuous Deployment
 on:
   release:
     types: [published]
-  workflow_dispatch:
 
 jobs:
 
@@ -91,12 +90,12 @@ jobs:
       run: |
         poetry install -E torch -E dask
 
-    # - name: Publish to PyPI
-    #   env:
-    #     PYPI_TOKEN: ${{ secrets.PYPI_TOKEN }}
-    #   run: |
-    #     poetry config pypi-token.pypi $PYPI_TOKEN
-    #     poetry publish --build
+    - name: Publish to PyPI
+      env:
+        PYPI_TOKEN: ${{ secrets.PYPI_TOKEN }}
+      run: |
+        poetry config pypi-token.pypi $PYPI_TOKEN
+        poetry publish --build
 
     - name: Run build script for Sphinx pages
       run: |
