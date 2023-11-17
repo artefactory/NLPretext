@@ -24,7 +24,7 @@ from nlpretext._config.config import FORMAT_NUMBERS, SUPPORTED_COUNTRY
 def find_phone_numbers(string: str, region_code: Optional[str] = None) -> List[str]:
     """
     Python port of Google's libphonenumber.
-    https://github.com/daviddrysdale/python-phonenumbers
+    https://github.com/daviddrysdale/python-phonenumbers.
 
     Parameters
     ----------
@@ -78,7 +78,7 @@ def extract_phone_numbers(text: str, countrylist: List[Optional[str]]) -> List[s
 class PhoneParser:
     """
     Python port of Google's libphonenumber.
-    https://github.com/daviddrysdale/python-phonenumbers
+    https://github.com/daviddrysdale/python-phonenumbers.
     """
 
     def __init__(self):
@@ -98,7 +98,7 @@ class PhoneParser:
         self, text: str, region_code: Optional[str] = None
     ) -> Optional[_phonenumbers.PhoneNumber]:
         """
-        Extract phone number from text
+        Extract phone number from text.
 
         Parameters
         ----------

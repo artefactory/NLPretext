@@ -25,14 +25,14 @@ All the goto functions you need to handle NLP use-cases, integrated in NLPretext
 # TL;DR
 
 
-> *Working on an NLP project and tired of always looking for the same silly preprocessing functions on the web?*  :tired_face: 
+> *Working on an NLP project and tired of always looking for the same silly preprocessing functions on the web?*  :tired_face:
 
 > *Need to efficiently extract email adresses from a document? Hashtags from tweets? Remove accents from a French post?* :disappointed_relieved:
 
 
 **NLPretext got you covered!** :rocket:
 
-NLPretext packages in a **unique** library all the text **preprocessing** functions you need to **ease** your NLP project. 
+NLPretext packages in a **unique** library all the text **preprocessing** functions you need to **ease** your NLP project.
 
 
 :mag: Quickly explore below our preprocessing pipelines and individual functions referential.
@@ -215,7 +215,7 @@ print(example)
 
 ## Data augmentation <a name="data_augmentation"></a>
 
-The augmentation module helps you to **generate new texts** based on your given examples by modifying some words in the initial ones and to **keep associated entities unchanged**, if any, in the case of **NER tasks**. If you want words other than entities to remain unchanged, you can specify it within the `stopwords` argument. Modifications depend on the chosen method, the ones currently supported by the module are **substitutions with synonyms** using Wordnet or BERT from the [`nlpaug`](https://github.com/makcedward/nlpaug) library. 
+The augmentation module helps you to **generate new texts** based on your given examples by modifying some words in the initial ones and to **keep associated entities unchanged**, if any, in the case of **NER tasks**. If you want words other than entities to remain unchanged, you can specify it within the `stopwords` argument. Modifications depend on the chosen method, the ones currently supported by the module are **substitutions with synonyms** using Wordnet or BERT from the [`nlpaug`](https://github.com/makcedward/nlpaug) library.
 
 ```python
 from nlpretext.augmentation.text_augmentation import augment_text
@@ -270,30 +270,33 @@ This project is licensed under the terms of the `Apache Software License 2.0` li
 # Project Organization
 ------------
 
+    .
+    ├── .github/workflows           <- Where the CI and CD lives
+    ├── datasets/external           <- Bash scripts to download external datasets
+    ├── docker                      <- All you need to build a Docker image from that package
+    ├── docs                        <- Sphinx HTML documentation
+    ├── nlpretext                   <- Main Package. This is where the code lives
+    │   ├── preprocessor.py         <- Main preprocessing script
+    │   ├── text_loader.py          <- Main loading script
+    │   ├── augmentation            <- Text augmentation script
+    │   ├── basic                   <- Basic text preprocessing
+    │   ├── cli                     <- Command lines that can be used
+    │   ├── social                  <- Social text preprocessing
+    │   ├── token                   <- Token text preprocessing
+    │   ├── textloader              <- File loading
+    │   ├── _config                 <- Where the configuration and constants live
+    │   └── _utils                  <- Where preprocessing utils scripts lives
+    ├── references                  <- assets
+    ├── tests                       <- Where the tests lives
+    ├── .gitignore
+    ├── .pre-commit-config.yaml     <- Pre-commit configuration
+    ├── CODE_OF_CONDUCT.md          <- Code of conduct guidelines
+    ├── CONTRIBUTING.md             <- Contribution guidelines
     ├── LICENSE
-    ├── CONTRIBUTING.md     <- Contribution guidelines
-    ├── CODE_OF_CONDUCT.md  <- Code of conduct guidelines
     ├── Makefile
-    ├── README.md           <- The top-level README for developers using this project.
-    ├── .github/workflows   <- Where the CI and CD lives
-    ├── datasets/external   <- Bash scripts to download external datasets
-    ├── docker              <- All you need to build a Docker image from that package
-    ├── docs                <- Sphinx HTML documentation
-    ├── nlpretext           <- Main Package. This is where the code lives
-    │   ├── preprocessor.py <- Main preprocessing script
-    │   ├── text_loader.py  <- Main loading script
-    │   ├── augmentation    <- Text augmentation script
-    │   ├── basic           <- Basic text preprocessing
-    │   ├── cli             <- Command lines that can be used
-    │   ├── social          <- Social text preprocessing
-    │   ├── token           <- Token text preprocessing
-    │   ├── textloader      <- File loading
-    │   ├── _config         <- Where the configuration and constants live
-    │   └── _utils          <- Where preprocessing utils scripts lives
-    ├── tests               <- Where the tests lives
-    ├── pyproject.toml      <- Package configuration
-    ├── poetry.lock         
-    └── setup.cfg           <- Configuration for plugins and other utils
+    ├── pyproject.toml              <- Package build configuration
+    ├── README.md                   <- The top-level README for developers using this project.
+    └── SECURITY.md
 
 # Credits
 

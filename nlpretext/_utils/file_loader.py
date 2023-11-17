@@ -25,7 +25,7 @@ from nlpretext._config import constants
 
 def detect_encoding(file_path_or_string: Union[str, bytes], n_lines: int = 100) -> str:
     """
-    Predict a file's encoding using chardet
+    Predict a file's encoding using chardet.
 
     Parameters
     ----------
@@ -50,7 +50,7 @@ def detect_encoding(file_path_or_string: Union[str, bytes], n_lines: int = 100) 
 
 def check_text_file_format(filepath: Union[str, List[str]]) -> str:
     """
-    Retrieve format of a file path or list of files path, among .csv, .json, .parquet and .txt
+    Retrieve format of a file path or list of files path, among .csv, .json, .parquet and .txt.
 
     Parameters
     ----------
@@ -71,7 +71,7 @@ def check_text_file_format(filepath: Union[str, List[str]]) -> str:
         raise ValueError(f"Multiple file formats found in file path list: {format_list}")
     if None in format_re_list:
         raise ValueError(
-            "Unrecognized format among specified files, only .csv, .json, .parquet and .txt accepted"
+            "Unrecognized format among specified files, only .csv, .json, .parquet and .txt accepted"  # noqa: E501
         )
     file_format = format_list[0]
     return file_format

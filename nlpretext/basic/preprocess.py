@@ -57,7 +57,7 @@ def remove_whitespace(text: str) -> str:
     """
     Given ``text`` str, remove one or more spacings and linebreaks.
     Also strip leading/trailing whitespace.
-    eg. "   foo  bar  " -> "foobar"
+    eg. "   foo  bar  " -> "foobar".
 
     Parameters
     ----------
@@ -74,7 +74,7 @@ def remove_whitespace(text: str) -> str:
 
 def lower_text(text: str) -> str:
     """
-    Given ``text`` str, transform it into lowercase
+    Given ``text`` str, transform it into lowercase.
 
     Parameters
     ----------
@@ -126,7 +126,6 @@ def ungroup_ignored_stopwords(
     -------
     list of strings
     """
-
     return [filter_groups(token, ignored_stopwords) for token in tokens]
 
 
@@ -153,7 +152,7 @@ def remove_stopwords(
     string
 
     Raises
-    -------
+    ------
     ValueError
         if ``custom_stopwords``  and ``ignored_stopwords`` have common elements.
     """
@@ -188,7 +187,7 @@ def remove_stopwords(
 
 
 def remove_eol_characters(text: str) -> str:
-    """
+    r"""
     Remove end of line (\n) char.
 
     Parameters
@@ -227,6 +226,7 @@ def fix_bad_unicode(text: str, normalization: str = "NFC") -> str:
         if 'NFKC', additional normalizations are applied that can change
         the meanings of characters, e.g. ellipsis characters will be replaced
         with three periods
+
     Returns
     -------
     string
@@ -256,7 +256,6 @@ def unpack_english_contractions(text: str) -> str:
     -------
     string
     """
-
     # standard
     text = constants.CONTRACTION_NT_NOT.sub(
         r"\1\2 not",
@@ -352,6 +351,7 @@ def replace_phone_numbers(
         If a list of country code is specified, will catch every number
         formatted.
         Only when method = 'detection'.
+
     Returns
     -------
     string
@@ -483,7 +483,7 @@ def remove_accents(text: str, method: str = "unicode") -> str:
     string
 
     Raises
-    -------
+    ------
     ValueError
         if ``method`` is not in {'unicode', 'ascii'}
     """
@@ -522,7 +522,7 @@ def remove_multiple_spaces_and_strip_text(text: str) -> str:
 
 def filter_non_latin_characters(text: str) -> str:
     """
-    Function that filters non latin characters of a text
+    Function that filters non latin characters of a text.
 
     Parameters
     ----------

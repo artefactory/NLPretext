@@ -22,13 +22,8 @@ on:
     branches:
       - main
   pull_request:
-    types:
-      - opened
-      - reopened
-      - edited
-      - labeled
-      - unlabeled
-      - synchronize
+    branches:
+      - '*'
 
 jobs:
   ci:
@@ -40,16 +35,18 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
+
     - name: Set up Python ${{ matrix.python-version }}
-      uses: actions/setup-python@v2.2.2
+      uses: actions/setup-python@v4
       with:
         python-version: ${{ matrix.python-version }}
+        cache: 'pip'
 
     - name: Install poetry
       run: make download-poetry
 
     - name: Set up pip cache
-      uses: actions/cache@v3.2.4
+      uses: actions/cache@v3.3.2
       with:
         path: ~/.cache/pypoetry/virtualenvs
         key: venv-${{ matrix.python-version }}-${{ hashFiles('pyproject.toml') }}-${{ hashFiles('poetry.lock') }}
@@ -67,15 +64,15 @@ jobs:
     - name: Install dependencies
       run: |
         poetry run pip install --upgrade pip
-        poetry install -E torch
+        poetry install -E torch -E dask
 
     - name: Run safety checks
       run: |
         STRICT=1 make check-safety
 
-    - name: Run style checks
+    - name: Lint and format
       run: |
-        STRICT=1 make check-style
+        make format-code
 
     - name: Run tests
       run: |

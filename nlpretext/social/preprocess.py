@@ -23,7 +23,7 @@ from nlpretext.basic.preprocess import normalize_whitespace
 
 def remove_mentions(text: str) -> str:
     """
-    Function that removes words preceded with a '@'
+    Function that removes words preceded with a '@'.
 
     Parameters
     ----------
@@ -40,7 +40,7 @@ def remove_mentions(text: str) -> str:
 def extract_mentions(text: str) -> List[str]:
     """
     Function that extracts words preceded with a '@'
-    eg. "I take care of my skin with @thisproduct" --> ["@thisproduct"]
+    eg. "I take care of my skin with @thisproduct" --> ["@thisproduct"].
 
     Parameters
     ----------
@@ -55,7 +55,7 @@ def extract_mentions(text: str) -> List[str]:
 
 def remove_html_tags(text: str) -> str:
     """
-    Function that removes words between < and >
+    Function that removes words between < and >.
 
     Parameters
     ----------
@@ -73,7 +73,7 @@ def remove_emoji(text: str) -> str:
     """
     Remove emoji from any str by stripping any unicode in the range of Emoji unicode
     as defined in the unicode convention:
-    http://www.unicode.org/emoji/charts/full-emoji-list.html
+    http://www.unicode.org/emoji/charts/full-emoji-list.html.
 
     Parameters
     ----------
@@ -112,7 +112,7 @@ def convert_emoji_to_text(text: str, code_delimiters: Tuple[str, str] = (":", ":
 def extract_emojis(text: str) -> List[str]:
     """
     Function that extracts emojis from a text and translates them into words
-    eg. "I take care of my skin 😀 :(" --> [":grinning_face:"]
+    eg. "I take care of my skin 😀 :(" --> [":grinning_face:"].
 
     Parameters
     ----------
@@ -133,7 +133,7 @@ def extract_emojis(text: str) -> List[str]:
 def extract_hashtags(text: str) -> List[str]:
     """
     Function that extracts words preceded with a '#'
-    eg. "I take care of my skin #selfcare#selfestim" --> ["skincare", "selfestim"]
+    eg. "I take care of my skin #selfcare#selfestim" --> ["skincare", "selfestim"].
 
     Parameters
     ----------
@@ -150,7 +150,7 @@ def extract_hashtags(text: str) -> List[str]:
 def remove_hashtag(text: str) -> str:
     """
     Function that removes words preceded with a '#'
-    eg. "I take care of my skin #selfcare#selfestim" --> "I take care of my skin"
+    eg. "I take care of my skin #selfcare#selfestim" --> "I take care of my skin".
 
     Parameters
     ----------

@@ -11,7 +11,7 @@ console = Console()
 
 @app.command()
 def run(
-    input: List[str] = typer.Option(
+    input: List[str] = typer.Option(  # noqa: B008
         [],
         "-i",
         "--input",

@@ -26,7 +26,7 @@ def remove_stopwords(
 ) -> List[str]:
     """
     Remove stopwords from a text.
-    eg. 'I like when you move your body !' -> 'I move body !'
+    eg. 'I like when you move your body !' -> 'I move body !'.
 
     Parameters
     ----------
@@ -58,7 +58,7 @@ def remove_tokens_with_nonletters(tokens: List[str]) -> List[str]:
     """
     Inputs a list of tokens, outputs a list of tokens without tokens that
     includes numbers of special caracters.
-    ['foo','bar','124','34euros'] -> ['foo','bar']
+    ['foo','bar','124','34euros'] -> ['foo','bar'].
 
     Parameters
     ----------
@@ -77,7 +77,7 @@ def remove_tokens_with_nonletters(tokens: List[str]) -> List[str]:
 def remove_special_caracters_from_tokenslist(tokens: List[str]) -> List[str]:
     """
     Remove tokens that doesn't contains any number or letter.
-    eg. ['foo','bar','---',"'s",'#'] -> ['foo','bar',"'s"]
+    eg. ['foo','bar','---',"'s",'#'] -> ['foo','bar',"'s"].
 
     Parameters
     ----------
@@ -97,7 +97,7 @@ def remove_special_caracters_from_tokenslist(tokens: List[str]) -> List[str]:
 def remove_smallwords(tokens: List[str], smallwords_threshold: int) -> List[str]:
     """
     Function that removes words which length is below a threshold
-    ["hello", "my", "name", "is", "John", "Doe"] --> ["hello","name","John","Doe"]
+    ["hello", "my", "name", "is", "John", "Doe"] --> ["hello","name","John","Doe"].
 
     Parameters
     ----------

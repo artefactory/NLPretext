@@ -13,15 +13,13 @@ from sklearn.preprocessing import FunctionTransformer
 
 class Preprocessor:
     def __init__(self):
-        """
-        Initialize preprocessor object to apply all text transformation
-        """
+        """Initialize preprocessor object to apply all text transformation."""
         self.__operations = []
         self.pipeline = None
 
     def pipe(self, operation: Callable[[Any], Any], args: Optional[Dict[str, Any]] = None) -> None:
         """
-        Add an operation and its arguments to pipe in the preprocessor
+        Add an operation and its arguments to pipe in the preprocessor.
 
         Parameters
         ----------
@@ -34,7 +32,7 @@ class Preprocessor:
     @staticmethod
     def build_pipeline(operation_list: List[Dict[Any, Any]]) -> Pipeline:
         """
-        Build sklearn pipeline from a operation list
+        Build sklearn pipeline from a operation list.
 
         Parameters
         ----------
@@ -57,7 +55,7 @@ class Preprocessor:
 
     def run(self, text: str) -> str:
         """
-        Apply pipeline to text
+        Apply pipeline to text.
 
         Parameters
         ----------

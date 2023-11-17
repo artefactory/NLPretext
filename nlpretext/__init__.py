@@ -19,7 +19,7 @@
 # mypy: disable-error-code="attr-defined"
 # mypy: disable-error-code="assignment"
 
-"""All the goto functions you need to handle NLP use-cases, integrated in NLPretext"""
+"""All the goto functions you need to handle NLP use-cases, integrated in NLPretext."""
 
 from importlib.metadata import PackageNotFoundError, version
 
