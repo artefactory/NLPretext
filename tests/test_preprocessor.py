@@ -58,7 +58,10 @@ from nlpretext.token.preprocess import remove_tokens_with_nonletters
 @pytest.mark.parametrize(
     "text, expected_result",
     [
-        ("ACV water + cinnamon + turmeric + cucumber + lemon. 👍🏻", [":thumbs_up_light_skin_tone:"]),
+        (
+            "ACV water + cinnamon + turmeric + cucumber + lemon. 👍🏻",
+            [":thumbs_up_light_skin_tone:"],
+        ),
         ("This is a text without emojis", []),
     ],
 )

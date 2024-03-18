@@ -54,7 +54,7 @@ Cannot find what you were looking for? Feel free to open an [issue]((https://git
 ### Supported Python Versions
 
 - Main version supported : `3.8`
-- Other supported versions : `3.9`, `3.10`
+- Other supported versions : `3.9`, `3.10`, `3.11`
 
 
 We strongly advise you to do the remaining steps in a virtual environnement.
