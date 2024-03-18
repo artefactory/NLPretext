@@ -32,7 +32,7 @@ classifiers = [  # Update me
 "nlpretext" = "nlpretext.cli.__main__:app"
 
 [tool.poetry.dependencies]
-python = ">=3.8,<3.11"
+python = ">=3.8,<3.12"
 typer = {extras = ["all"], version = ">=0.3.2"}
 rich = ">=10.1"
 chardet = ">=3.0.4"

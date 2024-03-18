@@ -11,7 +11,7 @@ The NLPretext library aimed to be a meta-library to be used to help you get star
 
 # Installation
 
-Beware, this package has been tested on Python `3.8`, `3.9` & `3.10` and will probably not be working under python **2.7** as **Python2.7** EOL is scheduled for December 2019.
+Beware, this package has been tested on Python `3.8`, `3.9`, `3.10` & `3.11` and will probably not be working under python **2.7** as **Python2.7** EOL is scheduled for December 2019.
 
 To install this library you should first clone the repository:
 
